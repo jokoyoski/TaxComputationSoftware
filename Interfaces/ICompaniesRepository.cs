@@ -10,8 +10,6 @@ namespace TaxComputationAPI.Interfaces
     public interface ICompaniesRepository
     {
         Task<Company> GetCompanyAsync(int id);
-
-        
         Task<Company> GetCompanyByTinAsync(string tinNumber);
         Task<PagedList<Company>> GetCompaniesAsync(PaginationParams pagination);
         Task AddCompanyAsync(Company company);

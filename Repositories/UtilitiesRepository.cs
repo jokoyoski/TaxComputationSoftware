@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -17,7 +18,7 @@ namespace TaxComputationAPI.Repositories
 
         }
 
-        public async Task<Company> GetAssetClassAsync(string Name)
+        public async Task<AssetClass> GetAssetClassAsync(string Name)
         {
             var asset = await _context.AssetClass.FirstOrDefaultAsync(x => x.Name == Name);
             return asset;
@@ -30,10 +31,10 @@ namespace TaxComputationAPI.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task<Company> GetFinancialYearAsync(string Name)
+        public async Task<FinancialYear> GetFinancialYearAsync(string Name)
         {
-            var asset = await _context.AssetClass.FirstOrDefaultAsync(x => x.Name == Name);
-            return asset;
+            var year = await _context.FinancialYear.FirstOrDefaultAsync(x => x.Name == Name);
+            return year;
         }
 
         public async Task AddFinancialYearAsync(FinancialYear financialYear)
@@ -42,5 +43,6 @@ namespace TaxComputationAPI.Repositories
             await _context.FinancialYear.AddAsync(financialYear);
             await _context.SaveChangesAsync();
         }
+
     }
 }
