@@ -26,7 +26,7 @@ namespace TaxComputationAPI.Controllers
         {
             try
             {
-                var value=10.40.ToString("0,00");
+                var value= 10.40.ToString("0,00");
                 List<AssetClass>fixedAssetListDtos=new List<AssetClass>();
                  for(int i=0;i<10;i++){
                 fixedAssetListDtos.Add(new AssetClass{
@@ -50,13 +50,13 @@ namespace TaxComputationAPI.Controllers
             try
             {
                 var assetClassRecord = _utilitiesService.GetAssetClassAsync(assetClassDto.Name);
-                if (assetClassRecord)
+                if (assetClassRecord == null)
                 {
                     var error = new[] { "Company Already exist!" };
                     return StatusCode(400, new { errors = new { error } });
                 }
-                var assetClassToAdd = _mapper.Map(AssetClass)(assetClassDto);
-                assetClassToAdd.Name = AssetClassDto.Name;
+                var assetClassToAdd = _mapper.Map<AssetClass>(assetClassDto);
+                assetClassToAdd.Name = assetClassDto.Name;
 
                 await _utilitiesService.AddAssetClassAsync(assetClassToAdd);
                 var assetClassToReturn = _mapper.Map<AssetClassDto>(assetClassToAdd);
@@ -69,9 +69,6 @@ namespace TaxComputationAPI.Controllers
                 return StatusCode(500, "Error Occured please try again later,please try again later...");
             }
         }
-
-
-
 
         [HttpGet("financialyear")]
         public async Task<IActionResult> GetFinancialYear()
@@ -96,11 +93,23 @@ namespace TaxComputationAPI.Controllers
         }
 
         [HttpPost("add-financialyear")]
-        public async Task<ActionResult> AddFinancialYearAsync(FinancialYearDto financialyearDto)
+        public async Task<ActionResult> AddFinancialYearAsync(FinancialYearDto financialYearDto)
         {
             try
             {
-                var FinancialYearToAdd =
+                var financialYearRecord = _utilitiesService.GetFinancialYearAsync(financialYearDto.Name);
+                if(financialYearRecord==null)
+                {
+                    var error = new[] { "Company Already exist!" };
+                    return StatusCode(400, new { errors = new { error } });
+                }
+                var financialYearToAdd = _mapper.Map<FinancialYear>(financialYearDto);
+                financialYearToAdd.Name = financialYearDto.Name;
+
+                await _utilitiesService.AddFinancialYearAsync(financialYearToAdd);
+                var financialYearToReturn = _mapper.Map<FinancialYearDto>(financialYearToAdd);
+
+                return CreatedAtRoute("GetFinancialYear", new { controller = "Utilities", id = financialYearToReturn.Name }, financialYearToReturn);
             }
             catch (Exception ex)
             {
