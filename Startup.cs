@@ -76,6 +76,8 @@ namespace TaxComputationAPI
             services.AddScoped<IUsersService, UsersService>();
             services.AddScoped<ICompaniesRepository, CompaniesRepository>();
             services.AddScoped<ICompaniesService, CompaniesService>();
+            services.AddScoped<IUtilitiesService, UtilitiesService>();
+            services.AddScoped<IUtilitiesRepository, UtilitiesRepository>();
             services.AddSingleton<IAuthorizationHandler,SystemAdminHandler>();
             services.AddDbContext<DataContext>(options => options.UseSqlServer(_configuration.GetConnectionString("DefaultConnection")));
             services.AddAutoMapper(typeof(Startup));
