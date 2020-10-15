@@ -1,7 +1,15 @@
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using TaxComputationAPI.Dtos;
+using TaxComputationAPI.Models;
+using TaxComputationAPI.ResponseModel;
+
 namespace TaxComputationAPI.Interfaces
 {
-    public class IFixedAssetRepository
+    public interface IFixedAssetRepository
     {
-        
+           Task SaveFixedAsset ( CreateFixedAssetDto fixedAsset);
+
+           Task <FixedAssetResponse> GetFixedAssetsByCompany(int companyId, int yearId);
     }
 }

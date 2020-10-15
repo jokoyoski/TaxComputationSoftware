@@ -1,6 +1,6 @@
 namespace TaxComputationAPI.Dtos
 {
-    public class CreateFixedAssetDto
+    public class TrialBalanceDto
     {
         
     }
