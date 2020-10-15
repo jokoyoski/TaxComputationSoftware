@@ -34,7 +34,8 @@ namespace TaxComputationAPI.Data
 
         public DbSet<Company> Company { get; set; }
         public DbSet<FixedAsset> FixedAsset {get;set;}
+        public DbSet<AssetClass> AssetClass { get; set; }
+        public DbSet<FinancialYear> FinancialYear { get; set; }
 
-      
     }
 }

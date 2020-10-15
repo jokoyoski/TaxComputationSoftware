@@ -1,9 +1,7 @@
 namespace TaxComputationAPI.Dtos
 {
-    public class AssetClass
+    public class AssetClassDto
     {
-      
-
         public string Name {get;set;}
     }
 }
