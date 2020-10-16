@@ -1,19 +1,50 @@
 import React from "react";
 import { Link } from "react-resource-router";
 import constants from "../../constants";
+import utils from "../../utils";
 
 const Sidebar = ({ selectedTitle }) => {
   const menuItems = [
     { title: "Dashboard", href: constants.routes.dashboard },
-    { title: "Fixed Asset" },
-    { title: "Profit & Loss", href: constants.routes.profit_loss },
-    { title: "Income Tax", href: constants.routes.income_tax },
-    { title: "Deferred Tax", href: constants.routes.deferred_tax },
-    { title: "Minimum Tax", href: constants.routes.minimum_tax },
-    { title: "I.T Levy", href: constants.routes.it_levy },
-    { title: "Capital Allowance", href: constants.routes.capital_allowance },
-    { title: "Investment Allowance", href: constants.routes.investment_allowance },
-    { title: "Balancing Adjustment", href: constants.routes.balancing_adjustment }
+    { title: constants.modules.fixedAsset },
+    {
+      title: constants.modules.profit_loss,
+      href: `${constants.routes.profit_loss}/${utils.defaultMode(constants.modules.profit_loss)}`
+    },
+    {
+      title: constants.modules.incomeTax,
+      href: `${constants.routes.income_tax}/${utils.defaultMode(constants.modules.incomeTax)}`
+    },
+    {
+      title: constants.modules.deferredTax,
+      href: `${constants.routes.deferred_tax}/${utils.defaultMode(constants.modules.deferredTax)}`
+    },
+    {
+      title: constants.modules.minimumTax,
+      href: `${constants.routes.minimum_tax}/${utils.defaultMode(constants.modules.minimumTax)}`
+    },
+    {
+      title: constants.modules.itLevy,
+      href: `${constants.routes.it_levy}/${utils.defaultMode(constants.modules.itLevy)}`
+    },
+    {
+      title: constants.modules.capitalAllowance,
+      href: `${constants.routes.capital_allowance}/${utils.defaultMode(
+        constants.modules.capitalAllowance
+      )}`
+    },
+    {
+      title: constants.modules.investmentAllowance,
+      href: `${constants.routes.investment_allowance}/${utils.defaultMode(
+        constants.modules.investmentAllowance
+      )}`
+    },
+    {
+      title: constants.modules.balancingAdjustment,
+      href: `${constants.routes.balancing_adjustment}/${utils.defaultMode(
+        constants.modules.balancingAdjustment
+      )}`
+    }
   ];
   return (
     <div className="p-d-flex" style={{ position: "fixed", zIndex: 1 }}>

@@ -9,7 +9,10 @@ import InvestmentAllowance from "../pages/InvestmentAllowance";
 import ITLevy from "../pages/ITLevy";
 import Login from "../pages/Login";
 import MinimumTax from "../pages/MinimumTax";
+import NotFound from "../pages/NotFound";
 import ProfitLoss from "../pages/ProfitLoss";
+
+const modePathParam = "/:mode";
 
 export const routes = [
   {
@@ -32,59 +35,64 @@ export const routes = [
     //resources: [aboutResource],
   },
   {
-    path: constants.routes.profit_loss,
+    path: `${constants.routes.profit_loss}${modePathParam}`,
     name: "PROFIT_LOSS",
     exact: true,
     component: ProfitLoss
     //resources: [aboutResource],
   },
   {
-    path: constants.routes.income_tax,
+    path: `${constants.routes.income_tax}${modePathParam}`,
     name: "INCOME_TAX",
     exact: true,
     component: IncomeTax
     //resources: [aboutResource],
   },
   {
-    path: constants.routes.deferred_tax,
+    path: `${constants.routes.deferred_tax}${modePathParam}`,
     name: "DEFERRED_TAX",
     exact: true,
     component: DeferredTax
     //resources: [aboutResource],
   },
   {
-    path: constants.routes.minimum_tax,
+    path: `${constants.routes.minimum_tax}${modePathParam}`,
     name: "MINIMUM_TAX",
     exact: true,
     component: MinimumTax
     //resources: [aboutResource],
   },
   {
-    path: constants.routes.it_levy,
+    path: `${constants.routes.it_levy}${modePathParam}`,
     name: "IT_LEVY",
     exact: true,
     component: ITLevy
     //resources: [aboutResource],
   },
   {
-    path: constants.routes.capital_allowance,
+    path: `${constants.routes.capital_allowance}${modePathParam}`,
     name: "CAPITAL_ALLOWANCE",
     exact: true,
     component: CapitalAllowance
     //resources: [aboutResource],
   },
   {
-    path: constants.routes.investment_allowance,
+    path: `${constants.routes.investment_allowance}${modePathParam}`,
     name: "INVESTMENT_ALLOWANCE",
     exact: true,
     component: InvestmentAllowance
     //resources: [aboutResource],
   },
   {
-    path: constants.routes.balancing_adjustment,
+    path: `${constants.routes.balancing_adjustment}${modePathParam}`,
     name: "BALANCING_ADJUSTMENT",
     exact: true,
     component: BalancingAdjustment
     //resources: [aboutResource],
+  },
+  {
+    path: "*",
+    name: "NOT_FOUND",
+    component: NotFound
   }
 ];

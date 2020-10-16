@@ -9,5 +9,6 @@ export default {
       years.push(i);
     }
     return years;
-  }
+  },
+  defaultMode: title => (constants.nonMappedModules.includes(title) ? "view" : "mapping")
 };

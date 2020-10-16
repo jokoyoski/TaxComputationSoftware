@@ -1,8 +1,12 @@
 import React from "react";
 import { Card } from "primereact/card";
 import ModuleHeader from "../common/ModuleHeader";
+import constants from "../../constants";
+import utils from "../../utils";
 
 const Main = ({ title, mode, setMode, year, setYear, yearSelectItems, children }) => {
+  if (!constants.modes.includes(mode)) setMode(utils.defaultMode(title));
+
   return (
     <Card
       header={

@@ -31,9 +31,9 @@ const CompanyPicker = ({
       onHide={() => setShowCompanyPicker(false)}>
       <form onSubmit={handleSubmit}>
         <div className="p-d-flex p-flex-column">
-          <p htmlhtmlFor="companyNameInput" style={{ margin: "0px 0px 10px 0px" }}>
+          <label htmlFor="companyNameInput" style={{ margin: "0px 0px 10px 0px" }}>
             Select a company or add a new company
-          </p>
+          </label>
           <Dropdown
             value={company}
             options={companySelectItems}

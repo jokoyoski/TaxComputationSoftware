@@ -5,10 +5,11 @@ import MappingMode from "../components/common/MappingMode";
 import ViewMode from "../components/common/ViewMode";
 import utils from "../utils";
 import Main from "../components/layout/Main";
+import { usePathParam } from "react-resource-router";
 
 const IncomeTax = () => {
   const title = "Income Tax";
-  const [mode, setMode] = React.useState("mapping");
+  const [mode, setMode] = usePathParam("mode");
   const [year, setYear] = React.useState(utils.currentYear());
   const yearSelectItems = utils.getYears(year => ({
     label: year.toString(),
