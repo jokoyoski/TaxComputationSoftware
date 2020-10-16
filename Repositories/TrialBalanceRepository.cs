@@ -2,6 +2,7 @@ using System.Threading.Tasks;
 using TaxComputationAPI.Data;
 using TaxComputationAPI.Interfaces;
 using System.Linq;
+using TaxComputationAPI.Models;
 
 namespace TaxComputationAPI.Repositories
 {
@@ -13,15 +14,15 @@ namespace TaxComputationAPI.Repositories
         }
         public  async Task UpdateTrialBalance(int trialBalanceId,string mappedTo)
         {
-            var record= _dataContext.TrialBalance.FirstOrDefault(x=>x.Id==trialBalanceId);
+           var record= _dataContext.TrialBalance.FirstOrDefault(x=>x.Id==trialBalanceId);
            if(record!=null)
            {
            record.IsCheck=true;
            record.MappedTo=mappedTo;
-           _dataContext.SaveChanges();
+            _dataContext.SaveChanges();
         
+           }
            }
 
         }
     }
-}

@@ -3,9 +3,9 @@ namespace TaxComputationAPI.Models
     public class FixedAsset
     {
         public int Id {get;set;}
-        public string CompanyId {get;set;} 
+        public int CompanyId {get;set;} 
         public int YearId {get;set;}
-        public string FixedAssetName {get;set;}
+        public int AssetId {get;set;}
         public long OpeningCost {get;set;}
         
         public long CostAddition {get;set;}

@@ -13,7 +13,7 @@ namespace TaxComputationAPI.Dtos
         public int TriBalanceId {get;set;}
 
         public bool IsCost {get;set;}
-        public string FixedAssetName {get;set;}
+    
         public long OpeningCost {get;set;}
         
         public long CostAddition {get;set;}

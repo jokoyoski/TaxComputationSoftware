@@ -36,16 +36,19 @@ namespace TaxComputationAPI.Services
 
 
             var result= await _fixedAssetRepository.GetFixedAssetsByCompany(companyId,yearId);
+            if(result.FixedAssetData.Count<=0){
+                return null;
+            }
             var cost=result.FixedAssetData.Where(x=>x.Id!=0);
              foreach(var x  in cost){
-              openingCostTotal =+ x.OpeningCost;
-              adddtionCostTotal =+ x.CostAddition;
-              disposalCostTotal =+ x.CostDisposal;
-              closingCostTotal  =+ x.CostClosing;
-              openingDepreciationTotal =+ x.OpeningDepreciation;
-              adddtionDepreciationTotal =+ x.DepreciationAddition;
-              disposalDepreciationTotal =+ x.DepreciationDisposal;
-              closingDepreciationTotal  =+ x.DepreciationClosing;
+              openingCostTotal += x.OpeningCost;
+              adddtionCostTotal += x.CostAddition;
+              disposalCostTotal += x.CostDisposal;
+              closingCostTotal  += x.CostClosing;
+              openingDepreciationTotal += x.OpeningDepreciation;
+              adddtionDepreciationTotal += x.DepreciationAddition;
+              disposalDepreciationTotal += x.DepreciationDisposal;
+              closingDepreciationTotal  += x.DepreciationClosing;
               netBookValues.Add(new NetBookValue{
                value=closingCostTotal-closingDepreciationTotal
               });

@@ -9,9 +9,13 @@ namespace TaxComputationAPI.Interfaces
     public interface IUtilitiesService
     {
 
-        Task<AssetClass> GetAssetClassAsync(string name);
+        Task<List<AssetClass>> GetAssetClassAsync();
+
+        Task<AssetClass> GetAssetClassAsync(string Name);
+
+        Task<FinancialYear> GetFinancialYearAsync(string Name);
         Task AddAssetClassAsync(AssetClass assetClass);
-        Task<FinancialYear> GetFinancialYearAsync(string name);
+        Task<List<FinancialYear>> GetFinancialYearAsync();
         Task AddFinancialYearAsync(FinancialYear financialYear);
 
     }

@@ -36,10 +36,15 @@ namespace TaxComputationAPI.Controllers
         {
             try
             {
+                 string[] error =new string[]{};
                 var user = await _userManager.FindByNameAsync(userForLoginDto.Email);
                 if(user == null)
-                    return Unauthorized(new {status = "error", message = "user not found"});
+                {
 
+                      error = new[] { "User Not Found" };
+                    return StatusCode(400, new { errors = new { error } });
+
+                }
                 var result = await _signInManager.CheckPasswordSignInAsync(user, userForLoginDto.Password, false);
 
                 if (result.Succeeded)
@@ -53,7 +58,7 @@ namespace TaxComputationAPI.Controllers
                     });
                 }
 
-                 var error = new[] { "Your login details are not valid" };
+                  error = new[] { "Your login details are not valid" };
                 return StatusCode(500, new { errors = new { error } });
 
             }

@@ -18,9 +18,9 @@ namespace TaxComputationAPI.Repositories
 
         }
 
-        public async Task<AssetClass> GetAssetClassAsync(string Name)
+        public async Task<List<AssetClass>> GetAssetClassAsync()
         {
-            var asset = await _context.AssetClass.FirstOrDefaultAsync(x => x.Name == Name);
+            var asset = _context.AssetClass.ToList();
             return asset;
         }
         
@@ -31,9 +31,9 @@ namespace TaxComputationAPI.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task<FinancialYear> GetFinancialYearAsync(string Name)
+        public  Task<List<FinancialYear>> GetFinancialYearAsync()
         {
-            var year = await _context.FinancialYear.FirstOrDefaultAsync(x => x.Name == Name);
+            var year =   _context.FinancialYear.ToListAsync();
             return year;
         }
 
@@ -44,5 +44,16 @@ namespace TaxComputationAPI.Repositories
             await _context.SaveChangesAsync();
         }
 
+        public async  Task<AssetClass> GetAssetClassAsync(string Name)
+        {
+            var assetClass =   _context.AssetClass.FirstOrDefault(x=>x.Name==Name);
+            return assetClass;
+        }
+
+        public async Task<FinancialYear> GetFinancialYearAsync(string Name)
+        {
+             var financialYear =   _context.FinancialYear.FirstOrDefault(x=>x.Name==Name);
+            return financialYear;
+        }
     }
 }

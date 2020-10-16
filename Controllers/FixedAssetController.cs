@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using TaxComputationAPI.Dtos;
+using TaxComputationAPI.Interfaces;
 
 namespace TaxComputationAPI.Controllers
 {
@@ -11,20 +13,37 @@ namespace TaxComputationAPI.Controllers
 
     public class FixedAssetController :ControllerBase
     {
+      private readonly IMapper _mapper;
+      private readonly IFixedAssetService _fixedAssetService;
+
+      public FixedAssetController(IMapper mapper,IFixedAssetService fixedAssetService){
+         _mapper=mapper;
+         _fixedAssetService=fixedAssetService;
+       }
+      
          [HttpPost]
         public async Task<IActionResult> AddFixedAsset(CreateFixedAssetDto createFixed)
         {
             try
-            {
+            { 
+             
+               if(createFixed==null){
+                  var error = new[] { "Bad Input !" };
+                  
+                return StatusCode(400, new { errors = new { error } });
+               } 
+                if(createFixed.MappedCode==null){
+                 return BadRequest();
+              }
+             await  _fixedAssetService.SaveFixedAsset(createFixed);
                 
-
                return Ok("saved successfully");
 
             }
             catch (Exception ex)
             {
-                var error = ex.Message;
-                return StatusCode(500, "Error Occured please try again later,please try again later...");
+               var error = new[] { "Error Occured please try again later,please try again later..." };
+                return StatusCode(500, new { errors = new { error } });
             }
         }
 
@@ -38,52 +57,18 @@ namespace TaxComputationAPI.Controllers
         {
             try
             {
-                List<NetBookValue> value=new List<NetBookValue>();
-                value.Add(new NetBookValue{
-                    value=3000,
-                });
-                  value.Add(new NetBookValue{
-                    value=3000,
-                });
-                  value.Add(new NetBookValue{
-                    value=5000,
-                });
-                  value.Add(new NetBookValue{
-                    value=8000,
-                });
-                  value.Add(new NetBookValue{
-                    value=9000,
-                });
-                List<FixedAssetListDto>fixedAssetListDtos=new List<FixedAssetListDto>();
-                FixedAssetDto fixedAsset =new FixedAssetDto();
-                 for(int i=0;i<10;i++){
-                   fixedAssetListDtos.Add(new FixedAssetListDto{
-                    OpeningCost=3000,
-                    OpeningDepreciation=4000,
-                    FixedAssetName="Plant and Machinery",
-                     DepreciationClosing=5000,
-                     
-                    
-                     
-                });
-
+                var fixedAsset=await _fixedAssetService.GetFixedAssetsByCompany(companyId,yearId);
+                 if(fixedAsset==null){
+                 var error = new[] { "Record not found at this time, please try later" };
+                return StatusCode(404, new { errors = new { error } });
                  }
-                 fixedAsset.values=fixedAssetListDtos;
-                 fixedAsset.netBookValue=value;
-                 fixedAsset.total=new Total{
-                        ClosingCostTotal=300,
-                        ClosingDepreciationTotal=4000,
-                        AdditionCostTotal=4000
-                     };
-
-                 
                return Ok(fixedAsset);
 
             }
             catch (Exception ex)
             {
-                var error = ex.Message;
-                return StatusCode(500, "Error Occured please try again later,please try again later...");
+                var error = new[] { "Error occured while trying to process your request please try again later !" };
+                return StatusCode(500, new { errors = new { error } });
             }
         }
     }

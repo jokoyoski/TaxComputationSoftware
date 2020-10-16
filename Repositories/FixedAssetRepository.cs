@@ -7,6 +7,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using TaxComputationAPI.ResponseModel;
+using System;
+using Total = TaxComputationAPI.ResponseModel.Total;
 
 namespace TaxComputationAPI.Repositories
 {
@@ -16,6 +18,7 @@ namespace TaxComputationAPI.Repositories
          private readonly IMapper    _mapper;
         public FixedAssetRepository(DataContext dataContext,IMapper mapper ){
              _dataContext=dataContext;
+             _mapper=mapper;
         }
 
         public async Task<FixedAssetResponse> GetFixedAssetsByCompany(int companyId, int yearId)
@@ -24,7 +27,8 @@ namespace TaxComputationAPI.Repositories
                 join b in _dataContext.FinancialYear on s.YearId equals b.Id
                 join  c in _dataContext.AssetClass on   s.AssetId equals c.Id
                 join x in _dataContext.Company on s.CompanyId equals x.Id
-            select new FixedAssetData{
+                where s.CompanyId==companyId && s.YearId==yearId
+                select new FixedAssetData{
                 Id=s.Id,
               CompanyName=x.CompanyName,
               Year=b.Name,
@@ -42,16 +46,17 @@ namespace TaxComputationAPI.Repositories
             ).OrderBy(x=>x.Id).ToList();
             FixedAssetResponse fixedAssetResponse= new FixedAssetResponse();
             fixedAssetResponse.FixedAssetData=result;
+            fixedAssetResponse.netBookValue=new List<ResponseModel.NetBookValue>();
+            fixedAssetResponse.total=new Total();
             return fixedAssetResponse;
              
         }
 
         public  async Task SaveFixedAsset(CreateFixedAssetDto fixedAssetDto)
         {
+          
            var value=_mapper.Map<FixedAsset>(fixedAssetDto);
-
            var record=_dataContext.FixedAsset.FirstOrDefault(x=>x.CompanyId==value.CompanyId&&x.YearId==value.YearId);
-
            if(record==null && fixedAssetDto.IsCost==true){
              var fixedAsset=new FixedAsset{
              CompanyId=fixedAssetDto.CompanyId,
@@ -98,7 +103,7 @@ namespace TaxComputationAPI.Repositories
              record.DepreciationDisposal=fixedAssetDto.DepreciationDisposal;
              record.DepreciationClosing=fixedAssetDto.DepreciationClosing;
             }
-                   await _dataContext.SaveChangesAsync();
+            _dataContext.SaveChanges();
            }
         }
     }

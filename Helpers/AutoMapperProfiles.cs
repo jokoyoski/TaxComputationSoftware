@@ -13,8 +13,9 @@ namespace TaxComputationAPI.Helpers
              CreateMap<User, UserForLoginDto>().ReverseMap();
             CreateMap<Company, CompanyForListDto>().ReverseMap();
             CreateMap<Company, CompanyForRegisterDto>().ReverseMap();
-            CreateMap<AssetClass, AssetClassDto>().ReverseMap();
-            CreateMap<FinancialYear, FinancialYearDto>().ReverseMap();
+            CreateMap<CreateFixedAssetDto, FixedAsset>().ReverseMap();
+            CreateMap<AssetClassDto, AssetClass>().ReverseMap();
+            CreateMap<FinancialYearDto, FinancialYear>().ReverseMap();
         }
     }
 }

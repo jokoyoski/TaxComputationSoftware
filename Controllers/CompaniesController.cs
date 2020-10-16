@@ -58,8 +58,8 @@ namespace TaxComputationAPI.Controllers
         {
             try
             {
-                var companyRecord=_companiesService.GetCompanyByTinAsync(companyForRegisterDto.TinNumber);
-                if(companyRecord==null){
+                var companyRecord=await _companiesService.GetCompanyByTinAsync(companyForRegisterDto.TinNumber);
+                if(companyRecord!=null){
                      var error = new[] { "Company Already exist!" };
                 return StatusCode(400, new { errors = new { error } });
                 }

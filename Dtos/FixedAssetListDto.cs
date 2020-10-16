@@ -4,6 +4,9 @@ namespace TaxComputationAPI.Dtos
 {
     public class FixedAssetListDto
     {
+        public  int CompanyId  {get;set;}
+
+         public int YearId {get;set;}
         public string FixedAssetName {get;set;}
         public long OpeningCost {get;set;}
         

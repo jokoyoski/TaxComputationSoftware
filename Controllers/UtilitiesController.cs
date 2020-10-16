@@ -26,95 +26,81 @@ namespace TaxComputationAPI.Controllers
         {
             try
             {
-                var value= 10.40.ToString("0,00");
-                List<AssetClass>fixedAssetListDtos=new List<AssetClass>();
-                 for(int i=0;i<10;i++){
-                fixedAssetListDtos.Add(new AssetClass{
-                 Name="Furniture and Fittings"
-                });
-                 }
+              var fixedAssetListDtos=await _utilitiesService.GetAssetClassAsync();
 
                return Ok(fixedAssetListDtos);
 
             }
             catch (Exception ex)
             {
-                var error = ex.Message;
-                return StatusCode(500, "Error Occured please try again later,please try again later...");
+               var error = new[] { "Error occured while trying to process your request please try again later !" };
+                return StatusCode(500, new { errors = new { error } });
             }
         }
 
-        [HttpPost("add-assetclass")]
+        [HttpPost("asset-class")]
         public async Task<ActionResult> AddAssetClassAsync(AssetClassDto assetClassDto)
         {
             try
             {
-                var assetClassRecord = _utilitiesService.GetAssetClassAsync(assetClassDto.Name);
-                if (assetClassRecord == null)
+                var assetClassRecord = await _utilitiesService.GetAssetClassAsync(assetClassDto.Name);
+                if (assetClassRecord != null)
                 {
-                    var error = new[] { "Company Already exist!" };
+                    var error = new[] { "Asset class exist!" };
                     return StatusCode(400, new { errors = new { error } });
                 }
                 var assetClassToAdd = _mapper.Map<AssetClass>(assetClassDto);
                 assetClassToAdd.Name = assetClassDto.Name;
 
                 await _utilitiesService.AddAssetClassAsync(assetClassToAdd);
-                var assetClassToReturn = _mapper.Map<AssetClassDto>(assetClassToAdd);
-
-                return CreatedAtRoute("GetAssetClass", new { controller = "Utilities", id = assetClassToReturn.Name }, assetClassToReturn);
-            }
+            
+                  return Ok("Asset class created successfully !!");
+           }
             catch (Exception ex)
             {
-                var error = ex.Message;
-                return StatusCode(500, "Error Occured please try again later,please try again later...");
+               var error = new[] { "Error occured while trying to process your request please try again later !" };
+                return StatusCode(500, new { errors = new { error } });
             }
         }
 
-        [HttpGet("financialyear")]
+        [HttpGet("financial-year")]
         public async Task<IActionResult> GetFinancialYear()
         {
             try
             {
-                List<FinancialYear>financialYears=new List<FinancialYear>();
-                 for(int i=0;i<10;i++){
-                financialYears.Add(new FinancialYear{
-                 Name="2020"
-                });
-                 }
+                var financialYear=await _utilitiesService.GetFinancialYearAsync();
 
-               return Ok(financialYears);
+               return Ok(financialYear);
 
             }
             catch (Exception ex)
             {
-                var error = ex.Message;
-                return StatusCode(500, "Error Occured please try again later,please try again later...");
+                var error = new[] { "Error occured while trying to process your request please try again later !" };
+                return StatusCode(500, new { errors = new { error } });
             }
         }
 
-        [HttpPost("add-financialyear")]
+        [HttpPost("add-financial-year")]
         public async Task<ActionResult> AddFinancialYearAsync(FinancialYearDto financialYearDto)
         {
             try
             {
-                var financialYearRecord = _utilitiesService.GetFinancialYearAsync(financialYearDto.Name);
-                if(financialYearRecord==null)
+                var financialYearRecord = await _utilitiesService.GetFinancialYearAsync(financialYearDto.Name);
+                if(financialYearRecord!=null)
                 {
-                    var error = new[] { "Company Already exist!" };
+                    var error = new[] { "Financial year already exist!" };
                     return StatusCode(400, new { errors = new { error } });
                 }
                 var financialYearToAdd = _mapper.Map<FinancialYear>(financialYearDto);
                 financialYearToAdd.Name = financialYearDto.Name;
 
                 await _utilitiesService.AddFinancialYearAsync(financialYearToAdd);
-                var financialYearToReturn = _mapper.Map<FinancialYearDto>(financialYearToAdd);
-
-                return CreatedAtRoute("GetFinancialYear", new { controller = "Utilities", id = financialYearToReturn.Name }, financialYearToReturn);
+                return Ok("Asset class created successfully !!");
             }
             catch (Exception ex)
             {
-                var error = ex.Message;
-                return StatusCode(500, "Error Occured please try again later,please try again later...");
+                var error = new[] { "Error occured while trying to process your request please try again later !" };
+                return StatusCode(500, new { errors = new { error } });
             }
         }
     }

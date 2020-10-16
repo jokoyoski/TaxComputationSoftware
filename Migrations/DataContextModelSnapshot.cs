@@ -172,8 +172,11 @@ namespace TaxComputationAPI.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("CompanyId")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("AssetId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CompanyId")
+                        .HasColumnType("int");
 
                     b.Property<long>("CostAddition")
                         .HasColumnType("bigint");
@@ -192,9 +195,6 @@ namespace TaxComputationAPI.Migrations
 
                     b.Property<long>("DepreciationDisposal")
                         .HasColumnType("bigint");
-
-                    b.Property<string>("FixedAssetName")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<long>("OpeningCost")
                         .HasColumnType("bigint");
@@ -237,6 +237,33 @@ namespace TaxComputationAPI.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles");
+                });
+
+            modelBuilder.Entity("TaxComputationAPI.Models.TrialBalance", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<long>("Credit")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("Debit")
+                        .HasColumnType("bigint");
+
+                    b.Property<bool>("IsCheck")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Item")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MappedTo")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TrialBalance");
                 });
 
             modelBuilder.Entity("TaxComputationAPI.Models.User", b =>

@@ -22,7 +22,8 @@ namespace TaxComputationAPI.Controllers
                 fixedAssetListDtos.Add(new TrialBalance{
                   Item="Furniture and fittings",
                   Debit=100,
-                  Credit=3000
+                  Credit=3000,
+                
                 });
                  }
 
