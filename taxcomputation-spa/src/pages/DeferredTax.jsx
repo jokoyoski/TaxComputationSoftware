@@ -6,10 +6,11 @@ import constants from "../constants";
 import ViewMode from "../components/common/ViewMode";
 import Main from "../components/layout/Main";
 import utils from "../utils";
+import { usePathParam } from "react-resource-router";
 
 const DeferredTax = () => {
   const title = constants.modules.deferredTax;
-  const [mode, setMode] = React.useState("mapping");
+  const [mode, setMode] = usePathParam("mode");
   const [year, setYear] = React.useState(utils.currentYear());
   const yearSelectItems = utils.getYears(year => ({
     label: year.toString(),
@@ -27,7 +28,9 @@ const DeferredTax = () => {
         yearSelectItems={yearSelectItems}>
         {
           {
-            mapping: <MappingMode />,
+            mapping: (
+              <MappingMode year={year} setYear={setYear} yearSelectItems={yearSelectItems} />
+            ),
             view: (
               <ViewMode title={title}>
                 <DeferredTaxView />

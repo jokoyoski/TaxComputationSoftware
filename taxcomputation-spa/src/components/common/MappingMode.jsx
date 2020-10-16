@@ -74,6 +74,7 @@ const MappingMode = ({ year, setYear, yearSelectItems }) => {
         <Column field="accountDescription" header="Account Description"></Column>
         <Column field="debitAmount" header="Debit Amount"></Column>
         <Column field="creditAmount" header="Credit Amount"></Column>
+        <Column field="mappedCode" header="Mapped To"></Column>
       </DataTable>
     </>
   );

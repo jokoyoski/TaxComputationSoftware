@@ -1,5 +1,6 @@
 export default {
   startYear: 1980,
+  modes: ["mapping", "view"],
   modules: {
     fixedAsset: "Fixed Asset",
     profit_loss: "Profit & Loss",
@@ -15,6 +16,7 @@ export default {
     home: "/",
     login: "/login",
     dashboard: "/dashboard",
+    fixed_asset: "/fixed_asset",
     profit_loss: "/profit_loss",
     income_tax: "/income_tax",
     deferred_tax: "/deferred_tax",
@@ -23,5 +25,13 @@ export default {
     capital_allowance: "/capital_allowance",
     investment_allowance: "/investment_allowance",
     balancing_adjustment: "/balancing_adjustment"
+  },
+  nonMappedModules: ["Minimum Tax", "Capital Allowance", "Investment Allowance", "I.T Levy"],
+  mappingCode: {
+    fixedasset: "fixedasset",
+    profitandloss: "profitandloss",
+    balancingadjustment: "balancingadjustment",
+    deferredtax: "deferredtax",
+    incometax: "incometax"
   }
 };

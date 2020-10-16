@@ -6,10 +6,11 @@ import constants from "../constants";
 import BalancingAdjustmentView from "../components/balancing_adjustment/BalancingAdjustmentView";
 import Main from "../components/layout/Main";
 import utils from "../utils";
+import { usePathParam } from "react-resource-router";
 
 const BalancingAdjustment = () => {
   const title = constants.modules.balancingAdjustment;
-  const [mode, setMode] = React.useState("mapping");
+  const [mode, setMode] = usePathParam("mode");
   const [year, setYear] = React.useState(utils.currentYear());
   const yearSelectItems = utils.getYears(year => ({
     label: year.toString(),

@@ -1,15 +1,15 @@
 import React from "react";
 import Layout from "../components/layout";
-import MappingMode from "../components/common/MappingMode";
 import ViewMode from "../components/common/ViewMode";
 import constants from "../constants";
 import CapitalAllowanceView from "../components/capital_allowance/CapitalAllowanceView";
 import Main from "../components/layout/Main";
 import utils from "../utils";
+import { usePathParam } from "react-resource-router";
 
 const CapitalAllowance = () => {
   const title = constants.modules.capitalAllowance;
-  const [mode, setMode] = React.useState("mapping");
+  const [mode, setMode] = usePathParam("mode");
   const [year, setYear] = React.useState(utils.currentYear());
   const yearSelectItems = utils.getYears(year => ({
     label: year.toString(),
@@ -25,18 +25,9 @@ const CapitalAllowance = () => {
         year={year}
         setYear={setYear}
         yearSelectItems={yearSelectItems}>
-        {
-          {
-            mapping: (
-              <MappingMode year={year} setYear={setYear} yearSelectItems={yearSelectItems} />
-            ),
-            view: (
-              <ViewMode title={title}>
-                <CapitalAllowanceView />
-              </ViewMode>
-            )
-          }[mode]
-        }
+        <ViewMode title={title}>
+          <CapitalAllowanceView />
+        </ViewMode>
       </Main>
     </Layout>
   );

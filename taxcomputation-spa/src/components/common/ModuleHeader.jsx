@@ -1,5 +1,6 @@
 import React from "react";
 import { Dropdown } from "primereact/dropdown";
+import constants from "../../constants";
 
 const ModuleHeader = ({ title, mode, setMode, year, setYear, yearSelectItems }) => {
   const modeSelectItems = [
@@ -28,6 +29,7 @@ const ModuleHeader = ({ title, mode, setMode, year, setYear, yearSelectItems }) 
           <Dropdown
             style={{ width: 180 }}
             value={mode}
+            disabled={constants.nonMappedModules.includes(title)}
             options={modeSelectItems}
             onChange={e => {
               setMode(e.value);
