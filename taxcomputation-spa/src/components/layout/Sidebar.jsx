@@ -6,7 +6,10 @@ import utils from "../../utils";
 const Sidebar = ({ selectedTitle }) => {
   const menuItems = [
     { title: "Dashboard", href: constants.routes.dashboard },
-    { title: constants.modules.fixedAsset },
+    {
+      title: constants.modules.fixedAsset,
+      href: `${constants.routes.fixed_asset}/${utils.defaultMode(constants.modules.fixedAsset)}`
+    },
     {
       title: constants.modules.profit_loss,
       href: `${constants.routes.profit_loss}/${utils.defaultMode(constants.modules.profit_loss)}`

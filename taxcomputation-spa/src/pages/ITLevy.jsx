@@ -1,6 +1,5 @@
 import React from "react";
 import Layout from "../components/layout";
-import MappingMode from "../components/common/MappingMode";
 import ITLevyView from "../components/it_levy/ITLevyView";
 import ViewMode from "../components/common/ViewMode";
 import constants from "../constants";
@@ -26,16 +25,9 @@ const ITLevy = () => {
         year={year}
         setYear={setYear}
         yearSelectItems={yearSelectItems}>
-        {
-          {
-            mapping: <MappingMode />,
-            view: (
-              <ViewMode title={title}>
-                <ITLevyView />
-              </ViewMode>
-            )
-          }[mode]
-        }
+        <ViewMode title={title}>
+          <ITLevyView />
+        </ViewMode>
       </Main>
     </Layout>
   );

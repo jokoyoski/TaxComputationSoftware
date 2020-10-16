@@ -3,6 +3,7 @@ import BalancingAdjustment from "../pages/BalancingAdjustment";
 import CapitalAllowance from "../pages/CapitalAllowance";
 import Dashboard from "../pages/Dashboard";
 import DeferredTax from "../pages/DeferredTax";
+import FixedAsset from "../pages/FixedAsset";
 import Home from "../pages/Home";
 import IncomeTax from "../pages/IncomeTax";
 import InvestmentAllowance from "../pages/InvestmentAllowance";
@@ -32,6 +33,13 @@ export const routes = [
     name: "DASHBOARD",
     exact: true,
     component: Dashboard
+    //resources: [aboutResource],
+  },
+  {
+    path: `${constants.routes.fixed_asset}${modePathParam}`,
+    name: "FIXED_ASSET",
+    exact: true,
+    component: FixedAsset
     //resources: [aboutResource],
   },
   {

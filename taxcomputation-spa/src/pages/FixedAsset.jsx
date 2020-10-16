@@ -1,15 +1,14 @@
 import React from "react";
-import Layout from "../components/layout";
-import IncomeTaxView from "../components/income_tax/IncomeTaxView";
-import MappingMode from "../components/common/MappingMode";
 import ViewMode from "../components/common/ViewMode";
-import utils from "../utils";
+import Layout from "../components/layout";
 import Main from "../components/layout/Main";
-import { usePathParam } from "react-resource-router";
 import constants from "../constants";
+import utils from "../utils";
+import { usePathParam } from "react-resource-router";
+import FixedAssetMapping from "../components/fixed_asset/FixedAssetMapping";
 
-const IncomeTax = () => {
-  const title = constants.modules.incomeTax;
+const FixedAsset = () => {
+  const title = constants.modules.fixedAsset;
   const [mode, setMode] = usePathParam("mode");
   const [year, setYear] = React.useState(utils.currentYear());
   const yearSelectItems = utils.getYears(year => ({
@@ -29,13 +28,9 @@ const IncomeTax = () => {
         {
           {
             mapping: (
-              <MappingMode year={year} setYear={setYear} yearSelectItems={yearSelectItems} />
+              <FixedAssetMapping year={year} setYear={setYear} yearSelectItems={yearSelectItems} />
             ),
-            view: (
-              <ViewMode title={title}>
-                <IncomeTaxView />
-              </ViewMode>
-            )
+            view: <ViewMode title={title}></ViewMode>
           }[mode]
         }
       </Main>
@@ -43,4 +38,4 @@ const IncomeTax = () => {
   );
 };
 
-export default IncomeTax;
+export default FixedAsset;

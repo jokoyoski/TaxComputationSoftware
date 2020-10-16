@@ -28,7 +28,9 @@ const DeferredTax = () => {
         yearSelectItems={yearSelectItems}>
         {
           {
-            mapping: <MappingMode />,
+            mapping: (
+              <MappingMode year={year} setYear={setYear} yearSelectItems={yearSelectItems} />
+            ),
             view: (
               <ViewMode title={title}>
                 <DeferredTaxView />
