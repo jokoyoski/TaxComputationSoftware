@@ -1,9 +1,11 @@
 import React from "react";
 import { Link } from "react-resource-router";
 import constants from "../../constants";
+import { useAuth } from "../../store/AuthStore";
 import utils from "../../utils";
 
 const Sidebar = ({ selectedTitle }) => {
+  const [, { onLogout }] = useAuth();
   const menuItems = [
     { title: "Dashboard", href: constants.routes.dashboard },
     {
@@ -49,6 +51,7 @@ const Sidebar = ({ selectedTitle }) => {
       )}`
     }
   ];
+
   return (
     <div className="p-d-flex" style={{ position: "fixed", zIndex: 1 }}>
       <div
@@ -72,7 +75,8 @@ const Sidebar = ({ selectedTitle }) => {
           <Link
             key={index}
             href={item.href}
-            style={{ padding: "5px 20px", textDecoration: "none", color: "inherit" }}>
+            className="sidebar-link"
+            style={{ padding: "5px 20px" }}>
             <p
               className={
                 selectedTitle.toLowerCase() === item.title.toLowerCase() ? "accent-color" : ""
@@ -84,7 +88,13 @@ const Sidebar = ({ selectedTitle }) => {
         ))}
         <div className="divider" style={{ margin: "10px 0px" }}></div>
         <div style={{ padding: "0px 20px" }}>
-          <p style={{ margin: 0 }}>Logout</p>
+          <p
+            style={{ margin: 0, cursor: "pointer" }}
+            onClick={() => {
+              onLogout();
+            }}>
+            Logout
+          </p>
         </div>
       </div>
     </div>

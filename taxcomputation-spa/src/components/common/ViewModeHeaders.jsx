@@ -3,8 +3,10 @@ import React from "react";
 const ViewModeHeaders = ({ headers }) => {
   return (
     <>
-      {headers.map(header => (
-        <p className="view-description">{header}</p>
+      {headers.map((header, index) => (
+        <p key={index} className="view-description">
+          {header}
+        </p>
       ))}
     </>
   );
