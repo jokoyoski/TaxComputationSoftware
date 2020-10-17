@@ -62,32 +62,41 @@ namespace TaxComputationAPI.Services
             DataTable data = await ExtraDataFromSheet(upload.File);
 
             if (data == null) return;
-            
+
+            int trackId = 0;
+
             var exist = await _trialBalancerepository.GetTrackTrialBalance(upload.CompanyId, upload.YearId);
 
-
-            //TODO: If record of track trial balance exist remove and add the new one
-            if(exist != null) 
+            if (exist != null)
             {
 
                 var trialBalanceRecord = await _trialBalancerepository.GetTrialBalance(exist.Id);
 
-                foreach(var trialBalance in trialBalanceRecord)
+                foreach (var trialBalance in trialBalanceRecord)
                 {
                     await _trialBalancerepository.RemoveTrackTrialBalance(trialBalance);
                 }
+
+                trackId = (exist.Id <= 0) ? 0 : exist.Id;
+            }
+            else
+            {
+
+
+                TrackTrialBalance track = new TrackTrialBalance
+                {
+                    CompanyId = upload.CompanyId,
+                    YearId = upload.YearId,
+                    DateCreated = DateTime.UtcNow
+                };
+
+
+                var saveTrack = await _trialBalancerepository.AddTrackTrialBalance(track);
+
+                trackId = (saveTrack.Id <= 0) ? 0 : track.Id;
+
             }
 
-            TrackTrialBalance track = new TrackTrialBalance
-            {
-                CompanyId = upload.CompanyId,
-                YearId = upload.YearId,
-                DateCreated = DateTime.UtcNow
-            };
-
-            var saveTrack = await _trialBalancerepository.AddTrackTrialBalance(track);
-
-            int trackId = (saveTrack.Id <= 0) ? 0 : track.Id;
 
             foreach (DataRow cell in data.Rows)
             {
