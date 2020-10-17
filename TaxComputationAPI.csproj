@@ -3,6 +3,7 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="Aspose.Cells" Version="20.10.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.8" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.8" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.8" />
