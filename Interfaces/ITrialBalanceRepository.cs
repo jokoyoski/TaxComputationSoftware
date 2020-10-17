@@ -15,6 +15,8 @@ namespace TaxComputationAPI.Interfaces
         Task<TrackTrialBalance> AddTrackTrialBalance(TrackTrialBalance model);
 
         Task<TrialBalance> UploadTrialBalance(TrialBalance model);
+
+        Task<TrialBalance> RemoveTrackTrialBalance(TrialBalance trialBalance);
       
     }
 }

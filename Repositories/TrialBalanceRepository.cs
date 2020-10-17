@@ -49,6 +49,14 @@ namespace TaxComputationAPI.Repositories
             return response.Entity;
         }
 
+        public async Task<TrialBalance> RemoveTrackTrialBalance(TrialBalance trialBalance)
+        {
+            var response = _dataContext.TrialBalance.Remove(trialBalance);
+            _dataContext.SaveChanges();
+
+            return response.Entity;
+        }
+
         public async Task<TrialBalance> UploadTrialBalance(TrialBalance model)
         {
             var response = _dataContext.TrialBalance.Add(model);

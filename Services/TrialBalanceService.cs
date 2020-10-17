@@ -65,7 +65,18 @@ namespace TaxComputationAPI.Services
             
             var exist = await _trialBalancerepository.GetTrackTrialBalance(upload.CompanyId, upload.YearId);
 
-            if(exist != null) return;
+
+            //TODO: If record of track trial balance exist remove and add the new one
+            if(exist != null) 
+            {
+
+                var trialBalanceRecord = await _trialBalancerepository.GetTrialBalance(exist.Id);
+
+                foreach(var trialBalance in trialBalanceRecord)
+                {
+                    await _trialBalancerepository.RemoveTrackTrialBalance(trialBalance);
+                }
+            }
 
             TrackTrialBalance track = new TrackTrialBalance
             {
