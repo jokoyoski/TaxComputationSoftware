@@ -7,7 +7,7 @@ const CompanyPicker = ({
   setShowAddCompany,
   showCompanyPicker,
   setShowCompanyPicker,
-  companyId,
+  company,
   onSelectCompany,
   companySelectItems
 }) => {
@@ -26,8 +26,8 @@ const CompanyPicker = ({
           />
           <Button
             label="Proceed"
-            disabled={!companyId}
-            onClick={() => companyId && setShowCompanyPicker(false)}
+            disabled={!company}
+            onClick={() => company && setShowCompanyPicker(false)}
           />
         </div>
       }
@@ -41,7 +41,7 @@ const CompanyPicker = ({
       <div className="p-d-flex p-flex-column" style={{ height: 300 }}>
         <label htmlFor="companyNameInput" style={{ margin: "0px 0px 10px 0px" }}></label>
         <Dropdown
-          value={companyId}
+          value={company}
           options={companySelectItems}
           optionLabel="name"
           autoFocus
@@ -52,6 +52,14 @@ const CompanyPicker = ({
           }}
           placeholder="Select a Company"
         />
+        {companySelectItems && companySelectItems.length === 0 && (
+          <div className="p-d-flex p-ai-center" style={{ fontSize: 14, marginTop: 15 }}>
+            <i
+              className="pi pi-exclamation-triangle"
+              style={{ marginRight: 10, color: "#FBC02D", fontSize: 20 }}></i>
+            <span>There are currently no companies, click add company button.</span>
+          </div>
+        )}
       </div>
     </Dialog>
   );

@@ -2,7 +2,7 @@ import React from "react";
 import AddCompanyForm from "../components/dashboard/AddCompanyForm";
 import FileUploader from "../components/dashboard/FileUploader";
 import Layout from "../components/layout/index";
-import CompanyTable from "../components/dashboard/CompanyTable";
+import TrialBalanceTable from "../components/dashboard/TrialBalanceTable";
 import CompanyPicker from "../components/dashboard/CompanyPicker";
 import { useResource } from "react-resource-router";
 import { companiesResource } from "../routes/resources";
@@ -18,8 +18,19 @@ const Dashboard = () => {
   const { data: companies, loading, error, refresh } = useResource(companiesResource);
   const [showCompanyPicker, setShowCompanyPicker] = React.useState(true);
   const [showAddCompany, setShowAddCompany] = React.useState(false);
-  const [companySelectItems, setCompanySelectItems] = React.useState([]);
-  const [{ companyId }, { onSelectCompany }] = useCompany();
+  const [companySelectItems, setCompanySelectItems] = React.useState(null);
+  const [company, { onSelectCompany }] = useCompany();
+
+  const toastCallback = React.useCallback(
+    ({ severity, summary, detail }) => ({
+      severity,
+      summary,
+      detail,
+      life: constants.toastLifeTime,
+      closable: false
+    }),
+    []
+  );
 
   React.useEffect(() => {
     if (!showAddCompany) {
@@ -47,22 +58,25 @@ const Dashboard = () => {
 
   return (
     <Layout title={title}>
-      <FileUploader />
-      <CompanyTable setShowAddCompany={setShowAddCompany} />
+      <FileUploader company={company} toast={toast.current} toastCallback={toastCallback} />
+      {company.companyId && <TrialBalanceTable company={company} />}
       <AddCompanyForm
         showAddCompany={showAddCompany}
         setShowAddCompany={setShowAddCompany}
         toast={toast.current}
+        toastCallback={toastCallback}
         refresh={refresh}
       />
-      <CompanyPicker
-        setShowAddCompany={setShowAddCompany}
-        showCompanyPicker={showCompanyPicker}
-        setShowCompanyPicker={setShowCompanyPicker}
-        companyId={companyId}
-        onSelectCompany={onSelectCompany}
-        companySelectItems={companySelectItems}
-      />
+      {company.companyId === null && (
+        <CompanyPicker
+          setShowAddCompany={setShowAddCompany}
+          showCompanyPicker={showCompanyPicker}
+          setShowCompanyPicker={setShowCompanyPicker}
+          company={company}
+          onSelectCompany={onSelectCompany}
+          companySelectItems={companySelectItems}
+        />
+      )}
       <Toast baseZIndex={1000} ref={el => (toast.current = el)} />
     </Layout>
   );

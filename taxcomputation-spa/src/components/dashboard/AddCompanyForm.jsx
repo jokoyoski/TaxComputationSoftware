@@ -6,20 +6,9 @@ import { useForm, Controller } from "react-hook-form";
 import { addCompany } from "../../apis/Companies";
 import constants from "../../constants";
 
-const AddCompanyForm = ({ showAddCompany, setShowAddCompany, toast, refresh }) => {
+const AddCompanyForm = ({ showAddCompany, setShowAddCompany, toast, toastCallback, refresh }) => {
   const { errors, handleSubmit, control } = useForm();
   const [loading, setLoading] = React.useState(false);
-
-  const toastCallback = React.useCallback(
-    ({ severity, summary, detail }) => ({
-      severity,
-      summary,
-      detail,
-      life: constants.toastLifeTime,
-      closable: false
-    }),
-    []
-  );
 
   const onSubmit = async data => {
     if (loading) return;
@@ -34,7 +23,7 @@ const AddCompanyForm = ({ showAddCompany, setShowAddCompany, toast, refresh }) =
           setLoading(false);
           setShowAddCompany(false);
           refresh();
-        }, 3000);
+        }, 2000);
       }
     } catch (error) {
       setLoading(false);
