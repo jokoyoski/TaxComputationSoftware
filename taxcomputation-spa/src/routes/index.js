@@ -13,6 +13,7 @@ import MinimumTax from "../pages/MinimumTax";
 import NotFound from "../pages/NotFound";
 import ProfitLoss from "../pages/ProfitLoss";
 import RouteGuard from "../RouteGuard";
+import { companiesResource } from "./resources";
 
 const modePathParam = "/:mode";
 
@@ -33,8 +34,8 @@ export const routes = [
     path: constants.routes.dashboard,
     name: "DASHBOARD",
     exact: true,
-    component: RouteGuard(Dashboard)
-    //resources: [aboutResource],
+    component: RouteGuard(Dashboard),
+    resources: [companiesResource]
   },
   {
     path: `${constants.routes.fixed_asset}${modePathParam}`,

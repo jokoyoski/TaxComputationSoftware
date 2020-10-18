@@ -3,6 +3,7 @@ export default {
   toastLifeTime: 6000,
   modes: ["mapping", "view"],
   modules: {
+    dashboard: "Dashboard",
     fixedAsset: "Fixed Asset",
     profit_loss: "Profit & Loss",
     incomeTax: "Income Tax",
@@ -34,5 +35,6 @@ export default {
     balancingadjustment: "balancingadjustment",
     deferredtax: "deferredtax",
     incometax: "incometax"
-  }
+  },
+  networkErrorMessage: "Unable to reach server, check your network or contact your admin"
 };

@@ -20,7 +20,8 @@ const Login = () => {
       severity: "error",
       summary,
       detail,
-      life: constants.toastLifeTime
+      life: constants.toastLifeTime,
+      closable: false
     }),
     []
   );
@@ -32,10 +33,8 @@ const Login = () => {
     const { email, password } = data;
     try {
       const {
-        data: {
-          token,
-          user: { id, firstName, lastName }
-        }
+        token,
+        user: { id, firstName, lastName }
       } = await login({ email, password });
       // store user details in global state
       onLoginSuccess({ id, token, email, firstName, lastName });
@@ -57,7 +56,7 @@ const Login = () => {
         toast.current.show(
           toastCallback({
             summary: "Network Error",
-            detail: "Unable to reach server, check your network or contact admin"
+            detail: constants.networkErrorMessage
           })
         );
       }
@@ -92,9 +91,7 @@ const Login = () => {
                   style={{ marginBottom: 5, width: "100%" }}
                   placeholder="Email"
                   value={props.value}
-                  onChange={e => {
-                    props.onChange(e.target.value);
-                  }}
+                  onChange={e => props.onChange(e.target.value)}
                 />
               )}
             />
