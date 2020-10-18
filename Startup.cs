@@ -80,6 +80,8 @@ namespace TaxComputationAPI
             services.AddScoped<ITrialBalanceRepository, TrialBalanceRepository>();
             services.AddScoped<ICompaniesService, CompaniesService>();
             services.AddScoped<IUtilitiesService, UtilitiesService>();
+            services.AddScoped<ITrialBalanceService, TrialBalanceService>();
+            services.AddScoped<ITrialBalanceRepository, TrialBalanceRepository>();
             services.AddScoped<IUtilitiesRepository, UtilitiesRepository>();
             services.AddSingleton<IAuthorizationHandler,SystemAdminHandler>();
             services.AddDbContext<DataContext>(options => options.UseSqlServer(_configuration.GetConnectionString("DefaultConnection")));

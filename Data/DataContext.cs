@@ -37,6 +37,7 @@ namespace TaxComputationAPI.Data
          public DbSet<FinancialYear> FinancialYear {get;set;}
         public DbSet<AssetClass> AssetClass {get;set;}
        public DbSet<TrialBalance> TrialBalance {get;set;}
+       public DbSet<TrackTrialBalance> TrackTrialBalance { get; set; }
 
       
     }

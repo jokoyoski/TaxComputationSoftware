@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TaxComputationAPI.Data;
 
 namespace TaxComputationAPI.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20201016203735_addAccountidtTrialbalanceModel")]
+    partial class addAccountidtTrialbalanceModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -239,27 +241,6 @@ namespace TaxComputationAPI.Migrations
                     b.ToTable("AspNetRoles");
                 });
 
-            modelBuilder.Entity("TaxComputationAPI.Models.TrackTrialBalance", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("CompanyId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("DateCreated")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("YearId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("TrackTrialBalance");
-                });
-
             modelBuilder.Entity("TaxComputationAPI.Models.TrialBalance", b =>
                 {
                     b.Property<int>("Id")
@@ -270,11 +251,11 @@ namespace TaxComputationAPI.Migrations
                     b.Property<string>("AccountId")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal>("Credit")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<long>("Credit")
+                        .HasColumnType("bigint");
 
-                    b.Property<decimal>("Debit")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<long>("Debit")
+                        .HasColumnType("bigint");
 
                     b.Property<bool>("IsCheck")
                         .HasColumnType("bit");
@@ -284,9 +265,6 @@ namespace TaxComputationAPI.Migrations
 
                     b.Property<string>("MappedTo")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("TrackId")
-                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
