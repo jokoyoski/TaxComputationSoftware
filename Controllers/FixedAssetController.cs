@@ -26,7 +26,8 @@ namespace TaxComputationAPI.Controllers
         {
             try
             { 
-             
+                
+               
                if(createFixed==null){
                   var error = new[] { "Bad Input !" };
                   
@@ -35,6 +36,24 @@ namespace TaxComputationAPI.Controllers
                 if(createFixed.MappedCode==null){
                  return BadRequest();
               }
+               if(createFixed.YearId==0){
+                    var error = new[] { "Please select a valid year" };
+                   return StatusCode(400, new { errors = new { error } });
+                }
+
+                  if(createFixed.CompanyId==0){
+                    var error = new[] { "Please select a valid Company" };
+                   return StatusCode(400, new { errors = new { error } });
+                }
+                if(createFixed.IsCost==true && (createFixed.CostAddition==0  && createFixed.CostClosing ==0 && createFixed.CostDisposal==0 )){
+                  var error = new[] { "You selected a Cost but didnt pass a cost input value" };
+                   return StatusCode(400, new { errors = new { error } });
+                }
+                 if(createFixed.IsCost==false && (createFixed.DepreciationAddition==0 && createFixed.DepreciationClosing ==0 && createFixed.DepreciationDisposal==0) ){
+                  var error = new[] { "You selected a depreciation but didnt pass a depreciation input value" };
+                   return StatusCode(400, new { errors = new { error } });
+                }
+
              await  _fixedAssetService.SaveFixedAsset(createFixed);
                 
                return Ok("saved successfully");
@@ -57,6 +76,10 @@ namespace TaxComputationAPI.Controllers
         {
             try
             {
+                if(yearId==0){
+                     var error = new[] { "Please select the year" };
+                    return StatusCode(400, new { errors = new { error } });
+                }
                 var fixedAsset=await _fixedAssetService.GetFixedAssetsByCompany(companyId,yearId);
                  if(fixedAsset==null){
                  var error = new[] { "Record not found at this time, please try later" };
@@ -71,5 +94,8 @@ namespace TaxComputationAPI.Controllers
                 return StatusCode(500, new { errors = new { error } });
             }
         }
+
+         
+      
     }
 }

@@ -7,6 +7,7 @@ using TaxComputationAPI.ResponseModel;
 using System.Linq;
 using Total = TaxComputationAPI.ResponseModel.Total;
 using NetBookValue = TaxComputationAPI.ResponseModel.NetBookValue;
+using TaxComputationAPI.Models;
 
 namespace TaxComputationAPI.Services
 {
@@ -14,9 +15,11 @@ namespace TaxComputationAPI.Services
     {
         private readonly IFixedAssetRepository _fixedAssetRepository;
         private readonly ITrialBalanceRepository _trialBalanceRepository;
-        public FixedAssetService(IFixedAssetRepository fixedAssetRepository,ITrialBalanceRepository trialBalanceRepository){
+        private readonly  IUtilitiesRepository _utilitiesRepository;
+        public FixedAssetService(IFixedAssetRepository fixedAssetRepository,IUtilitiesRepository utilitiesRepository,ITrialBalanceRepository trialBalanceRepository){
              _fixedAssetRepository=fixedAssetRepository;
              _trialBalanceRepository=trialBalanceRepository;
+             _utilitiesRepository=utilitiesRepository;
         }
 
         public async Task<FixedAssetResponse> GetFixedAssetsByCompany(int companyId, int yearId)
@@ -76,8 +79,18 @@ namespace TaxComputationAPI.Services
         {
             GetMappedDetails getMappedDetails =new GetMappedDetails();
             string trialBalanceValue=getMappedDetails.MappedTo(fixedAsset.MappedCode);
-             _trialBalanceRepository.UpdateTrialBalance(fixedAsset.AssetId,trialBalanceValue);
-             _fixedAssetRepository.SaveFixedAsset(fixedAsset);
+            var yearRecord=await _utilitiesRepository.GetFinancialYearAsync(fixedAsset.YearId);
+            if(yearRecord==null){
+                var createYear = new FinancialYear{
+                    Name=fixedAsset.YearId
+                };
+               await  _utilitiesRepository.AddFinancialYearAsync(createYear);
+            }
+            foreach(var value in fixedAsset.TriBalanceId){
+             await _trialBalanceRepository.UpdateTrialBalance(fixedAsset.AssetId,trialBalanceValue);
+            }
+            
+             await _fixedAssetRepository.SaveFixedAsset(fixedAsset);
               
             
         }

@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace TaxComputationAPI.Dtos
 {
     public class CreateFixedAssetDto
@@ -10,7 +12,7 @@ namespace TaxComputationAPI.Dtos
 
         public int AssetId {get;set;}
 
-        public int TriBalanceId {get;set;}
+        public List<int> TriBalanceId {get;set;}
 
         public bool IsCost {get;set;}
     

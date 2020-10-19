@@ -55,7 +55,7 @@ namespace TaxComputationAPI.Services
             return  await _utilitiesRepository.GetAssetClassAsync(Name);
         }
 
-        public async Task<FinancialYear> GetFinancialYearAsync(string Name)
+        public async Task<FinancialYear> GetFinancialYearAsync(int Name)
         {
             return  await _utilitiesRepository.GetFinancialYearAsync(Name);
         }

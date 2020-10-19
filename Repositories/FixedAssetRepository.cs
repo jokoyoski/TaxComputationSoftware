@@ -24,7 +24,7 @@ namespace TaxComputationAPI.Repositories
         public async Task<FixedAssetResponse> GetFixedAssetsByCompany(int companyId, int yearId)
         {
             var result=(from s in _dataContext.FixedAsset 
-                join b in _dataContext.FinancialYear on s.YearId equals b.Id
+                join b in _dataContext.FinancialYear on s.YearId equals b.Name
                 join  c in _dataContext.AssetClass on   s.AssetId equals c.Id
                 join x in _dataContext.Company on s.CompanyId equals x.Id
                 where s.CompanyId==companyId && s.YearId==yearId

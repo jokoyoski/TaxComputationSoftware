@@ -50,9 +50,9 @@ namespace TaxComputationAPI.Repositories
             return assetClass;
         }
 
-        public async Task<FinancialYear> GetFinancialYearAsync(string Name)
+        public async Task<FinancialYear> GetFinancialYearAsync(int year)
         {
-             var financialYear =   _context.FinancialYear.FirstOrDefault(x=>x.Name==Name);
+             var financialYear =   _context.FinancialYear.FirstOrDefault(x=>x.Name==year);
             return financialYear;
         }
     }

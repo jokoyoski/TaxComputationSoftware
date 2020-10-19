@@ -141,8 +141,8 @@ namespace TaxComputationAPI
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
            {
-               endpoints.MapControllers();
-               //endpoints.MapFallbackToController("Index","Fallback");
+               //endpoints.MapControllers();
+               endpoints.MapFallbackToController("Index","Fallback");
            });
             app.UseSwagger();
             app.UseSwaggerUI(options => options.SwaggerEndpoint("/swagger/v2/swagger.json", "TaxComputation Service"));

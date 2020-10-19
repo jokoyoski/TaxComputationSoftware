@@ -3,6 +3,6 @@ namespace TaxComputationAPI.Dtos
     public class FinancialYearDto
     {
        
-        public string Name {get;set;}
+        public int Name {get;set;}
     }
 }

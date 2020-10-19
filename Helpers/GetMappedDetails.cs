@@ -11,7 +11,7 @@ namespace TaxComputationAPI.Helpers
             modules.Add("profitandloss","Profit and Loss");
             modules.Add("fixedasset","FIXED ASSET");
             modules.Add("incometax","INCOME TAX");
-            modules.Add("deferredtax","DEFERREDTAX");
+            modules.Add("deferredtax","DEFERRED TAX");
 
             var mappedDetails=modules.GetValueOrDefault(mappedId);
 

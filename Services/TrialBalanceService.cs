@@ -16,11 +16,13 @@ namespace TaxComputationAPI.Services
     {
         private readonly ITrialBalanceRepository _trialBalancerepository;
         private readonly ILogger<TrialBalanceService> _logger;
+        private readonly IUtilitiesRepository _utilitiesRepository;
 
-        public TrialBalanceService(ITrialBalanceRepository trialBalanceRepository, ILogger<TrialBalanceService> logger)
+        public TrialBalanceService(ITrialBalanceRepository trialBalanceRepository,IUtilitiesRepository utilitiesRepository ,ILogger<TrialBalanceService> logger)
         {
             _trialBalancerepository = trialBalanceRepository;
             _logger = logger;
+            _utilitiesRepository=utilitiesRepository;
         }
         public async Task UpdateTrialBalance(int trialBalanceId, string mappedTo)
         {
@@ -64,7 +66,7 @@ namespace TaxComputationAPI.Services
             if (data == null) return;
 
             int trackId = 0;
-
+           
             var exist = await _trialBalancerepository.GetTrackTrialBalance(upload.CompanyId, upload.YearId);
 
             if (exist != null)
@@ -82,7 +84,13 @@ namespace TaxComputationAPI.Services
             else
             {
 
-
+               var yearRecord=await _utilitiesRepository.GetFinancialYearAsync(upload.YearId);
+               if(yearRecord==null){
+                var createYear = new FinancialYear{
+                    Name=upload.YearId
+                };
+                await  _utilitiesRepository.AddFinancialYearAsync(createYear);
+              }
                 TrackTrialBalance track = new TrackTrialBalance
                 {
                     CompanyId = upload.CompanyId,

@@ -13,7 +13,7 @@ namespace TaxComputationAPI.Interfaces
 
         Task<AssetClass> GetAssetClassAsync(string Name);
 
-        Task<FinancialYear> GetFinancialYearAsync(string Name);
+        Task<FinancialYear> GetFinancialYearAsync(int Name);
         Task AddAssetClassAsync(AssetClass assetClass);
         Task<List<FinancialYear>> GetFinancialYearAsync();
         Task AddFinancialYearAsync(FinancialYear financialYear);

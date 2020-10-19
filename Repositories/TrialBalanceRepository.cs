@@ -31,6 +31,7 @@ namespace TaxComputationAPI.Repositories
 
         public async Task<TrackTrialBalance> GetTrackTrialBalance(int companyId, int yearId)
         {
+    
             var response = _dataContext.TrackTrialBalance.Where(p => p.CompanyId == companyId && p.YearId == yearId).ToList().LastOrDefault();
             return response;
         }
