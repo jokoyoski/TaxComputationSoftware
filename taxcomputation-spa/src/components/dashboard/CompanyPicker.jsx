@@ -8,56 +8,60 @@ const CompanyPicker = ({
   showCompanyPicker,
   setShowCompanyPicker,
   company,
-  setCompany
+  onSelectCompany,
+  companySelectItems
 }) => {
-  const companySelectItems = [
-    { name: "Landmark", value: "Landmark" },
-    { name: "Interswitch", value: "Interswitch" }
-  ];
-
-  const handleSubmit = e => {
-    e.preventDefault();
-    setShowCompanyPicker(false);
-  };
-
   return (
     <Dialog
       header="Company"
+      footer={
+        <div>
+          <Button
+            label="Add Company"
+            onClick={() => {
+              setShowAddCompany(true);
+              setShowCompanyPicker(false);
+            }}
+            className="p-button-outlined"
+          />
+          <Button
+            label="Proceed"
+            disabled={!company.companyId}
+            onClick={() => company.companyId && setShowCompanyPicker(false)}
+          />
+        </div>
+      }
       visible={showCompanyPicker}
-      style={{ width: 400 }}
+      style={{ width: 500 }}
+      blockScroll
       focusOnShow={false}
       closeOnEscape={false}
       closable={false}
       onHide={() => setShowCompanyPicker(false)}>
-      <form onSubmit={handleSubmit}>
-        <div className="p-d-flex p-flex-column">
-          <label htmlFor="companyNameInput" style={{ margin: "0px 0px 10px 0px" }}>
-            Select a company or add a new company
-          </label>
-          <Dropdown
-            value={company}
-            options={companySelectItems}
-            optionLabel="name"
-            filter
-            filterBy="name"
-            onChange={e => {
-              setCompany(e.value);
-            }}
-            placeholder="Company"
-          />
-        </div>
-        <Button label="Select Company" type="submit" style={{ width: "100%", marginTop: 20 }} />
-        <Button
-          className="p-button-outlined"
-          label="Add Company"
-          type="button"
-          style={{ width: "100%", marginTop: 20 }}
-          onClick={() => {
-            setShowAddCompany(true);
-            setShowCompanyPicker(false);
+      <div className="p-d-flex p-flex-column" style={{ height: 300 }}>
+        <label htmlFor="companyNameInput" style={{ margin: "0px 0px 10px 0px" }}></label>
+        <Dropdown
+          value={company}
+          options={companySelectItems}
+          optionLabel="name"
+          autoFocus
+          filter
+          filterBy="name"
+          onChange={e => {
+            onSelectCompany(e.value);
+            sessionStorage.setItem("cid", e.value.companyId);
           }}
+          placeholder="Select a Company"
         />
-      </form>
+        {companySelectItems && companySelectItems.length === 0 && (
+          <div className="p-d-flex p-ai-center" style={{ fontSize: 14, marginTop: 15 }}>
+            <i
+              className="pi pi-exclamation-triangle"
+              style={{ marginRight: 10, color: "#FBC02D", fontSize: 20 }}></i>
+            <span>There are currently no companies, click add company button.</span>
+          </div>
+        )}
+      </div>
     </Dialog>
   );
 };

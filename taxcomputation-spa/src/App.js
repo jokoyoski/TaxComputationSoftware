@@ -7,19 +7,23 @@ import { Router, RouteComponent, createBrowserHistory } from "react-resource-rou
 import { routes } from "./routes";
 import { useAuth } from "./store/AuthStore";
 import utils from "./utils";
+import { useCompany } from "./store/CompanyStore";
 
 const history = createBrowserHistory();
 
 function App() {
-  const [state, { initAuth }] = useAuth();
+  const [auth, { initAuth }] = useAuth();
+  const [company, { initCompany }] = useCompany();
 
   window.onbeforeunload = () => {
-    utils.saveState(state);
+    utils.saveState(auth, "auth");
+    utils.saveState(company, "company");
     sessionStorage.setItem("path", history.location.pathname);
   };
 
   window.onload = () => {
-    initAuth(utils.loadState());
+    initAuth(utils.loadState("auth"));
+    initCompany(utils.loadState("company"));
   };
 
   return (

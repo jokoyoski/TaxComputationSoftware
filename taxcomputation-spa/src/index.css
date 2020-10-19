@@ -25,3 +25,7 @@ body {
   text-decoration: none;
   color: inherit;
 }
+
+.pi-24 {
+  font-size: 24px !important;
+}

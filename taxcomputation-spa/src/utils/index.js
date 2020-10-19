@@ -11,24 +11,32 @@ export default {
     return years;
   },
   defaultMode: title => (constants.nonMappedModules.includes(title) ? "view" : "mapping"),
-  saveState: state => {
+  saveState: (state, stateName) => {
     try {
       const serializedState = JSON.stringify(state);
-      sessionStorage.setItem("state", serializedState);
+      sessionStorage.setItem(stateName, serializedState);
     } catch (err) {
       console.log(err);
     }
   },
-  loadState: () => {
+  loadState: stateName => {
     try {
-      const serializedState = sessionStorage.getItem("state");
+      const serializedState = sessionStorage.getItem(stateName);
       if (serializedState === null) {
         return undefined;
       }
-      sessionStorage.removeItem("state");
+      sessionStorage.removeItem(stateName);
       return JSON.parse(serializedState);
     } catch (err) {
       return undefined;
     }
+  },
+  currencyFormatter: value => {
+    const formatter = new Intl.NumberFormat("en-NG", {
+      style: "currency",
+      currency: "NGN"
+    });
+
+    return formatter.format(value);
   }
 };
