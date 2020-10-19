@@ -25,8 +25,8 @@ const TrialBalanceTable = ({ company: { companyId } }) => {
                 } else {
                   return {
                     ...d,
-                    debit: utils.currencyFormatter(d.debit),
-                    credit: utils.currencyFormatter(d.credit)
+                    debitAmt: utils.currencyFormatter(d.debit),
+                    creditAmt: utils.currencyFormatter(d.credit)
                   };
                 }
               })
@@ -72,8 +72,8 @@ const TrialBalanceTable = ({ company: { companyId } }) => {
         }>
         <Column field="accountId" header="Account ID"></Column>
         <Column field="item" header="Account Description"></Column>
-        <Column field="debit" header="Debit Amt"></Column>
-        <Column field="credit" header="Credit Amt"></Column>
+        <Column field="debitAmt" header="Debit Amt"></Column>
+        <Column field="creditAmt" header="Credit Amt"></Column>
       </DataTable>
     </Card>
   );

@@ -26,8 +26,8 @@ const CompanyPicker = ({
           />
           <Button
             label="Proceed"
-            disabled={!company}
-            onClick={() => company && setShowCompanyPicker(false)}
+            disabled={!company.companyId}
+            onClick={() => company.companyId && setShowCompanyPicker(false)}
           />
         </div>
       }
@@ -49,6 +49,7 @@ const CompanyPicker = ({
           filterBy="name"
           onChange={e => {
             onSelectCompany(e.value);
+            sessionStorage.setItem("cid", e.value.companyId);
           }}
           placeholder="Select a Company"
         />

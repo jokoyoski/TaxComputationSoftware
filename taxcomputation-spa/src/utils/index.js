@@ -25,7 +25,7 @@ export default {
       if (serializedState === null) {
         return undefined;
       }
-      sessionStorage.removeItem("state");
+      sessionStorage.removeItem(stateName);
       return JSON.parse(serializedState);
     } catch (err) {
       return undefined;

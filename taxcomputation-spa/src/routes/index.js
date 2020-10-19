@@ -13,7 +13,7 @@ import MinimumTax from "../pages/MinimumTax";
 import NotFound from "../pages/NotFound";
 import ProfitLoss from "../pages/ProfitLoss";
 import RouteGuard from "../RouteGuard";
-import { companiesResource } from "./resources";
+import { assetClassResource, companiesResource, trialBalanceResource } from "./resources";
 
 const modePathParam = "/:mode";
 
@@ -41,8 +41,8 @@ export const routes = [
     path: `${constants.routes.fixed_asset}${modePathParam}`,
     name: "FIXED_ASSET",
     exact: true,
-    component: RouteGuard(FixedAsset)
-    //resources: [aboutResource],
+    component: RouteGuard(FixedAsset),
+    resources: [assetClassResource, trialBalanceResource]
   },
   {
     path: `${constants.routes.profit_loss}${modePathParam}`,
