@@ -12,7 +12,15 @@ const CompanyStore = createStore({
     initCompany: initialState => ({ setState }) => setState(initialState),
     onSelectCompany: ({ companyId, companyName, companyDescription, cacNumber, tinNumber }) => ({
       setState
-    }) => setState({ companyId, companyName, companyDescription, cacNumber, tinNumber })
+    }) => setState({ companyId, companyName, companyDescription, cacNumber, tinNumber }),
+    resetCompany: () => ({ setState }) =>
+      setState({
+        companyId: null,
+        companyName: "",
+        companyDescription: "",
+        cacNumber: "",
+        tinNumber: ""
+      })
   },
   name: "company"
 });

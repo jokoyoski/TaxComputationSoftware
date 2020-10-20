@@ -2,10 +2,12 @@ import React from "react";
 import { Link } from "react-resource-router";
 import constants from "../../constants";
 import { useAuth } from "../../store/AuthStore";
+import { useCompany } from "../../store/CompanyStore";
 import utils from "../../utils";
 
 const Sidebar = ({ selectedTitle }) => {
   const [, { onLogout }] = useAuth();
+  const [, { resetCompany }] = useCompany();
   const menuItems = [
     { title: "Dashboard", href: constants.routes.dashboard },
     {
@@ -91,7 +93,7 @@ const Sidebar = ({ selectedTitle }) => {
           <p
             style={{ margin: 0, cursor: "pointer" }}
             onClick={() => {
-              onLogout();
+              onLogout(resetCompany);
             }}>
             Logout
           </p>
