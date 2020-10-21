@@ -1,0 +1,42 @@
+2020-10-21 12:15:37.441 +01:00 [Warning] No type was specified for the decimal column '"Credit"' on entity type '"TrialBalance"'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values using 'HasColumnType()'.
+2020-10-21 12:15:37.597 +01:00 [Warning] No type was specified for the decimal column '"Debit"' on entity type '"TrialBalance"'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values using 'HasColumnType()'.
+2020-10-21 12:15:37.746 +01:00 [Information] Entity Framework Core "3.1.8" initialized '"DataContext"' using provider '"Microsoft.EntityFrameworkCore.SqlServer"' with options: "None"
+2020-10-21 12:15:44.745 +01:00 [Information] Executed DbCommand ("833"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT 1"
+2020-10-21 12:15:45.223 +01:00 [Information] Executed DbCommand ("454"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT OBJECT_ID(N'[__EFMigrationsHistory]');"
+2020-10-21 12:15:46.177 +01:00 [Information] Executed DbCommand ("944"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT 1"
+2020-10-21 12:15:47.132 +01:00 [Information] Executed DbCommand ("951"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT OBJECT_ID(N'[__EFMigrationsHistory]');"
+2020-10-21 12:15:47.978 +01:00 [Information] Executed DbCommand ("812"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT [MigrationId], [ProductVersion]
+FROM [__EFMigrationsHistory]
+ORDER BY [MigrationId];"
+2020-10-21 12:15:48.024 +01:00 [Information] No migrations were applied. The database is already up to date.
+2020-10-21 12:15:49.307 +01:00 [Information] Executed DbCommand ("889"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM [AspNetRoles] AS [a]) THEN CAST(1 AS bit)
+    ELSE CAST(0 AS bit)
+END"
+2020-10-21 12:15:49.482 +01:00 [Information] User profile is available. Using '"C:\Users\Oluwaseyi\AppData\Local\ASP.NET\DataProtection-Keys"' as key repository and Windows DPAPI to encrypt keys at rest.
+2020-10-21 12:15:50.498 +01:00 [Information] Now listening on: "http://localhost:5000"
+2020-10-21 12:15:50.499 +01:00 [Information] Application started. Press Ctrl+C to shut down.
+2020-10-21 12:15:50.499 +01:00 [Information] Hosting environment: "Development"
+2020-10-21 12:15:50.499 +01:00 [Information] Content root path: "C:\Users\Oluwaseyi\source\repos\TaxComputationSoftware"
+2020-10-21 12:15:56.022 +01:00 [Information] Request starting HTTP/1.1 GET http://localhost:5000/api/Companies/get-company/1  
+2020-10-21 12:15:57.036 +01:00 [Information] Successfully validated the token.
+2020-10-21 12:15:57.048 +01:00 [Information] Executing endpoint '"TaxComputationAPI.Controllers.CompaniesController.GetCompany (TaxComputationAPI)"'
+2020-10-21 12:15:57.167 +01:00 [Information] Route matched with "{action = \"GetCompany\", controller = \"Companies\"}". Executing controller action with signature "System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetCompany(Int32)" on controller "TaxComputationAPI.Controllers.CompaniesController" ("TaxComputationAPI").
+2020-10-21 12:16:08.722 +01:00 [Information] Entity Framework Core "3.1.8" initialized '"DataContext"' using provider '"Microsoft.EntityFrameworkCore.SqlServer"' with options: "None"
+2020-10-21 12:16:11.153 +01:00 [Information] Executed DbCommand ("2,183"ms) [Parameters=["@__id_0='?' (DbType = Int32)"], CommandType='Text', CommandTimeout='30']"
+""SELECT TOP(1) [c].[Id], [c].[CacNumber], [c].[CompanyDescription], [c].[CompanyName], [c].[DateCreated], [c].[IsActive], [c].[TinNumber]
+FROM [Company] AS [c]
+WHERE [c].[Id] = @__id_0"
+2020-10-21 12:16:18.184 +01:00 [Information] Exception for "example@gmail.com", "Exception of type 'System.Exception' was thrown."
+2020-10-21 12:16:25.280 +01:00 [Information] Executing ObjectResult, writing value of type '"<>f__AnonymousType0`1[[<>f__AnonymousType1`1[[System.String[], System.Private.CoreLib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], TaxComputationAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"'.
+2020-10-21 12:16:25.435 +01:00 [Information] Executed action "TaxComputationAPI.Controllers.CompaniesController.GetCompany (TaxComputationAPI)" in 28258.9706ms
+2020-10-21 12:16:25.436 +01:00 [Information] Executed endpoint '"TaxComputationAPI.Controllers.CompaniesController.GetCompany (TaxComputationAPI)"'
+2020-10-21 12:16:25.445 +01:00 [Information] Request finished in 29428.2915ms 500 application/json; charset=utf-8
