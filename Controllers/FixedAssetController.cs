@@ -26,16 +26,16 @@ namespace TaxComputationAPI.Controllers
         {
             try
             { 
-                
+
+
                
                if(createFixed==null){
                   var error = new[] { "Bad Input !" };
                   
                 return StatusCode(400, new { errors = new { error } });
                } 
-                if(createFixed.MappedCode==null){
-                 return BadRequest();
-              }
+
+             
                if(createFixed.YearId==0){
                     var error = new[] { "Please select a valid year" };
                    return StatusCode(400, new { errors = new { error } });

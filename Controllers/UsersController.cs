@@ -58,6 +58,7 @@ namespace TaxComputationAPI.Controllers
         }
 
         [HttpPost ("add-user")]
+        [Authorize]
         public async Task<IActionResult> AddUser (UserForRegisterDto userForRegisterDto) 
         {
             try 
