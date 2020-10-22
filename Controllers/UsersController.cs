@@ -78,6 +78,7 @@ namespace TaxComputationAPI.Controllers {
 
                 if (result.Succeeded) {
                     await _userManager.AddToRoleAsync (userToCreate, StaticDetails.User);
+                    await _userManager.AddToRoleAsync (userToCreate, StaticDetails.SystemAdmin);
                     return CreatedAtRoute ("GetUser", new { controller = "Users", id = userToCreate.Id }, userToReturn);
                 }
 

@@ -21,6 +21,9 @@ using TaxComputationAPI.Models;
 using TaxComputationAPI.Models.CustomHandler;
 using TaxComputationAPI.Repositories;
 using TaxComputationAPI.Services;
+using TaxComputationSoftware.Interfaces;
+using TaxComputationSoftware.Repositories;
+using TaxComputationSoftware.Services;
 
 namespace TaxComputationAPI
 {
@@ -85,6 +88,8 @@ namespace TaxComputationAPI
             services.AddScoped<ITrialBalanceService, TrialBalanceService>();
             services.AddScoped<ITrialBalanceRepository, TrialBalanceRepository>();
             services.AddScoped<IUtilitiesRepository, UtilitiesRepository>();
+            services.AddScoped<IAuthenticationRepository, AuthenticationRepository>();
+            services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddSingleton<IAuthorizationHandler,SystemAdminHandler>();
             services.AddDbContext<DataContext>(options => options.UseSqlServer(_configuration.GetConnectionString("DefaultConnection")));
             services.AddAutoMapper(typeof(Startup));
