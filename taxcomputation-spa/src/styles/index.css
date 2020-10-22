@@ -24,6 +24,11 @@ body {
 .sidebar-link {
   text-decoration: none;
   color: inherit;
+  transition: margin-left 0.3s ease-in-out;
+}
+
+.sidebar-link:hover {
+  margin-left: 3px;
 }
 
 .pi-20 {
