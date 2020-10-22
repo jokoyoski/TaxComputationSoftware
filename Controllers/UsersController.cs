@@ -65,16 +65,9 @@ namespace TaxComputationAPI.Controllers {
         }
 
         [HttpPost ("add-user")]
-<<<<<<< HEAD
         [Authorize(Roles = StaticDetails.SystemAdmin)]
         public async Task<IActionResult> AddUser (UserForRegisterDto userForRegisterDto) {
             try {
-=======
-        public async Task<IActionResult> AddUser (UserForRegisterDto userForRegisterDto) 
-        {
-            try 
-            {
->>>>>>> d723c342c632acc7fdfc11521cd1802eb4d3b5fe
                 var userToCreate = _mapper.Map<User> (userForRegisterDto);
                 userToCreate.IsActive = true;
                 userToCreate.EmailConfirmed = true;
