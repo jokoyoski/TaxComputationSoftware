@@ -41,6 +41,10 @@ namespace TaxComputationAPI.Repositories
               DepreciationAddition=s.DepreciationAddition,
               DepreciationDisposal=s.DepreciationAddition,
               DepreciationClosing=s.DepreciationClosing,
+              TransferCost=s.TransferCost,
+              TransferDepreciation=s.TransferDepreciation,
+              IsTransferCostRemoved=s.IsTransferCostRemoved,
+              IsTransferDepreciationRemoved=s.IsTransferDepreciationRemoved
 
             }
             ).OrderBy(x=>x.Id).ToList();
@@ -56,7 +60,7 @@ namespace TaxComputationAPI.Repositories
         {
           
            var value=_mapper.Map<FixedAsset>(fixedAssetDto);
-           var record=_dataContext.FixedAsset.FirstOrDefault(x=>x.CompanyId==value.CompanyId&&x.YearId==value.YearId);
+           var record=_dataContext.FixedAsset.FirstOrDefault(x=>x.CompanyId==value.CompanyId&&x.YearId==value.YearId && x.AssetId==fixedAssetDto.AssetId);
            if(record==null && fixedAssetDto.IsCost==true){
              var fixedAsset=new FixedAsset{
              CompanyId=fixedAssetDto.CompanyId,
@@ -66,12 +70,14 @@ namespace TaxComputationAPI.Repositories
              CostAddition=fixedAssetDto.CostAddition,
              CostDisposal=fixedAssetDto.CostDisposal,
              CostClosing=fixedAssetDto.CostClosing,
+             TransferCost=fixedAssetDto.TransferCost,
+             IsTransferCostRemoved=fixedAssetDto.IsTransferCostRemoved
             
             };
              await _dataContext.AddAsync(fixedAsset);
 
            } else if (record==null && fixedAssetDto.IsCost==false){
-               var fixedAsset=new FixedAsset{
+              var fixedAsset=new FixedAsset{
              CompanyId=fixedAssetDto.CompanyId,
              YearId=fixedAssetDto.YearId,
              AssetId=fixedAssetDto.AssetId,
@@ -79,6 +85,9 @@ namespace TaxComputationAPI.Repositories
              DepreciationAddition=fixedAssetDto.DepreciationAddition,
              DepreciationDisposal=fixedAssetDto.DepreciationDisposal,
              DepreciationClosing=fixedAssetDto.DepreciationClosing,
+             TransferDepreciation=fixedAssetDto.TransferDepreciation,
+             IsTransferDepreciationRemoved=fixedAssetDto.IsTransferDepreciationRemoved
+            
 
             };
              _dataContext.AddAsync(fixedAsset);
@@ -91,7 +100,10 @@ namespace TaxComputationAPI.Repositories
              record.OpeningCost=fixedAssetDto.OpeningCost;
              record.CostAddition=fixedAssetDto.CostAddition;
              record.CostDisposal=fixedAssetDto.CostDisposal;
+             record.TransferCost=fixedAssetDto.TransferCost;
+             record.IsTransferCostRemoved=fixedAssetDto.IsTransferCostRemoved;
              record.CostClosing=fixedAssetDto.CostClosing;
+            
             
             }
             else if(record!=null && fixedAssetDto.IsCost==false){
@@ -102,6 +114,8 @@ namespace TaxComputationAPI.Repositories
              record.DepreciationAddition=fixedAssetDto.DepreciationAddition;
              record.DepreciationDisposal=fixedAssetDto.DepreciationDisposal;
              record.DepreciationClosing=fixedAssetDto.DepreciationClosing;
+            record.TransferDepreciation=fixedAssetDto.TransferDepreciation;
+            record.IsTransferDepreciationRemoved=fixedAssetDto.IsTransferDepreciationRemoved;
             }
             _dataContext.SaveChanges();
            }

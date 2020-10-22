@@ -18,7 +18,17 @@ const AuthStore = createStore({
     },
     onLoginSuccess: ({ id: userId, token, email, firstName, lastName }) => ({ setState }) =>
       setState({ isAuthenticated: true, userId, token, email, firstName, lastName }),
-    onLogout: () => ({ setState }) => setState({ isAuthenticated: false })
+    onLogout: (...callbacks) => ({ setState }) => {
+      callbacks.forEach(cb => (cb instanceof Function ? cb() : null));
+      setState({
+        isAuthenticated: false,
+        userId: null,
+        token: "",
+        email: "",
+        firstName: "",
+        lastName: ""
+      });
+    }
   },
   name: "auth"
 });

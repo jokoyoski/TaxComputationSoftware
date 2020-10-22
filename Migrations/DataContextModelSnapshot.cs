@@ -196,10 +196,22 @@ namespace TaxComputationAPI.Migrations
                     b.Property<long>("DepreciationDisposal")
                         .HasColumnType("bigint");
 
+                    b.Property<bool>("IsTransferCostRemoved")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsTransferDepreciationRemoved")
+                        .HasColumnType("bit");
+
                     b.Property<long>("OpeningCost")
                         .HasColumnType("bigint");
 
                     b.Property<long>("OpeningDepreciation")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("TransferCost")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("TransferDepreciation")
                         .HasColumnType("bigint");
 
                     b.Property<int>("YearId")

@@ -32,6 +32,8 @@ namespace TaxComputationAPI.Services
             long adddtionDepreciationTotal=0;
             long disposalDepreciationTotal=0;
             long closingDepreciationTotal=0;
+            long transferCostTotal=0;
+            long transferDepreciationTotal=0;
 
 
             List<Total> totals=new List<Total>();
@@ -42,8 +44,8 @@ namespace TaxComputationAPI.Services
             if(result.FixedAssetData.Count<=0){
                 return null;
             }
-            var cost=result.FixedAssetData.Where(x=>x.Id!=0);
-             foreach(var x  in cost){
+            
+             foreach(var x  in result.FixedAssetData){
               openingCostTotal += x.OpeningCost;
               adddtionCostTotal += x.CostAddition;
               disposalCostTotal += x.CostDisposal;
@@ -52,10 +54,13 @@ namespace TaxComputationAPI.Services
               adddtionDepreciationTotal += x.DepreciationAddition;
               disposalDepreciationTotal += x.DepreciationDisposal;
               closingDepreciationTotal  += x.DepreciationClosing;
+              transferCostTotal+=x.TransferCost;
+              transferDepreciationTotal=x.TransferDepreciation;
+
               netBookValues.Add(new NetBookValue{
                value=closingCostTotal-closingDepreciationTotal
               });
-
+            
 
              }
              result.total=new Total{
@@ -78,7 +83,7 @@ namespace TaxComputationAPI.Services
         public  async Task SaveFixedAsset(CreateFixedAssetDto fixedAsset)
         {
             GetMappedDetails getMappedDetails =new GetMappedDetails();
-            string trialBalanceValue=getMappedDetails.MappedTo(fixedAsset.MappedCode);
+           
             var yearRecord=await _utilitiesRepository.GetFinancialYearAsync(fixedAsset.YearId);
             if(yearRecord==null){
                 var createYear = new FinancialYear{
@@ -87,7 +92,8 @@ namespace TaxComputationAPI.Services
                await  _utilitiesRepository.AddFinancialYearAsync(createYear);
             }
             foreach(var value in fixedAsset.TriBalanceId){
-             await _trialBalanceRepository.UpdateTrialBalance(fixedAsset.AssetId,trialBalanceValue);
+            string trialBalanceValue=getMappedDetails.MappedTo("fixedasset");
+             await _trialBalanceRepository.UpdateTrialBalance(value,trialBalanceValue);
             }
             
              await _fixedAssetRepository.SaveFixedAsset(fixedAsset);
