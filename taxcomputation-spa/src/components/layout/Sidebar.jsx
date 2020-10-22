@@ -7,7 +7,7 @@ import utils from "../../utils";
 
 const Sidebar = ({ selectedTitle }) => {
   const [, { onLogout }] = useAuth();
-  const [, { resetCompany }] = useCompany();
+  const [{ companyId }, { resetCompany }] = useCompany();
   const menuItems = [
     { title: "Dashboard", href: constants.routes.dashboard },
     {
@@ -76,7 +76,7 @@ const Sidebar = ({ selectedTitle }) => {
         {menuItems.map((item, index) => (
           <Link
             key={index}
-            href={item.href}
+            href={companyId ? item.href : null}
             className="sidebar-link"
             style={{ padding: "5px 20px" }}>
             <p
