@@ -17,31 +17,6 @@ namespace TaxComputationAPI.Controllers {
         private readonly IFixedAssetService _fixedAssetService;
         private readonly ILogger<FixedAssetController> _logger;
 
-<<<<<<< HEAD
-      public FixedAssetController(IMapper mapper,IFixedAssetService fixedAssetService){
-         _mapper=mapper;
-         _fixedAssetService=fixedAssetService;
-       }
-      
-         [HttpPost]
-        public async Task<IActionResult> AddFixedAsset(CreateFixedAssetDto createFixed)
-        {
-            try
-            { 
-
-
-               
-               if(createFixed==null){
-                  var error = new[] { "Bad Input !" };
-                  
-                return StatusCode(400, new { errors = new { error } });
-               } 
-
-             
-               if(createFixed.YearId==0){
-                    var error = new[] { "Please select a valid year" };
-                   return StatusCode(400, new { errors = new { error } });
-=======
         public FixedAssetController (IMapper mapper, IFixedAssetService fixedAssetService, ILogger<FixedAssetController> logger) {
             _logger = logger;
             _mapper = mapper;
@@ -63,7 +38,6 @@ namespace TaxComputationAPI.Controllers {
                 if (createFixed.YearId == 0) {
                     var error = new [] { "Please select a valid year" };
                     return StatusCode (400, new { errors = new { error } });
->>>>>>> 3040f12d78de78bc7bbcd69fe0b953cb417cb32e
                 }
 
                 if (createFixed.CompanyId == 0) {
