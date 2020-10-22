@@ -44,3 +44,47 @@ ORDER BY [f].[Id]"
 2020-10-22 00:03:58.955 +01:00 [Information] Executed action "TaxComputationAPI.Controllers.FixedAssetController.GetFixedAsset (TaxComputationAPI)" in 908.3361ms
 2020-10-22 00:03:58.956 +01:00 [Information] Executed endpoint '"TaxComputationAPI.Controllers.FixedAssetController.GetFixedAsset (TaxComputationAPI)"'
 2020-10-22 00:03:58.961 +01:00 [Information] Request finished in 1384.3717ms 200 application/json; charset=utf-8
+2020-10-22 16:57:00.153 +01:00 [Warning] No type was specified for the decimal column '"Credit"' on entity type '"TrialBalance"'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values using 'HasColumnType()'.
+2020-10-22 16:57:00.226 +01:00 [Warning] No type was specified for the decimal column '"Debit"' on entity type '"TrialBalance"'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values using 'HasColumnType()'.
+2020-10-22 16:57:00.279 +01:00 [Information] Entity Framework Core "3.1.8" initialized '"DataContext"' using provider '"Microsoft.EntityFrameworkCore.SqlServer"' with options: "None"
+2020-10-22 16:57:16.271 +01:00 [Information] Executed DbCommand ("874"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT 1"
+2020-10-22 16:57:16.661 +01:00 [Information] Executed DbCommand ("361"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT OBJECT_ID(N'[__EFMigrationsHistory]');"
+2020-10-22 16:57:17.141 +01:00 [Information] Executed DbCommand ("477"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT 1"
+2020-10-22 16:57:17.556 +01:00 [Information] Executed DbCommand ("413"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT OBJECT_ID(N'[__EFMigrationsHistory]');"
+2020-10-22 16:57:17.946 +01:00 [Information] Executed DbCommand ("375"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT [MigrationId], [ProductVersion]
+FROM [__EFMigrationsHistory]
+ORDER BY [MigrationId];"
+2020-10-22 16:57:17.968 +01:00 [Information] No migrations were applied. The database is already up to date.
+2020-10-22 16:57:18.515 +01:00 [Information] Executed DbCommand ("327"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM [AspNetRoles] AS [a]) THEN CAST(1 AS bit)
+    ELSE CAST(0 AS bit)
+END"
+2020-10-22 16:57:18.577 +01:00 [Information] User profile is available. Using '"/Users/mac/.aspnet/DataProtection-Keys"' as key repository; keys will not be encrypted at rest.
+2020-10-22 16:57:18.960 +01:00 [Information] Now listening on: "http://localhost:5000"
+2020-10-22 16:57:18.961 +01:00 [Information] Application started. Press Ctrl+C to shut down.
+2020-10-22 16:57:18.961 +01:00 [Information] Hosting environment: "Development"
+2020-10-22 16:57:18.961 +01:00 [Information] Content root path: "/Users/mac/Projects/taxcomsoftware/TaxComputationSoftware/TaxComputationAPI"
+2020-10-22 16:57:32.884 +01:00 [Information] Request starting HTTP/1.1 GET http://localhost:5000/swagger/index.html  
+2020-10-22 16:57:33.169 +01:00 [Information] Request finished in 290.2134ms 200 text/html;charset=utf-8
+2020-10-22 16:57:33.579 +01:00 [Information] Request starting HTTP/1.1 GET http://localhost:5000/swagger/swagger-ui-bundle.js  
+2020-10-22 16:57:33.582 +01:00 [Information] Request starting HTTP/1.1 GET http://localhost:5000/swagger/swagger-ui.css  
+2020-10-22 16:57:33.587 +01:00 [Information] Request starting HTTP/1.1 GET http://localhost:5000/swagger/swagger-ui-standalone-preset.js  
+2020-10-22 16:57:33.602 +01:00 [Information] The file "/swagger-ui.css" was not modified
+2020-10-22 16:57:33.602 +01:00 [Information] The file "/swagger-ui-bundle.js" was not modified
+2020-10-22 16:57:33.602 +01:00 [Information] The file "/swagger-ui-standalone-preset.js" was not modified
+2020-10-22 16:57:33.604 +01:00 [Information] Request finished in 16.6139ms 304 application/javascript
+2020-10-22 16:57:33.606 +01:00 [Information] Request finished in 22.368ms 304 text/css
+2020-10-22 16:57:33.607 +01:00 [Information] Request finished in 24.7416ms 304 application/javascript
+2020-10-22 16:57:33.965 +01:00 [Information] Request starting HTTP/1.1 GET http://localhost:5000/swagger/v2/swagger.json  
+2020-10-22 16:57:34.031 +01:00 [Information] Request starting HTTP/1.1 GET http://localhost:5000/swagger/favicon-32x32.png  
+2020-10-22 16:57:34.043 +01:00 [Information] Sending file. Request path: '"/favicon-32x32.png"'. Physical path: '"N/A"'
+2020-10-22 16:57:34.044 +01:00 [Information] Request finished in 13.2058ms 200 image/png
+2020-10-22 16:57:34.293 +01:00 [Information] Request finished in 327.8269ms 200 application/json;charset=utf-8
