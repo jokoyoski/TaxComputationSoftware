@@ -120,6 +120,27 @@ namespace TaxComputationAPI.Migrations
                     b.ToTable("AssetClass");
                 });
 
+            modelBuilder.Entity("TaxComputationAPI.Models.AssetMapping", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("Annual")
+                        .HasColumnType("int");
+
+                    b.Property<string>("AssetName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Initial")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AssetMapping");
+                });
+
             modelBuilder.Entity("TaxComputationAPI.Models.Company", b =>
                 {
                     b.Property<int>("Id")

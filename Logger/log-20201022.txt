@@ -400,3 +400,409 @@ END"
 2020-10-22 17:09:20.108 +01:00 [Information] Application started. Press Ctrl+C to shut down.
 2020-10-22 17:09:20.109 +01:00 [Information] Hosting environment: "Development"
 2020-10-22 17:09:20.109 +01:00 [Information] Content root path: "/Users/mac/Projects/taxcomsoftware/TaxComputationSoftware/TaxComputationAPI"
+2020-10-22 17:10:53.215 +01:00 [Warning] No type was specified for the decimal column '"Credit"' on entity type '"TrialBalance"'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values using 'HasColumnType()'.
+2020-10-22 17:10:53.301 +01:00 [Warning] No type was specified for the decimal column '"Debit"' on entity type '"TrialBalance"'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values using 'HasColumnType()'.
+2020-10-22 17:10:53.363 +01:00 [Information] Entity Framework Core "3.1.8" initialized '"DataContext"' using provider '"Microsoft.EntityFrameworkCore.SqlServer"' with options: "None"
+2020-10-22 17:10:56.181 +01:00 [Information] Executed DbCommand ("319"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT 1"
+2020-10-22 17:10:56.487 +01:00 [Information] Executed DbCommand ("291"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT OBJECT_ID(N'[__EFMigrationsHistory]');"
+2020-10-22 17:10:56.788 +01:00 [Information] Executed DbCommand ("297"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT 1"
+2020-10-22 17:10:57.214 +01:00 [Information] Executed DbCommand ("423"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT OBJECT_ID(N'[__EFMigrationsHistory]');"
+2020-10-22 17:10:57.892 +01:00 [Information] Executed DbCommand ("662"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT [MigrationId], [ProductVersion]
+FROM [__EFMigrationsHistory]
+ORDER BY [MigrationId];"
+2020-10-22 17:10:57.923 +01:00 [Information] No migrations were applied. The database is already up to date.
+2020-10-22 17:10:58.896 +01:00 [Information] Executed DbCommand ("753"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM [AspNetRoles] AS [a]) THEN CAST(1 AS bit)
+    ELSE CAST(0 AS bit)
+END"
+2020-10-22 17:10:58.964 +01:00 [Information] User profile is available. Using '"/Users/mac/.aspnet/DataProtection-Keys"' as key repository; keys will not be encrypted at rest.
+2020-10-22 17:10:59.372 +01:00 [Information] Now listening on: "http://localhost:5000"
+2020-10-22 17:10:59.373 +01:00 [Information] Application started. Press Ctrl+C to shut down.
+2020-10-22 17:10:59.373 +01:00 [Information] Hosting environment: "Development"
+2020-10-22 17:10:59.373 +01:00 [Information] Content root path: "/Users/mac/Projects/taxcomsoftware/TaxComputationSoftware/TaxComputationAPI"
+2020-10-22 17:12:05.726 +01:00 [Information] Request starting HTTP/1.1 GET http://localhost:5000/swagger/index.html  
+2020-10-22 17:12:06.058 +01:00 [Information] Request finished in 340.9431ms 200 text/html;charset=utf-8
+2020-10-22 17:12:06.451 +01:00 [Information] Request starting HTTP/1.1 GET http://localhost:5000/swagger/v2/swagger.json  
+2020-10-22 17:12:06.649 +01:00 [Information] Request starting HTTP/1.1 GET http://localhost:5000/swagger/favicon-32x32.png  
+2020-10-22 17:12:06.673 +01:00 [Information] Sending file. Request path: '"/favicon-32x32.png"'. Physical path: '"N/A"'
+2020-10-22 17:12:06.674 +01:00 [Information] Request finished in 24.8415ms 200 image/png
+2020-10-22 17:12:06.777 +01:00 [Information] Request finished in 326.3552ms 200 application/json;charset=utf-8
+2020-10-22 17:21:25.191 +01:00 [Warning] No type was specified for the decimal column '"Credit"' on entity type '"TrialBalance"'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values using 'HasColumnType()'.
+2020-10-22 17:21:25.256 +01:00 [Warning] No type was specified for the decimal column '"Debit"' on entity type '"TrialBalance"'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values using 'HasColumnType()'.
+2020-10-22 17:21:25.309 +01:00 [Information] Entity Framework Core "3.1.8" initialized '"DataContext"' using provider '"Microsoft.EntityFrameworkCore.SqlServer"' with options: "None"
+2020-10-22 17:21:29.977 +01:00 [Information] Executed DbCommand ("783"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT 1"
+2020-10-22 17:21:30.584 +01:00 [Information] Executed DbCommand ("590"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT OBJECT_ID(N'[__EFMigrationsHistory]');"
+2020-10-22 17:21:31.206 +01:00 [Information] Executed DbCommand ("618"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT 1"
+2020-10-22 17:21:31.888 +01:00 [Information] Executed DbCommand ("680"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT OBJECT_ID(N'[__EFMigrationsHistory]');"
+2020-10-22 17:21:32.503 +01:00 [Information] Executed DbCommand ("600"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT [MigrationId], [ProductVersion]
+FROM [__EFMigrationsHistory]
+ORDER BY [MigrationId];"
+2020-10-22 17:21:32.524 +01:00 [Information] No migrations were applied. The database is already up to date.
+2020-10-22 17:21:33.321 +01:00 [Information] Executed DbCommand ("579"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM [AspNetRoles] AS [a]) THEN CAST(1 AS bit)
+    ELSE CAST(0 AS bit)
+END"
+2020-10-22 17:21:33.384 +01:00 [Information] User profile is available. Using '"/Users/mac/.aspnet/DataProtection-Keys"' as key repository; keys will not be encrypted at rest.
+2020-10-22 17:21:33.763 +01:00 [Information] Now listening on: "http://localhost:5000"
+2020-10-22 17:21:33.764 +01:00 [Information] Application started. Press Ctrl+C to shut down.
+2020-10-22 17:21:33.764 +01:00 [Information] Hosting environment: "Development"
+2020-10-22 17:21:33.764 +01:00 [Information] Content root path: "/Users/mac/Projects/taxcomsoftware/TaxComputationSoftware/TaxComputationAPI"
+2020-10-22 17:31:35.792 +01:00 [Warning] No type was specified for the decimal column '"Credit"' on entity type '"TrialBalance"'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values using 'HasColumnType()'.
+2020-10-22 17:31:35.855 +01:00 [Warning] No type was specified for the decimal column '"Debit"' on entity type '"TrialBalance"'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values using 'HasColumnType()'.
+2020-10-22 17:31:35.902 +01:00 [Information] Entity Framework Core "3.1.8" initialized '"DataContext"' using provider '"Microsoft.EntityFrameworkCore.SqlServer"' with options: "None"
+2020-10-22 17:31:39.638 +01:00 [Information] Executed DbCommand ("1,311"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT 1"
+2020-10-22 17:31:40.031 +01:00 [Information] Executed DbCommand ("382"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT OBJECT_ID(N'[__EFMigrationsHistory]');"
+2020-10-22 17:31:40.429 +01:00 [Information] Executed DbCommand ("394"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT 1"
+2020-10-22 17:31:40.735 +01:00 [Information] Executed DbCommand ("304"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT OBJECT_ID(N'[__EFMigrationsHistory]');"
+2020-10-22 17:31:41.027 +01:00 [Information] Executed DbCommand ("276"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT [MigrationId], [ProductVersion]
+FROM [__EFMigrationsHistory]
+ORDER BY [MigrationId];"
+2020-10-22 17:31:41.050 +01:00 [Information] No migrations were applied. The database is already up to date.
+2020-10-22 17:31:41.655 +01:00 [Information] Executed DbCommand ("384"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM [AspNetRoles] AS [a]) THEN CAST(1 AS bit)
+    ELSE CAST(0 AS bit)
+END"
+2020-10-22 17:31:41.719 +01:00 [Information] User profile is available. Using '"/Users/mac/.aspnet/DataProtection-Keys"' as key repository; keys will not be encrypted at rest.
+2020-10-22 17:31:42.074 +01:00 [Information] Now listening on: "http://localhost:5000"
+2020-10-22 17:31:42.074 +01:00 [Information] Application started. Press Ctrl+C to shut down.
+2020-10-22 17:31:42.074 +01:00 [Information] Hosting environment: "Development"
+2020-10-22 17:31:42.074 +01:00 [Information] Content root path: "/Users/mac/Projects/taxcomsoftware/TaxComputationSoftware/TaxComputationAPI"
+2020-10-22 17:33:55.545 +01:00 [Information] Request starting HTTP/1.1 GET http://localhost:5000/swagger/index.html  
+2020-10-22 17:33:55.856 +01:00 [Information] Request finished in 312.4656ms 200 text/html;charset=utf-8
+2020-10-22 17:33:56.113 +01:00 [Information] Request starting HTTP/1.1 GET http://localhost:5000/swagger/favicon-32x32.png  
+2020-10-22 17:33:56.116 +01:00 [Information] Request starting HTTP/1.1 GET http://localhost:5000/swagger/v2/swagger.json  
+2020-10-22 17:33:56.141 +01:00 [Information] Sending file. Request path: '"/favicon-32x32.png"'. Physical path: '"N/A"'
+2020-10-22 17:33:56.142 +01:00 [Information] Request finished in 29.342ms 200 image/png
+2020-10-22 17:33:56.375 +01:00 [Information] Request finished in 259.5271ms 200 application/json;charset=utf-8
+2020-10-22 23:19:40.866 +01:00 [Warning] No type was specified for the decimal column '"Credit"' on entity type '"TrialBalance"'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values using 'HasColumnType()'.
+2020-10-22 23:19:40.949 +01:00 [Warning] No type was specified for the decimal column '"Debit"' on entity type '"TrialBalance"'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values using 'HasColumnType()'.
+2020-10-22 23:19:41.006 +01:00 [Information] Entity Framework Core "3.1.8" initialized '"DataContext"' using provider '"Microsoft.EntityFrameworkCore.SqlServer"' with options: "None"
+2020-10-22 23:19:44.033 +01:00 [Information] Executed DbCommand ("381"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT 1"
+2020-10-22 23:19:44.441 +01:00 [Information] Executed DbCommand ("397"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT OBJECT_ID(N'[__EFMigrationsHistory]');"
+2020-10-22 23:19:44.936 +01:00 [Information] Executed DbCommand ("491"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT 1"
+2020-10-22 23:19:45.755 +01:00 [Information] Executed DbCommand ("817"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT OBJECT_ID(N'[__EFMigrationsHistory]');"
+2020-10-22 23:19:46.077 +01:00 [Information] Executed DbCommand ("306"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT [MigrationId], [ProductVersion]
+FROM [__EFMigrationsHistory]
+ORDER BY [MigrationId];"
+2020-10-22 23:19:46.106 +01:00 [Information] Applying migration '"20201022173453_AddAssetMappingToDB"'.
+2020-10-22 23:19:47.015 +01:00 [Information] Executed DbCommand ("429"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE [AssetMapping] (
+    [Id] int NOT NULL IDENTITY,
+    [AssetName] nvarchar(max) NULL,
+    [Initial] int NOT NULL,
+    [Annual] int NOT NULL,
+    CONSTRAINT [PK_AssetMapping] PRIMARY KEY ([Id])
+);"
+2020-10-22 23:19:49.114 +01:00 [Information] Executed DbCommand ("2,097"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20201022173453_AddAssetMappingToDB', N'3.1.8');"
+2020-10-22 23:19:51.631 +01:00 [Information] Executed DbCommand ("309"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM [AspNetRoles] AS [a]) THEN CAST(1 AS bit)
+    ELSE CAST(0 AS bit)
+END"
+2020-10-22 23:19:51.687 +01:00 [Information] User profile is available. Using '"/Users/mac/.aspnet/DataProtection-Keys"' as key repository; keys will not be encrypted at rest.
+2020-10-22 23:19:52.112 +01:00 [Information] Now listening on: "http://localhost:5000"
+2020-10-22 23:19:52.113 +01:00 [Information] Application started. Press Ctrl+C to shut down.
+2020-10-22 23:19:52.113 +01:00 [Information] Hosting environment: "Development"
+2020-10-22 23:19:52.113 +01:00 [Information] Content root path: "/Users/mac/Projects/taxcomsoftware/TaxComputationSoftware/TaxComputationAPI"
+2020-10-22 23:20:28.701 +01:00 [Information] Request starting HTTP/1.1 GET http://localhost:5000/swagger/index.html  
+2020-10-22 23:20:28.993 +01:00 [Information] Request finished in 296.8278ms 200 text/html;charset=utf-8
+2020-10-22 23:20:29.551 +01:00 [Information] Request starting HTTP/1.1 GET http://localhost:5000/swagger/v2/swagger.json  
+2020-10-22 23:20:29.553 +01:00 [Information] Request starting HTTP/1.1 GET http://localhost:5000/swagger/favicon-32x32.png  
+2020-10-22 23:20:29.611 +01:00 [Information] Sending file. Request path: '"/favicon-32x32.png"'. Physical path: '"N/A"'
+2020-10-22 23:20:29.613 +01:00 [Information] Request finished in 57.89ms 200 image/png
+2020-10-22 23:20:29.928 +01:00 [Information] Request finished in 377.1347ms 200 application/json;charset=utf-8
+2020-10-22 23:21:01.015 +01:00 [Information] Request starting HTTP/1.1 POST http://localhost:5000/api/Utilities/asset-mapping application/json-patch+json 60
+2020-10-22 23:21:01.099 +01:00 [Information] CORS policy execution successful.
+2020-10-22 23:21:01.107 +01:00 [Information] Executing endpoint '"TaxComputationAPI.Controllers.UtilitiesController.CreateAssetClassMapping (TaxComputationAPI)"'
+2020-10-22 23:21:01.186 +01:00 [Information] Route matched with "{action = \"CreateAssetClassMapping\", controller = \"Utilities\"}". Executing controller action with signature "System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] CreateAssetClassMapping(TaxComputationAPI.Dtos.AssetMappingDto)" on controller "TaxComputationAPI.Controllers.UtilitiesController" ("TaxComputationAPI").
+2020-10-22 23:21:01.803 +01:00 [Information] Entity Framework Core "3.1.8" initialized '"DataContext"' using provider '"Microsoft.EntityFrameworkCore.SqlServer"' with options: "None"
+2020-10-22 23:21:02.355 +01:00 [Information] Executed DbCommand ("448"ms) [Parameters=["@__Name_0='?' (Size = 4000)"], CommandType='Text', CommandTimeout='30']"
+""SELECT TOP(1) [a].[Id], [a].[Annual], [a].[AssetName], [a].[Initial]
+FROM [AssetMapping] AS [a]
+WHERE [a].[AssetName] = @__Name_0"
+2020-10-22 23:21:03.867 +01:00 [Information] Executed DbCommand ("612"ms) [Parameters=["@p0='?' (DbType = Int32), @p1='?' (Size = 4000), @p2='?' (DbType = Int32)"], CommandType='Text', CommandTimeout='30']"
+""SET NOCOUNT ON;
+INSERT INTO [AssetMapping] ([Annual], [AssetName], [Initial])
+VALUES (@p0, @p1, @p2);
+SELECT [Id]
+FROM [AssetMapping]
+WHERE @@ROWCOUNT = 1 AND [Id] = scope_identity();"
+2020-10-22 23:21:04.419 +01:00 [Information] Executing ObjectResult, writing value of type '"System.String"'.
+2020-10-22 23:21:04.429 +01:00 [Information] Executed action "TaxComputationAPI.Controllers.UtilitiesController.CreateAssetClassMapping (TaxComputationAPI)" in 3236.4952ms
+2020-10-22 23:21:04.430 +01:00 [Information] Executed endpoint '"TaxComputationAPI.Controllers.UtilitiesController.CreateAssetClassMapping (TaxComputationAPI)"'
+2020-10-22 23:21:04.433 +01:00 [Information] Request finished in 3420.7351ms 200 text/plain; charset=utf-8
+2020-10-22 23:21:20.618 +01:00 [Information] Request starting HTTP/1.1 GET http://localhost:5000/api/Utilities/asset-mapping  
+2020-10-22 23:21:20.639 +01:00 [Information] Authorization failed.
+2020-10-22 23:21:20.646 +01:00 [Information] AuthenticationScheme: "Bearer" was challenged.
+2020-10-22 23:21:20.647 +01:00 [Information] Request finished in 28.2687ms 401 
+2020-10-22 23:21:42.207 +01:00 [Information] Request starting HTTP/1.1 POST http://localhost:5000/api/Authentication/login application/json-patch+json 59
+2020-10-22 23:21:42.213 +01:00 [Information] CORS policy execution successful.
+2020-10-22 23:21:42.215 +01:00 [Information] Executing endpoint '"TaxComputationAPI.Controllers.AuthenticationController.Login (TaxComputationAPI)"'
+2020-10-22 23:21:42.235 +01:00 [Information] Route matched with "{action = \"Login\", controller = \"Authentication\"}". Executing controller action with signature "System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(TaxComputationAPI.Dtos.UserForLoginDto)" on controller "TaxComputationAPI.Controllers.AuthenticationController" ("TaxComputationAPI").
+2020-10-22 23:21:42.305 +01:00 [Information] Entity Framework Core "3.1.8" initialized '"DataContext"' using provider '"Microsoft.EntityFrameworkCore.SqlServer"' with options: "None"
+2020-10-22 23:21:42.797 +01:00 [Information] Executed DbCommand ("459"ms) [Parameters=["@__normalizedUserName_0='?' (Size = 256)"], CommandType='Text', CommandTimeout='30']"
+""SELECT TOP(1) [a].[Id], [a].[AccessFailedCount], [a].[ConcurrencyStamp], [a].[DateCreated], [a].[Email], [a].[EmailConfirmed], [a].[FirstName], [a].[IsActive], [a].[LastName], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[PasswordHash], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[SecurityStamp], [a].[TwoFactorEnabled], [a].[UserName]
+FROM [AspNetUsers] AS [a]
+WHERE [a].[NormalizedUserName] = @__normalizedUserName_0"
+2020-10-22 23:21:46.287 +01:00 [Information] Executed DbCommand ("3,302"ms) [Parameters=["@__userId_0='?' (DbType = Int32)"], CommandType='Text', CommandTimeout='30']"
+""SELECT [a0].[Name]
+FROM [AspNetUserRoles] AS [a]
+INNER JOIN [AspNetRoles] AS [a0] ON [a].[RoleId] = [a0].[Id]
+WHERE [a].[UserId] = @__userId_0"
+2020-10-22 23:21:46.363 +01:00 [Information] Executing ObjectResult, writing value of type '"<>f__AnonymousType1`2[[System.String, System.Private.CoreLib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[TaxComputationAPI.Dtos.UserForListDto, TaxComputationAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"'.
+2020-10-22 23:21:46.395 +01:00 [Information] Executed action "TaxComputationAPI.Controllers.AuthenticationController.Login (TaxComputationAPI)" in 4160.0926ms
+2020-10-22 23:21:46.396 +01:00 [Information] Executed endpoint '"TaxComputationAPI.Controllers.AuthenticationController.Login (TaxComputationAPI)"'
+2020-10-22 23:21:46.396 +01:00 [Information] Request finished in 4189.7677ms 200 application/json; charset=utf-8
+2020-10-22 23:22:05.587 +01:00 [Information] Request starting HTTP/1.1 POST http://localhost:5000/api/Utilities/asset-mapping application/json-patch+json 60
+2020-10-22 23:22:05.589 +01:00 [Information] CORS policy execution successful.
+2020-10-22 23:22:05.652 +01:00 [Information] Successfully validated the token.
+2020-10-22 23:22:05.653 +01:00 [Information] Executing endpoint '"TaxComputationAPI.Controllers.UtilitiesController.CreateAssetClassMapping (TaxComputationAPI)"'
+2020-10-22 23:22:05.654 +01:00 [Information] Route matched with "{action = \"CreateAssetClassMapping\", controller = \"Utilities\"}". Executing controller action with signature "System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] CreateAssetClassMapping(TaxComputationAPI.Dtos.AssetMappingDto)" on controller "TaxComputationAPI.Controllers.UtilitiesController" ("TaxComputationAPI").
+2020-10-22 23:22:05.658 +01:00 [Information] Entity Framework Core "3.1.8" initialized '"DataContext"' using provider '"Microsoft.EntityFrameworkCore.SqlServer"' with options: "None"
+2020-10-22 23:22:07.190 +01:00 [Information] Executed DbCommand ("1,527"ms) [Parameters=["@__Name_0='?' (Size = 4000)"], CommandType='Text', CommandTimeout='30']"
+""SELECT TOP(1) [a].[Id], [a].[Annual], [a].[AssetName], [a].[Initial]
+FROM [AssetMapping] AS [a]
+WHERE [a].[AssetName] = @__Name_0"
+2020-10-22 23:22:07.197 +01:00 [Information] Executing ObjectResult, writing value of type '"<>f__AnonymousType0`1[[<>f__AnonymousType3`1[[System.String[], System.Private.CoreLib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], TaxComputationAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"'.
+2020-10-22 23:22:07.211 +01:00 [Information] Executed action "TaxComputationAPI.Controllers.UtilitiesController.CreateAssetClassMapping (TaxComputationAPI)" in 1557.3794ms
+2020-10-22 23:22:07.212 +01:00 [Information] Executed endpoint '"TaxComputationAPI.Controllers.UtilitiesController.CreateAssetClassMapping (TaxComputationAPI)"'
+2020-10-22 23:22:07.213 +01:00 [Information] Request finished in 1625.587ms 400 application/json; charset=utf-8
+2020-10-22 23:22:12.418 +01:00 [Information] Request starting HTTP/1.1 GET http://localhost:5000/api/Utilities/asset-mapping  
+2020-10-22 23:22:12.421 +01:00 [Information] Successfully validated the token.
+2020-10-22 23:22:12.423 +01:00 [Information] Authorization was successful.
+2020-10-22 23:22:12.424 +01:00 [Information] Executing endpoint '"TaxComputationAPI.Controllers.UtilitiesController.ListAssetClassMapping (TaxComputationAPI)"'
+2020-10-22 23:22:12.432 +01:00 [Information] Route matched with "{action = \"ListAssetClassMapping\", controller = \"Utilities\"}". Executing controller action with signature "System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] ListAssetClassMapping()" on controller "TaxComputationAPI.Controllers.UtilitiesController" ("TaxComputationAPI").
+2020-10-22 23:22:12.442 +01:00 [Information] Entity Framework Core "3.1.8" initialized '"DataContext"' using provider '"Microsoft.EntityFrameworkCore.SqlServer"' with options: "None"
+2020-10-22 23:22:13.206 +01:00 [Information] Executed DbCommand ("756"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT [a].[Id], [a].[Annual], [a].[AssetName], [a].[Initial]
+FROM [AssetMapping] AS [a]"
+2020-10-22 23:22:13.208 +01:00 [Information] Executing ObjectResult, writing value of type '"System.Collections.Generic.List`1[[TaxComputationAPI.Models.AssetMapping, TaxComputationAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"'.
+2020-10-22 23:22:13.217 +01:00 [Information] Executed action "TaxComputationAPI.Controllers.UtilitiesController.ListAssetClassMapping (TaxComputationAPI)" in 785.1609ms
+2020-10-22 23:22:13.217 +01:00 [Information] Executed endpoint '"TaxComputationAPI.Controllers.UtilitiesController.ListAssetClassMapping (TaxComputationAPI)"'
+2020-10-22 23:22:13.218 +01:00 [Information] Request finished in 799.8705ms 200 application/json; charset=utf-8
+2020-10-22 23:22:56.857 +01:00 [Information] Request starting HTTP/1.1 PUT http://localhost:5000/api/Utilities/asset-mapping/1 application/json-patch+json 63
+2020-10-22 23:22:56.859 +01:00 [Information] CORS policy execution successful.
+2020-10-22 23:22:56.860 +01:00 [Information] Successfully validated the token.
+2020-10-22 23:22:56.862 +01:00 [Information] Authorization was successful.
+2020-10-22 23:22:56.862 +01:00 [Information] Executing endpoint '"TaxComputationAPI.Controllers.UtilitiesController.UpdateAssetMapping (TaxComputationAPI)"'
+2020-10-22 23:22:56.874 +01:00 [Information] Route matched with "{action = \"UpdateAssetMapping\", controller = \"Utilities\"}". Executing controller action with signature "System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] UpdateAssetMapping(Int32, TaxComputationAPI.Dtos.AssetMappingUpdateDto)" on controller "TaxComputationAPI.Controllers.UtilitiesController" ("TaxComputationAPI").
+2020-10-22 23:22:56.888 +01:00 [Information] Entity Framework Core "3.1.8" initialized '"DataContext"' using provider '"Microsoft.EntityFrameworkCore.SqlServer"' with options: "None"
+2020-10-22 23:22:57.200 +01:00 [Information] Executed DbCommand ("306"ms) [Parameters=["@__Id_0='?' (DbType = Int32)"], CommandType='Text', CommandTimeout='30']"
+""SELECT TOP(1) [a].[Id], [a].[Annual], [a].[AssetName], [a].[Initial]
+FROM [AssetMapping] AS [a]
+WHERE [a].[Id] = @__Id_0"
+2020-10-22 23:22:57.850 +01:00 [Information] Executed DbCommand ("303"ms) [Parameters=["@p0='?' (DbType = Int32), @p1='?' (Size = 4000), @p2='?' (DbType = Int32)"], CommandType='Text', CommandTimeout='30']"
+""SET NOCOUNT ON;
+INSERT INTO [AssetMapping] ([Annual], [AssetName], [Initial])
+VALUES (@p0, @p1, @p2);
+SELECT [Id]
+FROM [AssetMapping]
+WHERE @@ROWCOUNT = 1 AND [Id] = scope_identity();"
+2020-10-22 23:22:58.262 +01:00 [Information] Executing ObjectResult, writing value of type '"System.String"'.
+2020-10-22 23:22:58.262 +01:00 [Information] Executed action "TaxComputationAPI.Controllers.UtilitiesController.UpdateAssetMapping (TaxComputationAPI)" in 1388.5976ms
+2020-10-22 23:22:58.263 +01:00 [Information] Executed endpoint '"TaxComputationAPI.Controllers.UtilitiesController.UpdateAssetMapping (TaxComputationAPI)"'
+2020-10-22 23:22:58.263 +01:00 [Information] Request finished in 1406.2417ms 200 text/plain; charset=utf-8
+2020-10-22 23:23:12.963 +01:00 [Information] Request starting HTTP/1.1 GET http://localhost:5000/api/Utilities/asset-mapping  
+2020-10-22 23:23:12.972 +01:00 [Information] Successfully validated the token.
+2020-10-22 23:23:12.974 +01:00 [Information] Authorization was successful.
+2020-10-22 23:23:12.974 +01:00 [Information] Executing endpoint '"TaxComputationAPI.Controllers.UtilitiesController.ListAssetClassMapping (TaxComputationAPI)"'
+2020-10-22 23:23:12.975 +01:00 [Information] Route matched with "{action = \"ListAssetClassMapping\", controller = \"Utilities\"}". Executing controller action with signature "System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] ListAssetClassMapping()" on controller "TaxComputationAPI.Controllers.UtilitiesController" ("TaxComputationAPI").
+2020-10-22 23:23:13.005 +01:00 [Information] Entity Framework Core "3.1.8" initialized '"DataContext"' using provider '"Microsoft.EntityFrameworkCore.SqlServer"' with options: "None"
+2020-10-22 23:23:13.415 +01:00 [Information] Executed DbCommand ("409"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT [a].[Id], [a].[Annual], [a].[AssetName], [a].[Initial]
+FROM [AssetMapping] AS [a]"
+2020-10-22 23:23:13.417 +01:00 [Information] Executing ObjectResult, writing value of type '"System.Collections.Generic.List`1[[TaxComputationAPI.Models.AssetMapping, TaxComputationAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"'.
+2020-10-22 23:23:13.418 +01:00 [Information] Executed action "TaxComputationAPI.Controllers.UtilitiesController.ListAssetClassMapping (TaxComputationAPI)" in 442.6168ms
+2020-10-22 23:23:13.418 +01:00 [Information] Executed endpoint '"TaxComputationAPI.Controllers.UtilitiesController.ListAssetClassMapping (TaxComputationAPI)"'
+2020-10-22 23:23:13.418 +01:00 [Information] Request finished in 455.5093ms 200 application/json; charset=utf-8
+2020-10-22 23:36:33.267 +01:00 [Warning] No type was specified for the decimal column '"Credit"' on entity type '"TrialBalance"'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values using 'HasColumnType()'.
+2020-10-22 23:36:33.336 +01:00 [Warning] No type was specified for the decimal column '"Debit"' on entity type '"TrialBalance"'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values using 'HasColumnType()'.
+2020-10-22 23:36:33.386 +01:00 [Information] Entity Framework Core "3.1.8" initialized '"DataContext"' using provider '"Microsoft.EntityFrameworkCore.SqlServer"' with options: "None"
+2020-10-22 23:36:36.420 +01:00 [Information] Executed DbCommand ("553"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT 1"
+2020-10-22 23:36:36.818 +01:00 [Information] Executed DbCommand ("382"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT OBJECT_ID(N'[__EFMigrationsHistory]');"
+2020-10-22 23:36:37.315 +01:00 [Information] Executed DbCommand ("493"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT 1"
+2020-10-22 23:36:37.726 +01:00 [Information] Executed DbCommand ("409"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT OBJECT_ID(N'[__EFMigrationsHistory]');"
+2020-10-22 23:36:38.340 +01:00 [Information] Executed DbCommand ("597"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT [MigrationId], [ProductVersion]
+FROM [__EFMigrationsHistory]
+ORDER BY [MigrationId];"
+2020-10-22 23:36:38.365 +01:00 [Information] No migrations were applied. The database is already up to date.
+2020-10-22 23:36:39.969 +01:00 [Information] Executed DbCommand ("1,355"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM [AspNetRoles] AS [a]) THEN CAST(1 AS bit)
+    ELSE CAST(0 AS bit)
+END"
+2020-10-22 23:36:40.029 +01:00 [Information] User profile is available. Using '"/Users/mac/.aspnet/DataProtection-Keys"' as key repository; keys will not be encrypted at rest.
+2020-10-22 23:36:40.393 +01:00 [Information] Now listening on: "http://localhost:5000"
+2020-10-22 23:36:40.393 +01:00 [Information] Application started. Press Ctrl+C to shut down.
+2020-10-22 23:36:40.393 +01:00 [Information] Hosting environment: "Development"
+2020-10-22 23:36:40.393 +01:00 [Information] Content root path: "/Users/mac/Projects/taxcomsoftware/TaxComputationSoftware/TaxComputationAPI"
+2020-10-22 23:37:00.655 +01:00 [Information] Request starting HTTP/1.1 POST http://localhost:5000/api/Utilities/asset-mapping application/json-patch+json 60
+2020-10-22 23:37:00.739 +01:00 [Information] CORS policy execution successful.
+2020-10-22 23:37:01.087 +01:00 [Information] Successfully validated the token.
+2020-10-22 23:37:01.092 +01:00 [Information] Executing endpoint '"TaxComputationAPI.Controllers.UtilitiesController.CreateAssetClassMapping (TaxComputationAPI)"'
+2020-10-22 23:37:01.142 +01:00 [Information] Route matched with "{action = \"CreateAssetClassMapping\", controller = \"Utilities\"}". Executing controller action with signature "System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] CreateAssetClassMapping(TaxComputationAPI.Dtos.AssetMappingDto)" on controller "TaxComputationAPI.Controllers.UtilitiesController" ("TaxComputationAPI").
+2020-10-22 23:37:01.510 +01:00 [Information] Entity Framework Core "3.1.8" initialized '"DataContext"' using provider '"Microsoft.EntityFrameworkCore.SqlServer"' with options: "None"
+2020-10-22 23:37:03.329 +01:00 [Information] Executed DbCommand ("1,724"ms) [Parameters=["@__Name_0='?' (Size = 4000)"], CommandType='Text', CommandTimeout='30']"
+""SELECT TOP(1) [a].[Id], [a].[Annual], [a].[AssetName], [a].[Initial]
+FROM [AssetMapping] AS [a]
+WHERE [a].[AssetName] = @__Name_0"
+2020-10-22 23:37:04.216 +01:00 [Information] Executed DbCommand ("316"ms) [Parameters=["@p0='?' (DbType = Int32), @p1='?' (Size = 4000), @p2='?' (DbType = Int32)"], CommandType='Text', CommandTimeout='30']"
+""SET NOCOUNT ON;
+INSERT INTO [AssetMapping] ([Annual], [AssetName], [Initial])
+VALUES (@p0, @p1, @p2);
+SELECT [Id]
+FROM [AssetMapping]
+WHERE @@ROWCOUNT = 1 AND [Id] = scope_identity();"
+2020-10-22 23:37:04.682 +01:00 [Information] Executing ObjectResult, writing value of type '"System.String"'.
+2020-10-22 23:37:04.698 +01:00 [Information] Executed action "TaxComputationAPI.Controllers.UtilitiesController.CreateAssetClassMapping (TaxComputationAPI)" in 3547.811ms
+2020-10-22 23:37:04.700 +01:00 [Information] Executed endpoint '"TaxComputationAPI.Controllers.UtilitiesController.CreateAssetClassMapping (TaxComputationAPI)"'
+2020-10-22 23:37:04.708 +01:00 [Information] Request finished in 4057.7373ms 200 text/plain; charset=utf-8
+2020-10-22 23:37:25.281 +01:00 [Information] Request starting HTTP/1.1 GET http://localhost:5000/api/Utilities/asset-mapping  
+2020-10-22 23:37:25.300 +01:00 [Information] Successfully validated the token.
+2020-10-22 23:37:25.307 +01:00 [Information] Authorization was successful.
+2020-10-22 23:37:25.307 +01:00 [Information] Executing endpoint '"TaxComputationAPI.Controllers.UtilitiesController.ListAssetClassMapping (TaxComputationAPI)"'
+2020-10-22 23:37:25.312 +01:00 [Information] Route matched with "{action = \"ListAssetClassMapping\", controller = \"Utilities\"}". Executing controller action with signature "System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] ListAssetClassMapping()" on controller "TaxComputationAPI.Controllers.UtilitiesController" ("TaxComputationAPI").
+2020-10-22 23:37:25.360 +01:00 [Information] Entity Framework Core "3.1.8" initialized '"DataContext"' using provider '"Microsoft.EntityFrameworkCore.SqlServer"' with options: "None"
+2020-10-22 23:37:26.932 +01:00 [Information] Executed DbCommand ("1,564"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT [a].[Id], [a].[Annual], [a].[AssetName], [a].[Initial]
+FROM [AssetMapping] AS [a]"
+2020-10-22 23:37:26.943 +01:00 [Information] Executing ObjectResult, writing value of type '"System.Collections.Generic.List`1[[TaxComputationAPI.Models.AssetMapping, TaxComputationAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"'.
+2020-10-22 23:37:27.026 +01:00 [Information] Executed action "TaxComputationAPI.Controllers.UtilitiesController.ListAssetClassMapping (TaxComputationAPI)" in 1713.66ms
+2020-10-22 23:37:27.026 +01:00 [Information] Executed endpoint '"TaxComputationAPI.Controllers.UtilitiesController.ListAssetClassMapping (TaxComputationAPI)"'
+2020-10-22 23:37:27.027 +01:00 [Information] Request finished in 1745.81ms 200 application/json; charset=utf-8
+2020-10-22 23:37:50.490 +01:00 [Information] Request starting HTTP/1.1 GET http://localhost:5000/api/Utilities/asset-mapping  
+2020-10-22 23:37:50.504 +01:00 [Information] Authorization failed.
+2020-10-22 23:37:50.512 +01:00 [Information] AuthenticationScheme: "Bearer" was challenged.
+2020-10-22 23:37:50.513 +01:00 [Information] Request finished in 23.0209ms 401 
+2020-10-22 23:38:11.435 +01:00 [Information] Request starting HTTP/1.1 POST http://localhost:5000/api/Authentication/login application/json-patch+json 59
+2020-10-22 23:38:11.437 +01:00 [Information] CORS policy execution successful.
+2020-10-22 23:38:11.443 +01:00 [Information] Executing endpoint '"TaxComputationAPI.Controllers.AuthenticationController.Login (TaxComputationAPI)"'
+2020-10-22 23:38:11.465 +01:00 [Information] Route matched with "{action = \"Login\", controller = \"Authentication\"}". Executing controller action with signature "System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(TaxComputationAPI.Dtos.UserForLoginDto)" on controller "TaxComputationAPI.Controllers.AuthenticationController" ("TaxComputationAPI").
+2020-10-22 23:38:11.494 +01:00 [Information] Entity Framework Core "3.1.8" initialized '"DataContext"' using provider '"Microsoft.EntityFrameworkCore.SqlServer"' with options: "None"
+2020-10-22 23:38:11.931 +01:00 [Information] Executed DbCommand ("406"ms) [Parameters=["@__normalizedUserName_0='?' (Size = 256)"], CommandType='Text', CommandTimeout='30']"
+""SELECT TOP(1) [a].[Id], [a].[AccessFailedCount], [a].[ConcurrencyStamp], [a].[DateCreated], [a].[Email], [a].[EmailConfirmed], [a].[FirstName], [a].[IsActive], [a].[LastName], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[PasswordHash], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[SecurityStamp], [a].[TwoFactorEnabled], [a].[UserName]
+FROM [AspNetUsers] AS [a]
+WHERE [a].[NormalizedUserName] = @__normalizedUserName_0"
+2020-10-22 23:38:12.440 +01:00 [Information] Executed DbCommand ("318"ms) [Parameters=["@__userId_0='?' (DbType = Int32)"], CommandType='Text', CommandTimeout='30']"
+""SELECT [a0].[Name]
+FROM [AspNetUserRoles] AS [a]
+INNER JOIN [AspNetRoles] AS [a0] ON [a].[RoleId] = [a0].[Id]
+WHERE [a].[UserId] = @__userId_0"
+2020-10-22 23:38:12.457 +01:00 [Information] Executing ObjectResult, writing value of type '"<>f__AnonymousType1`2[[System.String, System.Private.CoreLib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[TaxComputationAPI.Dtos.UserForListDto, TaxComputationAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"'.
+2020-10-22 23:38:12.475 +01:00 [Information] Executed action "TaxComputationAPI.Controllers.AuthenticationController.Login (TaxComputationAPI)" in 1008.5618ms
+2020-10-22 23:38:12.475 +01:00 [Information] Executed endpoint '"TaxComputationAPI.Controllers.AuthenticationController.Login (TaxComputationAPI)"'
+2020-10-22 23:38:12.476 +01:00 [Information] Request finished in 1040.6168ms 200 application/json; charset=utf-8
+2020-10-22 23:38:53.973 +01:00 [Information] Request starting HTTP/1.1 PUT http://localhost:5000/api/Utilities/asset-mapping/3 application/json-patch+json 57
+2020-10-22 23:38:53.975 +01:00 [Information] CORS policy execution successful.
+2020-10-22 23:38:53.979 +01:00 [Information] Successfully validated the token.
+2020-10-22 23:38:53.982 +01:00 [Information] Authorization was successful.
+2020-10-22 23:38:53.983 +01:00 [Information] Executing endpoint '"TaxComputationAPI.Controllers.UtilitiesController.UpdateAssetMapping (TaxComputationAPI)"'
+2020-10-22 23:38:53.999 +01:00 [Information] Route matched with "{action = \"UpdateAssetMapping\", controller = \"Utilities\"}". Executing controller action with signature "System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] UpdateAssetMapping(Int32, TaxComputationAPI.Dtos.AssetMappingUpdateDto)" on controller "TaxComputationAPI.Controllers.UtilitiesController" ("TaxComputationAPI").
+2020-10-22 23:38:54.025 +01:00 [Information] Entity Framework Core "3.1.8" initialized '"DataContext"' using provider '"Microsoft.EntityFrameworkCore.SqlServer"' with options: "None"
+2020-10-22 23:38:54.423 +01:00 [Information] Executed DbCommand ("392"ms) [Parameters=["@__Id_0='?' (DbType = Int32)"], CommandType='Text', CommandTimeout='30']"
+""SELECT TOP(1) [a].[Id], [a].[Annual], [a].[AssetName], [a].[Initial]
+FROM [AssetMapping] AS [a]
+WHERE [a].[Id] = @__Id_0"
+2020-10-22 23:38:54.833 +01:00 [Information] Executed DbCommand ("398"ms) [Parameters=["@__assetMapping_Id_0='?' (DbType = Int32)"], CommandType='Text', CommandTimeout='30']"
+""SELECT TOP(1) [a].[Id], [a].[Annual], [a].[AssetName], [a].[Initial]
+FROM [AssetMapping] AS [a]
+WHERE [a].[Id] = @__assetMapping_Id_0"
+2020-10-22 23:38:55.775 +01:00 [Information] Executed DbCommand ("426"ms) [Parameters=["@p1='?' (DbType = Int32), @p0='?' (Size = 4000)"], CommandType='Text', CommandTimeout='30']"
+""SET NOCOUNT ON;
+UPDATE [AssetMapping] SET [AssetName] = @p0
+WHERE [Id] = @p1;
+SELECT @@ROWCOUNT;"
+2020-10-22 23:38:56.109 +01:00 [Information] Executing ObjectResult, writing value of type '"System.String"'.
+2020-10-22 23:38:56.111 +01:00 [Information] Executed action "TaxComputationAPI.Controllers.UtilitiesController.UpdateAssetMapping (TaxComputationAPI)" in 2111.6472ms
+2020-10-22 23:38:56.111 +01:00 [Information] Executed endpoint '"TaxComputationAPI.Controllers.UtilitiesController.UpdateAssetMapping (TaxComputationAPI)"'
+2020-10-22 23:38:56.111 +01:00 [Information] Request finished in 2137.8762ms 200 text/plain; charset=utf-8
+2020-10-22 23:39:02.019 +01:00 [Information] Request starting HTTP/1.1 GET http://localhost:5000/api/Utilities/asset-mapping  
+2020-10-22 23:39:02.023 +01:00 [Information] Successfully validated the token.
+2020-10-22 23:39:02.024 +01:00 [Information] Authorization was successful.
+2020-10-22 23:39:02.024 +01:00 [Information] Executing endpoint '"TaxComputationAPI.Controllers.UtilitiesController.ListAssetClassMapping (TaxComputationAPI)"'
+2020-10-22 23:39:02.025 +01:00 [Information] Route matched with "{action = \"ListAssetClassMapping\", controller = \"Utilities\"}". Executing controller action with signature "System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] ListAssetClassMapping()" on controller "TaxComputationAPI.Controllers.UtilitiesController" ("TaxComputationAPI").
+2020-10-22 23:39:02.027 +01:00 [Information] Entity Framework Core "3.1.8" initialized '"DataContext"' using provider '"Microsoft.EntityFrameworkCore.SqlServer"' with options: "None"
+2020-10-22 23:39:02.545 +01:00 [Information] Executed DbCommand ("517"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT [a].[Id], [a].[Annual], [a].[AssetName], [a].[Initial]
+FROM [AssetMapping] AS [a]"
+2020-10-22 23:39:02.547 +01:00 [Information] Executing ObjectResult, writing value of type '"System.Collections.Generic.List`1[[TaxComputationAPI.Models.AssetMapping, TaxComputationAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"'.
+2020-10-22 23:39:02.548 +01:00 [Information] Executed action "TaxComputationAPI.Controllers.UtilitiesController.ListAssetClassMapping (TaxComputationAPI)" in 523.2817ms
+2020-10-22 23:39:02.549 +01:00 [Information] Executed endpoint '"TaxComputationAPI.Controllers.UtilitiesController.ListAssetClassMapping (TaxComputationAPI)"'
+2020-10-22 23:39:02.550 +01:00 [Information] Request finished in 530.6812ms 200 application/json; charset=utf-8
+2020-10-22 23:39:15.485 +01:00 [Information] Request starting HTTP/1.1 PUT http://localhost:5000/api/Utilities/asset-mapping/3 application/json-patch+json 58
+2020-10-22 23:39:15.486 +01:00 [Information] CORS policy execution successful.
+2020-10-22 23:39:15.487 +01:00 [Information] Successfully validated the token.
+2020-10-22 23:39:15.487 +01:00 [Information] Authorization was successful.
+2020-10-22 23:39:15.487 +01:00 [Information] Executing endpoint '"TaxComputationAPI.Controllers.UtilitiesController.UpdateAssetMapping (TaxComputationAPI)"'
+2020-10-22 23:39:15.488 +01:00 [Information] Route matched with "{action = \"UpdateAssetMapping\", controller = \"Utilities\"}". Executing controller action with signature "System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] UpdateAssetMapping(Int32, TaxComputationAPI.Dtos.AssetMappingUpdateDto)" on controller "TaxComputationAPI.Controllers.UtilitiesController" ("TaxComputationAPI").
+2020-10-22 23:39:15.496 +01:00 [Information] Entity Framework Core "3.1.8" initialized '"DataContext"' using provider '"Microsoft.EntityFrameworkCore.SqlServer"' with options: "None"
+2020-10-22 23:39:16.336 +01:00 [Information] Executed DbCommand ("834"ms) [Parameters=["@__Id_0='?' (DbType = Int32)"], CommandType='Text', CommandTimeout='30']"
+""SELECT TOP(1) [a].[Id], [a].[Annual], [a].[AssetName], [a].[Initial]
+FROM [AssetMapping] AS [a]
+WHERE [a].[Id] = @__Id_0"
+2020-10-22 23:39:17.020 +01:00 [Information] Executed DbCommand ("679"ms) [Parameters=["@__assetMapping_Id_0='?' (DbType = Int32)"], CommandType='Text', CommandTimeout='30']"
+""SELECT TOP(1) [a].[Id], [a].[Annual], [a].[AssetName], [a].[Initial]
+FROM [AssetMapping] AS [a]
+WHERE [a].[Id] = @__assetMapping_Id_0"
+2020-10-22 23:39:17.703 +01:00 [Information] Executed DbCommand ("348"ms) [Parameters=["@p2='?' (DbType = Int32), @p0='?' (Size = 4000), @p1='?' (DbType = Int32)"], CommandType='Text', CommandTimeout='30']"
+""SET NOCOUNT ON;
+UPDATE [AssetMapping] SET [AssetName] = @p0, [Initial] = @p1
+WHERE [Id] = @p2;
+SELECT @@ROWCOUNT;"
+2020-10-22 23:39:18.122 +01:00 [Information] Executing ObjectResult, writing value of type '"System.String"'.
+2020-10-22 23:39:18.123 +01:00 [Information] Executed action "TaxComputationAPI.Controllers.UtilitiesController.UpdateAssetMapping (TaxComputationAPI)" in 2635.3585ms
+2020-10-22 23:39:18.123 +01:00 [Information] Executed endpoint '"TaxComputationAPI.Controllers.UtilitiesController.UpdateAssetMapping (TaxComputationAPI)"'
+2020-10-22 23:39:18.125 +01:00 [Information] Request finished in 2639.5138ms 200 text/plain; charset=utf-8
+2020-10-22 23:39:25.207 +01:00 [Information] Request starting HTTP/1.1 GET http://localhost:5000/api/Utilities/asset-mapping  
+2020-10-22 23:39:25.209 +01:00 [Information] Successfully validated the token.
+2020-10-22 23:39:25.210 +01:00 [Information] Authorization was successful.
+2020-10-22 23:39:25.210 +01:00 [Information] Executing endpoint '"TaxComputationAPI.Controllers.UtilitiesController.ListAssetClassMapping (TaxComputationAPI)"'
+2020-10-22 23:39:25.210 +01:00 [Information] Route matched with "{action = \"ListAssetClassMapping\", controller = \"Utilities\"}". Executing controller action with signature "System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] ListAssetClassMapping()" on controller "TaxComputationAPI.Controllers.UtilitiesController" ("TaxComputationAPI").
+2020-10-22 23:39:25.211 +01:00 [Information] Entity Framework Core "3.1.8" initialized '"DataContext"' using provider '"Microsoft.EntityFrameworkCore.SqlServer"' with options: "None"
+2020-10-22 23:39:25.652 +01:00 [Information] Executed DbCommand ("440"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT [a].[Id], [a].[Annual], [a].[AssetName], [a].[Initial]
+FROM [AssetMapping] AS [a]"
+2020-10-22 23:39:25.653 +01:00 [Information] Executing ObjectResult, writing value of type '"System.Collections.Generic.List`1[[TaxComputationAPI.Models.AssetMapping, TaxComputationAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"'.
+2020-10-22 23:39:25.654 +01:00 [Information] Executed action "TaxComputationAPI.Controllers.UtilitiesController.ListAssetClassMapping (TaxComputationAPI)" in 443.9369ms
+2020-10-22 23:39:25.654 +01:00 [Information] Executed endpoint '"TaxComputationAPI.Controllers.UtilitiesController.ListAssetClassMapping (TaxComputationAPI)"'
+2020-10-22 23:39:25.655 +01:00 [Information] Request finished in 448.0711ms 200 application/json; charset=utf-8

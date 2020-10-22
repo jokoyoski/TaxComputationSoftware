@@ -34,6 +34,7 @@
           "Microsoft.EntityFrameworkCore.SqlServer": "3.1.8",
           "Microsoft.EntityFrameworkCore.Tools": "3.1.8",
           "Microsoft.Extensions.Logging.Console": "3.1.9",
+          "SendGrid": "9.21.0",
           "Serilog.AspNetCore": "3.4.0",
           "Serilog.Extensions.Logging": "3.0.1",
           "Serilog.Sinks.File": "4.1.0",
@@ -1048,6 +1049,21 @@
           }
         }
       },
+      "SendGrid/9.21.0": {
+        "dependencies": {
+          "Newtonsoft.Json": "12.0.2",
+          "starkbank-ecdsa": "1.2.0"
+        },
+        "runtime": {
+          "lib/netstandard2.0/SendGrid.dll": {
+            "assemblyVersion": "9.21.0.0",
+            "fileVersion": "9.21.0.0"
+          }
+        },
+        "compile": {
+          "lib/netstandard2.0/SendGrid.dll": {}
+        }
+      },
       "Serilog/2.9.0": {
         "runtime": {
           "lib/netstandard2.0/Serilog.dll": {
@@ -1209,6 +1225,17 @@
         },
         "compile": {
           "lib/netstandard1.3/Serilog.Sinks.RollingFile.dll": {}
+        }
+      },
+      "starkbank-ecdsa/1.2.0": {
+        "runtime": {
+          "lib/netstandard2.1/StarkbankEcdsa.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        },
+        "compile": {
+          "lib/netstandard2.1/StarkbankEcdsa.dll": {}
         }
       },
       "Swashbuckle.AspNetCore/5.6.3": {
@@ -3904,6 +3931,13 @@
       "path": "runtime.win-x86.runtime.native.system.data.sqlclient.sni/4.4.0",
       "hashPath": "runtime.win-x86.runtime.native.system.data.sqlclient.sni.4.4.0.nupkg.sha512"
     },
+    "SendGrid/9.21.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-GY7NZcS0K4WjepDZhs5XxORqZDC1FmTz6iT/j9crCSCMBG4Y/9I/ia9b6ws8209Yv1uVjnDcNr0gf54ibIxIsw==",
+      "path": "sendgrid/9.21.0",
+      "hashPath": "sendgrid.9.21.0.nupkg.sha512"
+    },
     "Serilog/2.9.0": {
       "type": "package",
       "serviceable": true,
@@ -3973,6 +4007,13 @@
       "sha512": "sha512-2lT5X1r3GH4P0bRWJfhA7etGl8Q2Ipw9AACvtAHWRUSpYZ42NGVyHoVs2ALBZ/cAkkS+tA4jl80Zie144eLQPg==",
       "path": "serilog.sinks.rollingfile/3.3.0",
       "hashPath": "serilog.sinks.rollingfile.3.3.0.nupkg.sha512"
+    },
+    "starkbank-ecdsa/1.2.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-hP53QPYOOEIR44EK9phz+DYliM6DEieDZxpb8GZzE+++qyrWqUscKcyHCC6L9yu/ehllYtqxtT4qrjWDsuQlUQ==",
+      "path": "starkbank-ecdsa/1.2.0",
+      "hashPath": "starkbank-ecdsa.1.2.0.nupkg.sha512"
     },
     "Swashbuckle.AspNetCore/5.6.3": {
       "type": "package",

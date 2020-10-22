@@ -23,7 +23,7 @@ namespace TaxComputationAPI.Repositories
             var asset = _context.AssetClass.ToList();
             return asset;
         }
-        
+
         public async Task AddAssetClassAsync(AssetClass assetClass)
         {
 
@@ -31,9 +31,9 @@ namespace TaxComputationAPI.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public  Task<List<FinancialYear>> GetFinancialYearAsync()
+        public Task<List<FinancialYear>> GetFinancialYearAsync()
         {
-            var year =   _context.FinancialYear.ToListAsync();
+            var year = _context.FinancialYear.ToListAsync();
             return year;
         }
 
@@ -44,16 +44,50 @@ namespace TaxComputationAPI.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async  Task<AssetClass> GetAssetClassAsync(string Name)
+        public async Task<AssetClass> GetAssetClassAsync(string Name)
         {
-            var assetClass =   _context.AssetClass.FirstOrDefault(x=>x.Name==Name);
+            var assetClass = _context.AssetClass.FirstOrDefault(x => x.Name == Name);
             return assetClass;
         }
 
         public async Task<FinancialYear> GetFinancialYearAsync(int year)
         {
-             var financialYear =   _context.FinancialYear.FirstOrDefault(x=>x.Name==year);
+            var financialYear = _context.FinancialYear.FirstOrDefault(x => x.Name == year);
             return financialYear;
+        }
+
+        public async Task<List<AssetMapping>> GetAssetMappingAsync()
+        {
+            var mapping = _context.AssetMapping.ToList();
+            return mapping;
+        }
+
+        public async Task<AssetMapping> GetAssetMappingAsync(string Name)
+        {
+            var assetMapping = _context.AssetMapping.FirstOrDefault(x => x.AssetName == Name);
+            return assetMapping;
+        }
+
+        public async Task<AssetMapping> GetAssetMappingById(int Id)
+        {
+            var assetMapping = _context.AssetMapping.FirstOrDefault(x => x.Id == Id);
+            return assetMapping;
+        }
+
+        public async Task AddAssetMappingAsync(AssetMapping assetMapping)
+        {
+
+            await _context.AssetMapping.AddAsync(assetMapping);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task UpdateAssetMappingAsync(AssetMapping assetMapping)
+        {
+            var result= _context.AssetMapping.FirstOrDefault(x=>x.Id==assetMapping.Id);
+            result.Annual=assetMapping.Annual;
+            result.AssetName=assetMapping.AssetName;
+            result.Initial=assetMapping.Initial;
+             _context.SaveChanges();
         }
     }
 }

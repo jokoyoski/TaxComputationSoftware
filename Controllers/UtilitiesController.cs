@@ -40,14 +40,90 @@ namespace TaxComputationAPI.Controllers {
             }
         }
 
+         [HttpGet("asset-mapping")]
+         [Authorize]
+
+        public async Task<IActionResult> ListAssetClassMapping()
+        {
+            try
+            {
+                var assetClassMappingDtos = await _utilitiesService.GetAssetMappingAsync();
+
+                return Ok(assetClassMappingDtos);
+
+            }
+            catch (Exception ex)
+            {
+                 return StatusCode (500, new { errors = new []{"Error occured while trying to process your request please try again later !"} });
+            
+            }
+        }
+
+
+        [HttpPut("asset-mapping/{Id}")]
+        [Authorize]
+
+        public async Task<IActionResult> UpdateAssetMapping(int Id, AssetMappingUpdateDto assetMappingUpdateDto)
+        {
+            try
+            {
+
+                var assetMappingRecord = await _utilitiesService.GetAssetMappingById(Id);
+                if (assetMappingRecord == null)
+                {
+                   // var error = new[] { "Asset mapping does not exist!" };
+                     return StatusCode (400, new { errors = new []{"Asset mapping does not exist!"} });
+         
+                }
+                var assetMappingToUpdate = _mapper.Map<AssetMapping>(assetMappingUpdateDto);
+                assetMappingToUpdate.Id=Id;
+
+                await _utilitiesService.UpdateAssetMappingAsync(assetMappingToUpdate);
+
+                return Ok("Asset mapping updated successfully !!");
+            }
+            catch (Exception ex)
+            {
+                  return StatusCode (500, new { errors = new []{"Error occured while trying to process your request please try again later !"} });
+            
+            }
+        }
+
+        [HttpPost("asset-mapping")]
+        public async Task<IActionResult> CreateAssetClassMapping(AssetMappingDto assetMappingDto)
+        {
+            try
+            {
+                var assetMappingRecord = await _utilitiesService.GetAssetMappingAsync(assetMappingDto.AssetName);
+                if (assetMappingRecord != null)
+                {
+                    var error = new[] { "Asset mapping exist!" };
+                    return StatusCode(400, new { errors = new { error } });
+                }
+                var assetMappingToAdd = _mapper.Map<AssetMapping>(assetMappingDto);
+                assetMappingToAdd.AssetName = assetMappingDto.AssetName;
+
+                await _utilitiesService.AddAssetMappingAsync(assetMappingToAdd);
+
+                return Ok("Asset mapping created successfully !!");
+
+            }
+            catch (Exception ex)
+            {
+                var error = new[] { "Error occured while trying to process your request please try again later !" };
+                return StatusCode(500, new { errors = new { error } });
+            }
+        }
+
         [HttpPost ("asset-class")]
         [Authorize]
         public async Task<ActionResult> AddAssetClassAsync (AssetClassDto assetClassDto) {
             try {
                 var assetClassRecord = await _utilitiesService.GetAssetClassAsync (assetClassDto.Name);
                 if (assetClassRecord != null) {
-                    
-                    return StatusCode (400, new { errors = new []{"Asset Class already exist"} });
+                    var error = new [] { "Asset class exist!" };
+                      return StatusCode (500, new { errors = new []{"Error occured while trying to process your request please try again later !"} });
+            
             
                 }
                 var assetClassToAdd = _mapper.Map<AssetClass> (assetClassDto);
@@ -59,7 +135,7 @@ namespace TaxComputationAPI.Controllers {
             } catch (Exception ex) {
                  var email = User.FindFirst (ClaimTypes.Email).Value;
                 _logger.LogInformation ("Exception for {email}, {ex}", email, ex.Message);
-                  return StatusCode (500, new { errors = new []{"Error occured while trying to process your request please try again later !"} });
+                 return StatusCode (500, new { errors = new []{"Error occured while trying to process your request please try again later !"} });
             
             }
         }

@@ -14,5 +14,11 @@ namespace TaxComputationAPI.Interfaces
         Task AddAssetClassAsync(AssetClass assetClass);
         Task<List<FinancialYear>> GetFinancialYearAsync();
         Task AddFinancialYearAsync(FinancialYear financialClass);
+
+        Task<List<AssetMapping>> GetAssetMappingAsync();
+        Task<AssetMapping> GetAssetMappingAsync(string Name);
+        Task<AssetMapping> GetAssetMappingById(int Id);
+        Task AddAssetMappingAsync(AssetMapping asset);
+        Task UpdateAssetMappingAsync(AssetMapping asset);
     }
 }

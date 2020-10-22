@@ -81,6 +81,73 @@ namespace TaxComputationAPI.Controllers
 
         }
 
+        [Authorize]
+        [HttpPost("change-password")]
+        public async Task<IActionResult> ChangePassword(ChangePasswordDto changePasswordDto)
+        {
+            try
+            {
+                var email = User.FindFirst(ClaimTypes.Email).Value;
+
+                var user = await _userManager.FindByEmailAsync(email);
+
+                var checkOldPassword = await _userManager.CheckPasswordAsync(user, changePasswordDto.CurrentPassword);
+                if (!checkOldPassword)
+                    return BadRequest(new { status = "error", message = "Invalid Password" });
+
+                var updatePassword = await _userManager.ChangePasswordAsync(user, changePasswordDto.CurrentPassword, changePasswordDto.NewPassword);
+
+                if (updatePassword.Succeeded)
+                {
+                    return Ok(new { status = "success", message = "Password updated successfully" });
+                }
+
+                return BadRequest(new { status = "error", message = "Unable to update password at the moment. Please try again later" });
+
+            }
+            catch (Exception ex)
+            {
+                var email = User.FindFirst(ClaimTypes.Email).Value;
+                _logger.LogInformation("Exception for {email}, {ex}", email, ex.Message);
+                var error = new[] { "Error Occured please try again later,please try again later..." };
+                return StatusCode(500, new { errors = new { error } });
+            }
+        }
+        [HttpPost("forgot-password/{email}")]
+        public async Task<IActionResult> ForgotPassword(string email)
+        {
+            try
+            {
+                var user = await _userManager.FindByEmailAsync(email);
+                if (user == null)
+                    return BadRequest(new { status = "error", message = "User with " + email + " does not exist in our records." });
+
+                var token = StaticDetails.GenerateToken();
+
+                SendMail sendMail = new SendMail();
+                string body = $"Kindly use the code {token} to complete your account password reset.";
+                var sendToken = await sendMail.SendEmail("Password Reset", email, body, _config.GetValue<string>("SendGridApiKey:Key"));
+                if (sendToken)
+                {
+                    var saveCode = _authService.SaveUserCode(token, email);
+                    if (!saveCode)
+                    {
+                        return StatusCode(500, "Error Occured please try again later, please try again later.......");
+                    }
+                    return Ok("A password reset token has been sent to your mail.");
+                }
+
+                return BadRequest("Unable to send password reset token at the moment. Please try again later");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogInformation("Exception for {email}, {ex}", email, ex.Message);
+                var error = new[] { "Error Occured please try again later,please try again later..." };
+                return StatusCode(500, new { errors = new { error } });
+            }
+
+        }
+
         [HttpPost("reset-password")]
         public async Task<IActionResult> ResetPassword(ResetPasswordDto resetPasswordDto)
         {
