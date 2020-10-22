@@ -59,5 +59,36 @@ namespace TaxComputationAPI.Services
         {
             return  await _utilitiesRepository.GetFinancialYearAsync(Name);
         }
+        public Task<List<AssetMapping>> GetAssetMappingAsync()
+        {
+            return _utilitiesRepository.GetAssetMappingAsync();
+        }
+        public async Task<AssetMapping> GetAssetMappingById(int Id)
+        {
+            return await _utilitiesRepository.GetAssetMappingById(Id);
+        }
+        public async Task<AssetMapping> GetAssetMappingAsync(string Name)
+        {
+            return await _utilitiesRepository.GetAssetMappingAsync(Name);
+        }
+        public async Task AddAssetMappingAsync(AssetMapping assetMapping)
+        {
+            if (assetMapping == null)
+            {
+                throw new ArgumentNullException(nameof(assetMapping));
+            }
+
+            await _utilitiesRepository.AddAssetMappingAsync(assetMapping);
+        }
+
+        public async Task UpdateAssetMappingAsync(AssetMapping assetMapping)
+        {
+            if (assetMapping == null)
+            {
+                throw new ArgumentNullException(nameof(assetMapping));
+            }
+
+            await _utilitiesRepository.UpdateAssetMappingAsync(assetMapping);
+        }
     }
 }
