@@ -17,7 +17,7 @@ namespace TaxComputationAPI.ResponseModel
          public  string CompanyName  {get;set;}
 
          public int Year {get;set;}
-        public string FixedAssetName {get;set;}
+        public string FixedAssetName {get;set;}    
         public long OpeningCost {get;set;}
         
          public long TransferCost {get;set;}

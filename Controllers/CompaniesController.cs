@@ -28,7 +28,9 @@ namespace TaxComputationAPI.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet ("get-company/{id}", Name = "GetCompany")]
+         [HttpGet ("get-company/{id}", Name = "GetCompany")]
+          [Authorize]
+
         public async Task<IActionResult> GetCompany (int id) 
         {
             try 
@@ -39,13 +41,15 @@ namespace TaxComputationAPI.Controllers
             {
                 var email = User.FindFirst(ClaimTypes.Email).Value;
                 _logger.LogInformation("Exception for {email}, {ex}", email, ex.Message);
-                var error = new [] { "Error Occured please try again later,please try again later..." };
-                return StatusCode (500, new { errors = new { error } });
+                  return StatusCode (500, new { errors = new []{"Error occured while trying to process your request please try again later !"} });
+            
             }
         }
 
         // [Authorize(Policy = "SystemAdmin")]   
         [HttpGet ("get-companies")]
+          [Authorize]
+
         public async Task<IActionResult> GetCompanies ([FromQuery] PaginationParams pagination) 
         {
             try 
@@ -59,13 +63,15 @@ namespace TaxComputationAPI.Controllers
             {
                 var email = User.FindFirst(ClaimTypes.Email).Value;
                 _logger.LogInformation("Exception for {email}, {ex}", email, ex.Message);
-                var error = new [] { "Error Occured please try again later,please try again later..." };
-                return StatusCode (500, new { errors = new { error } });
+                  return StatusCode (500, new { errors = new []{"Error occured while trying to process your request please try again later !"} });
+            
             }
 
         }
 
         [HttpPost ("add-company")]
+          [Authorize]
+
         // [Authorize(Roles = Constants.SYS+ "," + Constants.User)]
         public async Task<IActionResult> AddCompany (CompanyForRegisterDto companyForRegisterDto) 
         {
@@ -74,8 +80,8 @@ namespace TaxComputationAPI.Controllers
                 var companyRecord = await _companiesService.GetCompanyByTinAsync (companyForRegisterDto.TinNumber);
                 if (companyRecord != null) 
                 {
-                    var error = new [] { "Company Already exist!" };
-                    return StatusCode (400, new { errors = new { error } });
+                    return StatusCode (400, new { errors = new []{"Company already exist!"} });
+            
                 }
                 var companyToCreate = _mapper.Map<Company> (companyForRegisterDto);
                 companyToCreate.IsActive = true;
@@ -92,8 +98,8 @@ namespace TaxComputationAPI.Controllers
             {
                 var email = User.FindFirst(ClaimTypes.Email).Value;
                 _logger.LogInformation("Exception for {email}, {ex}", email, ex.Message);
-                var error = new [] { "Error Occured please try again later,please try again later..." };
-                return StatusCode (500, new { errors = new { error } });
+                  return StatusCode (500, new { errors = new []{"Error occured while trying to process your request please try again later !"} });
+            
             }
         }
     }

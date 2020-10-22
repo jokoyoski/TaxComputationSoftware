@@ -10,6 +10,6 @@ namespace TaxComputationAPI.Interfaces
          Task SaveFixedAsset ( CreateFixedAssetDto fixedAsset);
 
 
-         Task<FixedAssetResponse> GetFixedAssetsByCompany(int companyId, int yearId);
+         Task<TaxComputationAPI.Dtos.FixedAssetResponseDto> GetFixedAssetsByCompany(int companyId, int yearId);
     }
 }

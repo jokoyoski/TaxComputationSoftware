@@ -44,8 +44,8 @@ namespace TaxComputationAPI.Controllers
                 if (user == null) 
                 {
 
-                    error = new [] { "User Not Found" };
-                    return StatusCode (400, new { errors = new { error } });
+                      return StatusCode (404, new { errors = new []{"User Not Found!"} });
+            
 
                 }
                 var result = await _signInManager.CheckPasswordSignInAsync (user, userForLoginDto.Password, false);
@@ -61,16 +61,15 @@ namespace TaxComputationAPI.Controllers
                     });
                 }
 
-                error = new [] { "Your login details are not valid" };
-                return StatusCode (500, new { errors = new { error } });
-
+                return StatusCode (500, new { errors = new []{"Error occured while trying to process your request please try again later !"} });
+            
             } catch (Exception ex) 
             {
                 var user = await _userManager.FindByNameAsync (userForLoginDto.Email);
                 var email = user.Email;
                 _logger.LogInformation ("Exception for {email}, {ex}", email, ex.Message);
-                var error = new [] { "Error Occured please try again later,please try again later..." };
-                return StatusCode (500, new { errors = new { error } });
+             return StatusCode (500, new { errors = new []{"Error occured while trying to process your request please try again later !"} });
+            
             }
 
         }

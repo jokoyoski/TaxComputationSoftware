@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -23,6 +24,7 @@ namespace TaxComputationAPI.Controllers {
         }
 
         [HttpGet ()]
+        [Authorize]
         public async Task<IActionResult> GetTrialBalance (int companyId, int yearId) {
 
             if (companyId <= 0 && yearId <= 0) return BadRequest ($"{companyId} and {yearId} are required");
@@ -34,13 +36,18 @@ namespace TaxComputationAPI.Controllers {
                 // var error = ex.Message;
                 var email = User.FindFirst (ClaimTypes.Email).Value;
                 _logger.LogInformation ("Exception for {email}, {ex}", email, ex.Message);
-                return StatusCode (500, "Error Occured please try again later,please try again later...");
+                 return StatusCode (500, new { errors = new []{"Error occured while trying to process your request please try again later !"} });
+            
+                
             }
         }
 
         [HttpPost ()]
+        [Authorize]
         public async Task<IActionResult> UploadTrialBalance ([FromForm] UploadTrackTrialBalanceDto excel) {
             try {
+
+                
                 await _trialBalanceService.UploadTrialBalance (excel);
 
                 return Ok ($"{excel.File.FileName} successfully upload");
@@ -49,7 +56,8 @@ namespace TaxComputationAPI.Controllers {
                 // var error = ex.Message;
                 var email = User.FindFirst (ClaimTypes.Email).Value;
                 _logger.LogInformation ("Exception for {email}, {ex}", email, ex.Message);
-                return StatusCode (500, $"Error Occured please try again later,please try again later...{ex.Message}");
+                  return StatusCode (500, new { errors = new []{"Error occured while trying to process your request please try again later !"} });
+            
             }
         }
     }

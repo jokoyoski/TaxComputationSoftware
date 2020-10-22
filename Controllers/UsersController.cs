@@ -30,6 +30,7 @@ namespace TaxComputationAPI.Controllers {
         }
 
         [HttpGet ("get-user/{id}", Name = "GetUser")]
+        [Authorize]
         public async Task<IActionResult> GetUser (int id) {
             try {
                 var user = await _usersService.GetUserAsync (id);
@@ -38,13 +39,14 @@ namespace TaxComputationAPI.Controllers {
             } catch (Exception ex) {
                 var email = User.FindFirst (ClaimTypes.Email).Value;
                 _logger.LogInformation ("Exception for {email}, {ex}", email, ex.Message);
-                var error = new [] { "Error Occured please try again later,please try again later..." };
-                return StatusCode (500, new { errors = new { error } });
+                return StatusCode (500, new { errors = new []{"Error occured while trying to process your request please try again later !"} });
+            
             }
         }
 
-        // [Authorize(Roles = StaticDetails.SystemAdmin)]
+       
         [HttpGet ("get-users")]
+        [Authorize]
         public async Task<IActionResult> GetUsers ([FromQuery] PaginationParams pagination) {
             try {
                 var users = await _usersService.GetUsersAsync (pagination);
@@ -56,24 +58,16 @@ namespace TaxComputationAPI.Controllers {
             } catch (Exception ex) {
                  var email = User.FindFirst (ClaimTypes.Email).Value;
                 _logger.LogInformation ("Exception for {email}, {ex}", email, ex.Message);
-                var error = new [] { "Error Occured please try again later,please try again later..." };
-                return StatusCode (500, new { errors = new { error } });
-
+              return StatusCode (500, new { errors = new []{"Error occured while trying to process your request please try again later !"} });
+            
             }
 
         }
 
         [HttpPost ("add-user")]
-<<<<<<< HEAD
-        [Authorize]
-        public async Task<IActionResult> AddUser (UserForRegisterDto userForRegisterDto) 
-        {
-            try 
-            {
-=======
+        [Authorize(Roles = StaticDetails.SystemAdmin)]
         public async Task<IActionResult> AddUser (UserForRegisterDto userForRegisterDto) {
             try {
->>>>>>> 3040f12d78de78bc7bbcd69fe0b953cb417cb32e
                 var userToCreate = _mapper.Map<User> (userForRegisterDto);
                 userToCreate.IsActive = true;
                 userToCreate.EmailConfirmed = true;
@@ -95,8 +89,8 @@ namespace TaxComputationAPI.Controllers {
                 // var errors = ex.Message;
                  var email = User.FindFirst (ClaimTypes.Email).Value;
                 _logger.LogInformation ("Exception for {email}, {ex}", email, ex.Message);
-                var error = new [] { "Error Occured please try again later,please try again later..." };
-                return StatusCode (500, new { errors = new { error } });
+                  return StatusCode (500, new { errors = new []{"Error occured while trying to process your request please try again later !"} });
+            
             }
         }
 

@@ -1,0 +1,46 @@
+2020-10-22 00:03:39.047 +01:00 [Warning] No type was specified for the decimal column '"Credit"' on entity type '"TrialBalance"'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values using 'HasColumnType()'.
+2020-10-22 00:03:39.133 +01:00 [Warning] No type was specified for the decimal column '"Debit"' on entity type '"TrialBalance"'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values using 'HasColumnType()'.
+2020-10-22 00:03:39.198 +01:00 [Information] Entity Framework Core "3.1.8" initialized '"DataContext"' using provider '"Microsoft.EntityFrameworkCore.SqlServer"' with options: "None"
+2020-10-22 00:03:41.774 +01:00 [Information] Executed DbCommand ("383"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT 1"
+2020-10-22 00:03:42.177 +01:00 [Information] Executed DbCommand ("392"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT OBJECT_ID(N'[__EFMigrationsHistory]');"
+2020-10-22 00:03:42.471 +01:00 [Information] Executed DbCommand ("291"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT 1"
+2020-10-22 00:03:42.881 +01:00 [Information] Executed DbCommand ("408"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT OBJECT_ID(N'[__EFMigrationsHistory]');"
+2020-10-22 00:03:43.291 +01:00 [Information] Executed DbCommand ("394"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT [MigrationId], [ProductVersion]
+FROM [__EFMigrationsHistory]
+ORDER BY [MigrationId];"
+2020-10-22 00:03:43.313 +01:00 [Information] No migrations were applied. The database is already up to date.
+2020-10-22 00:03:43.904 +01:00 [Information] Executed DbCommand ("374"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM [AspNetRoles] AS [a]) THEN CAST(1 AS bit)
+    ELSE CAST(0 AS bit)
+END"
+2020-10-22 00:03:43.968 +01:00 [Information] User profile is available. Using '"/Users/mac/.aspnet/DataProtection-Keys"' as key repository; keys will not be encrypted at rest.
+2020-10-22 00:03:44.328 +01:00 [Information] Now listening on: "http://localhost:5000"
+2020-10-22 00:03:44.329 +01:00 [Information] Application started. Press Ctrl+C to shut down.
+2020-10-22 00:03:44.329 +01:00 [Information] Hosting environment: "Development"
+2020-10-22 00:03:44.329 +01:00 [Information] Content root path: "/Users/mac/Projects/taxcomsoftware/TaxComputationSoftware/TaxComputationAPI"
+2020-10-22 00:03:57.583 +01:00 [Information] Request starting HTTP/1.1 GET http://localhost:5000/api/FixedAsset/3/2020  
+2020-10-22 00:03:57.981 +01:00 [Information] Successfully validated the token.
+2020-10-22 00:03:57.993 +01:00 [Information] Authorization was successful.
+2020-10-22 00:03:57.994 +01:00 [Information] Executing endpoint '"TaxComputationAPI.Controllers.FixedAssetController.GetFixedAsset (TaxComputationAPI)"'
+2020-10-22 00:03:58.038 +01:00 [Information] Route matched with "{action = \"GetFixedAsset\", controller = \"FixedAsset\"}". Executing controller action with signature "System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetFixedAsset(Int32, Int32)" on controller "TaxComputationAPI.Controllers.FixedAssetController" ("TaxComputationAPI").
+2020-10-22 00:03:58.312 +01:00 [Information] Entity Framework Core "3.1.8" initialized '"DataContext"' using provider '"Microsoft.EntityFrameworkCore.SqlServer"' with options: "None"
+2020-10-22 00:03:58.858 +01:00 [Information] Executed DbCommand ("431"ms) [Parameters=["@__companyId_0='?' (DbType = Int32), @__yearId_1='?' (DbType = Int32)"], CommandType='Text', CommandTimeout='30']"
+""SELECT [f].[Id], [c].[CompanyName], [f0].[Name] AS [Year], [a].[Name] AS [FixedAssetName], [f].[OpeningCost], [f].[CostAddition], [f].[CostDisposal], [f].[CostClosing], [f].[OpeningDepreciation], [f].[DepreciationAddition], [f].[DepreciationClosing], [f].[TransferCost], [f].[TransferDepreciation], [f].[IsTransferCostRemoved], [f].[IsTransferDepreciationRemoved]
+FROM [FixedAsset] AS [f]
+INNER JOIN [FinancialYear] AS [f0] ON [f].[YearId] = [f0].[Name]
+INNER JOIN [AssetClass] AS [a] ON [f].[AssetId] = [a].[Id]
+INNER JOIN [Company] AS [c] ON [f].[CompanyId] = [c].[Id]
+WHERE ([f].[CompanyId] = @__companyId_0) AND ([f].[YearId] = @__yearId_1)
+ORDER BY [f].[Id]"
+2020-10-22 00:03:58.879 +01:00 [Information] Executing ObjectResult, writing value of type '"TaxComputationAPI.Dtos.FixedAssetResponseDto"'.
+2020-10-22 00:03:58.955 +01:00 [Information] Executed action "TaxComputationAPI.Controllers.FixedAssetController.GetFixedAsset (TaxComputationAPI)" in 908.3361ms
+2020-10-22 00:03:58.956 +01:00 [Information] Executed endpoint '"TaxComputationAPI.Controllers.FixedAssetController.GetFixedAsset (TaxComputationAPI)"'
+2020-10-22 00:03:58.961 +01:00 [Information] Request finished in 1384.3717ms 200 application/json; charset=utf-8

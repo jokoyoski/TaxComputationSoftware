@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using TaxComputationAPI.ResponseModel;
 using System;
 using Total = TaxComputationAPI.ResponseModel.Total;
+using FixedAssetData = TaxComputationAPI.ResponseModel.FixedAssetData;
 
 namespace TaxComputationAPI.Repositories
 {
