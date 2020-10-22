@@ -65,9 +65,16 @@ namespace TaxComputationAPI.Controllers {
         }
 
         [HttpPost ("add-user")]
+<<<<<<< HEAD
         [Authorize(Roles = StaticDetails.SystemAdmin)]
         public async Task<IActionResult> AddUser (UserForRegisterDto userForRegisterDto) {
             try {
+=======
+        public async Task<IActionResult> AddUser (UserForRegisterDto userForRegisterDto) 
+        {
+            try 
+            {
+>>>>>>> d723c342c632acc7fdfc11521cd1802eb4d3b5fe
                 var userToCreate = _mapper.Map<User> (userForRegisterDto);
                 userToCreate.IsActive = true;
                 userToCreate.EmailConfirmed = true;
@@ -78,14 +85,17 @@ namespace TaxComputationAPI.Controllers {
 
                 var userToReturn = _mapper.Map<UserForListDto> (userToCreate);
 
-                if (result.Succeeded) {
+                if (result.Succeeded) 
+                {
                     await _userManager.AddToRoleAsync (userToCreate, StaticDetails.User);
+                    await _userManager.AddToRoleAsync (userToCreate, StaticDetails.SystemAdmin);
                     return CreatedAtRoute ("GetUser", new { controller = "Users", id = userToCreate.Id }, userToReturn);
                 }
 
                 return BadRequest (result.Errors);
 
-            } catch (Exception ex) {
+            } catch (Exception ex) 
+            {
                 // var errors = ex.Message;
                  var email = User.FindFirst (ClaimTypes.Email).Value;
                 _logger.LogInformation ("Exception for {email}, {ex}", email, ex.Message);

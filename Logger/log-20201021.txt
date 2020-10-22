@@ -40,6 +40,7 @@ WHERE [c].[Id] = @__id_0"
 2020-10-21 12:16:25.435 +01:00 [Information] Executed action "TaxComputationAPI.Controllers.CompaniesController.GetCompany (TaxComputationAPI)" in 28258.9706ms
 2020-10-21 12:16:25.436 +01:00 [Information] Executed endpoint '"TaxComputationAPI.Controllers.CompaniesController.GetCompany (TaxComputationAPI)"'
 2020-10-21 12:16:25.445 +01:00 [Information] Request finished in 29428.2915ms 500 application/json; charset=utf-8
+<<<<<<< HEAD
 2020-10-21 16:57:27.914 +01:00 [Warning] No type was specified for the decimal column '"Credit"' on entity type '"TrialBalance"'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values using 'HasColumnType()'.
 2020-10-21 16:57:28.281 +01:00 [Warning] No type was specified for the decimal column '"Debit"' on entity type '"TrialBalance"'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values using 'HasColumnType()'.
 2020-10-21 16:57:28.328 +01:00 [Information] Entity Framework Core "3.1.8" initialized '"DataContext"' using provider '"Microsoft.EntityFrameworkCore.SqlServer"' with options: "None"
@@ -60,12 +61,32 @@ ORDER BY [MigrationId];"
 ""INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
 VALUES (N'20201021010646_empty', N'3.1.8');"
 2020-10-21 16:57:35.372 +01:00 [Information] Executed DbCommand ("327"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+=======
+2020-10-21 12:49:29.196 +01:00 [Warning] No type was specified for the decimal column '"Credit"' on entity type '"TrialBalance"'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values using 'HasColumnType()'.
+2020-10-21 12:49:29.221 +01:00 [Warning] No type was specified for the decimal column '"Debit"' on entity type '"TrialBalance"'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values using 'HasColumnType()'.
+2020-10-21 12:49:29.248 +01:00 [Information] Entity Framework Core "3.1.8" initialized '"DataContext"' using provider '"Microsoft.EntityFrameworkCore.SqlServer"' with options: "None"
+2020-10-21 12:49:32.342 +01:00 [Information] Executed DbCommand ("336"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT 1"
+2020-10-21 12:49:32.685 +01:00 [Information] Executed DbCommand ("336"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT OBJECT_ID(N'[__EFMigrationsHistory]');"
+2020-10-21 12:49:33.016 +01:00 [Information] Executed DbCommand ("328"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT 1"
+2020-10-21 12:49:33.355 +01:00 [Information] Executed DbCommand ("336"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT OBJECT_ID(N'[__EFMigrationsHistory]');"
+2020-10-21 12:49:33.699 +01:00 [Information] Executed DbCommand ("335"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT [MigrationId], [ProductVersion]
+FROM [__EFMigrationsHistory]
+ORDER BY [MigrationId];"
+2020-10-21 12:49:33.718 +01:00 [Information] No migrations were applied. The database is already up to date.
+2020-10-21 12:49:34.225 +01:00 [Information] Executed DbCommand ("360"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+>>>>>>> d723c342c632acc7fdfc11521cd1802eb4d3b5fe
 ""SELECT CASE
     WHEN EXISTS (
         SELECT 1
         FROM [AspNetRoles] AS [a]) THEN CAST(1 AS bit)
     ELSE CAST(0 AS bit)
 END"
+<<<<<<< HEAD
 2020-10-21 16:57:35.435 +01:00 [Information] User profile is available. Using '"/Users/mac/.aspnet/DataProtection-Keys"' as key repository; keys will not be encrypted at rest.
 2020-10-21 16:57:35.982 +01:00 [Information] Now listening on: "http://localhost:5000"
 2020-10-21 16:57:35.983 +01:00 [Information] Application started. Press Ctrl+C to shut down.
@@ -102,12 +123,38 @@ FROM [__EFMigrationsHistory]
 ORDER BY [MigrationId];"
 2020-10-21 19:34:24.181 +01:00 [Information] No migrations were applied. The database is already up to date.
 2020-10-21 19:34:25.297 +01:00 [Information] Executed DbCommand ("896"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+=======
+2020-10-21 12:49:34.244 +01:00 [Information] User profile is available. Using '"C:\Users\Oluwaseyi\AppData\Local\ASP.NET\DataProtection-Keys"' as key repository and Windows DPAPI to encrypt keys at rest.
+2020-10-21 12:49:34.398 +01:00 [Information] Now listening on: "http://localhost:5000"
+2020-10-21 12:49:34.398 +01:00 [Information] Application started. Press Ctrl+C to shut down.
+2020-10-21 12:49:34.398 +01:00 [Information] Hosting environment: "Development"
+2020-10-21 12:49:34.398 +01:00 [Information] Content root path: "C:\Users\Oluwaseyi\source\repos\TaxComputationSoftware"
+2020-10-21 12:50:49.094 +01:00 [Information] Application is shutting down...
+2020-10-21 12:50:57.577 +01:00 [Warning] No type was specified for the decimal column '"Credit"' on entity type '"TrialBalance"'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values using 'HasColumnType()'.
+2020-10-21 12:50:57.607 +01:00 [Warning] No type was specified for the decimal column '"Debit"' on entity type '"TrialBalance"'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values using 'HasColumnType()'.
+2020-10-21 12:50:57.632 +01:00 [Information] Entity Framework Core "3.1.8" initialized '"DataContext"' using provider '"Microsoft.EntityFrameworkCore.SqlServer"' with options: "None"
+2020-10-21 12:51:00.315 +01:00 [Information] Executed DbCommand ("351"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT 1"
+2020-10-21 12:51:00.660 +01:00 [Information] Executed DbCommand ("338"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT OBJECT_ID(N'[__EFMigrationsHistory]');"
+2020-10-21 12:51:01.001 +01:00 [Information] Executed DbCommand ("338"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT 1"
+2020-10-21 12:51:01.333 +01:00 [Information] Executed DbCommand ("329"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT OBJECT_ID(N'[__EFMigrationsHistory]');"
+2020-10-21 12:51:01.672 +01:00 [Information] Executed DbCommand ("329"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT [MigrationId], [ProductVersion]
+FROM [__EFMigrationsHistory]
+ORDER BY [MigrationId];"
+2020-10-21 12:51:01.686 +01:00 [Information] No migrations were applied. The database is already up to date.
+2020-10-21 12:51:02.135 +01:00 [Information] Executed DbCommand ("342"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+>>>>>>> d723c342c632acc7fdfc11521cd1802eb4d3b5fe
 ""SELECT CASE
     WHEN EXISTS (
         SELECT 1
         FROM [AspNetRoles] AS [a]) THEN CAST(1 AS bit)
     ELSE CAST(0 AS bit)
 END"
+<<<<<<< HEAD
 2020-10-21 19:34:25.366 +01:00 [Information] User profile is available. Using '"/Users/mac/.aspnet/DataProtection-Keys"' as key repository; keys will not be encrypted at rest.
 2020-10-21 19:34:25.745 +01:00 [Information] Now listening on: "http://localhost:5000"
 2020-10-21 19:34:25.745 +01:00 [Information] Application started. Press Ctrl+C to shut down.
@@ -189,12 +236,38 @@ FROM [__EFMigrationsHistory]
 ORDER BY [MigrationId];"
 2020-10-21 19:45:19.190 +01:00 [Information] No migrations were applied. The database is already up to date.
 2020-10-21 19:45:19.772 +01:00 [Information] Executed DbCommand ("371"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+=======
+2020-10-21 12:51:02.155 +01:00 [Information] User profile is available. Using '"C:\Users\Oluwaseyi\AppData\Local\ASP.NET\DataProtection-Keys"' as key repository and Windows DPAPI to encrypt keys at rest.
+2020-10-21 12:51:02.261 +01:00 [Information] Now listening on: "http://localhost:5000"
+2020-10-21 12:51:02.262 +01:00 [Information] Application started. Press Ctrl+C to shut down.
+2020-10-21 12:51:02.262 +01:00 [Information] Hosting environment: "Development"
+2020-10-21 12:51:02.262 +01:00 [Information] Content root path: "C:\Users\Oluwaseyi\source\repos\TaxComputationSoftware"
+2020-10-21 12:51:14.485 +01:00 [Information] Application is shutting down...
+2020-10-21 12:53:00.485 +01:00 [Warning] No type was specified for the decimal column '"Credit"' on entity type '"TrialBalance"'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values using 'HasColumnType()'.
+2020-10-21 12:53:00.522 +01:00 [Warning] No type was specified for the decimal column '"Debit"' on entity type '"TrialBalance"'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values using 'HasColumnType()'.
+2020-10-21 12:53:00.567 +01:00 [Information] Entity Framework Core "3.1.8" initialized '"DataContext"' using provider '"Microsoft.EntityFrameworkCore.SqlServer"' with options: "None"
+2020-10-21 12:53:08.766 +01:00 [Information] Executed DbCommand ("1,200"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT 1"
+2020-10-21 12:53:09.965 +01:00 [Information] Executed DbCommand ("1,192"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT OBJECT_ID(N'[__EFMigrationsHistory]');"
+2020-10-21 12:53:11.162 +01:00 [Information] Executed DbCommand ("1,190"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT 1"
+2020-10-21 12:53:12.527 +01:00 [Information] Executed DbCommand ("1,364"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT OBJECT_ID(N'[__EFMigrationsHistory]');"
+2020-10-21 12:53:14.145 +01:00 [Information] Executed DbCommand ("1,608"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT [MigrationId], [ProductVersion]
+FROM [__EFMigrationsHistory]
+ORDER BY [MigrationId];"
+2020-10-21 12:53:14.166 +01:00 [Information] No migrations were applied. The database is already up to date.
+2020-10-21 12:53:15.545 +01:00 [Information] Executed DbCommand ("1,269"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+>>>>>>> d723c342c632acc7fdfc11521cd1802eb4d3b5fe
 ""SELECT CASE
     WHEN EXISTS (
         SELECT 1
         FROM [AspNetRoles] AS [a]) THEN CAST(1 AS bit)
     ELSE CAST(0 AS bit)
 END"
+<<<<<<< HEAD
 2020-10-21 19:45:19.845 +01:00 [Information] User profile is available. Using '"/Users/mac/.aspnet/DataProtection-Keys"' as key repository; keys will not be encrypted at rest.
 2020-10-21 19:45:20.181 +01:00 [Information] Now listening on: "http://localhost:5000"
 2020-10-21 19:45:20.181 +01:00 [Information] Application started. Press Ctrl+C to shut down.
@@ -345,3 +418,103 @@ ORDER BY [f].[Id]"
 2020-10-21 23:52:55.458 +01:00 [Information] Executed action "TaxComputationAPI.Controllers.FixedAssetController.GetFixedAsset (TaxComputationAPI)" in 860.5699ms
 2020-10-21 23:52:55.458 +01:00 [Information] Executed endpoint '"TaxComputationAPI.Controllers.FixedAssetController.GetFixedAsset (TaxComputationAPI)"'
 2020-10-21 23:52:55.458 +01:00 [Information] Request finished in 880.4643ms 200 application/json; charset=utf-8
+=======
+2020-10-21 12:53:15.565 +01:00 [Information] User profile is available. Using '"C:\Users\Oluwaseyi\AppData\Local\ASP.NET\DataProtection-Keys"' as key repository and Windows DPAPI to encrypt keys at rest.
+2020-10-21 12:53:15.680 +01:00 [Information] Now listening on: "http://localhost:5000"
+2020-10-21 12:53:15.680 +01:00 [Information] Application started. Press Ctrl+C to shut down.
+2020-10-21 12:53:15.681 +01:00 [Information] Hosting environment: "Development"
+2020-10-21 12:53:15.681 +01:00 [Information] Content root path: "C:\Users\Oluwaseyi\source\repos\TaxComputationSoftware"
+2020-10-21 12:53:55.420 +01:00 [Information] Application is shutting down...
+2020-10-21 12:54:04.647 +01:00 [Warning] No type was specified for the decimal column '"Credit"' on entity type '"TrialBalance"'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values using 'HasColumnType()'.
+2020-10-21 12:54:04.689 +01:00 [Warning] No type was specified for the decimal column '"Debit"' on entity type '"TrialBalance"'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values using 'HasColumnType()'.
+2020-10-21 12:54:04.720 +01:00 [Information] Entity Framework Core "3.1.8" initialized '"DataContext"' using provider '"Microsoft.EntityFrameworkCore.SqlServer"' with options: "None"
+2020-10-21 12:54:19.981 +01:00 [Error] An error occured during migration
+Microsoft.Data.SqlClient.SqlException (0x80131904): A connection was successfully established with the server, but then an error occurred during the pre-login handshake. (provider: SSL Provider, error: 0 - The wait operation timed out.)
+ ---> System.ComponentModel.Win32Exception (258): The wait operation timed out.
+   at Microsoft.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at Microsoft.Data.SqlClient.TdsParser.WaitForSSLHandShakeToComplete(UInt32& error)
+   at Microsoft.Data.SqlClient.TdsParser.ConsumePreLoginHandshake(Boolean encrypt, Boolean trustServerCert, Boolean integratedSecurity, Boolean& marsCapable, Boolean& fedAuthRequired)
+   at Microsoft.Data.SqlClient.TdsParser.Connect(ServerInfo serverInfo, SqlInternalConnectionTds connHandler, Boolean ignoreSniOpenTimeout, Int64 timerExpire, Boolean encrypt, Boolean trustServerCert, Boolean integratedSecurity, Boolean withFailover, SqlAuthenticationMethod authType, SqlAuthenticationProviderManager sqlAuthProviderManager)
+   at Microsoft.Data.SqlClient.SqlInternalConnectionTds.AttemptOneLogin(ServerInfo serverInfo, String newPassword, SecureString newSecurePassword, Boolean ignoreSniOpenTimeout, TimeoutTimer timeout, Boolean withFailover)
+   at Microsoft.Data.SqlClient.SqlInternalConnectionTds.LoginNoFailover(ServerInfo serverInfo, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance, SqlConnectionString connectionOptions, SqlCredential credential, TimeoutTimer timeout)
+   at Microsoft.Data.SqlClient.SqlInternalConnectionTds.OpenLoginEnlist(TimeoutTimer timeout, SqlConnectionString connectionOptions, SqlCredential credential, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance)
+   at Microsoft.Data.SqlClient.SqlInternalConnectionTds..ctor(DbConnectionPoolIdentity identity, SqlConnectionString connectionOptions, SqlCredential credential, Object providerInfo, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance, SqlConnectionString userConnectionOptions, SessionData reconnectSessionData, Boolean applyTransientFaultHandling, String accessToken, DbConnectionPool pool, SqlAuthenticationProviderManager sqlAuthProviderManager)
+   at Microsoft.Data.SqlClient.SqlConnectionFactory.CreateConnection(DbConnectionOptions options, DbConnectionPoolKey poolKey, Object poolGroupProviderInfo, DbConnectionPool pool, DbConnection owningConnection, DbConnectionOptions userOptions)
+   at Microsoft.Data.ProviderBase.DbConnectionFactory.CreatePooledConnection(DbConnectionPool pool, DbConnection owningObject, DbConnectionOptions options, DbConnectionPoolKey poolKey, DbConnectionOptions userOptions)
+   at Microsoft.Data.ProviderBase.DbConnectionPool.CreateObject(DbConnection owningObject, DbConnectionOptions userOptions, DbConnectionInternal oldConnection)
+   at Microsoft.Data.ProviderBase.DbConnectionPool.UserCreateRequest(DbConnection owningObject, DbConnectionOptions userOptions, DbConnectionInternal oldConnection)
+   at Microsoft.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, UInt32 waitForMultipleObjectsTimeout, Boolean allowCreate, Boolean onlyOneCheckConnection, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   at Microsoft.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   at Microsoft.Data.ProviderBase.DbConnectionFactory.TryGetConnection(DbConnection owningConnection, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal oldConnection, DbConnectionInternal& connection)
+   at Microsoft.Data.ProviderBase.DbConnectionInternal.TryOpenConnectionInternal(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   at Microsoft.Data.ProviderBase.DbConnectionClosed.TryOpenConnection(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   at Microsoft.Data.SqlClient.SqlConnection.TryOpen(TaskCompletionSource`1 retry)
+   at Microsoft.Data.SqlClient.SqlConnection.Open()
+   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenDbConnection(Boolean errorsExpected)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.Open(Boolean errorsExpected)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerDatabaseCreator.<>c__DisplayClass18_0.<Exists>b__0(DateTime giveUp)
+   at Microsoft.EntityFrameworkCore.ExecutionStrategyExtensions.<>c__DisplayClass12_0`2.<Execute>b__0(DbContext c, TState s)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.Execute[TState,TResult](TState state, Func`3 operation, Func`3 verifySucceeded)
+   at Microsoft.EntityFrameworkCore.ExecutionStrategyExtensions.Execute[TState,TResult](IExecutionStrategy strategy, TState state, Func`2 operation, Func`2 verifySucceeded)
+   at Microsoft.EntityFrameworkCore.ExecutionStrategyExtensions.Execute[TState,TResult](IExecutionStrategy strategy, TState state, Func`2 operation)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerDatabaseCreator.Exists(Boolean retryOnNotExists)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerDatabaseCreator.Exists()
+   at Microsoft.EntityFrameworkCore.Migrations.HistoryRepository.Exists()
+   at Microsoft.EntityFrameworkCore.Migrations.Internal.Migrator.Migrate(String targetMigration)
+   at Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.Migrate(DatabaseFacade databaseFacade)
+   at TaxComputationAPI.Program.Main(String[] args) in C:\Users\Oluwaseyi\source\repos\TaxComputationSoftware\Program.cs:line 31
+ClientConnectionId:54fdd30f-f4f3-411a-bab5-55050dce0a5b
+Error Number:258,State:0,Class:20
+2020-10-21 12:54:20.231 +01:00 [Information] User profile is available. Using '"C:\Users\Oluwaseyi\AppData\Local\ASP.NET\DataProtection-Keys"' as key repository and Windows DPAPI to encrypt keys at rest.
+2020-10-21 12:54:20.538 +01:00 [Information] Now listening on: "http://localhost:5000"
+2020-10-21 12:54:20.539 +01:00 [Information] Application started. Press Ctrl+C to shut down.
+2020-10-21 12:54:20.539 +01:00 [Information] Hosting environment: "Development"
+2020-10-21 12:54:20.539 +01:00 [Information] Content root path: "C:\Users\Oluwaseyi\source\repos\TaxComputationSoftware"
+2020-10-21 12:54:37.517 +01:00 [Information] Request starting HTTP/1.1 GET http://localhost:5000/login  
+2020-10-21 12:54:37.677 +01:00 [Information] Executing endpoint '"TaxComputationAPI.Controllers.FallBackController.Index (TaxComputationAPI)"'
+2020-10-21 12:54:37.699 +01:00 [Information] Route matched with "{action = \"Index\", controller = \"FallBack\"}". Executing controller action with signature "Microsoft.AspNetCore.Mvc.IActionResult Index()" on controller "TaxComputationAPI.Controllers.FallBackController" ("TaxComputationAPI").
+2020-10-21 12:54:37.708 +01:00 [Information] Executing "Microsoft.AspNetCore.Mvc.PhysicalFileResult", sending file '"C:\Users\Oluwaseyi\source\repos\TaxComputationSoftware\wwwroot\index.html"' with download name '""' ...
+2020-10-21 12:54:37.753 +01:00 [Information] Executed action "TaxComputationAPI.Controllers.FallBackController.Index (TaxComputationAPI)" in 48.7864ms
+2020-10-21 12:54:37.754 +01:00 [Information] Executed endpoint '"TaxComputationAPI.Controllers.FallBackController.Index (TaxComputationAPI)"'
+2020-10-21 12:54:37.760 +01:00 [Information] Request finished in 252.6069ms 200 text/HTML
+2020-10-21 12:54:38.117 +01:00 [Information] Request starting HTTP/1.1 GET http://localhost:5000/manifest.json  
+2020-10-21 12:54:38.124 +01:00 [Information] The file "/manifest.json" was not modified
+2020-10-21 12:54:38.126 +01:00 [Information] Request finished in 9.6207ms 304 application/json
+2020-10-21 12:54:38.145 +01:00 [Information] Request starting HTTP/1.1 GET http://localhost:5000/logo192.png  
+2020-10-21 12:54:38.146 +01:00 [Information] The file "/logo192.png" was not modified
+2020-10-21 12:54:38.146 +01:00 [Information] Request finished in 0.7648ms 304 image/png
+2020-10-21 12:56:00.686 +01:00 [Information] Request starting HTTP/1.1 GET http://localhost:5000/static/media/poppins-latin-400-normal.9ed361bb.woff2  
+2020-10-21 12:56:00.701 +01:00 [Information] Sending file. Request path: '"/static/media/poppins-latin-400-normal.9ed361bb.woff2"'. Physical path: '"C:\Users\Oluwaseyi\source\repos\TaxComputationSoftware\wwwroot\static\media\poppins-latin-400-normal.9ed361bb.woff2"'
+2020-10-21 12:56:00.702 +01:00 [Information] Request finished in 15.8943ms 200 font/woff2
+2020-10-21 23:58:25.662 +01:00 [Warning] No type was specified for the decimal column '"Credit"' on entity type '"TrialBalance"'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values using 'HasColumnType()'.
+2020-10-21 23:58:25.702 +01:00 [Warning] No type was specified for the decimal column '"Debit"' on entity type '"TrialBalance"'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values using 'HasColumnType()'.
+2020-10-21 23:58:25.745 +01:00 [Information] Entity Framework Core "3.1.8" initialized '"DataContext"' using provider '"Microsoft.EntityFrameworkCore.SqlServer"' with options: "None"
+2020-10-21 23:58:59.765 +01:00 [Warning] No type was specified for the decimal column '"Credit"' on entity type '"TrialBalance"'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values using 'HasColumnType()'.
+2020-10-21 23:58:59.832 +01:00 [Warning] No type was specified for the decimal column '"Debit"' on entity type '"TrialBalance"'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values using 'HasColumnType()'.
+2020-10-21 23:58:59.898 +01:00 [Information] Entity Framework Core "3.1.8" initialized '"DataContext"' using provider '"Microsoft.EntityFrameworkCore.SqlServer"' with options: "None"
+2020-10-21 23:59:03.329 +01:00 [Information] Executed DbCommand ("362"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT 1"
+2020-10-21 23:59:03.716 +01:00 [Information] Executed DbCommand ("365"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT OBJECT_ID(N'[__EFMigrationsHistory]');"
+2020-10-21 23:59:04.108 +01:00 [Information] Executed DbCommand ("386"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT 1"
+2020-10-21 23:59:04.524 +01:00 [Information] Executed DbCommand ("414"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT OBJECT_ID(N'[__EFMigrationsHistory]');"
+2020-10-21 23:59:04.926 +01:00 [Information] Executed DbCommand ("370"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT [MigrationId], [ProductVersion]
+FROM [__EFMigrationsHistory]
+ORDER BY [MigrationId];"
+2020-10-21 23:59:04.970 +01:00 [Information] Applying migration '"20201021225826_UserCode"'.
+2020-10-21 23:59:05.852 +01:00 [Information] Executed DbCommand ("409"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE [UserCodes] (
+    [Id] int NOT NULL IDENTITY,
+    [Email] nvarchar(max) NULL,
+    [Code] nvarchar(max) NULL,
+    [DateCreated] datetime2 NOT NULL,
+    CONSTRAINT [PK_UserCodes] PRIMARY KEY ([Id])
+);"
+2020-10-21 23:59:06.257 +01:00 [Information] Executed DbCommand ("403"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20201021225826_UserCode', N'3.1.8');"
+>>>>>>> d723c342c632acc7fdfc11521cd1802eb4d3b5fe

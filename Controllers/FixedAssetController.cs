@@ -38,9 +38,15 @@ namespace TaxComputationAPI.Controllers {
                 if (createFixed.MappedCode == null) {
                     return BadRequest ();
                 }
+<<<<<<< HEAD
                 if (createFixed.YearId <=0) {
                     
                     return StatusCode (400, new { errors = new []{"Please select a valid year"} });
+=======
+                if (createFixed.YearId == 0) {
+                    var error = new [] { "Please select a valid year" };
+                    return StatusCode (400, new { errors = new { error } });
+>>>>>>> d723c342c632acc7fdfc11521cd1802eb4d3b5fe
                 }
 
                 if (createFixed.CompanyId == 0) {
