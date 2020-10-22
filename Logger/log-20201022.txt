@@ -372,3 +372,31 @@ WHERE [a].[UserId] = @__userId_0"
 2020-10-22 10:03:42.375 +01:00 [Information] Executed endpoint '"TaxComputationAPI.Controllers.AuthenticationController.Login (TaxComputationAPI)"'
 2020-10-22 10:03:42.376 +01:00 [Information] Request finished in 751.5857ms 200 application/json; charset=utf-8
 >>>>>>> d723c342c632acc7fdfc11521cd1802eb4d3b5fe
+2020-10-22 17:09:09.002 +01:00 [Warning] No type was specified for the decimal column '"Credit"' on entity type '"TrialBalance"'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values using 'HasColumnType()'.
+2020-10-22 17:09:09.113 +01:00 [Warning] No type was specified for the decimal column '"Debit"' on entity type '"TrialBalance"'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values using 'HasColumnType()'.
+2020-10-22 17:09:09.205 +01:00 [Information] Entity Framework Core "3.1.8" initialized '"DataContext"' using provider '"Microsoft.EntityFrameworkCore.SqlServer"' with options: "None"
+2020-10-22 17:09:15.850 +01:00 [Information] Executed DbCommand ("675"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT 1"
+2020-10-22 17:09:16.440 +01:00 [Information] Executed DbCommand ("575"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT OBJECT_ID(N'[__EFMigrationsHistory]');"
+2020-10-22 17:09:16.880 +01:00 [Information] Executed DbCommand ("437"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT 1"
+2020-10-22 17:09:17.390 +01:00 [Information] Executed DbCommand ("508"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT OBJECT_ID(N'[__EFMigrationsHistory]');"
+2020-10-22 17:09:18.122 +01:00 [Information] Executed DbCommand ("709"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT [MigrationId], [ProductVersion]
+FROM [__EFMigrationsHistory]
+ORDER BY [MigrationId];"
+2020-10-22 17:09:18.163 +01:00 [Information] No migrations were applied. The database is already up to date.
+2020-10-22 17:09:18.977 +01:00 [Information] Executed DbCommand ("521"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM [AspNetRoles] AS [a]) THEN CAST(1 AS bit)
+    ELSE CAST(0 AS bit)
+END"
+2020-10-22 17:09:19.067 +01:00 [Information] User profile is available. Using '"/Users/mac/.aspnet/DataProtection-Keys"' as key repository; keys will not be encrypted at rest.
+2020-10-22 17:09:20.107 +01:00 [Information] Now listening on: "http://localhost:5000"
+2020-10-22 17:09:20.108 +01:00 [Information] Application started. Press Ctrl+C to shut down.
+2020-10-22 17:09:20.109 +01:00 [Information] Hosting environment: "Development"
+2020-10-22 17:09:20.109 +01:00 [Information] Content root path: "/Users/mac/Projects/taxcomsoftware/TaxComputationSoftware/TaxComputationAPI"
