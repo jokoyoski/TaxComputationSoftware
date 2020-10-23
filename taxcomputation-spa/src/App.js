@@ -8,6 +8,7 @@ import { routes } from "./routes";
 import { useAuth } from "./store/AuthStore";
 import utils from "./utils";
 import { useCompany } from "./store/CompanyStore";
+import axiosConfig from "./configs/axios.config";
 
 const history = createBrowserHistory();
 
@@ -19,12 +20,17 @@ function App() {
     utils.saveState(auth, "auth");
     utils.saveState(company, "company");
     sessionStorage.setItem("path", history.location.pathname);
+    sessionStorage.setItem("token", auth.token);
   };
 
   window.onload = () => {
     initAuth(utils.loadState("auth"));
     initCompany(utils.loadState("company"));
+    sessionStorage.removeItem("token");
   };
+
+  // axios config
+  axiosConfig(auth.token);
 
   return (
     <Router history={history} routes={routes}>

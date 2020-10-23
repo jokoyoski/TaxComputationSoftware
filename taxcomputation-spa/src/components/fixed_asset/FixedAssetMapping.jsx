@@ -1,14 +1,14 @@
 import React from "react";
 import { Dropdown } from "primereact/dropdown";
 import { Button } from "primereact/button";
-import { DataTable } from "primereact/datatable";
-import { Column } from "primereact/column";
 import { InputText } from "primereact/inputtext";
+import { Checkbox } from "primereact/checkbox";
 import utils from "../../utils";
 import { Controller, useForm } from "react-hook-form";
 import { useCompany } from "../../store/CompanyStore";
 import constants from "../../constants";
 import { fixedAssetMapping } from "../../apis/FixedAsset";
+import TrialBalanceMappingTable from "../common/TrialBalanceMappingTable";
 
 const FixedAssetMapping = ({
   year,
@@ -25,6 +25,8 @@ const FixedAssetMapping = ({
   const [loading, setLoading] = React.useState(false);
   const [closingBalanceAmt, setClosingBalanceAmt] = React.useState(utils.currencyFormatter(0));
   const [selectedAccounts, setSelectedAccounts] = React.useState([]);
+  const [selectedAssetType, setSelectedAssetType] = React.useState();
+  const [transferChecked, setTransferChecked] = React.useState();
   const typeSelectItems = [
     { label: "Cost", value: "cost" },
     { label: "Depreciation", value: "depreciation" }
@@ -145,7 +147,7 @@ const FixedAssetMapping = ({
             )}
           </div>
           <div className="p-d-flex p-flex-column">
-            <p style={{ marginBottom: 5, marginTop: 0 }}>Fixed Asset Type</p>
+            <p style={{ marginBottom: 5, marginTop: 0 }}>Cost / Depreciation</p>
             <Controller
               name="assetType"
               control={control}
@@ -156,7 +158,10 @@ const FixedAssetMapping = ({
                   style={{ marginBottom: 5, width: 200 }}
                   value={props.value}
                   options={typeSelectItems}
-                  onChange={e => props.onChange(e.target.value)}
+                  onChange={e => {
+                    props.onChange(e.target.value);
+                    setSelectedAssetType(e.target.value);
+                  }}
                 />
               )}
             />
@@ -221,7 +226,9 @@ const FixedAssetMapping = ({
             )}
           </div>
           <div className="p-d-flex p-flex-column">
-            <p style={{ marginBottom: 5, marginTop: 0 }}>Addition</p>
+            <p style={{ marginBottom: 5, marginTop: 0 }}>
+              {selectedAssetType === "depreciation" ? "Charge per year" : "Addition"}
+            </p>
             <Controller
               name="addition"
               control={control}
@@ -259,29 +266,47 @@ const FixedAssetMapping = ({
             )}
           </div>
           <div className="p-d-flex p-flex-column">
-            <p style={{ marginBottom: 5, marginTop: 0, color: "transparent" }}>Submit</p>
-            <Button
-              type="submit"
-              label={!loading ? "Submit" : null}
-              icon={loading ? "pi pi-spin pi-spinner" : null}
-              style={{ width: 200 }}
+            <p style={{ marginBottom: 5, marginTop: 0 }}>Transfer</p>
+            <Controller
+              name="transfer"
+              control={control}
+              rules={{ required: true }}
+              defaultValue="0"
+              render={props => (
+                <InputText
+                  style={{ width: 200 }}
+                  value={props.value}
+                  onChange={e => props.onChange(e.target?.value)}
+                />
+              )}
             />
+            {errors.transfer && (
+              <span style={{ fontSize: 12, color: "red" }}>Transfer is required</span>
+            )}
           </div>
         </div>
+        <div className="p-d-flex p-flex-column" style={{ marginTop: 20 }}>
+          <div className="p-field-checkbox">
+            <Checkbox
+              inputId="transferOut"
+              checked={transferChecked}
+              onChange={e => setTransferChecked(e.checked)}
+            />
+            <label htmlFor="transferOut">Transfer Out</label>
+          </div>
+          <Button
+            type="submit"
+            label={!loading ? "Submit" : null}
+            icon={loading ? "pi pi-spin pi-spinner" : null}
+            style={{ width: 200 }}
+          />
+        </div>
       </form>
-      <DataTable
-        value={tbData}
-        className="p-datatable-gridlines"
-        selection={selectedAccounts}
-        onSelectionChange={e => setSelectedAccounts(e.value)}
-        style={{ marginTop: 50 }}>
-        <Column selectionMode="multiple" style={{ width: "3em" }} />
-        <Column field="accountId" header="Account ID"></Column>
-        <Column field="item" header="Account Description"></Column>
-        <Column field="debitAmt" header="Debit Amt"></Column>
-        <Column field="creditAmt" header="Credit Amt"></Column>
-        <Column field="mappedCode" header="Mapped To"></Column>
-      </DataTable>
+      <TrialBalanceMappingTable
+        tbData={tbData}
+        selectedAccounts={selectedAccounts}
+        setSelectedAccounts={setSelectedAccounts}
+      />
     </>
   );
 };

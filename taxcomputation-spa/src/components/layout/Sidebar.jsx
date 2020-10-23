@@ -6,8 +6,8 @@ import { useCompany } from "../../store/CompanyStore";
 import utils from "../../utils";
 
 const Sidebar = ({ selectedTitle }) => {
-  const [, { onLogout }] = useAuth();
-  const [, { resetCompany }] = useCompany();
+  const [{ firstName, lastName, email }, { onLogout }] = useAuth();
+  const [{ companyId }, { resetCompany }] = useCompany();
   const menuItems = [
     { title: "Dashboard", href: constants.routes.dashboard },
     {
@@ -69,14 +69,16 @@ const Sidebar = ({ selectedTitle }) => {
         <div className="divider"></div>
         <div style={{ padding: "10px 20px" }}>
           <div style={{ marginTop: 10, background: "#f5f6f8", padding: 10 }}>
-            <h4 style={{ marginTop: 5, marginBottom: 0 }}>John.Doe</h4>
-            <p style={{ fontSize: 12, margin: 0 }}>Role: super admin</p>
+            <h4 style={{ marginTop: 5, marginBottom: 0 }}>
+              {firstName} {lastName}
+            </h4>
+            <p style={{ fontSize: 12, margin: 0 }}>Email: {email}</p>
           </div>
         </div>
         {menuItems.map((item, index) => (
           <Link
             key={index}
-            href={item.href}
+            href={companyId ? item.href : null}
             className="sidebar-link"
             style={{ padding: "5px 20px" }}>
             <p
@@ -89,7 +91,7 @@ const Sidebar = ({ selectedTitle }) => {
           </Link>
         ))}
         <div className="divider" style={{ margin: "10px 0px" }}></div>
-        <div style={{ padding: "0px 20px" }}>
+        <div className="sidebar-link" style={{ padding: "0px 20px" }}>
           <p
             style={{ margin: 0, cursor: "pointer" }}
             onClick={() => {

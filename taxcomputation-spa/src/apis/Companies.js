@@ -15,6 +15,7 @@ export const addCompany = async ({ companyName, companyDescription, cacNumber, t
 
 export const getCompanies = async (pageNumber = 1, pageSize = 100) => {
   try {
+    console.log("abc");
     const { data } = await axios.get(
       `/api/Companies/get-companies${
         pageNumber && pageSize ? `?PageNumber=${pageNumber}&PageSIze=${pageSize}` : ""
