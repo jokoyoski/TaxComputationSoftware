@@ -10,15 +10,20 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
+using Serilog;
 using TaxComputationAPI.Data;
 using TaxComputationAPI.Interfaces;
 using TaxComputationAPI.Models;
 using TaxComputationAPI.Models.CustomHandler;
 using TaxComputationAPI.Repositories;
 using TaxComputationAPI.Services;
+using TaxComputationSoftware.Interfaces;
+using TaxComputationSoftware.Repositories;
+using TaxComputationSoftware.Services;
 
 namespace TaxComputationAPI
 {
@@ -83,6 +88,8 @@ namespace TaxComputationAPI
             services.AddScoped<ITrialBalanceService, TrialBalanceService>();
             services.AddScoped<ITrialBalanceRepository, TrialBalanceRepository>();
             services.AddScoped<IUtilitiesRepository, UtilitiesRepository>();
+            services.AddScoped<IAuthenticationRepository, AuthenticationRepository>();
+            services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddSingleton<IAuthorizationHandler,SystemAdminHandler>();
             services.AddDbContext<DataContext>(options => options.UseSqlServer(_configuration.GetConnectionString("DefaultConnection")));
             services.AddAutoMapper(typeof(Startup));
@@ -121,12 +128,15 @@ namespace TaxComputationAPI
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            //Logging
+            loggerFactory.AddSerilog();
 
             // app.UseHttpsRedirection ();
 

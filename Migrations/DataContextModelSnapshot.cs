@@ -217,10 +217,22 @@ namespace TaxComputationAPI.Migrations
                     b.Property<long>("DepreciationDisposal")
                         .HasColumnType("bigint");
 
+                    b.Property<bool>("IsTransferCostRemoved")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsTransferDepreciationRemoved")
+                        .HasColumnType("bit");
+
                     b.Property<long>("OpeningCost")
                         .HasColumnType("bigint");
 
                     b.Property<long>("OpeningDepreciation")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("TransferCost")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("TransferDepreciation")
                         .HasColumnType("bigint");
 
                     b.Property<int>("YearId")
@@ -229,6 +241,24 @@ namespace TaxComputationAPI.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("FixedAsset");
+                });
+
+            modelBuilder.Entity("TaxComputationAPI.Models.ItemsMapping", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("ItemValue")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MappedCode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ItemsMapping");
                 });
 
             modelBuilder.Entity("TaxComputationAPI.Models.Role", b =>
@@ -406,6 +436,27 @@ namespace TaxComputationAPI.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles");
+                });
+
+            modelBuilder.Entity("TaxComputationSoftware.Models.UserCode", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Code")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("UserCodes");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>

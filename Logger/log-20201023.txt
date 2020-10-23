@@ -1,0 +1,236 @@
+2020-10-23 10:35:22.725 +01:00 [Warning] No type was specified for the decimal column '"Credit"' on entity type '"TrialBalance"'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values using 'HasColumnType()'.
+2020-10-23 10:35:22.855 +01:00 [Warning] No type was specified for the decimal column '"Debit"' on entity type '"TrialBalance"'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values using 'HasColumnType()'.
+2020-10-23 10:35:22.952 +01:00 [Information] Entity Framework Core "3.1.8" initialized '"DataContext"' using provider '"Microsoft.EntityFrameworkCore.SqlServer"' with options: "None"
+2020-10-23 10:35:26.605 +01:00 [Information] Executed DbCommand ("551"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT 1"
+2020-10-23 10:35:26.982 +01:00 [Information] Executed DbCommand ("353"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT OBJECT_ID(N'[__EFMigrationsHistory]');"
+2020-10-23 10:35:27.368 +01:00 [Information] Executed DbCommand ("381"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT 1"
+2020-10-23 10:35:27.794 +01:00 [Information] Executed DbCommand ("424"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT OBJECT_ID(N'[__EFMigrationsHistory]');"
+2020-10-23 10:35:28.188 +01:00 [Information] Executed DbCommand ("379"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT [MigrationId], [ProductVersion]
+FROM [__EFMigrationsHistory]
+ORDER BY [MigrationId];"
+2020-10-23 10:35:28.219 +01:00 [Information] No migrations were applied. The database is already up to date.
+2020-10-23 10:35:28.749 +01:00 [Information] Executed DbCommand ("298"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM [AspNetRoles] AS [a]) THEN CAST(1 AS bit)
+    ELSE CAST(0 AS bit)
+END"
+2020-10-23 10:35:28.833 +01:00 [Information] User profile is available. Using '"C:\Users\kkcgr\AppData\Local\ASP.NET\DataProtection-Keys"' as key repository and Windows DPAPI to encrypt keys at rest.
+2020-10-23 10:35:29.582 +01:00 [Information] Now listening on: "http://localhost:5000"
+2020-10-23 10:35:29.583 +01:00 [Information] Application started. Press Ctrl+C to shut down.
+2020-10-23 10:35:29.583 +01:00 [Information] Hosting environment: "Development"
+2020-10-23 10:35:29.583 +01:00 [Information] Content root path: "C:\Users\kkcgr\source\repos\TaxComputationSoftware"
+2020-10-23 10:35:30.741 +01:00 [Information] Request starting HTTP/1.1 GET http://localhost:5000/weatherforecast  
+2020-10-23 10:35:31.194 +01:00 [Information] Executing endpoint '"TaxComputationAPI.Controllers.WeatherForecastController.Get (TaxComputationAPI)"'
+2020-10-23 10:35:31.244 +01:00 [Information] Route matched with "{action = \"Get\", controller = \"WeatherForecast\"}". Executing controller action with signature "System.Collections.Generic.IEnumerable`1[TaxComputationAPI.WeatherForecast] Get()" on controller "TaxComputationAPI.Controllers.WeatherForecastController" ("TaxComputationAPI").
+2020-10-23 10:35:31.259 +01:00 [Information] Executing ObjectResult, writing value of type '"TaxComputationAPI.WeatherForecast[]"'.
+2020-10-23 10:35:31.573 +01:00 [Information] Executed action "TaxComputationAPI.Controllers.WeatherForecastController.Get (TaxComputationAPI)" in 319.5369ms
+2020-10-23 10:35:31.574 +01:00 [Information] Executed endpoint '"TaxComputationAPI.Controllers.WeatherForecastController.Get (TaxComputationAPI)"'
+2020-10-23 10:35:31.577 +01:00 [Information] Request finished in 844.0897ms 200 application/json; charset=utf-8
+2020-10-23 10:38:19.861 +01:00 [Information] Request starting HTTP/1.1 GET http://localhost:5000/swagger/index.html  
+2020-10-23 10:38:20.051 +01:00 [Information] Request finished in 184.8522ms 200 text/html;charset=utf-8
+2020-10-23 10:38:22.371 +01:00 [Information] Request starting HTTP/1.1 GET http://localhost:5000/swagger/v2/swagger.json  
+2020-10-23 10:38:22.624 +01:00 [Information] Request finished in 252.6522ms 200 application/json;charset=utf-8
+2020-10-23 10:40:40.629 +01:00 [Information] Request starting HTTP/1.1 DELETE http://localhost:5000/api/Utilities/asset-mapping/1 application/json-patch+json 45
+2020-10-23 10:40:40.633 +01:00 [Information] CORS policy execution successful.
+2020-10-23 10:40:40.714 +01:00 [Information] Authorization failed.
+2020-10-23 10:40:40.734 +01:00 [Information] AuthenticationScheme: "Bearer" was challenged.
+2020-10-23 10:40:40.737 +01:00 [Information] Request finished in 107.8802ms 401 
+2020-10-23 10:41:19.993 +01:00 [Information] Request starting HTTP/1.1 GET http://localhost:5000/api/Utilities/asset-mapping  
+2020-10-23 10:41:20.003 +01:00 [Information] Authorization failed.
+2020-10-23 10:41:20.004 +01:00 [Information] AuthenticationScheme: "Bearer" was challenged.
+2020-10-23 10:41:20.004 +01:00 [Information] Request finished in 11.3471ms 401 
+2020-10-23 10:42:04.269 +01:00 [Information] Request starting HTTP/1.1 POST http://localhost:5000/api/Utilities/asset-mapping application/json-patch+json 61
+2020-10-23 10:42:04.270 +01:00 [Information] CORS policy execution successful.
+2020-10-23 10:42:04.270 +01:00 [Information] Executing endpoint '"TaxComputationAPI.Controllers.UtilitiesController.CreateAssetClassMapping (TaxComputationAPI)"'
+2020-10-23 10:42:04.304 +01:00 [Information] Route matched with "{action = \"CreateAssetClassMapping\", controller = \"Utilities\"}". Executing controller action with signature "System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] CreateAssetClassMapping(TaxComputationAPI.Dtos.AssetMappingDto)" on controller "TaxComputationAPI.Controllers.UtilitiesController" ("TaxComputationAPI").
+2020-10-23 10:42:05.011 +01:00 [Information] Entity Framework Core "3.1.8" initialized '"DataContext"' using provider '"Microsoft.EntityFrameworkCore.SqlServer"' with options: "None"
+2020-10-23 10:42:08.196 +01:00 [Information] Executed DbCommand ("430"ms) [Parameters=["@__Name_0='?' (Size = 4000)"], CommandType='Text', CommandTimeout='30']"
+""SELECT TOP(1) [a].[Id], [a].[Annual], [a].[AssetName], [a].[Initial]
+FROM [AssetMapping] AS [a]
+WHERE [a].[AssetName] = @__Name_0"
+2020-10-23 10:42:09.585 +01:00 [Information] Executed DbCommand ("446"ms) [Parameters=["@p0='?' (DbType = Int32), @p1='?' (Size = 4000), @p2='?' (DbType = Int32)"], CommandType='Text', CommandTimeout='30']"
+""SET NOCOUNT ON;
+INSERT INTO [AssetMapping] ([Annual], [AssetName], [Initial])
+VALUES (@p0, @p1, @p2);
+SELECT [Id]
+FROM [AssetMapping]
+WHERE @@ROWCOUNT = 1 AND [Id] = scope_identity();"
+2020-10-23 10:42:10.284 +01:00 [Information] Executing ObjectResult, writing value of type '"System.String"'.
+2020-10-23 10:42:10.286 +01:00 [Information] Executed action "TaxComputationAPI.Controllers.UtilitiesController.CreateAssetClassMapping (TaxComputationAPI)" in 5981.7109ms
+2020-10-23 10:42:10.288 +01:00 [Information] Executed endpoint '"TaxComputationAPI.Controllers.UtilitiesController.CreateAssetClassMapping (TaxComputationAPI)"'
+2020-10-23 10:42:10.300 +01:00 [Information] Request finished in 6031.4728ms 200 text/plain; charset=utf-8
+2020-10-23 10:42:16.405 +01:00 [Information] Request starting HTTP/1.1 GET http://localhost:5000/api/Utilities/asset-mapping  
+2020-10-23 10:42:16.407 +01:00 [Information] Authorization failed.
+2020-10-23 10:42:16.407 +01:00 [Information] AuthenticationScheme: "Bearer" was challenged.
+2020-10-23 10:42:16.408 +01:00 [Information] Request finished in 3ms 401 
+2020-10-23 10:42:21.922 +01:00 [Information] Request starting HTTP/1.1 GET http://localhost:5000/api/Utilities/asset-mapping  
+2020-10-23 10:42:21.923 +01:00 [Information] Authorization failed.
+2020-10-23 10:42:21.923 +01:00 [Information] AuthenticationScheme: "Bearer" was challenged.
+2020-10-23 10:42:21.924 +01:00 [Information] Request finished in 2.1696ms 401 
+2020-10-23 10:42:33.681 +01:00 [Information] Request starting HTTP/1.1 GET http://localhost:5000/api/Utilities/asset-mapping  
+2020-10-23 10:42:33.685 +01:00 [Information] Authorization failed.
+2020-10-23 10:42:33.686 +01:00 [Information] AuthenticationScheme: "Bearer" was challenged.
+2020-10-23 10:42:33.687 +01:00 [Information] Request finished in 6.3462ms 401 
+2020-10-23 10:42:34.606 +01:00 [Information] Request starting HTTP/1.1 GET http://localhost:5000/api/Utilities/asset-mapping  
+2020-10-23 10:42:34.607 +01:00 [Information] Authorization failed.
+2020-10-23 10:42:34.607 +01:00 [Information] AuthenticationScheme: "Bearer" was challenged.
+2020-10-23 10:42:34.607 +01:00 [Information] Request finished in 1.6644ms 401 
+2020-10-23 10:42:34.817 +01:00 [Information] Request starting HTTP/1.1 GET http://localhost:5000/api/Utilities/asset-mapping  
+2020-10-23 10:42:34.818 +01:00 [Information] Authorization failed.
+2020-10-23 10:42:34.818 +01:00 [Information] AuthenticationScheme: "Bearer" was challenged.
+2020-10-23 10:42:34.819 +01:00 [Information] Request finished in 1.6373ms 401 
+2020-10-23 10:42:34.959 +01:00 [Information] Request starting HTTP/1.1 GET http://localhost:5000/api/Utilities/asset-mapping  
+2020-10-23 10:42:34.960 +01:00 [Information] Authorization failed.
+2020-10-23 10:42:34.960 +01:00 [Information] AuthenticationScheme: "Bearer" was challenged.
+2020-10-23 10:42:34.960 +01:00 [Information] Request finished in 1.4732ms 401 
+2020-10-23 10:42:41.077 +01:00 [Information] Request starting HTTP/1.1 GET http://localhost:5000/api/Utilities/asset-mapping  
+2020-10-23 10:42:41.078 +01:00 [Information] Authorization failed.
+2020-10-23 10:42:41.078 +01:00 [Information] AuthenticationScheme: "Bearer" was challenged.
+2020-10-23 10:42:41.079 +01:00 [Information] Request finished in 1.4037ms 401 
+2020-10-23 10:48:15.709 +01:00 [Information] Request starting HTTP/1.1 DELETE http://localhost:5000/api/Utilities/asset-mapping/3 application/json 160
+2020-10-23 10:48:15.710 +01:00 [Information] Authorization failed.
+2020-10-23 10:48:15.711 +01:00 [Information] AuthenticationScheme: "Bearer" was challenged.
+2020-10-23 10:48:15.711 +01:00 [Information] Request finished in 2.6548ms 401 
+2020-10-23 10:49:13.815 +01:00 [Information] Request starting HTTP/1.1 GET http://localhost:5000/api/Utilities/asset-mapping/{Id}  
+2020-10-23 10:49:13.816 +01:00 [Information] Executing endpoint '"TaxComputationAPI.Controllers.FallBackController.Index (TaxComputationAPI)"'
+2020-10-23 10:49:13.821 +01:00 [Information] Route matched with "{action = \"Index\", controller = \"FallBack\"}". Executing controller action with signature "Microsoft.AspNetCore.Mvc.IActionResult Index()" on controller "TaxComputationAPI.Controllers.FallBackController" ("TaxComputationAPI").
+2020-10-23 10:49:13.858 +01:00 [Information] Executing "Microsoft.AspNetCore.Mvc.PhysicalFileResult", sending file '"C:\Users\kkcgr\source\repos\TaxComputationSoftware\wwwroot\index.html"' with download name '""' ...
+2020-10-23 10:49:13.962 +01:00 [Information] Executed action "TaxComputationAPI.Controllers.FallBackController.Index (TaxComputationAPI)" in 140.5905ms
+2020-10-23 10:49:13.963 +01:00 [Information] Executed endpoint '"TaxComputationAPI.Controllers.FallBackController.Index (TaxComputationAPI)"'
+2020-10-23 10:49:13.964 +01:00 [Information] Request finished in 149.3817ms 200 text/HTML
+2020-10-23 10:49:14.074 +01:00 [Information] Request starting HTTP/1.1 GET http://localhost:5000/runtime.config.js  
+2020-10-23 10:49:14.075 +01:00 [Information] Request starting HTTP/1.1 GET http://localhost:5000/static/css/main.f7da316e.chunk.css  
+2020-10-23 10:49:14.077 +01:00 [Information] Request starting HTTP/1.1 GET http://localhost:5000/static/css/2.57e2a37d.chunk.css  
+2020-10-23 10:49:14.077 +01:00 [Information] Request starting HTTP/1.1 GET http://localhost:5000/static/js/2.2aa32af8.chunk.js  
+2020-10-23 10:49:14.078 +01:00 [Information] Request starting HTTP/1.1 GET http://localhost:5000/static/js/main.61769f44.chunk.js  
+2020-10-23 10:49:14.083 +01:00 [Information] Request finished in 4.9521ms 404 
+2020-10-23 10:49:14.098 +01:00 [Information] The file "/runtime.config.js" was not modified
+2020-10-23 10:49:14.098 +01:00 [Information] The file "/static/css/2.57e2a37d.chunk.css" was not modified
+2020-10-23 10:49:14.098 +01:00 [Information] Request finished in 24.9241ms 304 application/javascript
+2020-10-23 10:49:14.099 +01:00 [Information] Request finished in 22.126ms 304 text/css
+2020-10-23 10:49:14.143 +01:00 [Information] Sending file. Request path: '"/static/css/main.f7da316e.chunk.css"'. Physical path: '"C:\Users\kkcgr\source\repos\TaxComputationSoftware\wwwroot\static\css\main.f7da316e.chunk.css"'
+2020-10-23 10:49:14.143 +01:00 [Information] Request finished in 68.07ms 200 text/css
+2020-10-23 10:49:14.562 +01:00 [Information] Sending file. Request path: '"/static/js/2.2aa32af8.chunk.js"'. Physical path: '"C:\Users\kkcgr\source\repos\TaxComputationSoftware\wwwroot\static\js\2.2aa32af8.chunk.js"'
+2020-10-23 10:49:14.563 +01:00 [Information] Request finished in 485.6278ms 200 application/javascript
+2020-10-23 10:49:14.584 +01:00 [Information] Request starting HTTP/1.1 GET http://localhost:5000/static/js/main.61769f44.chunk.js  
+2020-10-23 10:49:14.585 +01:00 [Information] Request finished in 1.5091ms 404 
+2020-10-23 10:49:14.611 +01:00 [Information] Request starting HTTP/1.1 GET http://localhost:5000/manifest.json  
+2020-10-23 10:49:14.613 +01:00 [Information] The file "/manifest.json" was not modified
+2020-10-23 10:49:14.613 +01:00 [Information] Request finished in 1.9272ms 304 application/json
+2020-10-23 10:49:14.631 +01:00 [Information] Request starting HTTP/1.1 GET http://localhost:5000/logo192.png  
+2020-10-23 10:49:14.645 +01:00 [Information] The file "/logo192.png" was not modified
+2020-10-23 10:49:14.645 +01:00 [Information] Request finished in 14.1248ms 304 image/png
+2020-10-23 18:11:28.802 +01:00 [Warning] No type was specified for the decimal column '"Credit"' on entity type '"TrialBalance"'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values using 'HasColumnType()'.
+2020-10-23 18:11:28.917 +01:00 [Warning] No type was specified for the decimal column '"Debit"' on entity type '"TrialBalance"'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values using 'HasColumnType()'.
+2020-10-23 18:11:28.951 +01:00 [Information] Entity Framework Core "3.1.8" initialized '"DataContext"' using provider '"Microsoft.EntityFrameworkCore.SqlServer"' with options: "None"
+2020-10-23 18:11:53.831 +01:00 [Warning] No type was specified for the decimal column '"Credit"' on entity type '"TrialBalance"'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values using 'HasColumnType()'.
+2020-10-23 18:11:53.860 +01:00 [Warning] No type was specified for the decimal column '"Debit"' on entity type '"TrialBalance"'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values using 'HasColumnType()'.
+2020-10-23 18:11:53.893 +01:00 [Information] Entity Framework Core "3.1.8" initialized '"DataContext"' using provider '"Microsoft.EntityFrameworkCore.SqlServer"' with options: "None"
+2020-10-23 18:11:57.399 +01:00 [Information] Executed DbCommand ("373"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT 1"
+2020-10-23 18:11:57.804 +01:00 [Information] Executed DbCommand ("386"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT OBJECT_ID(N'[__EFMigrationsHistory]');"
+2020-10-23 18:11:58.159 +01:00 [Information] Executed DbCommand ("350"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT 1"
+2020-10-23 18:11:58.501 +01:00 [Information] Executed DbCommand ("337"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT OBJECT_ID(N'[__EFMigrationsHistory]');"
+2020-10-23 18:11:58.870 +01:00 [Information] Executed DbCommand ("337"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT [MigrationId], [ProductVersion]
+FROM [__EFMigrationsHistory]
+ORDER BY [MigrationId];"
+2020-10-23 18:11:58.990 +01:00 [Information] Applying migration '"20201023171129_AddItemsMappingToDB"'.
+2020-10-23 18:12:00.072 +01:00 [Information] Executed DbCommand ("537"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE [ItemsMapping] (
+    [Id] int NOT NULL IDENTITY,
+    [MappedCode] nvarchar(max) NULL,
+    [ItemValue] nvarchar(max) NULL,
+    CONSTRAINT [PK_ItemsMapping] PRIMARY KEY ([Id])
+);"
+2020-10-23 18:12:00.553 +01:00 [Information] Executed DbCommand ("479"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20201023171129_AddItemsMappingToDB', N'3.1.8');"
+2020-10-23 20:39:44.837 +01:00 [Warning] No type was specified for the decimal column '"Credit"' on entity type '"TrialBalance"'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values using 'HasColumnType()'.
+2020-10-23 20:39:44.886 +01:00 [Warning] No type was specified for the decimal column '"Debit"' on entity type '"TrialBalance"'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values using 'HasColumnType()'.
+2020-10-23 20:39:44.936 +01:00 [Information] Entity Framework Core "3.1.8" initialized '"DataContext"' using provider '"Microsoft.EntityFrameworkCore.SqlServer"' with options: "None"
+2020-10-23 20:39:53.152 +01:00 [Information] Executed DbCommand ("535"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT 1"
+2020-10-23 20:39:53.583 +01:00 [Information] Executed DbCommand ("409"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT OBJECT_ID(N'[__EFMigrationsHistory]');"
+2020-10-23 20:39:53.954 +01:00 [Information] Executed DbCommand ("364"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT 1"
+2020-10-23 20:39:54.364 +01:00 [Information] Executed DbCommand ("405"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT OBJECT_ID(N'[__EFMigrationsHistory]');"
+2020-10-23 20:39:54.777 +01:00 [Information] Executed DbCommand ("375"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT [MigrationId], [ProductVersion]
+FROM [__EFMigrationsHistory]
+ORDER BY [MigrationId];"
+2020-10-23 20:39:54.818 +01:00 [Information] No migrations were applied. The database is already up to date.
+2020-10-23 20:39:55.592 +01:00 [Information] Executed DbCommand ("403"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM [AspNetRoles] AS [a]) THEN CAST(1 AS bit)
+    ELSE CAST(0 AS bit)
+END"
+2020-10-23 20:39:55.693 +01:00 [Information] User profile is available. Using '"C:\Users\kkcgr\AppData\Local\ASP.NET\DataProtection-Keys"' as key repository and Windows DPAPI to encrypt keys at rest.
+2020-10-23 20:39:56.411 +01:00 [Information] Now listening on: "http://localhost:5000"
+2020-10-23 20:39:56.412 +01:00 [Information] Application started. Press Ctrl+C to shut down.
+2020-10-23 20:39:56.412 +01:00 [Information] Hosting environment: "Development"
+2020-10-23 20:39:56.412 +01:00 [Information] Content root path: "C:\Users\kkcgr\source\repos\TaxComputationSoftware"
+2020-10-23 20:39:57.728 +01:00 [Information] Request starting HTTP/1.1 GET http://localhost:5000/weatherforecast  
+2020-10-23 20:39:58.360 +01:00 [Information] Executing endpoint '"TaxComputationAPI.Controllers.WeatherForecastController.Get (TaxComputationAPI)"'
+2020-10-23 20:39:58.406 +01:00 [Information] Route matched with "{action = \"Get\", controller = \"WeatherForecast\"}". Executing controller action with signature "System.Collections.Generic.IEnumerable`1[TaxComputationAPI.WeatherForecast] Get()" on controller "TaxComputationAPI.Controllers.WeatherForecastController" ("TaxComputationAPI").
+2020-10-23 20:39:58.424 +01:00 [Information] Executing ObjectResult, writing value of type '"TaxComputationAPI.WeatherForecast[]"'.
+2020-10-23 20:39:58.711 +01:00 [Information] Executed action "TaxComputationAPI.Controllers.WeatherForecastController.Get (TaxComputationAPI)" in 297.3075ms
+2020-10-23 20:39:58.711 +01:00 [Information] Executed endpoint '"TaxComputationAPI.Controllers.WeatherForecastController.Get (TaxComputationAPI)"'
+2020-10-23 20:39:58.716 +01:00 [Information] Request finished in 997.0353ms 200 application/json; charset=utf-8
+2020-10-23 20:41:48.818 +01:00 [Information] Request starting HTTP/1.1 GET http://localhost:5000/swagger/index.html  
+2020-10-23 20:41:48.893 +01:00 [Information] Request finished in 75.3121ms 200 text/html;charset=utf-8
+2020-10-23 20:41:51.075 +01:00 [Information] Request starting HTTP/1.1 GET http://localhost:5000/swagger/v2/swagger.json  
+2020-10-23 20:41:51.351 +01:00 [Information] Request finished in 275.557ms 200 application/json;charset=utf-8
+2020-10-23 20:44:02.042 +01:00 [Information] Request starting HTTP/1.1 POST http://localhost:5000/api/Utilities/items-mapping application/json 46
+2020-10-23 20:44:02.043 +01:00 [Information] Executing endpoint '"TaxComputationAPI.Controllers.UtilitiesController.CreateItemsClassMapping (TaxComputationAPI)"'
+2020-10-23 20:44:02.096 +01:00 [Information] Route matched with "{action = \"CreateItemsClassMapping\", controller = \"Utilities\"}". Executing controller action with signature "System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] CreateItemsClassMapping(TaxComputationAPI.Dtos.ItemsMappingDto)" on controller "TaxComputationAPI.Controllers.UtilitiesController" ("TaxComputationAPI").
+2020-10-23 20:44:02.513 +01:00 [Information] Entity Framework Core "3.1.8" initialized '"DataContext"' using provider '"Microsoft.EntityFrameworkCore.SqlServer"' with options: "None"
+2020-10-23 20:44:03.063 +01:00 [Information] Executed DbCommand ("456"ms) [Parameters=["@__MappedCode_0='?' (Size = 4000)"], CommandType='Text', CommandTimeout='30']"
+""SELECT TOP(1) [i].[Id], [i].[ItemValue], [i].[MappedCode]
+FROM [ItemsMapping] AS [i]
+WHERE [i].[MappedCode] = @__MappedCode_0"
+2020-10-23 20:44:04.259 +01:00 [Information] Executed DbCommand ("391"ms) [Parameters=["@p0='?' (Size = 4000), @p1='?' (Size = 4000)"], CommandType='Text', CommandTimeout='30']"
+""SET NOCOUNT ON;
+INSERT INTO [ItemsMapping] ([ItemValue], [MappedCode])
+VALUES (@p0, @p1);
+SELECT [Id]
+FROM [ItemsMapping]
+WHERE @@ROWCOUNT = 1 AND [Id] = scope_identity();"
+2020-10-23 20:44:04.754 +01:00 [Information] Executing ObjectResult, writing value of type '"System.String"'.
+2020-10-23 20:44:04.758 +01:00 [Information] Executed action "TaxComputationAPI.Controllers.UtilitiesController.CreateItemsClassMapping (TaxComputationAPI)" in 2661.1504ms
+2020-10-23 20:44:04.760 +01:00 [Information] Executed endpoint '"TaxComputationAPI.Controllers.UtilitiesController.CreateItemsClassMapping (TaxComputationAPI)"'
+2020-10-23 20:44:04.773 +01:00 [Information] Request finished in 2731.4348ms 200 text/plain; charset=utf-8
+2020-10-23 20:44:15.782 +01:00 [Information] Request starting HTTP/1.1 GET http://localhost:5000/api/Utilities/items-mapping application/json 46
+2020-10-23 20:44:15.792 +01:00 [Information] Authorization failed.
+2020-10-23 20:44:15.798 +01:00 [Information] AuthenticationScheme: "Bearer" was challenged.
+2020-10-23 20:44:15.799 +01:00 [Information] Request finished in 16.6397ms 401 
+2020-10-23 20:44:43.288 +01:00 [Information] Request starting HTTP/1.1 GET http://localhost:5000/api/Utilities/items-mapping  
+2020-10-23 20:44:43.291 +01:00 [Information] Authorization failed.
+2020-10-23 20:44:43.291 +01:00 [Information] AuthenticationScheme: "Bearer" was challenged.
+2020-10-23 20:44:43.292 +01:00 [Information] Request finished in 4.3068ms 401 
+2020-10-23 20:46:04.605 +01:00 [Information] Request starting HTTP/1.1 GET http://localhost:5000/api/Utilities/items-mapping application/json 46
+2020-10-23 20:46:04.607 +01:00 [Information] Authorization failed.
+2020-10-23 20:46:04.607 +01:00 [Information] AuthenticationScheme: "Bearer" was challenged.
+2020-10-23 20:46:04.609 +01:00 [Information] Request finished in 3.3931ms 401 
+2020-10-23 20:46:07.954 +01:00 [Information] Request starting HTTP/1.1 GET http://localhost:5000/api/Utilities/items-mapping application/json 46
+2020-10-23 20:46:07.955 +01:00 [Information] Authorization failed.
+2020-10-23 20:46:07.955 +01:00 [Information] AuthenticationScheme: "Bearer" was challenged.
+2020-10-23 20:46:07.956 +01:00 [Information] Request finished in 2.1185ms 401 
+2020-10-23 20:46:18.482 +01:00 [Information] Request starting HTTP/1.1 GET http://localhost:5000/api/Utilities/items-mapping  
+2020-10-23 20:46:18.483 +01:00 [Information] Authorization failed.
+2020-10-23 20:46:18.483 +01:00 [Information] AuthenticationScheme: "Bearer" was challenged.
+2020-10-23 20:46:18.484 +01:00 [Information] Request finished in 1.5945ms 401 

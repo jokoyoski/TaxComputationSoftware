@@ -24,5 +24,14 @@ namespace TaxComputationAPI.Interfaces
         Task AddAssetMappingAsync(AssetMapping assetMapping);
 
         Task UpdateAssetMappingAsync(AssetMapping assetMapping);
+        Task DeleteAssetMappingAsync(AssetMapping assetMapping);
+
+        Task<List<ItemsMapping>> GetItemsMappingAsync();
+        Task<ItemsMapping> GetItemsMappingByMappedCode(string MappedCode);
+        Task<ItemsMapping> GetItemsMappingById(int Id);
+        Task AddItemsMappingAsync(ItemsMapping assetMapping);
+
+        Task UpdateItemsMappingAsync(ItemsMapping assetMapping);
+        Task DeleteItemsMappingAsync(ItemsMapping assetMapping);
     }
 }

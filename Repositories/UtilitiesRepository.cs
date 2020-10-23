@@ -83,9 +83,58 @@ namespace TaxComputationAPI.Repositories
 
         public async Task UpdateAssetMappingAsync(AssetMapping assetMapping)
         {
-
-             _context.AssetMapping.Update(assetMapping);
+            var result= _context.AssetMapping.FirstOrDefault(x=>x.Id==assetMapping.Id);
+            result.Annual=assetMapping.Annual;
+            result.AssetName=assetMapping.AssetName;
+            result.Initial=assetMapping.Initial;
              _context.SaveChanges();
+        }
+
+        public async Task DeleteAssetMappingAsync(AssetMapping assetMapping)
+        {
+            var result = _context.AssetMapping.FirstOrDefault(x => x.Id == assetMapping.Id);
+            _context.Remove(result);
+            _context.SaveChanges();
+        }
+
+        public async Task<List<ItemsMapping>> GetItemsMappingAsync()
+        {
+            var mapping = _context.ItemsMapping.ToList();
+            return mapping;
+        }
+
+        public async Task<ItemsMapping> GetItemsMappingByMappedCode(string MappedCode)
+        {
+            var itemsMapping = _context.ItemsMapping.FirstOrDefault(x => x.MappedCode == MappedCode);
+            return itemsMapping;
+        }
+
+        public async Task<ItemsMapping> GetItemsMappingById(int Id)
+        {
+            var itemsMapping = _context.ItemsMapping.FirstOrDefault(x => x.Id == Id);
+            return itemsMapping;
+        }
+
+        public async Task AddItemsMappingAsync(ItemsMapping itemsMapping)
+        {
+
+            await _context.ItemsMapping.AddAsync(itemsMapping);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task UpdateItemsMappingAsync(ItemsMapping itemsMapping)
+        {
+            var result = _context.ItemsMapping.FirstOrDefault(x => x.Id == itemsMapping.Id);
+            result.MappedCode = itemsMapping.MappedCode;
+            result.ItemValue = itemsMapping.ItemValue;
+            _context.SaveChanges();
+        }
+
+        public async Task DeleteItemsMappingAsync(ItemsMapping itemMapping)
+        {
+            var result = _context.ItemsMapping.FirstOrDefault(x => x.Id == itemMapping.Id);
+            _context.Remove(result);
+            _context.SaveChanges();
         }
     }
 }
