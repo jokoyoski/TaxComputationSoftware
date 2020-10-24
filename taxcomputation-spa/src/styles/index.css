@@ -21,6 +21,17 @@ body {
   margin: 0px 0px 10px 0px;
 }
 
+.auth-link {
+  text-decoration: none;
+  color: inherit;
+  text-align: center;
+  transition: color 0.5s;
+}
+
+.auth-link:hover {
+  color: #2196f3;
+}
+
 .sidebar-link {
   text-decoration: none;
   color: inherit;

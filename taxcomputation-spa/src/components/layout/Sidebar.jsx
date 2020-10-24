@@ -72,7 +72,7 @@ const Sidebar = ({ selectedTitle }) => {
             <h4 style={{ marginTop: 5, marginBottom: 0 }}>
               {firstName} {lastName}
             </h4>
-            <p style={{ fontSize: 12, margin: 0 }}>Email: {email}</p>
+            <p style={{ fontSize: 12, margin: 0 }}>{email}</p>
           </div>
         </div>
         {menuItems.map((item, index) => (

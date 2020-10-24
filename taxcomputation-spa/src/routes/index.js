@@ -4,6 +4,7 @@ import CapitalAllowance from "../pages/CapitalAllowance";
 import Dashboard from "../pages/Dashboard";
 import DeferredTax from "../pages/DeferredTax";
 import FixedAsset from "../pages/FixedAsset";
+import ForgotPassword from "../pages/ForgotPassword";
 import Home from "../pages/Home";
 import IncomeTax from "../pages/IncomeTax";
 import InvestmentAllowance from "../pages/InvestmentAllowance";
@@ -12,6 +13,7 @@ import Login from "../pages/Login";
 import MinimumTax from "../pages/MinimumTax";
 import NotFound from "../pages/NotFound";
 import ProfitLoss from "../pages/ProfitLoss";
+import ResetPassword from "../pages/ResetPassword";
 import RouteGuard from "../RouteGuard";
 import { assetClassResource, companiesResource, trialBalanceResource } from "./resources";
 
@@ -29,6 +31,18 @@ export const routes = [
     name: "LOGIN",
     exact: true,
     component: Login
+  },
+  {
+    path: constants.routes.forgot_password,
+    name: "FORGOT_PASSWORD",
+    exact: true,
+    component: ForgotPassword
+  },
+  {
+    path: constants.routes.reset_password,
+    name: "RESET_PASSWORD",
+    exact: true,
+    component: ResetPassword
   },
   {
     path: constants.routes.dashboard,
