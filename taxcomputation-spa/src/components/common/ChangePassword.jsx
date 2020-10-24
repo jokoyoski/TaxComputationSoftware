@@ -1,20 +1,20 @@
 import React from "react";
 import { Card } from "primereact/card";
 import { Button } from "primereact/button";
-import { InputText } from "primereact/inputtext";
 import { Toast } from "primereact/toast";
 import { useForm, Controller } from "react-hook-form";
-import { resetPassword } from "../apis/Authentication";
-import constants from "../constants";
-import { useAuth } from "../store/AuthStore";
-import { Link, Redirect, useRouter, useRouterActions } from "react-resource-router";
-import PasswordInput from "../components/common/PasswordInput";
+import { useRouter } from "react-resource-router";
+import PasswordInput from "./PasswordInput";
+import { changePassword } from "../../apis/Authentication";
+import constants from "../../constants";
+import { useAuth } from "../../store/AuthStore";
+import { useCompany } from "../../store/CompanyStore";
 
-const ResetPassword = () => {
+const ChangePassword = ({ setShowChangePassword }) => {
   const [routerState] = useRouter();
   const { errors, handleSubmit, control } = useForm();
-  const [{ isAuthenticated }] = useAuth();
-  const { push } = useRouterActions();
+  const [, { onLogout }] = useAuth();
+  const [, { resetCompany }] = useCompany();
   const [loading, setLoading] = React.useState(false);
   const toast = React.useRef();
   const toastCallback = React.useCallback(
@@ -38,19 +38,35 @@ const ResetPassword = () => {
   const onSubmit = async data => {
     if (loading) return;
 
+    const { currentPassword, newPassword } = data;
+    // display error notification if current password and new password are the same
+    if (currentPassword === newPassword) {
+      toast.current.show(
+        toastCallback({
+          severity: "error",
+          detail: "Current Password and New Password cannot be the same"
+        })
+      );
+      return;
+    }
+
     setLoading(true);
-    const { token, newPassword } = data;
     try {
-      const { message } = await resetPassword({ token, newPassword });
-      push({ pathname: constants.routes.login, state: message });
+      const { message } = await changePassword({ currentPassword, newPassword });
+      routerState.location.state = message;
+      onLogout(resetCompany);
     } catch (error) {
       setLoading(false);
       if (error.response) {
-        const {
-          data: { message }
-        } = error.response;
+        const { data } = error.response;
         // display error as toast notification
-        toast.current.show(toastCallback({ severity: "error", summary: "Error", detail: message }));
+        toast.current.show(
+          toastCallback({
+            severity: "error",
+            summary: "Error",
+            detail: data.message || data.errors.NewPassword[0]
+          })
+        );
       } else {
         // network errors
         toast.current.show(
@@ -64,41 +80,27 @@ const ResetPassword = () => {
     }
   };
 
-  if (isAuthenticated) {
-    const path = sessionStorage.getItem("path") || constants.routes.dashboard;
-    sessionStorage.removeItem("path");
-    return <Redirect to={path} />;
-  }
-
   return (
-    <div className="p-d-flex p-jc-center p-ai-center" style={{ height: "100vh" }}>
-      <Card
-        header={
-          <>
-            <h2 className="p-text-center accent-color">Tax Computation</h2>
-            <div className="divider"></div>
-          </>
-        }
-        style={{ width: 320 }}>
+    <div className="p-d-flex p-jc-center p-ai-center overlay">
+      <Card style={{ width: 320 }}>
         <form className="p-d-flex p-flex-column" onSubmit={handleSubmit(onSubmit)}>
           <div style={{ marginBottom: 15 }}>
             <Controller
-              name="token"
+              name="currentPassword"
               control={control}
               rules={{ required: true }}
               defaultValue=""
               render={props => (
-                <InputText
-                  style={{ marginBottom: 5, width: "100%" }}
-                  placeholder="Token"
-                  maxLength={4}
-                  keyfilter="pint"
+                <PasswordInput
+                  placeholder="Current Password"
                   value={props.value}
                   onChange={e => props.onChange(e.target.value)}
                 />
               )}
             />
-            {errors.token && <span style={{ fontSize: 12, color: "red" }}>Token is required</span>}
+            {errors.currentPassword && (
+              <span style={{ fontSize: 12, color: "red" }}>Current Password is required</span>
+            )}
           </div>
           <div style={{ marginBottom: 15 }}>
             <Controller
@@ -120,18 +122,20 @@ const ResetPassword = () => {
           </div>
           <Button
             type="submit"
-            label={!loading ? "Reset Password" : null}
+            label={!loading ? "Change Password" : null}
             icon={loading ? "pi pi-spin pi-spinner" : null}
             style={{ width: "100%" }}
           />
         </form>
-        <Link href={constants.routes.login} className="auth-link">
-          <p style={{ marginBottom: 0, marginTop: 20, fontSize: 14 }}>Back to login</p>
-        </Link>
+        {!loading && (
+          <p className="back-to-app-link" onClick={() => setShowChangePassword(state => !state)}>
+            Back to app
+          </p>
+        )}
       </Card>
       <Toast ref={el => (toast.current = el)} />
     </div>
   );
 };
 
-export default ResetPassword;
+export default ChangePassword;

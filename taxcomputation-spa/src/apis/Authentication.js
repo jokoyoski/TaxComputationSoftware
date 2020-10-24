@@ -30,3 +30,16 @@ export const resetPassword = async ({ token, newPassword }) => {
     throw error;
   }
 };
+
+export const changePassword = async ({ currentPassword, newPassword }) => {
+  try {
+    const { data } = await axios.post("/api/Authentication/change-password", {
+      currentPassword,
+      newPassword,
+      confirmPassword: newPassword
+    });
+    return data;
+  } catch (error) {
+    throw error;
+  }
+};
