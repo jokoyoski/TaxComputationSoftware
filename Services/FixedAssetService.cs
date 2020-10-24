@@ -112,6 +112,7 @@ namespace TaxComputationAPI.Services
               fixedAssetData.CompanyName=asset.CompanyName;
               fixedAssetData.Year=asset.Year;
               fixedAssetData.FixedAssetName=asset.FixedAssetName;
+<<<<<<< HEAD
               fixedAssetData.OpeningCost=$"{Utilities.FormatAmount(asset.OpeningCost)}";
               fixedAssetData.CostAddition=$"{Utilities.FormatAmount(asset.CostAddition)}";
               fixedAssetData.CostDisposal=$"({Utilities.FormatAmount(asset.CostDisposal)})";
@@ -132,6 +133,28 @@ namespace TaxComputationAPI.Services
                }
                else{
                    fixedAssetData.TransferCost=$"{Utilities.FormatAmount(asset.TransferCost)}";
+=======
+              fixedAssetData.OpeningCost=$"₦{asset.OpeningCost.ToString("0,00")}";
+              fixedAssetData.CostAddition=$"₦{asset.CostAddition.ToString("0,00")}";
+              fixedAssetData.CostDisposal=$"₦({asset.CostDisposal.ToString("0,00")})";
+              fixedAssetData.CostClosing=$"₦{asset.CostClosing.ToString("0,00")}";
+              fixedAssetData.OpeningDepreciation=$"₦{asset.OpeningDepreciation.ToString("0,00")}";
+              fixedAssetData.DepreciationAddition=$"₦{asset.DepreciationAddition.ToString("0,00")}";
+              fixedAssetData.DepreciationDisposal=$"₦{asset.DepreciationAddition.ToString("0,00")}";
+              fixedAssetData.DepreciationClosing=$"₦{asset.DepreciationClosing.ToString("0,00")}";
+               if(asset.IsTransferDepreciationRemoved==true){
+                 fixedAssetData.TransferDepreciation=$"₦({asset.TransferDepreciation.ToString("0,00")})";
+               }
+               else{
+                   fixedAssetData.TransferDepreciation=$"₦{asset.TransferDepreciation.ToString("0,00")}";
+               }
+
+                if(asset.IsTransferCostRemoved==true){
+                 fixedAssetData.TransferCost=$"₦({asset.TransferCost.ToString("0,00")})";
+               }
+               else{
+                   fixedAssetData.TransferCost=$"₦{asset.TransferCost.ToString("0,00")}";
+>>>>>>> 60cfebf7bf4916f2bc6e96612980e5cc32c51022
                }
              
               
@@ -140,7 +163,11 @@ namespace TaxComputationAPI.Services
 
           foreach(var netbook in fixedAssetResponse.netBookValue){
                 netBookValues.Add(new TaxComputationAPI.Dtos.NetBookValue{
+<<<<<<< HEAD
                value=$"{Utilities.FormatAmount(netbook.value)}"
+=======
+               value=$"₦{netbook.value.ToString("0,00")}"
+>>>>>>> 60cfebf7bf4916f2bc6e96612980e5cc32c51022
               });
             
 
@@ -148,6 +175,7 @@ namespace TaxComputationAPI.Services
 
           
           var total= new TaxComputationAPI.Dtos.Total{
+<<<<<<< HEAD
                  OpeningCostTotal=$"{Utilities.FormatAmount(fixedAssetResponse.total.OpeningCostTotal)}",
                  AdditionCostTotal=$"{Utilities.FormatAmount(fixedAssetResponse.total.AdditionCostTotal)}",
                  ClosingCostTotal=$"{Utilities.FormatAmount(fixedAssetResponse.total.ClosingCostTotal)}",
@@ -156,6 +184,16 @@ namespace TaxComputationAPI.Services
                  AdditionDepreciationTotal=$"{Utilities.FormatAmount(fixedAssetResponse.total.AdditionDepreciationTotal)}",
                  DisposalDepreciationTotal=$"{Utilities.FormatAmount(fixedAssetResponse.total.DisposalDepreciationTotal)}",
                  ClosingDepreciationTotal=$"{Utilities.FormatAmount(fixedAssetResponse.total.ClosingDepreciationTotal)}",
+=======
+                OpeningCostTotal=$"₦{fixedAssetResponse.total.OpeningCostTotal.ToString("0,00")}",
+                 AdditionCostTotal=$"₦{fixedAssetResponse.total.AdditionCostTotal.ToString("0,00")}",
+                 ClosingCostTotal=$"₦{fixedAssetResponse.total.ClosingCostTotal.ToString("0,00")}",
+                 DisposalCostTotal=$"₦{fixedAssetResponse.total.DisposalCostTotal.ToString("0,00")}",
+                 OpeningDepreciationTotal=$"₦{fixedAssetResponse.total.OpeningDepreciationTotal.ToString("0,00")}",
+                 AdditionDepreciationTotal=$"₦{fixedAssetResponse.total.AdditionDepreciationTotal.ToString("0,00")}",
+                 DisposalDepreciationTotal=$"₦{fixedAssetResponse.total.DisposalDepreciationTotal.ToString("0,00")}",
+                 ClosingDepreciationTotal=$"₦{fixedAssetResponse.total.ClosingDepreciationTotal.ToString("0,00")}",
+>>>>>>> 60cfebf7bf4916f2bc6e96612980e5cc32c51022
           };
           TaxComputationAPI.Dtos.FixedAssetResponseDto fixedAsset=new   TaxComputationAPI.Dtos.FixedAssetResponseDto();
           fixedAsset.FixedAssetData=fixedAssetDatas;

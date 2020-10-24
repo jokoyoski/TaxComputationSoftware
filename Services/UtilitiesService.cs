@@ -90,5 +90,57 @@ namespace TaxComputationAPI.Services
 
             await _utilitiesRepository.UpdateAssetMappingAsync(assetMapping);
         }
+
+        public async Task DeleteAssetMappingAsync(AssetMapping assetMapping)
+        {
+            if (assetMapping == null)
+            {
+                throw new ArgumentNullException(nameof(assetMapping));
+            }
+
+            await _utilitiesRepository.DeleteAssetMappingAsync(assetMapping);
+        }
+
+        public Task<List<ItemsMapping>> GetItemsMappingAsync()
+        {
+            return _utilitiesRepository.GetItemsMappingAsync();
+        }
+        public async Task<ItemsMapping> GetItemsMappingById(int Id)
+        {
+            return await _utilitiesRepository.GetItemsMappingById(Id);
+        }
+        public async Task<ItemsMapping> GetItemsMappingByMappedCode(string MappedCode)
+        {
+            return await _utilitiesRepository.GetItemsMappingByMappedCode(MappedCode);
+        }
+        public async Task AddItemsMappingAsync(ItemsMapping itemsMapping)
+        {
+            if (itemsMapping == null)
+            {
+                throw new ArgumentNullException(nameof(itemsMapping));
+            }
+
+            await _utilitiesRepository.AddItemsMappingAsync(itemsMapping);
+        }
+
+        public async Task UpdateItemsMappingAsync(ItemsMapping itemsMapping)
+        {
+            if (itemsMapping == null)
+            {
+                throw new ArgumentNullException(nameof(itemsMapping));
+            }
+
+            await _utilitiesRepository.UpdateItemsMappingAsync(itemsMapping);
+        }
+
+        public async Task DeleteItemsMappingAsync(ItemsMapping itemsMapping)
+        {
+            if (itemsMapping == null)
+            {
+                throw new ArgumentNullException(nameof(itemsMapping));
+            }
+
+            await _utilitiesRepository.DeleteItemsMappingAsync(itemsMapping);
+        }
     }
 }

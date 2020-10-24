@@ -18,6 +18,10 @@ namespace TaxComputationAPI.Helpers
             CreateMap<FinancialYearDto, FinancialYear>().ReverseMap();
             CreateMap<AssetMapping, AssetMappingDto>().ReverseMap();
             CreateMap<AssetMapping, AssetMappingUpdateDto>().ReverseMap();
+            CreateMap<AssetMapping, AssetMappingDeleteDto>().ReverseMap();
+            CreateMap<ItemsMapping, ItemsMappingDto>().ReverseMap();
+            CreateMap<ItemsMapping, ItemsMappingUpdateDto>().ReverseMap();
+            CreateMap<ItemsMapping, ItemsMappingDeleteDto>().ReverseMap();
         }
     }
 }
