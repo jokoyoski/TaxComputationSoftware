@@ -1,0 +1,524 @@
+2020-10-24 00:18:39.312 +01:00 [Warning] No type was specified for the decimal column '"Credit"' on entity type '"TrialBalance"'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values using 'HasColumnType()'.
+2020-10-24 00:18:39.406 +01:00 [Warning] No type was specified for the decimal column '"Debit"' on entity type '"TrialBalance"'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values using 'HasColumnType()'.
+2020-10-24 00:18:39.446 +01:00 [Information] Entity Framework Core "3.1.8" initialized '"DataContext"' using provider '"Microsoft.EntityFrameworkCore.SqlServer"' with options: "None"
+2020-10-24 00:18:42.818 +01:00 [Information] Executed DbCommand ("313"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT 1"
+2020-10-24 00:18:43.133 +01:00 [Information] Executed DbCommand ("308"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT OBJECT_ID(N'[__EFMigrationsHistory]');"
+2020-10-24 00:18:43.416 +01:00 [Information] Executed DbCommand ("281"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT 1"
+2020-10-24 00:18:43.752 +01:00 [Information] Executed DbCommand ("335"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT OBJECT_ID(N'[__EFMigrationsHistory]');"
+2020-10-24 00:18:44.068 +01:00 [Information] Executed DbCommand ("303"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT [MigrationId], [ProductVersion]
+FROM [__EFMigrationsHistory]
+ORDER BY [MigrationId];"
+2020-10-24 00:18:44.104 +01:00 [Information] No migrations were applied. The database is already up to date.
+2020-10-24 00:18:44.573 +01:00 [Information] Executed DbCommand ("293"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM [AspNetRoles] AS [a]) THEN CAST(1 AS bit)
+    ELSE CAST(0 AS bit)
+END"
+2020-10-24 00:18:44.842 +01:00 [Information] User profile is available. Using '"C:\Users\Oluwaseyi\AppData\Local\ASP.NET\DataProtection-Keys"' as key repository and Windows DPAPI to encrypt keys at rest.
+2020-10-24 00:18:46.373 +01:00 [Information] Now listening on: "http://localhost:5000"
+2020-10-24 00:18:46.374 +01:00 [Information] Application started. Press Ctrl+C to shut down.
+2020-10-24 00:18:46.374 +01:00 [Information] Hosting environment: "Development"
+2020-10-24 00:18:46.374 +01:00 [Information] Content root path: "C:\Users\Oluwaseyi\source\repos\TaxComputationSoftware"
+2020-10-24 00:19:20.396 +01:00 [Information] Application is shutting down...
+2020-10-24 00:19:28.756 +01:00 [Warning] No type was specified for the decimal column '"Credit"' on entity type '"TrialBalance"'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values using 'HasColumnType()'.
+2020-10-24 00:19:28.783 +01:00 [Warning] No type was specified for the decimal column '"Debit"' on entity type '"TrialBalance"'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values using 'HasColumnType()'.
+2020-10-24 00:19:28.807 +01:00 [Information] Entity Framework Core "3.1.8" initialized '"DataContext"' using provider '"Microsoft.EntityFrameworkCore.SqlServer"' with options: "None"
+2020-10-24 00:19:30.763 +01:00 [Information] Executed DbCommand ("287"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT 1"
+2020-10-24 00:19:31.104 +01:00 [Information] Executed DbCommand ("335"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT OBJECT_ID(N'[__EFMigrationsHistory]');"
+2020-10-24 00:19:31.392 +01:00 [Information] Executed DbCommand ("285"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT 1"
+2020-10-24 00:19:31.670 +01:00 [Information] Executed DbCommand ("276"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT OBJECT_ID(N'[__EFMigrationsHistory]');"
+2020-10-24 00:19:31.961 +01:00 [Information] Executed DbCommand ("280"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT [MigrationId], [ProductVersion]
+FROM [__EFMigrationsHistory]
+ORDER BY [MigrationId];"
+2020-10-24 00:19:31.993 +01:00 [Information] No migrations were applied. The database is already up to date.
+2020-10-24 00:19:32.367 +01:00 [Information] Executed DbCommand ("263"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM [AspNetRoles] AS [a]) THEN CAST(1 AS bit)
+    ELSE CAST(0 AS bit)
+END"
+2020-10-24 00:19:32.388 +01:00 [Information] User profile is available. Using '"C:\Users\Oluwaseyi\AppData\Local\ASP.NET\DataProtection-Keys"' as key repository and Windows DPAPI to encrypt keys at rest.
+2020-10-24 00:19:32.503 +01:00 [Information] Now listening on: "http://localhost:5000"
+2020-10-24 00:19:32.503 +01:00 [Information] Application started. Press Ctrl+C to shut down.
+2020-10-24 00:19:32.504 +01:00 [Information] Hosting environment: "Development"
+2020-10-24 00:19:32.504 +01:00 [Information] Content root path: "C:\Users\Oluwaseyi\source\repos\TaxComputationSoftware"
+2020-10-24 00:20:06.770 +01:00 [Information] Application is shutting down...
+2020-10-24 00:22:59.065 +01:00 [Warning] No type was specified for the decimal column '"Credit"' on entity type '"TrialBalance"'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values using 'HasColumnType()'.
+2020-10-24 00:22:59.111 +01:00 [Warning] No type was specified for the decimal column '"Debit"' on entity type '"TrialBalance"'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values using 'HasColumnType()'.
+2020-10-24 00:22:59.150 +01:00 [Information] Entity Framework Core "3.1.8" initialized '"DataContext"' using provider '"Microsoft.EntityFrameworkCore.SqlServer"' with options: "None"
+2020-10-24 00:23:01.667 +01:00 [Information] Executed DbCommand ("280"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT 1"
+2020-10-24 00:23:01.994 +01:00 [Information] Executed DbCommand ("316"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT OBJECT_ID(N'[__EFMigrationsHistory]');"
+2020-10-24 00:23:02.289 +01:00 [Information] Executed DbCommand ("291"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT 1"
+2020-10-24 00:23:02.559 +01:00 [Information] Executed DbCommand ("266"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT OBJECT_ID(N'[__EFMigrationsHistory]');"
+2020-10-24 00:23:02.846 +01:00 [Information] Executed DbCommand ("276"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT [MigrationId], [ProductVersion]
+FROM [__EFMigrationsHistory]
+ORDER BY [MigrationId];"
+2020-10-24 00:23:02.860 +01:00 [Information] No migrations were applied. The database is already up to date.
+2020-10-24 00:23:03.298 +01:00 [Information] Executed DbCommand ("309"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM [AspNetRoles] AS [a]) THEN CAST(1 AS bit)
+    ELSE CAST(0 AS bit)
+END"
+2020-10-24 00:23:03.351 +01:00 [Information] User profile is available. Using '"C:\Users\Oluwaseyi\AppData\Local\ASP.NET\DataProtection-Keys"' as key repository and Windows DPAPI to encrypt keys at rest.
+2020-10-24 00:23:03.626 +01:00 [Information] Now listening on: "http://localhost:5000"
+2020-10-24 00:23:03.626 +01:00 [Information] Application started. Press Ctrl+C to shut down.
+2020-10-24 00:23:03.626 +01:00 [Information] Hosting environment: "Development"
+2020-10-24 00:23:03.626 +01:00 [Information] Content root path: "C:\Users\Oluwaseyi\source\repos\TaxComputationSoftware"
+2020-10-24 00:26:39.917 +01:00 [Information] Request starting HTTP/1.1 POST http://localhost:5000/api/Users/add-user application/json 186
+2020-10-24 00:26:40.217 +01:00 [Information] "Bearer" was not authenticated. Failure message: "No SecurityTokenValidator available for token: <Bearer Token>"
+2020-10-24 00:26:40.224 +01:00 [Information] Authorization failed.
+2020-10-24 00:26:40.231 +01:00 [Information] AuthenticationScheme: "Bearer" was challenged.
+2020-10-24 00:26:40.248 +01:00 [Information] Request finished in 333.8211ms 401 
+2020-10-24 00:27:12.665 +01:00 [Warning] No type was specified for the decimal column '"Credit"' on entity type '"TrialBalance"'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values using 'HasColumnType()'.
+2020-10-24 00:27:12.702 +01:00 [Warning] No type was specified for the decimal column '"Debit"' on entity type '"TrialBalance"'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values using 'HasColumnType()'.
+2020-10-24 00:27:12.727 +01:00 [Information] Entity Framework Core "3.1.8" initialized '"DataContext"' using provider '"Microsoft.EntityFrameworkCore.SqlServer"' with options: "None"
+2020-10-24 00:27:14.859 +01:00 [Information] Executed DbCommand ("297"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT 1"
+2020-10-24 00:27:15.212 +01:00 [Information] Executed DbCommand ("346"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT OBJECT_ID(N'[__EFMigrationsHistory]');"
+2020-10-24 00:27:15.554 +01:00 [Information] Executed DbCommand ("337"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT 1"
+2020-10-24 00:27:15.900 +01:00 [Information] Executed DbCommand ("341"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT OBJECT_ID(N'[__EFMigrationsHistory]');"
+2020-10-24 00:27:16.310 +01:00 [Information] Executed DbCommand ("400"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT [MigrationId], [ProductVersion]
+FROM [__EFMigrationsHistory]
+ORDER BY [MigrationId];"
+2020-10-24 00:27:16.326 +01:00 [Information] No migrations were applied. The database is already up to date.
+2020-10-24 00:27:16.756 +01:00 [Information] Executed DbCommand ("287"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM [AspNetRoles] AS [a]) THEN CAST(1 AS bit)
+    ELSE CAST(0 AS bit)
+END"
+2020-10-24 00:27:16.805 +01:00 [Information] User profile is available. Using '"C:\Users\Oluwaseyi\AppData\Local\ASP.NET\DataProtection-Keys"' as key repository and Windows DPAPI to encrypt keys at rest.
+2020-10-24 00:27:17.067 +01:00 [Information] Now listening on: "http://localhost:5000"
+2020-10-24 00:27:17.067 +01:00 [Information] Application started. Press Ctrl+C to shut down.
+2020-10-24 00:27:17.067 +01:00 [Information] Hosting environment: "Development"
+2020-10-24 00:27:17.068 +01:00 [Information] Content root path: "C:\Users\Oluwaseyi\source\repos\TaxComputationSoftware"
+2020-10-24 00:27:23.547 +01:00 [Information] Request starting HTTP/1.1 POST http://localhost:5000/api/Users/add-user application/json 186
+2020-10-24 00:27:23.651 +01:00 [Information] "Bearer" was not authenticated. Failure message: "No SecurityTokenValidator available for token: <Bearer Token>"
+2020-10-24 00:27:23.653 +01:00 [Information] Executing endpoint '"TaxComputationAPI.Controllers.UsersController.AddUser (TaxComputationAPI)"'
+2020-10-24 00:27:23.797 +01:00 [Information] Route matched with "{action = \"AddUser\", controller = \"Users\"}". Executing controller action with signature "System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] AddUser(TaxComputationAPI.Dtos.UserForRegisterDto)" on controller "TaxComputationAPI.Controllers.UsersController" ("TaxComputationAPI").
+2020-10-24 00:27:40.993 +01:00 [Information] Entity Framework Core "3.1.8" initialized '"DataContext"' using provider '"Microsoft.EntityFrameworkCore.SqlServer"' with options: "None"
+2020-10-24 00:27:41.618 +01:00 [Information] Executed DbCommand ("555"ms) [Parameters=["@__normalizedUserName_0='?' (Size = 256)"], CommandType='Text', CommandTimeout='30']"
+""SELECT TOP(1) [a].[Id], [a].[AccessFailedCount], [a].[ConcurrencyStamp], [a].[DateCreated], [a].[Email], [a].[EmailConfirmed], [a].[FirstName], [a].[IsActive], [a].[LastName], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[PasswordHash], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[SecurityStamp], [a].[TwoFactorEnabled], [a].[UserName]
+FROM [AspNetUsers] AS [a]
+WHERE [a].[NormalizedUserName] = @__normalizedUserName_0"
+2020-10-24 00:27:42.403 +01:00 [Information] Executed DbCommand ("297"ms) [Parameters=["@p0='?' (DbType = Int32), @p1='?' (Size = 4000), @p2='?' (DbType = DateTime2), @p3='?' (Size = 256), @p4='?' (DbType = Boolean), @p5='?' (Size = 4000), @p6='?' (DbType = Boolean), @p7='?' (Size = 4000), @p8='?' (DbType = Boolean), @p9='?' (DbType = DateTimeOffset), @p10='?' (Size = 256), @p11='?' (Size = 256), @p12='?' (Size = 4000), @p13='?' (Size = 4000), @p14='?' (DbType = Boolean), @p15='?' (Size = 4000), @p16='?' (DbType = Boolean), @p17='?' (Size = 256)"], CommandType='Text', CommandTimeout='30']"
+""SET NOCOUNT ON;
+INSERT INTO [AspNetUsers] ([AccessFailedCount], [ConcurrencyStamp], [DateCreated], [Email], [EmailConfirmed], [FirstName], [IsActive], [LastName], [LockoutEnabled], [LockoutEnd], [NormalizedEmail], [NormalizedUserName], [PasswordHash], [PhoneNumber], [PhoneNumberConfirmed], [SecurityStamp], [TwoFactorEnabled], [UserName])
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12, @p13, @p14, @p15, @p16, @p17);
+SELECT [Id]
+FROM [AspNetUsers]
+WHERE @@ROWCOUNT = 1 AND [Id] = scope_identity();"
+2020-10-24 00:27:47.516 +01:00 [Information] Executed DbCommand ("301"ms) [Parameters=["@__normalizedRoleName_0='?' (Size = 256)"], CommandType='Text', CommandTimeout='30']"
+""SELECT TOP(2) [a].[Id], [a].[ConcurrencyStamp], [a].[Name], [a].[NormalizedName]
+FROM [AspNetRoles] AS [a]
+WHERE [a].[NormalizedName] = @__normalizedRoleName_0"
+2020-10-24 00:27:47.852 +01:00 [Information] Executed DbCommand ("282"ms) [Parameters=["@__p_0='?' (DbType = Int32), @__p_1='?' (DbType = Int32)"], CommandType='Text', CommandTimeout='30']"
+""SELECT TOP(1) [a].[UserId], [a].[RoleId]
+FROM [AspNetUserRoles] AS [a]
+WHERE ([a].[UserId] = @__p_0) AND ([a].[RoleId] = @__p_1)"
+2020-10-24 00:27:48.147 +01:00 [Information] Executed DbCommand ("284"ms) [Parameters=["@__normalizedRoleName_0='?' (Size = 256)"], CommandType='Text', CommandTimeout='30']"
+""SELECT TOP(2) [a].[Id], [a].[ConcurrencyStamp], [a].[Name], [a].[NormalizedName]
+FROM [AspNetRoles] AS [a]
+WHERE [a].[NormalizedName] = @__normalizedRoleName_0"
+2020-10-24 00:27:48.560 +01:00 [Information] Executed DbCommand ("388"ms) [Parameters=["@__normalizedUserName_0='?' (Size = 256)"], CommandType='Text', CommandTimeout='30']"
+""SELECT TOP(1) [a].[Id], [a].[AccessFailedCount], [a].[ConcurrencyStamp], [a].[DateCreated], [a].[Email], [a].[EmailConfirmed], [a].[FirstName], [a].[IsActive], [a].[LastName], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[PasswordHash], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[SecurityStamp], [a].[TwoFactorEnabled], [a].[UserName]
+FROM [AspNetUsers] AS [a]
+WHERE [a].[NormalizedUserName] = @__normalizedUserName_0"
+2020-10-24 00:27:49.187 +01:00 [Information] Executed DbCommand ("301"ms) [Parameters=["@p0='?' (DbType = Int32), @p1='?' (DbType = Int32)"], CommandType='Text', CommandTimeout='30']"
+""SET NOCOUNT ON;
+INSERT INTO [AspNetUserRoles] ([UserId], [RoleId])
+VALUES (@p0, @p1);"
+2020-10-24 00:27:49.513 +01:00 [Information] Executed DbCommand ("320"ms) [Parameters=["@p18='?' (DbType = Int32), @p0='?' (DbType = Int32), @p1='?' (Size = 4000), @p19='?' (Size = 4000), @p2='?' (DbType = DateTime2), @p3='?' (Size = 256), @p4='?' (DbType = Boolean), @p5='?' (Size = 4000), @p6='?' (DbType = Boolean), @p7='?' (Size = 4000), @p8='?' (DbType = Boolean), @p9='?' (DbType = DateTimeOffset), @p10='?' (Size = 256), @p11='?' (Size = 256), @p12='?' (Size = 4000), @p13='?' (Size = 4000), @p14='?' (DbType = Boolean), @p15='?' (Size = 4000), @p16='?' (DbType = Boolean), @p17='?' (Size = 256)"], CommandType='Text', CommandTimeout='30']"
+""SET NOCOUNT ON;
+UPDATE [AspNetUsers] SET [AccessFailedCount] = @p0, [ConcurrencyStamp] = @p1, [DateCreated] = @p2, [Email] = @p3, [EmailConfirmed] = @p4, [FirstName] = @p5, [IsActive] = @p6, [LastName] = @p7, [LockoutEnabled] = @p8, [LockoutEnd] = @p9, [NormalizedEmail] = @p10, [NormalizedUserName] = @p11, [PasswordHash] = @p12, [PhoneNumber] = @p13, [PhoneNumberConfirmed] = @p14, [SecurityStamp] = @p15, [TwoFactorEnabled] = @p16, [UserName] = @p17
+WHERE [Id] = @p18 AND [ConcurrencyStamp] = @p19;
+SELECT @@ROWCOUNT;"
+2020-10-24 00:27:54.521 +01:00 [Information] Executed DbCommand ("1,098"ms) [Parameters=["@__normalizedRoleName_0='?' (Size = 256)"], CommandType='Text', CommandTimeout='30']"
+""SELECT TOP(2) [a].[Id], [a].[ConcurrencyStamp], [a].[Name], [a].[NormalizedName]
+FROM [AspNetRoles] AS [a]
+WHERE [a].[NormalizedName] = @__normalizedRoleName_0"
+2020-10-24 00:27:55.452 +01:00 [Information] Executed DbCommand ("915"ms) [Parameters=["@__p_0='?' (DbType = Int32), @__p_1='?' (DbType = Int32)"], CommandType='Text', CommandTimeout='30']"
+""SELECT TOP(1) [a].[UserId], [a].[RoleId]
+FROM [AspNetUserRoles] AS [a]
+WHERE ([a].[UserId] = @__p_0) AND ([a].[RoleId] = @__p_1)"
+2020-10-24 00:27:56.134 +01:00 [Information] Executed DbCommand ("680"ms) [Parameters=["@__normalizedRoleName_0='?' (Size = 256)"], CommandType='Text', CommandTimeout='30']"
+""SELECT TOP(2) [a].[Id], [a].[ConcurrencyStamp], [a].[Name], [a].[NormalizedName]
+FROM [AspNetRoles] AS [a]
+WHERE [a].[NormalizedName] = @__normalizedRoleName_0"
+2020-10-24 00:27:56.874 +01:00 [Information] Executed DbCommand ("734"ms) [Parameters=["@__normalizedUserName_0='?' (Size = 256)"], CommandType='Text', CommandTimeout='30']"
+""SELECT TOP(1) [a].[Id], [a].[AccessFailedCount], [a].[ConcurrencyStamp], [a].[DateCreated], [a].[Email], [a].[EmailConfirmed], [a].[FirstName], [a].[IsActive], [a].[LastName], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[PasswordHash], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[SecurityStamp], [a].[TwoFactorEnabled], [a].[UserName]
+FROM [AspNetUsers] AS [a]
+WHERE [a].[NormalizedUserName] = @__normalizedUserName_0"
+2020-10-24 00:27:58.076 +01:00 [Information] Executed DbCommand ("676"ms) [Parameters=["@p0='?' (DbType = Int32), @p1='?' (DbType = Int32)"], CommandType='Text', CommandTimeout='30']"
+""SET NOCOUNT ON;
+INSERT INTO [AspNetUserRoles] ([UserId], [RoleId])
+VALUES (@p0, @p1);"
+2020-10-24 00:27:59.002 +01:00 [Information] Executed DbCommand ("922"ms) [Parameters=["@p18='?' (DbType = Int32), @p0='?' (DbType = Int32), @p1='?' (Size = 4000), @p19='?' (Size = 4000), @p2='?' (DbType = DateTime2), @p3='?' (Size = 256), @p4='?' (DbType = Boolean), @p5='?' (Size = 4000), @p6='?' (DbType = Boolean), @p7='?' (Size = 4000), @p8='?' (DbType = Boolean), @p9='?' (DbType = DateTimeOffset), @p10='?' (Size = 256), @p11='?' (Size = 256), @p12='?' (Size = 4000), @p13='?' (Size = 4000), @p14='?' (DbType = Boolean), @p15='?' (Size = 4000), @p16='?' (DbType = Boolean), @p17='?' (Size = 256)"], CommandType='Text', CommandTimeout='30']"
+""SET NOCOUNT ON;
+UPDATE [AspNetUsers] SET [AccessFailedCount] = @p0, [ConcurrencyStamp] = @p1, [DateCreated] = @p2, [Email] = @p3, [EmailConfirmed] = @p4, [FirstName] = @p5, [IsActive] = @p6, [LastName] = @p7, [LockoutEnabled] = @p8, [LockoutEnd] = @p9, [NormalizedEmail] = @p10, [NormalizedUserName] = @p11, [PasswordHash] = @p12, [PhoneNumber] = @p13, [PhoneNumberConfirmed] = @p14, [SecurityStamp] = @p15, [TwoFactorEnabled] = @p16, [UserName] = @p17
+WHERE [Id] = @p18 AND [ConcurrencyStamp] = @p19;
+SELECT @@ROWCOUNT;"
+2020-10-24 00:28:06.713 +01:00 [Information] Executing ObjectResult, writing value of type '"TaxComputationAPI.Dtos.UserForListDto"'.
+2020-10-24 00:28:06.795 +01:00 [Information] Executed action "TaxComputationAPI.Controllers.UsersController.AddUser (TaxComputationAPI)" in 42993.6535ms
+2020-10-24 00:28:06.796 +01:00 [Information] Executed endpoint '"TaxComputationAPI.Controllers.UsersController.AddUser (TaxComputationAPI)"'
+2020-10-24 00:28:06.801 +01:00 [Information] Request finished in 43256.1431ms 201 application/json; charset=utf-8
+2020-10-24 00:28:31.759 +01:00 [Information] Request starting HTTP/1.1 POST http://localhost:5000/api/Authentication/login application/json 66
+2020-10-24 00:28:31.763 +01:00 [Information] "Bearer" was not authenticated. Failure message: "No SecurityTokenValidator available for token: <Bearer Token>"
+2020-10-24 00:28:31.764 +01:00 [Information] Executing endpoint '"TaxComputationAPI.Controllers.AuthenticationController.Login (TaxComputationAPI)"'
+2020-10-24 00:28:31.768 +01:00 [Information] Route matched with "{action = \"Login\", controller = \"Authentication\"}". Executing controller action with signature "System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(TaxComputationAPI.Dtos.UserForLoginDto)" on controller "TaxComputationAPI.Controllers.AuthenticationController" ("TaxComputationAPI").
+2020-10-24 00:28:31.806 +01:00 [Information] Entity Framework Core "3.1.8" initialized '"DataContext"' using provider '"Microsoft.EntityFrameworkCore.SqlServer"' with options: "None"
+2020-10-24 00:28:32.144 +01:00 [Information] Executed DbCommand ("337"ms) [Parameters=["@__normalizedUserName_0='?' (Size = 256)"], CommandType='Text', CommandTimeout='30']"
+""SELECT TOP(1) [a].[Id], [a].[AccessFailedCount], [a].[ConcurrencyStamp], [a].[DateCreated], [a].[Email], [a].[EmailConfirmed], [a].[FirstName], [a].[IsActive], [a].[LastName], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[PasswordHash], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[SecurityStamp], [a].[TwoFactorEnabled], [a].[UserName]
+FROM [AspNetUsers] AS [a]
+WHERE [a].[NormalizedUserName] = @__normalizedUserName_0"
+2020-10-24 00:28:32.569 +01:00 [Information] Executed DbCommand ("344"ms) [Parameters=["@__userId_0='?' (DbType = Int32)"], CommandType='Text', CommandTimeout='30']"
+""SELECT [a0].[Name]
+FROM [AspNetUserRoles] AS [a]
+INNER JOIN [AspNetRoles] AS [a0] ON [a].[RoleId] = [a0].[Id]
+WHERE [a].[UserId] = @__userId_0"
+2020-10-24 00:28:32.936 +01:00 [Information] Executing ObjectResult, writing value of type '"<>f__AnonymousType1`2[[System.String, System.Private.CoreLib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[TaxComputationAPI.Dtos.UserForListDto, TaxComputationAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"'.
+2020-10-24 00:28:32.942 +01:00 [Information] Executed action "TaxComputationAPI.Controllers.AuthenticationController.Login (TaxComputationAPI)" in 1174.311ms
+2020-10-24 00:28:32.943 +01:00 [Information] Executed endpoint '"TaxComputationAPI.Controllers.AuthenticationController.Login (TaxComputationAPI)"'
+2020-10-24 00:28:32.943 +01:00 [Information] Request finished in 1184.1194ms 200 application/json; charset=utf-8
+2020-10-24 00:28:45.245 +01:00 [Information] Request starting HTTP/1.1 POST http://localhost:5000/api/Authentication/login application/json 67
+2020-10-24 00:28:45.248 +01:00 [Information] "Bearer" was not authenticated. Failure message: "No SecurityTokenValidator available for token: <Bearer Token>"
+2020-10-24 00:28:45.249 +01:00 [Information] Executing endpoint '"TaxComputationAPI.Controllers.AuthenticationController.Login (TaxComputationAPI)"'
+2020-10-24 00:28:45.249 +01:00 [Information] Route matched with "{action = \"Login\", controller = \"Authentication\"}". Executing controller action with signature "System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(TaxComputationAPI.Dtos.UserForLoginDto)" on controller "TaxComputationAPI.Controllers.AuthenticationController" ("TaxComputationAPI").
+2020-10-24 00:28:45.251 +01:00 [Information] Entity Framework Core "3.1.8" initialized '"DataContext"' using provider '"Microsoft.EntityFrameworkCore.SqlServer"' with options: "None"
+2020-10-24 00:28:45.594 +01:00 [Information] Executed DbCommand ("342"ms) [Parameters=["@__normalizedUserName_0='?' (Size = 256)"], CommandType='Text', CommandTimeout='30']"
+""SELECT TOP(1) [a].[Id], [a].[AccessFailedCount], [a].[ConcurrencyStamp], [a].[DateCreated], [a].[Email], [a].[EmailConfirmed], [a].[FirstName], [a].[IsActive], [a].[LastName], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[PasswordHash], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[SecurityStamp], [a].[TwoFactorEnabled], [a].[UserName]
+FROM [AspNetUsers] AS [a]
+WHERE [a].[NormalizedUserName] = @__normalizedUserName_0"
+2020-10-24 00:28:45.604 +01:00 [Warning] Invalid password for user "10".
+2020-10-24 00:28:45.604 +01:00 [Warning] User "10" failed to provide the correct password.
+2020-10-24 00:28:45.605 +01:00 [Information] Executing ObjectResult, writing value of type '"<>f__AnonymousType0`1[[System.String[], System.Private.CoreLib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]"'.
+2020-10-24 00:28:45.609 +01:00 [Information] Executed action "TaxComputationAPI.Controllers.AuthenticationController.Login (TaxComputationAPI)" in 359.5709ms
+2020-10-24 00:28:45.609 +01:00 [Information] Executed endpoint '"TaxComputationAPI.Controllers.AuthenticationController.Login (TaxComputationAPI)"'
+2020-10-24 00:28:45.609 +01:00 [Information] Request finished in 363.9358ms 500 application/json; charset=utf-8
+2020-10-24 00:34:55.600 +01:00 [Warning] No type was specified for the decimal column '"Credit"' on entity type '"TrialBalance"'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values using 'HasColumnType()'.
+2020-10-24 00:34:55.636 +01:00 [Warning] No type was specified for the decimal column '"Debit"' on entity type '"TrialBalance"'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values using 'HasColumnType()'.
+2020-10-24 00:34:55.667 +01:00 [Information] Entity Framework Core "3.1.8" initialized '"DataContext"' using provider '"Microsoft.EntityFrameworkCore.SqlServer"' with options: "None"
+2020-10-24 00:34:57.734 +01:00 [Information] Executed DbCommand ("278"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT 1"
+2020-10-24 00:34:58.042 +01:00 [Information] Executed DbCommand ("299"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT OBJECT_ID(N'[__EFMigrationsHistory]');"
+2020-10-24 00:34:58.308 +01:00 [Information] Executed DbCommand ("262"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT 1"
+2020-10-24 00:34:58.577 +01:00 [Information] Executed DbCommand ("268"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT OBJECT_ID(N'[__EFMigrationsHistory]');"
+2020-10-24 00:34:58.862 +01:00 [Information] Executed DbCommand ("275"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT [MigrationId], [ProductVersion]
+FROM [__EFMigrationsHistory]
+ORDER BY [MigrationId];"
+2020-10-24 00:34:58.881 +01:00 [Information] No migrations were applied. The database is already up to date.
+2020-10-24 00:34:59.360 +01:00 [Information] Executed DbCommand ("290"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM [AspNetRoles] AS [a]) THEN CAST(1 AS bit)
+    ELSE CAST(0 AS bit)
+END"
+2020-10-24 00:34:59.406 +01:00 [Information] User profile is available. Using '"C:\Users\Oluwaseyi\AppData\Local\ASP.NET\DataProtection-Keys"' as key repository and Windows DPAPI to encrypt keys at rest.
+2020-10-24 00:34:59.705 +01:00 [Information] Now listening on: "http://localhost:5000"
+2020-10-24 00:34:59.706 +01:00 [Information] Application started. Press Ctrl+C to shut down.
+2020-10-24 00:34:59.706 +01:00 [Information] Hosting environment: "Development"
+2020-10-24 00:34:59.706 +01:00 [Information] Content root path: "C:\Users\Oluwaseyi\source\repos\TaxComputationSoftware"
+2020-10-24 00:35:53.106 +01:00 [Information] Request starting HTTP/1.1 POST http://localhost:5000/api/Authentication/login application/json 67
+2020-10-24 00:35:53.222 +01:00 [Information] "Bearer" was not authenticated. Failure message: "No SecurityTokenValidator available for token: <Bearer Token>"
+2020-10-24 00:35:53.223 +01:00 [Information] Executing endpoint '"TaxComputationAPI.Controllers.AuthenticationController.Login (TaxComputationAPI)"'
+2020-10-24 00:35:53.253 +01:00 [Information] Route matched with "{action = \"Login\", controller = \"Authentication\"}". Executing controller action with signature "System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(TaxComputationAPI.Dtos.UserForLoginDto)" on controller "TaxComputationAPI.Controllers.AuthenticationController" ("TaxComputationAPI").
+2020-10-24 00:36:00.069 +01:00 [Information] Entity Framework Core "3.1.8" initialized '"DataContext"' using provider '"Microsoft.EntityFrameworkCore.SqlServer"' with options: "None"
+2020-10-24 00:36:00.575 +01:00 [Information] Executed DbCommand ("419"ms) [Parameters=["@__normalizedUserName_0='?' (Size = 256)"], CommandType='Text', CommandTimeout='30']"
+""SELECT TOP(1) [a].[Id], [a].[AccessFailedCount], [a].[ConcurrencyStamp], [a].[DateCreated], [a].[Email], [a].[EmailConfirmed], [a].[FirstName], [a].[IsActive], [a].[LastName], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[PasswordHash], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[SecurityStamp], [a].[TwoFactorEnabled], [a].[UserName]
+FROM [AspNetUsers] AS [a]
+WHERE [a].[NormalizedUserName] = @__normalizedUserName_0"
+2020-10-24 00:36:03.418 +01:00 [Warning] Invalid password for user "10".
+2020-10-24 00:36:03.420 +01:00 [Warning] User "10" failed to provide the correct password.
+2020-10-24 00:36:17.196 +01:00 [Information] Executing ObjectResult, writing value of type '"<>f__AnonymousType0`1[[System.String[], System.Private.CoreLib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]"'.
+2020-10-24 00:36:17.256 +01:00 [Information] Executed action "TaxComputationAPI.Controllers.AuthenticationController.Login (TaxComputationAPI)" in 23999.3509ms
+2020-10-24 00:36:17.257 +01:00 [Information] Executed endpoint '"TaxComputationAPI.Controllers.AuthenticationController.Login (TaxComputationAPI)"'
+2020-10-24 00:36:17.261 +01:00 [Information] Request finished in 24158.4452ms 400 application/json; charset=utf-8
+2020-10-24 00:43:32.076 +01:00 [Warning] No type was specified for the decimal column '"Credit"' on entity type '"TrialBalance"'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values using 'HasColumnType()'.
+2020-10-24 00:43:32.129 +01:00 [Warning] No type was specified for the decimal column '"Debit"' on entity type '"TrialBalance"'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values using 'HasColumnType()'.
+2020-10-24 00:43:32.154 +01:00 [Information] Entity Framework Core "3.1.8" initialized '"DataContext"' using provider '"Microsoft.EntityFrameworkCore.SqlServer"' with options: "None"
+2020-10-24 00:43:34.245 +01:00 [Information] Executed DbCommand ("290"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT 1"
+2020-10-24 00:43:34.536 +01:00 [Information] Executed DbCommand ("284"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT OBJECT_ID(N'[__EFMigrationsHistory]');"
+2020-10-24 00:43:34.802 +01:00 [Information] Executed DbCommand ("262"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT 1"
+2020-10-24 00:43:35.069 +01:00 [Information] Executed DbCommand ("266"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT OBJECT_ID(N'[__EFMigrationsHistory]');"
+2020-10-24 00:43:35.359 +01:00 [Information] Executed DbCommand ("280"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT [MigrationId], [ProductVersion]
+FROM [__EFMigrationsHistory]
+ORDER BY [MigrationId];"
+2020-10-24 00:43:35.374 +01:00 [Information] No migrations were applied. The database is already up to date.
+2020-10-24 00:43:35.785 +01:00 [Information] Executed DbCommand ("281"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM [AspNetRoles] AS [a]) THEN CAST(1 AS bit)
+    ELSE CAST(0 AS bit)
+END"
+2020-10-24 00:43:35.841 +01:00 [Information] User profile is available. Using '"C:\Users\Oluwaseyi\AppData\Local\ASP.NET\DataProtection-Keys"' as key repository and Windows DPAPI to encrypt keys at rest.
+2020-10-24 00:43:36.186 +01:00 [Information] Now listening on: "http://localhost:5000"
+2020-10-24 00:43:36.186 +01:00 [Information] Application started. Press Ctrl+C to shut down.
+2020-10-24 00:43:36.186 +01:00 [Information] Hosting environment: "Development"
+2020-10-24 00:43:36.186 +01:00 [Information] Content root path: "C:\Users\Oluwaseyi\source\repos\TaxComputationSoftware"
+2020-10-24 00:43:50.636 +01:00 [Information] Request starting HTTP/1.1 POST http://localhost:5000/api/Authentication/login application/json 67
+2020-10-24 00:43:50.756 +01:00 [Information] "Bearer" was not authenticated. Failure message: "No SecurityTokenValidator available for token: <Bearer Token>"
+2020-10-24 00:43:50.758 +01:00 [Information] Executing endpoint '"TaxComputationAPI.Controllers.AuthenticationController.Login (TaxComputationAPI)"'
+2020-10-24 00:43:50.784 +01:00 [Information] Route matched with "{action = \"Login\", controller = \"Authentication\"}". Executing controller action with signature "System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(TaxComputationAPI.Dtos.UserForLoginDto)" on controller "TaxComputationAPI.Controllers.AuthenticationController" ("TaxComputationAPI").
+2020-10-24 00:43:55.923 +01:00 [Information] Entity Framework Core "3.1.8" initialized '"DataContext"' using provider '"Microsoft.EntityFrameworkCore.SqlServer"' with options: "None"
+2020-10-24 00:43:56.347 +01:00 [Information] Executed DbCommand ("321"ms) [Parameters=["@__normalizedUserName_0='?' (Size = 256)"], CommandType='Text', CommandTimeout='30']"
+""SELECT TOP(1) [a].[Id], [a].[AccessFailedCount], [a].[ConcurrencyStamp], [a].[DateCreated], [a].[Email], [a].[EmailConfirmed], [a].[FirstName], [a].[IsActive], [a].[LastName], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[PasswordHash], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[SecurityStamp], [a].[TwoFactorEnabled], [a].[UserName]
+FROM [AspNetUsers] AS [a]
+WHERE [a].[NormalizedUserName] = @__normalizedUserName_0"
+2020-10-24 00:43:56.463 +01:00 [Warning] Invalid password for user "10".
+2020-10-24 00:43:56.463 +01:00 [Warning] User "10" failed to provide the correct password.
+2020-10-24 00:43:56.468 +01:00 [Information] Executing ObjectResult, writing value of type '"<>f__AnonymousType0`1[[System.String[], System.Private.CoreLib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]"'.
+2020-10-24 00:43:56.529 +01:00 [Information] Executed action "TaxComputationAPI.Controllers.AuthenticationController.Login (TaxComputationAPI)" in 5735.3482ms
+2020-10-24 00:43:56.530 +01:00 [Information] Executed endpoint '"TaxComputationAPI.Controllers.AuthenticationController.Login (TaxComputationAPI)"'
+2020-10-24 00:43:56.536 +01:00 [Information] Request finished in 5901.7017ms 401 application/json; charset=utf-8
+2020-10-24 00:44:20.645 +01:00 [Information] Request starting HTTP/1.1 POST http://localhost:5000/api/Authentication/login application/json 66
+2020-10-24 00:44:20.649 +01:00 [Information] "Bearer" was not authenticated. Failure message: "No SecurityTokenValidator available for token: <Bearer Token>"
+2020-10-24 00:44:20.650 +01:00 [Information] Executing endpoint '"TaxComputationAPI.Controllers.AuthenticationController.Login (TaxComputationAPI)"'
+2020-10-24 00:44:20.650 +01:00 [Information] Route matched with "{action = \"Login\", controller = \"Authentication\"}". Executing controller action with signature "System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(TaxComputationAPI.Dtos.UserForLoginDto)" on controller "TaxComputationAPI.Controllers.AuthenticationController" ("TaxComputationAPI").
+2020-10-24 00:44:26.242 +01:00 [Information] Entity Framework Core "3.1.8" initialized '"DataContext"' using provider '"Microsoft.EntityFrameworkCore.SqlServer"' with options: "None"
+2020-10-24 00:44:26.540 +01:00 [Information] Executed DbCommand ("294"ms) [Parameters=["@__normalizedUserName_0='?' (Size = 256)"], CommandType='Text', CommandTimeout='30']"
+""SELECT TOP(1) [a].[Id], [a].[AccessFailedCount], [a].[ConcurrencyStamp], [a].[DateCreated], [a].[Email], [a].[EmailConfirmed], [a].[FirstName], [a].[IsActive], [a].[LastName], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[PasswordHash], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[SecurityStamp], [a].[TwoFactorEnabled], [a].[UserName]
+FROM [AspNetUsers] AS [a]
+WHERE [a].[NormalizedUserName] = @__normalizedUserName_0"
+2020-10-24 00:44:26.895 +01:00 [Information] Executed DbCommand ("273"ms) [Parameters=["@__userId_0='?' (DbType = Int32)"], CommandType='Text', CommandTimeout='30']"
+""SELECT [a0].[Name]
+FROM [AspNetUserRoles] AS [a]
+INNER JOIN [AspNetRoles] AS [a0] ON [a].[RoleId] = [a0].[Id]
+WHERE [a].[UserId] = @__userId_0"
+2020-10-24 00:44:26.928 +01:00 [Information] Executing ObjectResult, writing value of type '"<>f__AnonymousType1`2[[System.String, System.Private.CoreLib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[TaxComputationAPI.Dtos.UserForListDto, TaxComputationAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"'.
+2020-10-24 00:44:26.934 +01:00 [Information] Executed action "TaxComputationAPI.Controllers.AuthenticationController.Login (TaxComputationAPI)" in 6284.0461ms
+2020-10-24 00:44:26.934 +01:00 [Information] Executed endpoint '"TaxComputationAPI.Controllers.AuthenticationController.Login (TaxComputationAPI)"'
+2020-10-24 00:44:26.935 +01:00 [Information] Request finished in 6289.2605ms 200 application/json; charset=utf-8
+2020-10-24 00:46:26.433 +01:00 [Warning] No type was specified for the decimal column '"Credit"' on entity type '"TrialBalance"'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values using 'HasColumnType()'.
+2020-10-24 00:46:26.466 +01:00 [Warning] No type was specified for the decimal column '"Debit"' on entity type '"TrialBalance"'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values using 'HasColumnType()'.
+2020-10-24 00:46:26.492 +01:00 [Information] Entity Framework Core "3.1.8" initialized '"DataContext"' using provider '"Microsoft.EntityFrameworkCore.SqlServer"' with options: "None"
+2020-10-24 00:46:28.538 +01:00 [Information] Executed DbCommand ("279"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT 1"
+2020-10-24 00:46:28.847 +01:00 [Information] Executed DbCommand ("298"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT OBJECT_ID(N'[__EFMigrationsHistory]');"
+2020-10-24 00:46:29.112 +01:00 [Information] Executed DbCommand ("261"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT 1"
+2020-10-24 00:46:29.386 +01:00 [Information] Executed DbCommand ("272"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT OBJECT_ID(N'[__EFMigrationsHistory]');"
+2020-10-24 00:46:29.669 +01:00 [Information] Executed DbCommand ("272"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT [MigrationId], [ProductVersion]
+FROM [__EFMigrationsHistory]
+ORDER BY [MigrationId];"
+2020-10-24 00:46:29.685 +01:00 [Information] No migrations were applied. The database is already up to date.
+2020-10-24 00:46:30.116 +01:00 [Information] Executed DbCommand ("286"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM [AspNetRoles] AS [a]) THEN CAST(1 AS bit)
+    ELSE CAST(0 AS bit)
+END"
+2020-10-24 00:46:30.170 +01:00 [Information] User profile is available. Using '"C:\Users\Oluwaseyi\AppData\Local\ASP.NET\DataProtection-Keys"' as key repository and Windows DPAPI to encrypt keys at rest.
+2020-10-24 00:46:30.445 +01:00 [Information] Now listening on: "http://localhost:5000"
+2020-10-24 00:46:30.445 +01:00 [Information] Application started. Press Ctrl+C to shut down.
+2020-10-24 00:46:30.445 +01:00 [Information] Hosting environment: "Development"
+2020-10-24 00:46:30.445 +01:00 [Information] Content root path: "C:\Users\Oluwaseyi\source\repos\TaxComputationSoftware"
+2020-10-24 00:46:40.765 +01:00 [Information] Request starting HTTP/1.1 POST http://localhost:5000/api/Authentication/login application/json 60
+2020-10-24 00:46:40.869 +01:00 [Information] "Bearer" was not authenticated. Failure message: "No SecurityTokenValidator available for token: <Bearer Token>"
+2020-10-24 00:46:40.871 +01:00 [Information] Executing endpoint '"TaxComputationAPI.Controllers.AuthenticationController.Login (TaxComputationAPI)"'
+2020-10-24 00:46:40.900 +01:00 [Information] Route matched with "{action = \"Login\", controller = \"Authentication\"}". Executing controller action with signature "System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(TaxComputationAPI.Dtos.UserForLoginDto)" on controller "TaxComputationAPI.Controllers.AuthenticationController" ("TaxComputationAPI").
+2020-10-24 00:46:46.309 +01:00 [Information] Entity Framework Core "3.1.8" initialized '"DataContext"' using provider '"Microsoft.EntityFrameworkCore.SqlServer"' with options: "None"
+2020-10-24 00:46:46.752 +01:00 [Information] Executed DbCommand ("367"ms) [Parameters=["@__normalizedUserName_0='?' (Size = 256)"], CommandType='Text', CommandTimeout='30']"
+""SELECT TOP(1) [a].[Id], [a].[AccessFailedCount], [a].[ConcurrencyStamp], [a].[DateCreated], [a].[Email], [a].[EmailConfirmed], [a].[FirstName], [a].[IsActive], [a].[LastName], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[PasswordHash], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[SecurityStamp], [a].[TwoFactorEnabled], [a].[UserName]
+FROM [AspNetUsers] AS [a]
+WHERE [a].[NormalizedUserName] = @__normalizedUserName_0"
+2020-10-24 00:46:46.777 +01:00 [Information] Executing ObjectResult, writing value of type '"<>f__AnonymousType0`1[[System.String[], System.Private.CoreLib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]"'.
+2020-10-24 00:46:46.827 +01:00 [Information] Executed action "TaxComputationAPI.Controllers.AuthenticationController.Login (TaxComputationAPI)" in 5923.8859ms
+2020-10-24 00:46:46.828 +01:00 [Information] Executed endpoint '"TaxComputationAPI.Controllers.AuthenticationController.Login (TaxComputationAPI)"'
+2020-10-24 00:46:46.833 +01:00 [Information] Request finished in 6069.8657ms 404 application/json; charset=utf-8
+2020-10-24 00:50:33.420 +01:00 [Warning] No type was specified for the decimal column '"Credit"' on entity type '"TrialBalance"'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values using 'HasColumnType()'.
+2020-10-24 00:50:33.456 +01:00 [Warning] No type was specified for the decimal column '"Debit"' on entity type '"TrialBalance"'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values using 'HasColumnType()'.
+2020-10-24 00:50:33.492 +01:00 [Information] Entity Framework Core "3.1.8" initialized '"DataContext"' using provider '"Microsoft.EntityFrameworkCore.SqlServer"' with options: "None"
+2020-10-24 00:50:40.826 +01:00 [Information] Executed DbCommand ("1,708"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT 1"
+2020-10-24 00:50:42.093 +01:00 [Information] Executed DbCommand ("1,257"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT OBJECT_ID(N'[__EFMigrationsHistory]');"
+2020-10-24 00:50:42.635 +01:00 [Information] Executed DbCommand ("535"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT 1"
+2020-10-24 00:50:43.086 +01:00 [Information] Executed DbCommand ("447"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT OBJECT_ID(N'[__EFMigrationsHistory]');"
+2020-10-24 00:50:43.382 +01:00 [Information] Executed DbCommand ("278"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT [MigrationId], [ProductVersion]
+FROM [__EFMigrationsHistory]
+ORDER BY [MigrationId];"
+2020-10-24 00:50:43.403 +01:00 [Information] No migrations were applied. The database is already up to date.
+2020-10-24 00:50:44.387 +01:00 [Information] Executed DbCommand ("839"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM [AspNetRoles] AS [a]) THEN CAST(1 AS bit)
+    ELSE CAST(0 AS bit)
+END"
+2020-10-24 00:50:44.452 +01:00 [Information] User profile is available. Using '"C:\Users\Oluwaseyi\AppData\Local\ASP.NET\DataProtection-Keys"' as key repository and Windows DPAPI to encrypt keys at rest.
+2020-10-24 00:50:44.930 +01:00 [Information] Now listening on: "http://localhost:5000"
+2020-10-24 00:50:44.930 +01:00 [Information] Application started. Press Ctrl+C to shut down.
+2020-10-24 00:50:44.930 +01:00 [Information] Hosting environment: "Development"
+2020-10-24 00:50:44.930 +01:00 [Information] Content root path: "C:\Users\Oluwaseyi\source\repos\TaxComputationSoftware"
+2020-10-24 00:50:44.986 +01:00 [Information] Request starting HTTP/1.1 POST http://localhost:5000/api/Authentication/login application/json 60
+2020-10-24 00:50:45.103 +01:00 [Information] "Bearer" was not authenticated. Failure message: "No SecurityTokenValidator available for token: <Bearer Token>"
+2020-10-24 00:50:45.104 +01:00 [Information] Executing endpoint '"TaxComputationAPI.Controllers.AuthenticationController.Login (TaxComputationAPI)"'
+2020-10-24 00:50:45.136 +01:00 [Information] Route matched with "{action = \"Login\", controller = \"Authentication\"}". Executing controller action with signature "System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(TaxComputationAPI.Dtos.UserForLoginDto)" on controller "TaxComputationAPI.Controllers.AuthenticationController" ("TaxComputationAPI").
+2020-10-24 00:50:45.479 +01:00 [Information] Executing ObjectResult, writing value of type '"Microsoft.AspNetCore.Mvc.ValidationProblemDetails"'.
+2020-10-24 00:50:45.546 +01:00 [Information] Executed action "TaxComputationAPI.Controllers.AuthenticationController.Login (TaxComputationAPI)" in 405.6694ms
+2020-10-24 00:50:45.546 +01:00 [Information] Executed endpoint '"TaxComputationAPI.Controllers.AuthenticationController.Login (TaxComputationAPI)"'
+2020-10-24 00:50:45.549 +01:00 [Information] Request finished in 565.3421ms 400 application/problem+json; charset=utf-8
+2020-10-24 00:52:11.727 +01:00 [Warning] No type was specified for the decimal column '"Credit"' on entity type '"TrialBalance"'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values using 'HasColumnType()'.
+2020-10-24 00:52:11.770 +01:00 [Warning] No type was specified for the decimal column '"Debit"' on entity type '"TrialBalance"'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values using 'HasColumnType()'.
+2020-10-24 00:52:11.804 +01:00 [Information] Entity Framework Core "3.1.8" initialized '"DataContext"' using provider '"Microsoft.EntityFrameworkCore.SqlServer"' with options: "None"
+2020-10-24 00:52:14.482 +01:00 [Information] Executed DbCommand ("861"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT 1"
+2020-10-24 00:52:15.338 +01:00 [Information] Executed DbCommand ("839"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT OBJECT_ID(N'[__EFMigrationsHistory]');"
+2020-10-24 00:52:15.799 +01:00 [Information] Executed DbCommand ("455"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT 1"
+2020-10-24 00:52:16.103 +01:00 [Information] Executed DbCommand ("300"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT OBJECT_ID(N'[__EFMigrationsHistory]');"
+2020-10-24 00:52:16.411 +01:00 [Information] Executed DbCommand ("291"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT [MigrationId], [ProductVersion]
+FROM [__EFMigrationsHistory]
+ORDER BY [MigrationId];"
+2020-10-24 00:52:16.426 +01:00 [Information] No migrations were applied. The database is already up to date.
+2020-10-24 00:52:16.903 +01:00 [Information] Executed DbCommand ("298"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM [AspNetRoles] AS [a]) THEN CAST(1 AS bit)
+    ELSE CAST(0 AS bit)
+END"
+2020-10-24 00:52:16.952 +01:00 [Information] User profile is available. Using '"C:\Users\Oluwaseyi\AppData\Local\ASP.NET\DataProtection-Keys"' as key repository and Windows DPAPI to encrypt keys at rest.
+2020-10-24 00:52:17.235 +01:00 [Information] Now listening on: "http://localhost:5000"
+2020-10-24 00:52:17.235 +01:00 [Information] Application started. Press Ctrl+C to shut down.
+2020-10-24 00:52:17.235 +01:00 [Information] Hosting environment: "Development"
+2020-10-24 00:52:17.235 +01:00 [Information] Content root path: "C:\Users\Oluwaseyi\source\repos\TaxComputationSoftware"
+2020-10-24 00:52:30.043 +01:00 [Information] Request starting HTTP/1.1 POST http://localhost:5000/api/Authentication/login application/json 60
+2020-10-24 00:52:30.148 +01:00 [Information] "Bearer" was not authenticated. Failure message: "No SecurityTokenValidator available for token: <Bearer Token>"
+2020-10-24 00:52:30.150 +01:00 [Information] Executing endpoint '"TaxComputationAPI.Controllers.AuthenticationController.Login (TaxComputationAPI)"'
+2020-10-24 00:52:30.177 +01:00 [Information] Route matched with "{action = \"Login\", controller = \"Authentication\"}". Executing controller action with signature "System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(TaxComputationAPI.Dtos.UserForLoginDto)" on controller "TaxComputationAPI.Controllers.AuthenticationController" ("TaxComputationAPI").
+2020-10-24 00:52:30.495 +01:00 [Information] Executing ObjectResult, writing value of type '"Microsoft.AspNetCore.Mvc.ValidationProblemDetails"'.
+2020-10-24 00:52:30.561 +01:00 [Information] Executed action "TaxComputationAPI.Controllers.AuthenticationController.Login (TaxComputationAPI)" in 379.2684ms
+2020-10-24 00:52:30.561 +01:00 [Information] Executed endpoint '"TaxComputationAPI.Controllers.AuthenticationController.Login (TaxComputationAPI)"'
+2020-10-24 00:52:30.564 +01:00 [Information] Request finished in 525.5218ms 400 application/problem+json; charset=utf-8
+2020-10-24 00:52:35.550 +01:00 [Information] Request starting HTTP/1.1 POST http://localhost:5000/api/Authentication/login application/json 60
+2020-10-24 00:52:35.555 +01:00 [Information] "Bearer" was not authenticated. Failure message: "No SecurityTokenValidator available for token: <Bearer Token>"
+2020-10-24 00:52:35.555 +01:00 [Information] Executing endpoint '"TaxComputationAPI.Controllers.AuthenticationController.Login (TaxComputationAPI)"'
+2020-10-24 00:52:35.555 +01:00 [Information] Route matched with "{action = \"Login\", controller = \"Authentication\"}". Executing controller action with signature "System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(TaxComputationAPI.Dtos.UserForLoginDto)" on controller "TaxComputationAPI.Controllers.AuthenticationController" ("TaxComputationAPI").
+2020-10-24 00:52:35.569 +01:00 [Information] Executing ObjectResult, writing value of type '"Microsoft.AspNetCore.Mvc.ValidationProblemDetails"'.
+2020-10-24 00:52:35.570 +01:00 [Information] Executed action "TaxComputationAPI.Controllers.AuthenticationController.Login (TaxComputationAPI)" in 14.1713ms
+2020-10-24 00:52:35.570 +01:00 [Information] Executed endpoint '"TaxComputationAPI.Controllers.AuthenticationController.Login (TaxComputationAPI)"'
+2020-10-24 00:52:35.570 +01:00 [Information] Request finished in 19.7483ms 400 application/problem+json; charset=utf-8
+2020-10-24 00:53:04.467 +01:00 [Warning] No type was specified for the decimal column '"Credit"' on entity type '"TrialBalance"'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values using 'HasColumnType()'.
+2020-10-24 00:53:04.500 +01:00 [Warning] No type was specified for the decimal column '"Debit"' on entity type '"TrialBalance"'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values using 'HasColumnType()'.
+2020-10-24 00:53:04.531 +01:00 [Information] Entity Framework Core "3.1.8" initialized '"DataContext"' using provider '"Microsoft.EntityFrameworkCore.SqlServer"' with options: "None"
+2020-10-24 00:53:06.681 +01:00 [Information] Executed DbCommand ("344"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT 1"
+2020-10-24 00:53:06.979 +01:00 [Information] Executed DbCommand ("289"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT OBJECT_ID(N'[__EFMigrationsHistory]');"
+2020-10-24 00:53:07.243 +01:00 [Information] Executed DbCommand ("261"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT 1"
+2020-10-24 00:53:07.557 +01:00 [Information] Executed DbCommand ("313"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT OBJECT_ID(N'[__EFMigrationsHistory]');"
+2020-10-24 00:53:07.860 +01:00 [Information] Executed DbCommand ("293"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT [MigrationId], [ProductVersion]
+FROM [__EFMigrationsHistory]
+ORDER BY [MigrationId];"
+2020-10-24 00:53:07.875 +01:00 [Information] No migrations were applied. The database is already up to date.
+2020-10-24 00:53:08.377 +01:00 [Information] Executed DbCommand ("285"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM [AspNetRoles] AS [a]) THEN CAST(1 AS bit)
+    ELSE CAST(0 AS bit)
+END"
+2020-10-24 00:53:08.436 +01:00 [Information] User profile is available. Using '"C:\Users\Oluwaseyi\AppData\Local\ASP.NET\DataProtection-Keys"' as key repository and Windows DPAPI to encrypt keys at rest.
+2020-10-24 00:53:08.806 +01:00 [Information] Now listening on: "http://localhost:5000"
+2020-10-24 00:53:08.806 +01:00 [Information] Application started. Press Ctrl+C to shut down.
+2020-10-24 00:53:08.806 +01:00 [Information] Hosting environment: "Development"
+2020-10-24 00:53:08.806 +01:00 [Information] Content root path: "C:\Users\Oluwaseyi\source\repos\TaxComputationSoftware"
+2020-10-24 00:53:09.814 +01:00 [Information] Request starting HTTP/1.1 POST http://localhost:5000/api/Authentication/login application/json 60
+2020-10-24 00:53:09.916 +01:00 [Information] "Bearer" was not authenticated. Failure message: "No SecurityTokenValidator available for token: <Bearer Token>"
+2020-10-24 00:53:09.917 +01:00 [Information] Executing endpoint '"TaxComputationAPI.Controllers.AuthenticationController.Login (TaxComputationAPI)"'
+2020-10-24 00:53:09.945 +01:00 [Information] Route matched with "{action = \"Login\", controller = \"Authentication\"}". Executing controller action with signature "System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(TaxComputationAPI.Dtos.UserForLoginDto)" on controller "TaxComputationAPI.Controllers.AuthenticationController" ("TaxComputationAPI").
+2020-10-24 00:53:10.259 +01:00 [Information] Executing ObjectResult, writing value of type '"Microsoft.AspNetCore.Mvc.ValidationProblemDetails"'.
+2020-10-24 00:53:10.332 +01:00 [Information] Executed action "TaxComputationAPI.Controllers.AuthenticationController.Login (TaxComputationAPI)" in 382.9704ms
+2020-10-24 00:53:10.332 +01:00 [Information] Executed endpoint '"TaxComputationAPI.Controllers.AuthenticationController.Login (TaxComputationAPI)"'
+2020-10-24 00:53:10.335 +01:00 [Information] Request finished in 522.4952ms 400 application/problem+json; charset=utf-8
+2020-10-24 00:53:11.947 +01:00 [Information] Request starting HTTP/1.1 POST http://localhost:5000/api/Authentication/login application/json 60
+2020-10-24 00:53:11.955 +01:00 [Information] "Bearer" was not authenticated. Failure message: "No SecurityTokenValidator available for token: <Bearer Token>"
+2020-10-24 00:53:11.955 +01:00 [Information] Executing endpoint '"TaxComputationAPI.Controllers.AuthenticationController.Login (TaxComputationAPI)"'
+2020-10-24 00:53:11.956 +01:00 [Information] Route matched with "{action = \"Login\", controller = \"Authentication\"}". Executing controller action with signature "System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(TaxComputationAPI.Dtos.UserForLoginDto)" on controller "TaxComputationAPI.Controllers.AuthenticationController" ("TaxComputationAPI").
+2020-10-24 00:53:11.970 +01:00 [Information] Executing ObjectResult, writing value of type '"Microsoft.AspNetCore.Mvc.ValidationProblemDetails"'.
+2020-10-24 00:53:11.971 +01:00 [Information] Executed action "TaxComputationAPI.Controllers.AuthenticationController.Login (TaxComputationAPI)" in 14.6302ms
+2020-10-24 00:53:11.971 +01:00 [Information] Executed endpoint '"TaxComputationAPI.Controllers.AuthenticationController.Login (TaxComputationAPI)"'
+2020-10-24 00:53:11.971 +01:00 [Information] Request finished in 24.0457ms 400 application/problem+json; charset=utf-8
+2020-10-24 00:53:23.880 +01:00 [Information] Request starting HTTP/1.1 POST http://localhost:5000/api/Authentication/login application/json 66
+2020-10-24 00:53:23.883 +01:00 [Information] "Bearer" was not authenticated. Failure message: "No SecurityTokenValidator available for token: <Bearer Token>"
+2020-10-24 00:53:23.883 +01:00 [Information] Executing endpoint '"TaxComputationAPI.Controllers.AuthenticationController.Login (TaxComputationAPI)"'
+2020-10-24 00:53:23.884 +01:00 [Information] Route matched with "{action = \"Login\", controller = \"Authentication\"}". Executing controller action with signature "System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(TaxComputationAPI.Dtos.UserForLoginDto)" on controller "TaxComputationAPI.Controllers.AuthenticationController" ("TaxComputationAPI").
+2020-10-24 00:53:23.897 +01:00 [Information] Entity Framework Core "3.1.8" initialized '"DataContext"' using provider '"Microsoft.EntityFrameworkCore.SqlServer"' with options: "None"
+2020-10-24 00:53:24.363 +01:00 [Information] Executed DbCommand ("386"ms) [Parameters=["@__normalizedUserName_0='?' (Size = 256)"], CommandType='Text', CommandTimeout='30']"
+""SELECT TOP(1) [a].[Id], [a].[AccessFailedCount], [a].[ConcurrencyStamp], [a].[DateCreated], [a].[Email], [a].[EmailConfirmed], [a].[FirstName], [a].[IsActive], [a].[LastName], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[PasswordHash], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[SecurityStamp], [a].[TwoFactorEnabled], [a].[UserName]
+FROM [AspNetUsers] AS [a]
+WHERE [a].[NormalizedUserName] = @__normalizedUserName_0"
+2020-10-24 00:53:24.845 +01:00 [Information] Executed DbCommand ("278"ms) [Parameters=["@__userId_0='?' (DbType = Int32)"], CommandType='Text', CommandTimeout='30']"
+""SELECT [a0].[Name]
+FROM [AspNetUserRoles] AS [a]
+INNER JOIN [AspNetRoles] AS [a0] ON [a].[RoleId] = [a0].[Id]
+WHERE [a].[UserId] = @__userId_0"
+2020-10-24 00:53:24.908 +01:00 [Information] Executing ObjectResult, writing value of type '"<>f__AnonymousType1`2[[System.String, System.Private.CoreLib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[TaxComputationAPI.Dtos.UserForListDto, TaxComputationAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"'.
+2020-10-24 00:53:24.917 +01:00 [Information] Executed action "TaxComputationAPI.Controllers.AuthenticationController.Login (TaxComputationAPI)" in 1033.3597ms
+2020-10-24 00:53:24.918 +01:00 [Information] Executed endpoint '"TaxComputationAPI.Controllers.AuthenticationController.Login (TaxComputationAPI)"'
+2020-10-24 00:53:24.922 +01:00 [Information] Request finished in 1042.22ms 200 application/json; charset=utf-8
+2020-10-24 00:53:29.973 +01:00 [Information] Request starting HTTP/1.1 POST http://localhost:5000/api/Authentication/login application/json 67
+2020-10-24 00:53:29.974 +01:00 [Information] "Bearer" was not authenticated. Failure message: "No SecurityTokenValidator available for token: <Bearer Token>"
+2020-10-24 00:53:29.975 +01:00 [Information] Executing endpoint '"TaxComputationAPI.Controllers.AuthenticationController.Login (TaxComputationAPI)"'
+2020-10-24 00:53:29.975 +01:00 [Information] Route matched with "{action = \"Login\", controller = \"Authentication\"}". Executing controller action with signature "System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(TaxComputationAPI.Dtos.UserForLoginDto)" on controller "TaxComputationAPI.Controllers.AuthenticationController" ("TaxComputationAPI").
+2020-10-24 00:53:30.021 +01:00 [Information] Entity Framework Core "3.1.8" initialized '"DataContext"' using provider '"Microsoft.EntityFrameworkCore.SqlServer"' with options: "None"
+2020-10-24 00:53:30.355 +01:00 [Information] Executed DbCommand ("328"ms) [Parameters=["@__normalizedUserName_0='?' (Size = 256)"], CommandType='Text', CommandTimeout='30']"
+""SELECT TOP(1) [a].[Id], [a].[AccessFailedCount], [a].[ConcurrencyStamp], [a].[DateCreated], [a].[Email], [a].[EmailConfirmed], [a].[FirstName], [a].[IsActive], [a].[LastName], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[PasswordHash], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[SecurityStamp], [a].[TwoFactorEnabled], [a].[UserName]
+FROM [AspNetUsers] AS [a]
+WHERE [a].[NormalizedUserName] = @__normalizedUserName_0"
+2020-10-24 00:53:30.372 +01:00 [Warning] Invalid password for user "10".
+2020-10-24 00:53:30.372 +01:00 [Warning] User "10" failed to provide the correct password.
+2020-10-24 00:53:30.373 +01:00 [Information] Executing ObjectResult, writing value of type '"<>f__AnonymousType0`1[[System.String[], System.Private.CoreLib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]"'.
+2020-10-24 00:53:30.376 +01:00 [Information] Executed action "TaxComputationAPI.Controllers.AuthenticationController.Login (TaxComputationAPI)" in 400.6322ms
+2020-10-24 00:53:30.376 +01:00 [Information] Executed endpoint '"TaxComputationAPI.Controllers.AuthenticationController.Login (TaxComputationAPI)"'
+2020-10-24 00:53:30.377 +01:00 [Information] Request finished in 403.8681ms 401 application/json; charset=utf-8
