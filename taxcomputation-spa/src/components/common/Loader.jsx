@@ -3,7 +3,7 @@ import Layout from "../layout";
 
 const Loader = ({ title }) => {
   return (
-    <Layout title={title}>
+    <Layout title={title} loading={true}>
       <div
         className="p-d-flex p-flex-column p-jc-center p-ai-center"
         style={{ height: "calc(100vh - 120px)" }}>

@@ -4,16 +4,16 @@ import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
 import { Toast } from "primereact/toast";
 import { useForm, Controller } from "react-hook-form";
-import { login } from "../apis/Authentication";
+import { resetPassword } from "../apis/Authentication";
 import constants from "../constants";
 import { useAuth } from "../store/AuthStore";
 import { Link, Redirect, useRouter, useRouterActions } from "react-resource-router";
 import PasswordInput from "../components/common/PasswordInput";
 
-const Login = () => {
+const ResetPassword = () => {
   const [routerState] = useRouter();
   const { errors, handleSubmit, control } = useForm();
-  const [{ isAuthenticated }, { onLoginSuccess }] = useAuth();
+  const [{ isAuthenticated }] = useAuth();
   const { push } = useRouterActions();
   const [loading, setLoading] = React.useState(false);
   const toast = React.useRef();
@@ -39,27 +39,18 @@ const Login = () => {
     if (loading) return;
 
     setLoading(true);
-    const { email, password } = data;
+    const { token, newPassword } = data;
     try {
-      const {
-        token,
-        user: { id, firstName, lastName }
-      } = await login({ email, password });
-      // store user details in global state
-      onLoginSuccess({ id, token, email, firstName, lastName });
-      push(constants.routes.dashboard);
+      const { message } = await resetPassword({ token, newPassword });
+      push({ pathname: constants.routes.login, state: message });
     } catch (error) {
       setLoading(false);
       if (error.response) {
         const {
-          data: { errors }
+          data: { message }
         } = error.response;
-        // display all errors as toast notification
-        errors.map(err =>
-          toast.current.show(
-            toastCallback({ severity: "error", summary: "Login Error", detail: err })
-          )
-        );
+        // display error as toast notification
+        toast.current.show(toastCallback({ severity: "error", summary: "Error", detail: message }));
       } else {
         // network errors
         toast.current.show(
@@ -92,48 +83,50 @@ const Login = () => {
         <form className="p-d-flex p-flex-column" onSubmit={handleSubmit(onSubmit)}>
           <div style={{ marginBottom: 15 }}>
             <Controller
-              name="email"
+              name="token"
               control={control}
               rules={{ required: true }}
               defaultValue=""
               render={props => (
                 <InputText
                   style={{ marginBottom: 5, width: "100%" }}
-                  placeholder="Email"
+                  placeholder="Token"
+                  maxLength={4}
+                  keyfilter="pint"
                   value={props.value}
                   onChange={e => props.onChange(e.target.value)}
                 />
               )}
             />
-            {errors.email && <span style={{ fontSize: 12, color: "red" }}>Email is required</span>}
+            {errors.token && <span style={{ fontSize: 12, color: "red" }}>Token is required</span>}
           </div>
           <div style={{ marginBottom: 15 }}>
             <Controller
-              name="password"
+              name="newPassword"
               control={control}
               rules={{ required: true }}
               defaultValue=""
               render={props => (
                 <PasswordInput
-                  placeholder="Password"
+                  placeholder="New Password"
                   value={props.value}
                   onChange={e => props.onChange(e.target.value)}
                 />
               )}
             />
-            {errors.password && (
-              <span style={{ fontSize: 12, color: "red" }}>Password is required</span>
+            {errors.newPassword && (
+              <span style={{ fontSize: 12, color: "red" }}>New Password is required</span>
             )}
           </div>
           <Button
             type="submit"
-            label={!loading ? "Login" : null}
+            label={!loading ? "Reset Password" : null}
             icon={loading ? "pi pi-spin pi-spinner" : null}
             style={{ width: "100%" }}
           />
         </form>
-        <Link href={constants.routes.forgot_password} className="auth-link">
-          <p style={{ marginBottom: 0, marginTop: 20, fontSize: 14 }}>Forgot Password</p>
+        <Link href={constants.routes.login} className="auth-link">
+          <p style={{ marginBottom: 0, marginTop: 20, fontSize: 14 }}>Back to login</p>
         </Link>
       </Card>
       <Toast ref={el => (toast.current = el)} />
@@ -141,4 +134,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default ResetPassword;

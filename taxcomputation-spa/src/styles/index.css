@@ -21,6 +21,27 @@ body {
   margin: 0px 0px 10px 0px;
 }
 
+.auth-link {
+  text-decoration: none;
+  color: inherit;
+  text-align: center;
+  transition: color 0.5s;
+}
+
+.back-to-app-link {
+  margin-bottom: 0;
+  margin-top: 20;
+  font-size: 14;
+  text-align: center;
+  transition: color 0.5s;
+  cursor: pointer;
+}
+
+.auth-link:hover,
+.back-to-app-link:hover {
+  color: #2196f3;
+}
+
 .sidebar-link {
   text-decoration: none;
   color: inherit;
@@ -55,4 +76,15 @@ body {
 
 .settings-item:hover {
   background-color: #eee;
+}
+
+.overlay {
+  background-color: rgba(0, 0, 0, 0.4);
+  pointer-events: auto;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1000;
 }
