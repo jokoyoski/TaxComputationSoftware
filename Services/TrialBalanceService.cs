@@ -24,9 +24,9 @@ namespace TaxComputationAPI.Services
             _logger = logger;
             _utilitiesRepository=utilitiesRepository;
         }
-        public async Task UpdateTrialBalance(int trialBalanceId, string mappedTo)
+        public async Task UpdateTrialBalance(int trialBalanceId, string mappedTo,bool isDelete)
         {
-            _trialBalancerepository.UpdateTrialBalance(trialBalanceId, mappedTo);
+            _trialBalancerepository.UpdateTrialBalance(trialBalanceId, mappedTo,isDelete);
         }
 
         public async Task<List<TrialBalance>> GetTrialBalance(int companyId, int yearId)
@@ -95,7 +95,8 @@ namespace TaxComputationAPI.Services
                 {
                     CompanyId = upload.CompanyId,
                     YearId = upload.YearId,
-                    DateCreated = DateTime.UtcNow
+                    DateCreated = DateTime.UtcNow,
+                
                 };
 
 
@@ -126,6 +127,8 @@ namespace TaxComputationAPI.Services
                 trialBalance.IsCheck = false;
                 trialBalance.MappedTo = string.Empty;
                 trialBalance.TrackId = trackId;
+                trialBalance.IsCheck=false;
+                trialBalance.IsRemoved=false;
 
                 try
                 {

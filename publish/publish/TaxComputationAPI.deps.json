@@ -34,10 +34,7 @@
           "Microsoft.EntityFrameworkCore.SqlServer": "3.1.8",
           "Microsoft.EntityFrameworkCore.Tools": "3.1.8",
           "Microsoft.Extensions.Logging.Console": "3.1.9",
-<<<<<<< HEAD
           "SendGrid": "9.21.0",
-=======
->>>>>>> 60cfebf7bf4916f2bc6e96612980e5cc32c51022
           "Serilog.AspNetCore": "3.4.0",
           "Serilog.Extensions.Logging": "3.0.1",
           "Serilog.Sinks.File": "4.1.0",
@@ -799,7 +796,6 @@
         }
       },
       "Microsoft.Extensions.Logging.Configuration/3.1.9": {
-<<<<<<< HEAD
         "dependencies": {
           "Microsoft.Extensions.Logging": "3.1.9",
           "Microsoft.Extensions.Options.ConfigurationExtensions": "3.1.9"
@@ -832,40 +828,6 @@
       },
       "Microsoft.Extensions.Options/3.1.9": {
         "dependencies": {
-=======
-        "dependencies": {
-          "Microsoft.Extensions.Logging": "3.1.9",
-          "Microsoft.Extensions.Options.ConfigurationExtensions": "3.1.9"
-        },
-        "runtime": {
-          "lib/netcoreapp3.1/Microsoft.Extensions.Logging.Configuration.dll": {
-            "assemblyVersion": "3.1.9.0",
-            "fileVersion": "3.100.920.47302"
-          }
-        },
-        "compile": {
-          "lib/netcoreapp3.1/Microsoft.Extensions.Logging.Configuration.dll": {}
-        }
-      },
-      "Microsoft.Extensions.Logging.Console/3.1.9": {
-        "dependencies": {
-          "Microsoft.Extensions.Configuration.Abstractions": "3.1.9",
-          "Microsoft.Extensions.Logging": "3.1.9",
-          "Microsoft.Extensions.Logging.Configuration": "3.1.9"
-        },
-        "runtime": {
-          "lib/netcoreapp3.1/Microsoft.Extensions.Logging.Console.dll": {
-            "assemblyVersion": "3.1.9.0",
-            "fileVersion": "3.100.920.47302"
-          }
-        },
-        "compile": {
-          "lib/netcoreapp3.1/Microsoft.Extensions.Logging.Console.dll": {}
-        }
-      },
-      "Microsoft.Extensions.Options/3.1.9": {
-        "dependencies": {
->>>>>>> 60cfebf7bf4916f2bc6e96612980e5cc32c51022
           "Microsoft.Extensions.DependencyInjection.Abstractions": "3.1.9",
           "Microsoft.Extensions.Primitives": "3.1.9"
         },
@@ -1087,7 +1049,6 @@
           }
         }
       },
-<<<<<<< HEAD
       "SendGrid/9.21.0": {
         "dependencies": {
           "Newtonsoft.Json": "12.0.2",
@@ -1103,8 +1064,6 @@
           "lib/netstandard2.0/SendGrid.dll": {}
         }
       },
-=======
->>>>>>> 60cfebf7bf4916f2bc6e96612980e5cc32c51022
       "Serilog/2.9.0": {
         "runtime": {
           "lib/netstandard2.0/Serilog.dll": {
@@ -1268,7 +1227,6 @@
           "lib/netstandard1.3/Serilog.Sinks.RollingFile.dll": {}
         }
       },
-<<<<<<< HEAD
       "starkbank-ecdsa/1.2.0": {
         "runtime": {
           "lib/netstandard2.1/StarkbankEcdsa.dll": {
@@ -1280,8 +1238,6 @@
           "lib/netstandard2.1/StarkbankEcdsa.dll": {}
         }
       },
-=======
->>>>>>> 60cfebf7bf4916f2bc6e96612980e5cc32c51022
       "Swashbuckle.AspNetCore/5.6.3": {
         "dependencies": {
           "Microsoft.Extensions.ApiDescription.Server": "3.0.0",
@@ -3731,7 +3687,6 @@
       "hashPath": "microsoft.extensions.caching.memory.3.1.8.nupkg.sha512"
     },
     "Microsoft.Extensions.Configuration/3.1.9": {
-<<<<<<< HEAD
       "type": "package",
       "serviceable": true,
       "sha512": "sha512-lqdkOGNeTMKG981Q7yWGlRiFbIlsRwTlMMiybT+WOzUCFBS/wc25tZgh7Wm/uRoBbWefgvokzmnea7ZjmFedmA==",
@@ -3776,52 +3731,6 @@
     "Microsoft.Extensions.FileProviders.Abstractions/2.1.0": {
       "type": "package",
       "serviceable": true,
-=======
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-lqdkOGNeTMKG981Q7yWGlRiFbIlsRwTlMMiybT+WOzUCFBS/wc25tZgh7Wm/uRoBbWefgvokzmnea7ZjmFedmA==",
-      "path": "microsoft.extensions.configuration/3.1.9",
-      "hashPath": "microsoft.extensions.configuration.3.1.9.nupkg.sha512"
-    },
-    "Microsoft.Extensions.Configuration.Abstractions/3.1.9": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-vOJxPKczaHpXeZFrxARxYwsEulhEouXc5aZGgMdkhV/iEXX9/pfjqKk76rTG+4CsJjHV+G/4eMhvOIaQMHENNA==",
-      "path": "microsoft.extensions.configuration.abstractions/3.1.9",
-      "hashPath": "microsoft.extensions.configuration.abstractions.3.1.9.nupkg.sha512"
-    },
-    "Microsoft.Extensions.Configuration.Binder/3.1.9": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-BG6HcT7tARYakftqfQu+cLksgIWG1NdxMY+igI12hdZrUK+WjS973NiRyuao/U9yyTeM9NPwRnC61hCmG3G3jg==",
-      "path": "microsoft.extensions.configuration.binder/3.1.9",
-      "hashPath": "microsoft.extensions.configuration.binder.3.1.9.nupkg.sha512"
-    },
-    "Microsoft.Extensions.DependencyInjection/3.1.9": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-ORqfrAACcvTInie1oGola5uky344/PiNfgayTPuZWV4WnSfIQZJQm/ZLpGshJE3h7TqwYaYElGazK/yaM2bFLA==",
-      "path": "microsoft.extensions.dependencyinjection/3.1.9",
-      "hashPath": "microsoft.extensions.dependencyinjection.3.1.9.nupkg.sha512"
-    },
-    "Microsoft.Extensions.DependencyInjection.Abstractions/3.1.9": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-8PkcaPwiTPOhqshoY4+rQUbz86X6YpLDLUqXOezh7L2A3pgpBmeBBByYIffofBlvQxDdQ0zB2DkWjbZWyCxRWg==",
-      "path": "microsoft.extensions.dependencyinjection.abstractions/3.1.9",
-      "hashPath": "microsoft.extensions.dependencyinjection.abstractions.3.1.9.nupkg.sha512"
-    },
-    "Microsoft.Extensions.DependencyModel/2.0.4": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-jnHAeijsfJFQXdXmnYK/NhQIkgBUeth//RZZkf0ldIKC+jARbf7YxbA9uTrs/EPhuQxHXaDxVuMyscgmL+UqfA==",
-      "path": "microsoft.extensions.dependencymodel/2.0.4",
-      "hashPath": "microsoft.extensions.dependencymodel.2.0.4.nupkg.sha512"
-    },
-    "Microsoft.Extensions.FileProviders.Abstractions/2.1.0": {
-      "type": "package",
-      "serviceable": true,
->>>>>>> 60cfebf7bf4916f2bc6e96612980e5cc32c51022
       "sha512": "sha512-itv+7XBu58pxi8mykxx9cUO1OOVYe0jmQIZVSZVp5lOcLxB7sSV2bnHiI1RSu6Nxne/s6+oBla3ON5CCMSmwhQ==",
       "path": "microsoft.extensions.fileproviders.abstractions/2.1.0",
       "hashPath": "microsoft.extensions.fileproviders.abstractions.2.1.0.nupkg.sha512"
@@ -3855,7 +3764,6 @@
       "hashPath": "microsoft.extensions.logging.3.1.9.nupkg.sha512"
     },
     "Microsoft.Extensions.Logging.Abstractions/3.1.9": {
-<<<<<<< HEAD
       "type": "package",
       "serviceable": true,
       "sha512": "sha512-W5fbF8qVR9SMVVJqDQLIR7meWbev6Pu/lbrm7LDNr4Sp7HOotr4k2UULTdFSXOi5aoDdkQZpWnq0ZSpjrR3tjg==",
@@ -3893,45 +3801,6 @@
     "Microsoft.Extensions.Primitives/3.1.9": {
       "type": "package",
       "serviceable": true,
-=======
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-W5fbF8qVR9SMVVJqDQLIR7meWbev6Pu/lbrm7LDNr4Sp7HOotr4k2UULTdFSXOi5aoDdkQZpWnq0ZSpjrR3tjg==",
-      "path": "microsoft.extensions.logging.abstractions/3.1.9",
-      "hashPath": "microsoft.extensions.logging.abstractions.3.1.9.nupkg.sha512"
-    },
-    "Microsoft.Extensions.Logging.Configuration/3.1.9": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-hv6XsGgikrbkolBJdF1usl9R/nrliC5mifMqHMEY9zWcCLwNkXMJiS8p0lbosrnpVAMi4PbNx39DB51Dqscd0w==",
-      "path": "microsoft.extensions.logging.configuration/3.1.9",
-      "hashPath": "microsoft.extensions.logging.configuration.3.1.9.nupkg.sha512"
-    },
-    "Microsoft.Extensions.Logging.Console/3.1.9": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-8Dusl1rkDivmvLrwj6QAo917xMHPiDBzG3IG3agiyDdtsC/fRp+1VN5iIN+O09PtEaMged2OLA6wCDwfSTSTZw==",
-      "path": "microsoft.extensions.logging.console/3.1.9",
-      "hashPath": "microsoft.extensions.logging.console.3.1.9.nupkg.sha512"
-    },
-    "Microsoft.Extensions.Options/3.1.9": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-EIb3G1DL+Rl9MvJR7LjI1wCy2nfTN4y8MflbOftn1HLYQBj/Rwl8kUbGTrSFE01c99Wm4ETjWVsjqKcpFvhPng==",
-      "path": "microsoft.extensions.options/3.1.9",
-      "hashPath": "microsoft.extensions.options.3.1.9.nupkg.sha512"
-    },
-    "Microsoft.Extensions.Options.ConfigurationExtensions/3.1.9": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-u5jh7RW+Ev81YqK1ZoBG0lftp2MA9xqXiTiRL46XzaPj2ScNUyiVbzcVY0fPbE27UOpT2hj+yPzRSOMIIo55UA==",
-      "path": "microsoft.extensions.options.configurationextensions/3.1.9",
-      "hashPath": "microsoft.extensions.options.configurationextensions.3.1.9.nupkg.sha512"
-    },
-    "Microsoft.Extensions.Primitives/3.1.9": {
-      "type": "package",
-      "serviceable": true,
->>>>>>> 60cfebf7bf4916f2bc6e96612980e5cc32c51022
       "sha512": "sha512-IrHecH0eGG7/XoeEtv++oLg/sJHRNyeCqlA9RhAo6ig4GpOTjtDr32sBMYuuLtUq8ALahneWkrOzoBAwJ4L4iA==",
       "path": "microsoft.extensions.primitives/3.1.9",
       "hashPath": "microsoft.extensions.primitives.3.1.9.nupkg.sha512"
@@ -4062,7 +3931,6 @@
       "path": "runtime.win-x86.runtime.native.system.data.sqlclient.sni/4.4.0",
       "hashPath": "runtime.win-x86.runtime.native.system.data.sqlclient.sni.4.4.0.nupkg.sha512"
     },
-<<<<<<< HEAD
     "SendGrid/9.21.0": {
       "type": "package",
       "serviceable": true,
@@ -4070,8 +3938,6 @@
       "path": "sendgrid/9.21.0",
       "hashPath": "sendgrid.9.21.0.nupkg.sha512"
     },
-=======
->>>>>>> 60cfebf7bf4916f2bc6e96612980e5cc32c51022
     "Serilog/2.9.0": {
       "type": "package",
       "serviceable": true,
@@ -4142,7 +4008,6 @@
       "path": "serilog.sinks.rollingfile/3.3.0",
       "hashPath": "serilog.sinks.rollingfile.3.3.0.nupkg.sha512"
     },
-<<<<<<< HEAD
     "starkbank-ecdsa/1.2.0": {
       "type": "package",
       "serviceable": true,
@@ -4150,8 +4015,6 @@
       "path": "starkbank-ecdsa/1.2.0",
       "hashPath": "starkbank-ecdsa.1.2.0.nupkg.sha512"
     },
-=======
->>>>>>> 60cfebf7bf4916f2bc6e96612980e5cc32c51022
     "Swashbuckle.AspNetCore/5.6.3": {
       "type": "package",
       "serviceable": true,

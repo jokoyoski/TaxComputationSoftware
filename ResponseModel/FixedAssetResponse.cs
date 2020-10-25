@@ -18,9 +18,9 @@ namespace TaxComputationAPI.ResponseModel
 
          public int Year {get;set;}
         public string FixedAssetName {get;set;}    
-        public long OpeningCost {get;set;}
+        public decimal OpeningCost {get;set;}
         
-         public long TransferCost {get;set;}
+         public decimal TransferCost {get;set;}
 
         public long TransferDepreciation {get;set;}
 
@@ -48,26 +48,26 @@ namespace TaxComputationAPI.ResponseModel
 
    public class Total {
 
-    public long OpeningCostTotal  {get;set;}
+    public decimal OpeningCostTotal  {get;set;}
 
-    public long AdditionCostTotal {get;set;}
+    public decimal AdditionCostTotal {get;set;}
 
-    public long DisposalCostTotal {get;set;}
+    public decimal DisposalCostTotal {get;set;}
 
-    public long ClosingCostTotal {get;set;}
+    public decimal ClosingCostTotal {get;set;}
 
-    public long OpeningDepreciationTotal  {get;set;}
+    public decimal OpeningDepreciationTotal  {get;set;}
 
-    public long AdditionDepreciationTotal {get;set;}
+    public decimal AdditionDepreciationTotal {get;set;}
 
-    public long DisposalDepreciationTotal {get;set;}
+    public decimal DisposalDepreciationTotal {get;set;}
 
-     public long ClosingDepreciationTotal {get;set;}
+     public decimal ClosingDepreciationTotal {get;set;}
     }
 
    public class NetBookValue{
 
-       public long value {get;set;}
+       public decimal value {get;set;}
    }
 
 }

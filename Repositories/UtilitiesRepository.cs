@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TaxComputationAPI.Data;
+using TaxComputationAPI.Helpers.Response;
 using TaxComputationAPI.Interfaces;
 using TaxComputationAPI.Models;
 
@@ -18,18 +19,8 @@ namespace TaxComputationAPI.Repositories
 
         }
 
-        public async Task<List<AssetClass>> GetAssetClassAsync()
-        {
-            var asset = _context.AssetClass.ToList();
-            return asset;
-        }
+     
 
-        public async Task AddAssetClassAsync(AssetClass assetClass)
-        {
-
-            await _context.AssetClass.AddAsync(assetClass);
-            await _context.SaveChangesAsync();
-        }
 
         public Task<List<FinancialYear>> GetFinancialYearAsync()
         {
@@ -44,11 +35,7 @@ namespace TaxComputationAPI.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task<AssetClass> GetAssetClassAsync(string Name)
-        {
-            var assetClass = _context.AssetClass.FirstOrDefault(x => x.Name == Name);
-            return assetClass;
-        }
+
 
         public async Task<FinancialYear> GetFinancialYearAsync(int year)
         {
@@ -83,11 +70,11 @@ namespace TaxComputationAPI.Repositories
 
         public async Task UpdateAssetMappingAsync(AssetMapping assetMapping)
         {
-            var result= _context.AssetMapping.FirstOrDefault(x=>x.Id==assetMapping.Id);
-            result.Annual=assetMapping.Annual;
-            result.AssetName=assetMapping.AssetName;
-            result.Initial=assetMapping.Initial;
-             _context.SaveChanges();
+            var result = _context.AssetMapping.FirstOrDefault(x => x.Id == assetMapping.Id);
+            result.Annual = assetMapping.Annual;
+            result.AssetName = assetMapping.AssetName;
+            result.Initial = assetMapping.Initial;
+            _context.SaveChanges();
         }
 
         public async Task DeleteAssetMappingAsync(AssetMapping assetMapping)
@@ -97,44 +84,57 @@ namespace TaxComputationAPI.Repositories
             _context.SaveChanges();
         }
 
-        public async Task<List<ItemsMapping>> GetItemsMappingAsync()
+      
+
+       
+
+       
+
+      
+
+       
+
+
+       
+
+        public decimal GetAmount(int moduleId, string additionalInfo)
         {
-            var mapping = _context.ItemsMapping.ToList();
-            return mapping;
+
+            decimal finalAmount = 0;
+            var result = (from s in _context.TrialBalanceMapping
+                          join b in _context.TrialBalance on s.TrialBalanceId equals b.Id
+                          where s.ModuleId == moduleId && s.AdditionalInfo == additionalInfo
+                          select new Amount
+                          {
+                              amount = b.Debit
+                          }
+            ).OrderBy(x => x.amount).ToList();
+            foreach (var item in result)
+            {
+                finalAmount += item.amount;
+            }
+
+            return finalAmount;
         }
 
-        public async Task<ItemsMapping> GetItemsMappingByMappedCode(string MappedCode)
+        public void AddTrialBalanceMapping(int trialBalanceId, int moduleId, string moduleCode, string additionalInfo)
         {
-            var itemsMapping = _context.ItemsMapping.FirstOrDefault(x => x.MappedCode == MappedCode);
-            return itemsMapping;
+            var trialBalanceMapping = new TrialBalanceMapping
+            {
+                ModuleCode = moduleCode,
+                AdditionalInfo = additionalInfo,
+                ModuleId = moduleId,
+                TrialBalanceId = trialBalanceId
+            };
+            _context.TrialBalanceMapping.Add(trialBalanceMapping);
+             _context.SaveChanges();
         }
 
-        public async Task<ItemsMapping> GetItemsMappingById(int Id)
+        public void DeleteTrialBalancingMapping(int trialBalanceId)
         {
-            var itemsMapping = _context.ItemsMapping.FirstOrDefault(x => x.Id == Id);
-            return itemsMapping;
-        }
-
-        public async Task AddItemsMappingAsync(ItemsMapping itemsMapping)
-        {
-
-            await _context.ItemsMapping.AddAsync(itemsMapping);
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task UpdateItemsMappingAsync(ItemsMapping itemsMapping)
-        {
-            var result = _context.ItemsMapping.FirstOrDefault(x => x.Id == itemsMapping.Id);
-            result.MappedCode = itemsMapping.MappedCode;
-            result.ItemValue = itemsMapping.ItemValue;
-            _context.SaveChanges();
-        }
-
-        public async Task DeleteItemsMappingAsync(ItemsMapping itemMapping)
-        {
-            var result = _context.ItemsMapping.FirstOrDefault(x => x.Id == itemMapping.Id);
-            _context.Remove(result);
-            _context.SaveChanges();
+            var item = _context.TrialBalanceMapping.FirstOrDefault(x => x.TrialBalanceId == trialBalanceId);
+            _context.Remove(item);
+             _context.SaveChanges();
         }
     }
 }

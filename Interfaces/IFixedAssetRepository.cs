@@ -8,7 +8,7 @@ namespace TaxComputationAPI.Interfaces
 {
     public interface IFixedAssetRepository
     {
-           Task SaveFixedAsset ( CreateFixedAssetDto fixedAsset);
+           Task<int> SaveFixedAsset ( CreateFixedAssetDto fixedAsset);
 
            Task <FixedAssetResponse> GetFixedAssetsByCompany(int companyId, int yearId);
     }

@@ -8,7 +8,7 @@ namespace TaxComputationAPI.Interfaces
 {
     public interface ITrialBalanceService
     {
-        Task UpdateTrialBalance (int trialBalanceId,string mappedTo);
+        Task UpdateTrialBalance (int trialBalanceId,string mappedTo,bool isDelete);
 
 
         Task<List<TrialBalance>> GetTrialBalance(int companyId, int yearId);

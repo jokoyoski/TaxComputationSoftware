@@ -36,17 +36,14 @@ namespace TaxComputationAPI.Data
         public DbSet<Company> Company { get; set; }
         public DbSet<FixedAsset> FixedAsset {get;set;}
          public DbSet<FinancialYear> FinancialYear {get;set;}
-        public DbSet<AssetClass> AssetClass {get;set;}
+       // public DbSet<AssetClass> AssetClass {get;set;}
        public DbSet<TrialBalance> TrialBalance {get;set;}
          public DbSet<TrackTrialBalance> TrackTrialBalance { get; set; }
         public DbSet<AssetMapping> AssetMapping { get; set; }
          public DbSet<UserCode> UserCodes { get; set; }
-<<<<<<< HEAD
+       
 
-
-
-=======
-        public DbSet<ItemsMapping> ItemsMapping { get; set; }
->>>>>>> 60cfebf7bf4916f2bc6e96612980e5cc32c51022
+        public DbSet<TrialBalanceMapping> TrialBalanceMapping {get;set;}
     }
 }
+

@@ -8,10 +8,10 @@ namespace TaxComputationAPI.Interfaces
 {
     public interface IUtilitiesRepository
     {
-        Task<List<AssetClass>> GetAssetClassAsync();
-        Task<AssetClass> GetAssetClassAsync(string Name);
+       
         Task<FinancialYear> GetFinancialYearAsync(int yearId);
-        Task AddAssetClassAsync(AssetClass assetClass);
+        
+        decimal GetAmount(int moduleId, string additionalInfo);
         Task<List<FinancialYear>> GetFinancialYearAsync();
         Task AddFinancialYearAsync(FinancialYear financialClass);
 
@@ -22,11 +22,9 @@ namespace TaxComputationAPI.Interfaces
         Task UpdateAssetMappingAsync(AssetMapping asset);
         Task DeleteAssetMappingAsync(AssetMapping asset);
 
-        Task<List<ItemsMapping>> GetItemsMappingAsync();
-        Task<ItemsMapping> GetItemsMappingByMappedCode(string MappedCode);
-        Task<ItemsMapping> GetItemsMappingById(int Id);
-        Task AddItemsMappingAsync(ItemsMapping asset);
-        Task UpdateItemsMappingAsync(ItemsMapping asset);
-        Task DeleteItemsMappingAsync(ItemsMapping asset);
+      
+        void  AddTrialBalanceMapping (int trialBalanceId, int moduleId,string moduleCode,string additionalInfo);
+
+        void  DeleteTrialBalancingMapping(int trialBalanceId);
     }
 }

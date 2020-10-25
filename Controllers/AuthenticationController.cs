@@ -49,14 +49,7 @@ namespace TaxComputationAPI.Controllers
                 string[] error = new string[] { };
                 var user = await _userManager.FindByNameAsync(userForLoginDto.Email);
                 if (user == null)
-<<<<<<< HEAD
-                {
-
-                      return StatusCode (404, new { errors = new []{"User Not Found!"} });
-            
-=======
                     return StatusCode (404, new { errors = new []{"User Not Found!"} });
->>>>>>> 60cfebf7bf4916f2bc6e96612980e5cc32c51022
 
                 var result = await _signInManager.CheckPasswordSignInAsync(user, userForLoginDto.Password, false);
 
@@ -82,6 +75,7 @@ namespace TaxComputationAPI.Controllers
              return StatusCode (500, new { errors = new []{"Error occured while trying to process your request please try again later !"} });
             
             }
+            
 
         }
 
@@ -108,45 +102,6 @@ namespace TaxComputationAPI.Controllers
 
                 return BadRequest(new { status = "error", message = "Unable to update password at the moment. Please try again later" });
 
-<<<<<<< HEAD
-                return StatusCode (500, new { errors = new []{"Error occured while trying to process your request please try again later !"} });
-            
-            } catch (Exception ex) 
-            {
-                var user = await _userManager.FindByNameAsync(userForLoginDto.Email);
-                var email = user.Email;
-                _logger.LogInformation ("Exception for {email}, {ex}", email, ex.Message);
-             return StatusCode (500, new { errors = new []{"Error occured while trying to process your request please try again later !"} });
-            
-            }
-
-        }
-
-        [Authorize]
-        [HttpPost("change-password")]
-        public async Task<IActionResult> ChangePassword(ChangePasswordDto changePasswordDto)
-        {
-            try
-            {
-                var email = User.FindFirst(ClaimTypes.Email).Value;
-
-                var user = await _userManager.FindByEmailAsync(email);
-
-                var checkOldPassword = await _userManager.CheckPasswordAsync(user, changePasswordDto.CurrentPassword);
-                if (!checkOldPassword)
-                    return BadRequest(new { status = "error", message = "Invalid Password" });
-
-                var updatePassword = await _userManager.ChangePasswordAsync(user, changePasswordDto.CurrentPassword, changePasswordDto.NewPassword);
-
-                if (updatePassword.Succeeded)
-                {
-                    return Ok(new { status = "success", message = "Password updated successfully" });
-                }
-
-                return BadRequest(new { status = "error", message = "Unable to update password at the moment. Please try again later" });
-
-=======
->>>>>>> 60cfebf7bf4916f2bc6e96612980e5cc32c51022
             }
             catch (Exception ex)
             {
@@ -164,7 +119,6 @@ namespace TaxComputationAPI.Controllers
                 var user = await _userManager.FindByEmailAsync(email);
                 if (user == null)
                     return BadRequest(new { status = "error", message = "User with " + email + " does not exist in our records." });
-<<<<<<< HEAD
 
                 var token = StaticDetails.GenerateToken();
 
@@ -181,24 +135,6 @@ namespace TaxComputationAPI.Controllers
                     return Ok("A password reset token has been sent to your mail.");
                 }
 
-=======
-
-                var token = StaticDetails.GenerateToken();
-
-                SendMail sendMail = new SendMail();
-                string body = $"Kindly use the code {token} to complete your account password reset.";
-                var sendToken = await sendMail.SendEmail("Password Reset", email, body, _config.GetValue<string>("SendGridApiKey:Key"));
-                if (sendToken)
-                {
-                    var saveCode = _authService.SaveUserCode(token, email);
-                    if (!saveCode)
-                    {
-                        return StatusCode(500, "Error Occured please try again later, please try again later.......");
-                    }
-                    return Ok("A password reset token has been sent to your mail.");
-                }
-
->>>>>>> 60cfebf7bf4916f2bc6e96612980e5cc32c51022
                 return BadRequest("Unable to send password reset token at the moment. Please try again later");
             }
             catch (Exception ex)
