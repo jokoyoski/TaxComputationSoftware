@@ -6,7 +6,12 @@ import utils from "../../utils";
 import { uploadTrialBalance } from "../../apis/TrialBalance";
 import constants from "../../constants";
 
-const FileUploader = ({ company: { companyId }, toast, toastCallback }) => {
+const FileUploader = ({
+  company: { companyId },
+  toast,
+  toastCallback,
+  setRefreshTrialBalanceTable
+}) => {
   const [file, setFile] = React.useState();
   const [year, setYear] = React.useState();
   const [yearSelectItems] = React.useState(utils.getYears());
@@ -33,6 +38,7 @@ const FileUploader = ({ company: { companyId }, toast, toastCallback }) => {
       if (response.status === 200) {
         setYear(null);
         setFile(null);
+        setRefreshTrialBalanceTable(true);
         toast.show(toastCallback({ severity: "success", detail: response.data }));
       }
     } catch (error) {
