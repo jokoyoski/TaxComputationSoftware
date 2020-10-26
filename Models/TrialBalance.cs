@@ -16,6 +16,8 @@ namespace TaxComputationAPI.Models
         public  string MappedTo {get;set;}
 
         public bool IsCheck {get;set;}
+
+        public bool IsRemoved {get;set;}
         
         public int TrackId { get; set; }
     }

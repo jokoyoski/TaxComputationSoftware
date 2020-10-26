@@ -49,12 +49,8 @@ namespace TaxComputationAPI.Controllers
                 string[] error = new string[] { };
                 var user = await _userManager.FindByNameAsync(userForLoginDto.Email);
                 if (user == null)
-                {
+                    return StatusCode (404, new { errors = new []{"User Not Found!"} });
 
-                      return StatusCode (404, new { errors = new []{"User Not Found!"} });
-            
-
-                }
                 var result = await _signInManager.CheckPasswordSignInAsync(user, userForLoginDto.Password, false);
 
                 if (result.Succeeded)
@@ -67,8 +63,9 @@ namespace TaxComputationAPI.Controllers
                         user = appUser
                     });
                 }
+                return Unauthorized(new { errors = new [] {"Incorrect password! Please enter a valid password."}});
 
-                return StatusCode (500, new { errors = new []{"Error occured while trying to process your request please try again later !"} });
+                // return StatusCode (400, new { errors = new []{"Incorrect password! Please enter a valid password"} });
             
             } catch (Exception ex) 
             {
@@ -78,6 +75,7 @@ namespace TaxComputationAPI.Controllers
              return StatusCode (500, new { errors = new []{"Error occured while trying to process your request please try again later !"} });
             
             }
+            
 
         }
 

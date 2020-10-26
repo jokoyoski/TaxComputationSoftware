@@ -17,6 +17,8 @@ export default {
   routes: {
     home: "/",
     login: "/login",
+    forgot_password: "/forgot_password",
+    reset_password: "/reset_password",
     dashboard: "/dashboard",
     fixed_asset: "/fixed_asset",
     profit_loss: "/profit_loss",

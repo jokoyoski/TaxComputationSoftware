@@ -6,11 +6,14 @@ namespace TaxComputationAPI.Interfaces
 {
    public interface ITrialBalanceRepository
     {
-        Task UpdateTrialBalance(int trialBalanceId,string mappedTo);
+        Task UpdateTrialBalance(int trialBalanceId,string mappedTo, bool isDelete);
 
         Task<TrackTrialBalance> GetTrackTrialBalance(int companyId, int yearId);
 
         Task<List<TrialBalance>> GetTrialBalance(int trackId);
+
+        TrialBalance GetTrialBalanceById(int trialBalance);
+
 
         Task<TrackTrialBalance> AddTrackTrialBalance(TrackTrialBalance model);
 

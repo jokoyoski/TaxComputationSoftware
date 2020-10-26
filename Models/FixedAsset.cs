@@ -15,7 +15,7 @@ namespace TaxComputationAPI.Models
         public long CostDisposal {get;set;}
 
 
-         public long CostClosing {get;set;}
+      ///   public long CostClosing {get;set;}
 
         public bool IsTransferCostRemoved {get;set;}
         
@@ -28,9 +28,10 @@ namespace TaxComputationAPI.Models
 
         public long DepreciationDisposal {get;set;}
 
-        public long DepreciationClosing {get;set;}
+     ///   public long DepreciationClosing {get;set;}
 
-         public bool IsTransferDepreciationRemoved {get;set;}
+       public bool IsTransferDepreciationRemoved {get;set;}
+        
 
     }
 }

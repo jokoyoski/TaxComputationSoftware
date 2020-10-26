@@ -65,7 +65,7 @@ namespace TaxComputationAPI.Controllers {
         }
 
         [HttpPost ("add-user")]
-        [Authorize(Roles = StaticDetails.SystemAdmin)]
+        // [Authorize(Roles = StaticDetails.SystemAdmin)]
         public async Task<IActionResult> AddUser (UserForRegisterDto userForRegisterDto) {
             try {
                 var userToCreate = _mapper.Map<User> (userForRegisterDto);

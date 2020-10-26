@@ -105,21 +105,6 @@ namespace TaxComputationAPI.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("TaxComputationAPI.Models.AssetClass", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("AssetClass");
-                });
-
             modelBuilder.Entity("TaxComputationAPI.Models.AssetMapping", b =>
                 {
                     b.Property<int>("Id")
@@ -202,16 +187,10 @@ namespace TaxComputationAPI.Migrations
                     b.Property<long>("CostAddition")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("CostClosing")
-                        .HasColumnType("bigint");
-
                     b.Property<long>("CostDisposal")
                         .HasColumnType("bigint");
 
                     b.Property<long>("DepreciationAddition")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("DepreciationClosing")
                         .HasColumnType("bigint");
 
                     b.Property<long>("DepreciationDisposal")
@@ -241,24 +220,6 @@ namespace TaxComputationAPI.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("FixedAsset");
-                });
-
-            modelBuilder.Entity("TaxComputationAPI.Models.ItemsMapping", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("ItemValue")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("MappedCode")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ItemsMapping");
                 });
 
             modelBuilder.Entity("TaxComputationAPI.Models.Role", b =>
@@ -330,6 +291,9 @@ namespace TaxComputationAPI.Migrations
                     b.Property<bool>("IsCheck")
                         .HasColumnType("bit");
 
+                    b.Property<bool>("IsRemoved")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Item")
                         .HasColumnType("nvarchar(max)");
 
@@ -342,6 +306,30 @@ namespace TaxComputationAPI.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("TrialBalance");
+                });
+
+            modelBuilder.Entity("TaxComputationAPI.Models.TrialBalanceMapping", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("AdditionalInfo")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ModuleCode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ModuleId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TrialBalanceId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TrialBalanceMapping");
                 });
 
             modelBuilder.Entity("TaxComputationAPI.Models.User", b =>

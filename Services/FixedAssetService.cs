@@ -16,153 +16,208 @@ namespace TaxComputationAPI.Services
     {
         private readonly IFixedAssetRepository _fixedAssetRepository;
         private readonly ITrialBalanceRepository _trialBalanceRepository;
-        private readonly  IUtilitiesRepository _utilitiesRepository;
-        public FixedAssetService(IFixedAssetRepository fixedAssetRepository,IUtilitiesRepository utilitiesRepository,ITrialBalanceRepository trialBalanceRepository){
-             _fixedAssetRepository=fixedAssetRepository;
-             _trialBalanceRepository=trialBalanceRepository;
-             _utilitiesRepository=utilitiesRepository;
+        private readonly IUtilitiesRepository _utilitiesRepository;
+        public FixedAssetService(IFixedAssetRepository fixedAssetRepository, IUtilitiesRepository utilitiesRepository, ITrialBalanceRepository trialBalanceRepository)
+        {
+            _fixedAssetRepository = fixedAssetRepository;
+            _trialBalanceRepository = trialBalanceRepository;
+            _utilitiesRepository = utilitiesRepository;
         }
 
         public async Task<TaxComputationAPI.Dtos.FixedAssetResponseDto> GetFixedAssetsByCompany(int companyId, int yearId)
         {
-            long openingCostTotal=0;
-            long adddtionCostTotal=0;
-            long disposalCostTotal =0;
-            long closingCostTotal=0;
-            long openingDepreciationTotal=0;
-            long adddtionDepreciationTotal=0;
-            long disposalDepreciationTotal=0;
-            long closingDepreciationTotal=0;
-            long transferCostTotal=0;
-            long transferDepreciationTotal=0;
+            decimal openingCostTotal = 0;
+            decimal adddtionCostTotal = 0;
+            decimal disposalCostTotal = 0;
+            decimal closingCostTotal = 0;
+            decimal openingDepreciationTotal = 0;
+            decimal adddtionDepreciationTotal = 0;
+            decimal disposalDepreciationTotal = 0;
+            decimal closingDepreciationTotal = 0;
+            decimal transferCostTotal = 0;
+            decimal transferDepreciationTotal = 0;
 
 
-            List<Total> totals=new List<Total>();
-            List<NetBookValue> netBookValues =new List<NetBookValue>();
+            List<Total> totals = new List<Total>();
+            List<NetBookValue> netBookValues = new List<NetBookValue>();
 
 
-            var result= await _fixedAssetRepository.GetFixedAssetsByCompany(companyId,yearId);
-            if(result.FixedAssetData.Count<=0){
+            var result = await _fixedAssetRepository.GetFixedAssetsByCompany(companyId, yearId);
+            if (result.FixedAssetData.Count <= 0)
+            {
                 return null;
             }
-            
-             foreach(var x  in result.FixedAssetData){
-              openingCostTotal += x.OpeningCost;
-              adddtionCostTotal += x.CostAddition;
-              disposalCostTotal += x.CostDisposal;
-              closingCostTotal  += x.CostClosing;
-              openingDepreciationTotal += x.OpeningDepreciation;
-              adddtionDepreciationTotal += x.DepreciationAddition;
-              disposalDepreciationTotal += x.DepreciationDisposal;
-              closingDepreciationTotal  += x.DepreciationClosing;
-              transferCostTotal+=x.TransferCost;
-              transferDepreciationTotal=x.TransferDepreciation;
+          
 
-              netBookValues.Add(new NetBookValue{
-               value=closingCostTotal-closingDepreciationTotal
-              });
-            
+            foreach (var x in result.FixedAssetData)
+            {
+                openingCostTotal += x.OpeningCost;
+                adddtionCostTotal += x.CostAddition;
+                disposalCostTotal += x.CostDisposal;
+                closingCostTotal += _utilitiesRepository.GetAmount(x.Id,"cost");
+                openingDepreciationTotal += x.OpeningDepreciation;
+                adddtionDepreciationTotal += x.DepreciationAddition;
+                disposalDepreciationTotal += x.DepreciationDisposal;
+                closingDepreciationTotal += _utilitiesRepository.GetAmount(x.Id,"depreciation");
+                transferCostTotal += x.TransferCost;
+                transferDepreciationTotal = x.TransferDepreciation;
 
-             }
-             result.total=new Total{
-                 OpeningCostTotal=openingCostTotal,
-                 AdditionCostTotal=adddtionCostTotal,
-                 ClosingCostTotal=closingCostTotal,
-                 DisposalCostTotal=disposalCostTotal,
-                 OpeningDepreciationTotal=openingDepreciationTotal,
-                 AdditionDepreciationTotal=adddtionDepreciationTotal,
-                 DisposalDepreciationTotal=disposalDepreciationTotal,
-                 ClosingDepreciationTotal=closingDepreciationTotal,
-                 
-                
-             };
-             result.netBookValue=netBookValues;
-             
+                netBookValues.Add(new NetBookValue
+                {
+                    value =  _utilitiesRepository.GetAmount(x.Id,"cost") - _utilitiesRepository.GetAmount(x.Id,"depreciation")
+                });
+
+
+            }
+            result.total = new Total
+            {
+                OpeningCostTotal = openingCostTotal,
+                AdditionCostTotal = adddtionCostTotal,
+                ClosingCostTotal = closingCostTotal,
+                DisposalCostTotal = disposalCostTotal,
+                OpeningDepreciationTotal = openingDepreciationTotal,
+                AdditionDepreciationTotal = adddtionDepreciationTotal,
+                DisposalDepreciationTotal = disposalDepreciationTotal,
+                ClosingDepreciationTotal = closingDepreciationTotal,
+
+
+            };
+            result.netBookValue = netBookValues;
+
             return FormatAmount(result);
         }
 
-        public  async Task SaveFixedAsset(CreateFixedAssetDto fixedAsset)
+        public async Task SaveFixedAsset(CreateFixedAssetDto fixedAsset)
         {
-            GetMappedDetails getMappedDetails =new GetMappedDetails();
-           
-            var yearRecord=await _utilitiesRepository.GetFinancialYearAsync(fixedAsset.YearId);
-            if(yearRecord==null){
-                var createYear = new FinancialYear{
-                    Name=fixedAsset.YearId
+            GetMappedDetails getMappedDetails = new GetMappedDetails();
+
+            var yearRecord = await _utilitiesRepository.GetFinancialYearAsync(fixedAsset.YearId);
+            if (yearRecord == null)
+            {
+                var createYear = new FinancialYear
+                {
+                    Name = fixedAsset.YearId
                 };
-               await  _utilitiesRepository.AddFinancialYearAsync(createYear);
+                await _utilitiesRepository.AddFinancialYearAsync(createYear);
             }
-            foreach(var value in fixedAsset.TriBalanceId){
-            string trialBalanceValue=getMappedDetails.MappedTo("fixedasset");
-             await _trialBalanceRepository.UpdateTrialBalance(value,trialBalanceValue);
+            if (fixedAsset.TriBalanceId.Count > 0)
+            {
+                var firstItemInArray = _trialBalanceRepository.GetTrialBalanceById(fixedAsset.TriBalanceId[0]);
+                if (firstItemInArray.IsCheck == true)
+                {
+                    foreach (var value in fixedAsset.TriBalanceId)
+                    {
+                        await _trialBalanceRepository.UpdateTrialBalance(value, null, true); 
+                        _utilitiesRepository.DeleteTrialBalancingMapping(value);
+                    }
+
+                   
+                }else{
+                    foreach (var value in fixedAsset.TriBalanceId)
+                {
+                    string trialBalanceValue = getMappedDetails.MappedTo("fixedasset");
+                    await _trialBalanceRepository.UpdateTrialBalance(value, trialBalanceValue, false);
+                     
+                }
+                
+                var result=  await _fixedAssetRepository.SaveFixedAsset(fixedAsset);
+                 foreach (var value in fixedAsset.TriBalanceId)
+                {
+                    if(fixedAsset.IsCost==true){
+                     
+                    _utilitiesRepository.AddTrialBalanceMapping(value,result,"fixedasset","cost");
+                    }else{
+                      
+                    _utilitiesRepository.AddTrialBalanceMapping(value,result,"fixedasset","depreciation");
+
+                    }
+                   
+                
+                }
+
+                }
+
+            }else{
+                 var result=  await _fixedAssetRepository.SaveFixedAsset(fixedAsset);
+
             }
             
-             await _fixedAssetRepository.SaveFixedAsset(fixedAsset);
-              
-            
+
+
+
         }
 
-        public TaxComputationAPI.Dtos.FixedAssetResponseDto FormatAmount(FixedAssetResponse fixedAssetResponse){
-           List<FixedAssetData> fixedAssetDatas=new List<FixedAssetData>();
-           List<TaxComputationAPI.Dtos.NetBookValue> netBookValues =new List<TaxComputationAPI.Dtos.NetBookValue>();
-           List<TaxComputationAPI.Dtos.Total> totals= new List<TaxComputationAPI.Dtos.Total>();
-          foreach(var asset in fixedAssetResponse.FixedAssetData){
-             var fixedAssetData=new FixedAssetData();
-                fixedAssetData.Id=asset.Id;
-              fixedAssetData.CompanyName=asset.CompanyName;
-              fixedAssetData.Year=asset.Year;
-              fixedAssetData.FixedAssetName=asset.FixedAssetName;
-              fixedAssetData.OpeningCost=$"₦{asset.OpeningCost.ToString("0,00")}";
-              fixedAssetData.CostAddition=$"₦{asset.CostAddition.ToString("0,00")}";
-              fixedAssetData.CostDisposal=$"₦({asset.CostDisposal.ToString("0,00")})";
-              fixedAssetData.CostClosing=$"₦{asset.CostClosing.ToString("0,00")}";
-              fixedAssetData.OpeningDepreciation=$"₦{asset.OpeningDepreciation.ToString("0,00")}";
-              fixedAssetData.DepreciationAddition=$"₦{asset.DepreciationAddition.ToString("0,00")}";
-              fixedAssetData.DepreciationDisposal=$"₦{asset.DepreciationAddition.ToString("0,00")}";
-              fixedAssetData.DepreciationClosing=$"₦{asset.DepreciationClosing.ToString("0,00")}";
-               if(asset.IsTransferDepreciationRemoved==true){
-                 fixedAssetData.TransferDepreciation=$"₦({asset.TransferDepreciation.ToString("0,00")})";
-               }
-               else{
-                   fixedAssetData.TransferDepreciation=$"₦{asset.TransferDepreciation.ToString("0,00")}";
-               }
 
-                if(asset.IsTransferCostRemoved==true){
-                 fixedAssetData.TransferCost=$"₦({asset.TransferCost.ToString("0,00")})";
-               }
-               else{
-                   fixedAssetData.TransferCost=$"₦{asset.TransferCost.ToString("0,00")}";
-               }
-             
-              
-             fixedAssetDatas.Add(fixedAssetData);
-          }
+        public TaxComputationAPI.Dtos.FixedAssetResponseDto FormatAmount(FixedAssetResponse fixedAssetResponse)
+        {
+            List<FixedAssetData> fixedAssetDatas = new List<FixedAssetData>();
+            List<TaxComputationAPI.Dtos.NetBookValue> netBookValues = new List<TaxComputationAPI.Dtos.NetBookValue>();
+            List<TaxComputationAPI.Dtos.Total> totals = new List<TaxComputationAPI.Dtos.Total>();
+            foreach (var asset in fixedAssetResponse.FixedAssetData)
+            {
+                var fixedAssetData = new FixedAssetData();
+                fixedAssetData.Id = asset.Id;
+                fixedAssetData.CompanyName = asset.CompanyName;
+                fixedAssetData.Year = asset.Year;
+                fixedAssetData.FixedAssetName = asset.FixedAssetName;
+                fixedAssetData.OpeningCost = $"{Utilities.FormatAmount(asset.OpeningCost)}";
+                fixedAssetData.CostAddition = $"{Utilities.FormatAmount(asset.CostAddition)}";
+                fixedAssetData.CostDisposal = $"({Utilities.FormatAmount(asset.CostDisposal)})";
+                fixedAssetData.CostClosing = $"{Utilities.FormatAmount(_utilitiesRepository.GetAmount(asset.Id,"cost"))}";
+                fixedAssetData.OpeningDepreciation = $"{Utilities.FormatAmount(asset.OpeningDepreciation)}";
+                fixedAssetData.DepreciationAddition = $"{Utilities.FormatAmount(asset.DepreciationAddition)}";
+                fixedAssetData.DepreciationDisposal = $"({Utilities.FormatAmount(asset.DepreciationDisposal)})";
+                fixedAssetData.DepreciationClosing = $"{Utilities.FormatAmount(_utilitiesRepository.GetAmount(asset.Id,"depreciation"))}";
+                if (asset.IsTransferDepreciationRemoved == true)
+                {
+                    fixedAssetData.TransferDepreciation = $"({Utilities.FormatAmount(asset.TransferDepreciation)})";
+                }
+                else
+                {
+                    fixedAssetData.TransferDepreciation = $"{Utilities.FormatAmount(asset.TransferDepreciation)}";
+                }
 
-          foreach(var netbook in fixedAssetResponse.netBookValue){
-                netBookValues.Add(new TaxComputationAPI.Dtos.NetBookValue{
-               value=$"₦{netbook.value.ToString("0,00")}"
-              });
-            
+                if (asset.IsTransferCostRemoved == true)
+                {
+                    fixedAssetData.TransferCost = $"({Utilities.FormatAmount(asset.TransferCost)})";
+                }
+                else
+                {
+                    fixedAssetData.TransferCost = $"{Utilities.FormatAmount(asset.TransferCost)}";
+                }
 
-          }
 
-          
-          var total= new TaxComputationAPI.Dtos.Total{
-                OpeningCostTotal=$"₦{fixedAssetResponse.total.OpeningCostTotal.ToString("0,00")}",
-                 AdditionCostTotal=$"₦{fixedAssetResponse.total.AdditionCostTotal.ToString("0,00")}",
-                 ClosingCostTotal=$"₦{fixedAssetResponse.total.ClosingCostTotal.ToString("0,00")}",
-                 DisposalCostTotal=$"₦{fixedAssetResponse.total.DisposalCostTotal.ToString("0,00")}",
-                 OpeningDepreciationTotal=$"₦{fixedAssetResponse.total.OpeningDepreciationTotal.ToString("0,00")}",
-                 AdditionDepreciationTotal=$"₦{fixedAssetResponse.total.AdditionDepreciationTotal.ToString("0,00")}",
-                 DisposalDepreciationTotal=$"₦{fixedAssetResponse.total.DisposalDepreciationTotal.ToString("0,00")}",
-                 ClosingDepreciationTotal=$"₦{fixedAssetResponse.total.ClosingDepreciationTotal.ToString("0,00")}",
-          };
-          TaxComputationAPI.Dtos.FixedAssetResponseDto fixedAsset=new   TaxComputationAPI.Dtos.FixedAssetResponseDto();
-          fixedAsset.FixedAssetData=fixedAssetDatas;
-          fixedAsset.netBookValue=netBookValues;
-          fixedAsset.total=total;
+                fixedAssetDatas.Add(fixedAssetData);
+            }
 
-          return fixedAsset;
+            foreach (var netbook in fixedAssetResponse.netBookValue)
+            {
+                netBookValues.Add(new TaxComputationAPI.Dtos.NetBookValue
+                {
+                    value = $"{Utilities.FormatAmount(netbook.value)}"
+                });
+
+
+            }
+
+
+            var total = new TaxComputationAPI.Dtos.Total
+            {
+                OpeningCostTotal = $"{Utilities.FormatAmount(fixedAssetResponse.total.OpeningCostTotal)}",
+                AdditionCostTotal = $"{Utilities.FormatAmount(fixedAssetResponse.total.AdditionCostTotal)}",
+                ClosingCostTotal = $"{Utilities.FormatAmount(fixedAssetResponse.total.ClosingCostTotal)}",
+                DisposalCostTotal = $"{Utilities.FormatAmount(fixedAssetResponse.total.DisposalCostTotal)}",
+                OpeningDepreciationTotal = $"{Utilities.FormatAmount(fixedAssetResponse.total.OpeningDepreciationTotal)}",
+                AdditionDepreciationTotal = $"{Utilities.FormatAmount(fixedAssetResponse.total.AdditionDepreciationTotal)}",
+                DisposalDepreciationTotal = $"{Utilities.FormatAmount(fixedAssetResponse.total.DisposalDepreciationTotal)}",
+                ClosingDepreciationTotal = $"{Utilities.FormatAmount(fixedAssetResponse.total.ClosingDepreciationTotal)}",
+            };
+            TaxComputationAPI.Dtos.FixedAssetResponseDto fixedAsset = new TaxComputationAPI.Dtos.FixedAssetResponseDto();
+            fixedAsset.FixedAssetData = fixedAssetDatas;
+            fixedAsset.netBookValue = netBookValues;
+            fixedAsset.total = total;
+
+            return fixedAsset;
         }
     }
 }

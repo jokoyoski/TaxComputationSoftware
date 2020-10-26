@@ -7,17 +7,19 @@ import { useForm, Controller } from "react-hook-form";
 import { login } from "../apis/Authentication";
 import constants from "../constants";
 import { useAuth } from "../store/AuthStore";
-import { Redirect, useRouterActions } from "react-resource-router";
+import { Link, Redirect, useRouter, useRouterActions } from "react-resource-router";
+import PasswordInput from "../components/common/PasswordInput";
 
 const Login = () => {
+  const [routerState] = useRouter();
   const { errors, handleSubmit, control } = useForm();
   const [{ isAuthenticated }, { onLoginSuccess }] = useAuth();
   const { push } = useRouterActions();
   const [loading, setLoading] = React.useState(false);
   const toast = React.useRef();
   const toastCallback = React.useCallback(
-    ({ summary, detail }) => ({
-      severity: "error",
+    ({ severity, summary, detail }) => ({
+      severity,
       summary,
       detail,
       life: constants.toastLifeTime,
@@ -25,6 +27,13 @@ const Login = () => {
     }),
     []
   );
+
+  React.useEffect(() => {
+    if (routerState.location.state)
+      toast.current.show(
+        toastCallback({ severity: "success", detail: routerState.location.state })
+      );
+  }, [routerState, toastCallback]);
 
   const onSubmit = async data => {
     if (loading) return;
@@ -43,18 +52,19 @@ const Login = () => {
       setLoading(false);
       if (error.response) {
         const {
-          data: {
-            errors: { error: loginErrors }
-          }
+          data: { errors }
         } = error.response;
         // display all errors as toast notification
-        loginErrors.map(err =>
-          toast.current.show(toastCallback({ summary: "Login Error", detail: err }))
+        errors.map(err =>
+          toast.current.show(
+            toastCallback({ severity: "error", summary: "Login Error", detail: err })
+          )
         );
       } else {
         // network errors
         toast.current.show(
           toastCallback({
+            severity: "error",
             summary: "Network Error",
             detail: constants.networkErrorMessage
           })
@@ -104,9 +114,7 @@ const Login = () => {
               rules={{ required: true }}
               defaultValue=""
               render={props => (
-                <InputText
-                  style={{ marginBottom: 5, width: "100%" }}
-                  type="password"
+                <PasswordInput
                   placeholder="Password"
                   value={props.value}
                   onChange={e => props.onChange(e.target.value)}
@@ -124,6 +132,9 @@ const Login = () => {
             style={{ width: "100%" }}
           />
         </form>
+        <Link href={constants.routes.forgot_password} className="auth-link">
+          <p style={{ marginBottom: 0, marginTop: 20, fontSize: 14 }}>Forgot Password</p>
+        </Link>
       </Card>
       <Toast ref={el => (toast.current = el)} />
     </div>

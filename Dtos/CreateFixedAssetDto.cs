@@ -30,7 +30,7 @@ namespace TaxComputationAPI.Dtos
 
         public long CostDisposal {get;set;}
 
-        public long CostClosing {get;set;}
+       // public long CostClosing {get;set;}
 
          public long OpeningDepreciation {get;set;}
         
@@ -38,7 +38,7 @@ namespace TaxComputationAPI.Dtos
 
         public long DepreciationDisposal {get;set;}
 
-        public long DepreciationClosing {get;set;}
+        //public long DepreciationClosing {get;set;}
 
     }
 

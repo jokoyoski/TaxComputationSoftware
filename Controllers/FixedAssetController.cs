@@ -47,7 +47,7 @@ namespace TaxComputationAPI.Controllers {
                     return StatusCode (400, new { errors = new []{"Please select a valid company"} });
                     
                 }
-                if (createFixed.IsCost == true && (createFixed.CostAddition == 0 && createFixed.CostClosing == 0 && createFixed.CostDisposal == 0)) {
+           /*     if (createFixed.IsCost == true && (createFixed.CostAddition == 0 && createFixed.CostClosing == 0 && createFixed.CostDisposal == 0)) {
                    
                       return StatusCode (400, new { errors = new []{"PYou selected a Cost but didnt pass a cost input value"} });
                 }
@@ -55,6 +55,7 @@ namespace TaxComputationAPI.Controllers {
                    
                    return StatusCode (400, new { errors = new []{"You selected a depreciation but didnt pass a depreciation input value"} });
                 }
+                */
 
                 await _fixedAssetService.SaveFixedAsset (createFixed);
 

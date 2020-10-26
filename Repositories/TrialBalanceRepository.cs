@@ -17,16 +17,21 @@ namespace TaxComputationAPI.Repositories
             _dataContext = dataContext;
         }
 
-        public async Task UpdateTrialBalance(int trialBalanceId, string mappedTo)
+        public async Task UpdateTrialBalance(int trialBalanceId, string mappedTo,bool IsDelete)
         {
             var record = _dataContext.TrialBalance.FirstOrDefault(x => x.Id == trialBalanceId);
-            if (record != null)
-            {
-                record.IsCheck = true;
+            if(IsDelete){
+               record.IsCheck = false;
+               record.IsRemoved=false;
                 record.MappedTo = mappedTo;
                 _dataContext.SaveChanges();
-
+            }else{
+                  record.IsCheck = true;
+                  record.IsRemoved=true;
+                 record.MappedTo = mappedTo;
+                _dataContext.SaveChanges();
             }
+            
         }
 
         public async Task<TrackTrialBalance> GetTrackTrialBalance(int companyId, int yearId)
@@ -61,10 +66,15 @@ namespace TaxComputationAPI.Repositories
         public async Task<TrialBalance> UploadTrialBalance(TrialBalance model)
         {
             var response = _dataContext.TrialBalance.Add(model);
-            _dataContext.SaveChanges();
+            _dataContext.SaveChangesAsync();
 
             return response.Entity;
         }
 
+        public  TrialBalance GetTrialBalanceById(int trialBalanceId)
+        {
+           var trialBalance=_dataContext.TrialBalance.FirstOrDefault(x=>x.Id==trialBalanceId);
+           return trialBalance;
+        }
     }
 }

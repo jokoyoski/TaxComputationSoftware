@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TaxComputationAPI.Dtos;
 using TaxComputationAPI.Interfaces;
 using TaxComputationAPI.Models;
 
@@ -18,22 +19,8 @@ namespace TaxComputationAPI.Services
 
         
 
-        public  Task<List<AssetClass>> GetAssetClassAsync()
-        {
-            return  _utilitiesRepository.GetAssetClassAsync();
-        }
 
-        public async Task AddAssetClassAsync(AssetClass assetClass)
-        {
-            if (assetClass == null)
-            {
-                throw new ArgumentNullException(nameof(assetClass));
-            }
-
-
-            await _utilitiesRepository.AddAssetClassAsync(assetClass);
-        }
-
+       
         public async Task<List<FinancialYear>> GetFinancialYearAsync()
         {
             return await _utilitiesRepository.GetFinancialYearAsync();
@@ -50,10 +37,7 @@ namespace TaxComputationAPI.Services
             await _utilitiesRepository.AddFinancialYearAsync(financialYear);
         }
 
-        public async Task<AssetClass> GetAssetClassAsync(string Name)
-        {
-            return  await _utilitiesRepository.GetAssetClassAsync(Name);
-        }
+       
 
         public async Task<FinancialYear> GetFinancialYearAsync(int Name)
         {
@@ -101,46 +85,28 @@ namespace TaxComputationAPI.Services
             await _utilitiesRepository.DeleteAssetMappingAsync(assetMapping);
         }
 
-        public Task<List<ItemsMapping>> GetItemsMappingAsync()
+       
+       
+      
+       
+
+        
+       
+
+        public async Task<List<ModuleTypeDto>> GetModuleMappingbyCode(string code)
         {
-            return _utilitiesRepository.GetItemsMappingAsync();
-        }
-        public async Task<ItemsMapping> GetItemsMappingById(int Id)
-        {
-            return await _utilitiesRepository.GetItemsMappingById(Id);
-        }
-        public async Task<ItemsMapping> GetItemsMappingByMappedCode(string MappedCode)
-        {
-            return await _utilitiesRepository.GetItemsMappingByMappedCode(MappedCode);
-        }
-        public async Task AddItemsMappingAsync(ItemsMapping itemsMapping)
-        {
-            if (itemsMapping == null)
-            {
-                throw new ArgumentNullException(nameof(itemsMapping));
+            List<ModuleTypeDto> moduleTypes= new List<ModuleTypeDto>();
+            if(code=="fixedasset"){
+               var values =await _utilitiesRepository.GetAssetMappingAsync();
+               foreach(var item in values){
+                moduleTypes.Add(new ModuleTypeDto{
+                    Id=item.Id,
+                    Name=item.AssetName
+                });
+               }
             }
 
-            await _utilitiesRepository.AddItemsMappingAsync(itemsMapping);
-        }
-
-        public async Task UpdateItemsMappingAsync(ItemsMapping itemsMapping)
-        {
-            if (itemsMapping == null)
-            {
-                throw new ArgumentNullException(nameof(itemsMapping));
-            }
-
-            await _utilitiesRepository.UpdateItemsMappingAsync(itemsMapping);
-        }
-
-        public async Task DeleteItemsMappingAsync(ItemsMapping itemsMapping)
-        {
-            if (itemsMapping == null)
-            {
-                throw new ArgumentNullException(nameof(itemsMapping));
-            }
-
-            await _utilitiesRepository.DeleteItemsMappingAsync(itemsMapping);
+            return moduleTypes;
         }
     }
 }
