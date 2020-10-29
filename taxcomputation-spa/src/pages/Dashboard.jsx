@@ -19,6 +19,7 @@ const Dashboard = () => {
   const [showCompanyPicker, setShowCompanyPicker] = React.useState(true);
   const [showAddCompany, setShowAddCompany] = React.useState(false);
   const [companySelectItems, setCompanySelectItems] = React.useState(null);
+  const [refreshTrialBalanceTable, setRefreshTrialBalanceTable] = React.useState(true);
   const [company, { onSelectCompany }] = useCompany();
 
   const toastCallback = React.useCallback(
@@ -58,8 +59,19 @@ const Dashboard = () => {
 
   return (
     <Layout title={title}>
-      <FileUploader company={company} toast={toast.current} toastCallback={toastCallback} />
-      {company.companyId && <TrialBalanceTable company={company} />}
+      <FileUploader
+        company={company}
+        toast={toast.current}
+        toastCallback={toastCallback}
+        setRefreshTrialBalanceTable={setRefreshTrialBalanceTable}
+      />
+      {company.companyId && (
+        <TrialBalanceTable
+          company={company}
+          refreshTrialBalanceTable={refreshTrialBalanceTable}
+          setRefreshTrialBalanceTable={setRefreshTrialBalanceTable}
+        />
+      )}
       <AddCompanyForm
         showAddCompany={showAddCompany}
         setShowAddCompany={setShowAddCompany}
@@ -75,6 +87,7 @@ const Dashboard = () => {
           company={company}
           onSelectCompany={onSelectCompany}
           companySelectItems={companySelectItems}
+          setRefreshTrialBalanceTable={setRefreshTrialBalanceTable}
         />
       )}
       <Toast baseZIndex={1000} ref={el => (toast.current = el)} />

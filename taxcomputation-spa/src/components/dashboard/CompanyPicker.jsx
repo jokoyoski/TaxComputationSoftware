@@ -9,8 +9,11 @@ const CompanyPicker = ({
   setShowCompanyPicker,
   company,
   onSelectCompany,
-  companySelectItems
+  companySelectItems,
+  setRefreshTrialBalanceTable
 }) => {
+  React.useEffect(() => setRefreshTrialBalanceTable(true), [setRefreshTrialBalanceTable]);
+
   return (
     <Dialog
       header="Company"
