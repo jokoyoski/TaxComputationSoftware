@@ -11,16 +11,18 @@ import constants from "../constants";
 import Error from "../components/common/Error";
 import { useCompany } from "../store/CompanyStore";
 import { Toast } from "primereact/toast";
+import { useResources } from "../store/ResourcesStore";
 
 const Dashboard = () => {
   const title = constants.modules.dashboard;
   const toast = React.useRef();
-  const { data: companies, loading, error, refresh } = useResource(companiesResource);
+  const { data: companies, error, refresh } = useResource(companiesResource);
   const [showCompanyPicker, setShowCompanyPicker] = React.useState(true);
   const [showAddCompany, setShowAddCompany] = React.useState(false);
   const [companySelectItems, setCompanySelectItems] = React.useState(null);
   const [refreshTrialBalanceTable, setRefreshTrialBalanceTable] = React.useState(true);
   const [company, { onSelectCompany }] = useCompany();
+  const [resources, { onCompanies }] = useResources();
 
   const toastCallback = React.useCallback(
     ({ severity, summary, detail }) => ({
@@ -40,9 +42,13 @@ const Dashboard = () => {
   }, [showAddCompany]);
 
   React.useEffect(() => {
-    if (companies) {
+    if (companies) onCompanies(companies);
+  }, [companies, onCompanies]);
+
+  React.useEffect(() => {
+    if (resources.companies) {
       setCompanySelectItems(
-        companies.map(
+        resources.companies.map(
           ({ id: companyId, companyName, companyDescription, cacNumber, tinNumber, isActive }) =>
             isActive && {
               name: companyName,
@@ -51,11 +57,11 @@ const Dashboard = () => {
         )
       );
     }
-  }, [companies]);
-
-  if (loading) return <Loader title={title} />;
+  }, [resources.companies]);
 
   if (error) return <Error title={title} error={error} refresh={refresh} />;
+
+  if (!resources.companies) return <Loader title={title} />;
 
   return (
     <Layout title={title}>

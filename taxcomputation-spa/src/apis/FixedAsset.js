@@ -8,13 +8,15 @@ export const fixedAssetMapping = async ({
   triBalanceId,
   isCost,
   openingCost,
+  transferCost,
+  transferDepreciation,
+  isTransferCostRemoved,
+  isTransferDepreciationRemoved,
   costAddition,
   costDisposal,
-  costClosing,
   openingDepreciation,
   depreciationAddition,
-  depreciationDisposal,
-  depreciationClosing
+  depreciationDisposal
 }) => {
   try {
     return await axios.post("/api/FixedAsset", {
@@ -25,13 +27,15 @@ export const fixedAssetMapping = async ({
       triBalanceId,
       isCost,
       openingCost,
+      transferCost,
+      transferDepreciation,
+      isTransferCostRemoved,
+      isTransferDepreciationRemoved,
       costAddition,
       costDisposal,
-      costClosing,
       openingDepreciation,
       depreciationAddition,
-      depreciationDisposal,
-      depreciationClosing
+      depreciationDisposal
     });
   } catch (error) {
     throw error;

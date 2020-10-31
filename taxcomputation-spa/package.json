@@ -15,7 +15,7 @@
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-hook-form": "^6.9.2",
-    "react-resource-router": "^0.13.0",
+    "react-resource-router": "^0.14.0",
     "react-scripts": "3.4.3",
     "react-sweet-state": "^2.3.2",
     "react-transition-group": "^4.4.1"

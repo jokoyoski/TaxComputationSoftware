@@ -15,7 +15,11 @@ import NotFound from "../pages/NotFound";
 import ProfitLoss from "../pages/ProfitLoss";
 import ResetPassword from "../pages/ResetPassword";
 import RouteGuard from "../RouteGuard";
-import { assetClassResource, companiesResource, trialBalanceResource } from "./resources";
+import {
+  companiesResource,
+  fixedAssetModuleClassResource,
+  trialBalanceResource
+} from "./resources";
 
 const modePathParam = "/:mode";
 
@@ -56,7 +60,7 @@ export const routes = [
     name: "FIXED_ASSET",
     exact: true,
     component: RouteGuard(FixedAsset),
-    resources: [assetClassResource, trialBalanceResource]
+    resources: [fixedAssetModuleClassResource, trialBalanceResource]
   },
   {
     path: `${constants.routes.profit_loss}${modePathParam}`,

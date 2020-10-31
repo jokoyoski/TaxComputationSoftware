@@ -19,6 +19,8 @@ const FixedAssetMapping = ({
   toast,
   toastCallback
 }) => {
+  const cost = "cost";
+  const depreciation = "depreciation";
   const { errors, handleSubmit, control } = useForm();
   const [{ companyId }] = useCompany();
   const [closingBalance, setClosingBalance] = React.useState();
@@ -28,8 +30,8 @@ const FixedAssetMapping = ({
   const [selectedAssetType, setSelectedAssetType] = React.useState();
   const [transferChecked, setTransferChecked] = React.useState();
   const typeSelectItems = [
-    { label: "Cost", value: "cost" },
-    { label: "Depreciation", value: "depreciation" }
+    { label: "Cost", value: cost },
+    { label: "Depreciation", value: depreciation }
   ];
 
   React.useEffect(() => {
@@ -46,7 +48,7 @@ const FixedAssetMapping = ({
   const onSubmit = async data => {
     if (loading) return;
 
-    const { assetClass, assetType, year, openingBalance, addition, disposal } = data;
+    const { assetClass, assetType, year, openingBalance, addition, disposal, transfer } = data;
 
     if (selectedAccounts.length === 0) {
       toast.show(
@@ -70,7 +72,7 @@ const FixedAssetMapping = ({
       toast.show(
         toastCallback({
           severity: "error",
-          detail: "Addition is not a number"
+          detail: `${assetType === cost ? "Addition" : "Charge per year"} value is not a number`
         })
       );
       return;
@@ -78,7 +80,15 @@ const FixedAssetMapping = ({
       toast.show(
         toastCallback({
           severity: "error",
-          detail: "Disposal is not a number"
+          detail: "Disposal value is not a number"
+        })
+      );
+      return;
+    } else if (isNaN(transfer)) {
+      toast.show(
+        toastCallback({
+          severity: "error",
+          detail: "Transfer value is not a number"
         })
       );
       return;
@@ -93,15 +103,19 @@ const FixedAssetMapping = ({
         mappedCode: "fixedasset",
         assetId: assetClass,
         triBalanceId: selectedAccounts.map(account => account.id),
-        isCost: assetType === "cost" ? true : false,
-        openingCost: assetType === "cost" ? Number(openingBalance) : 0,
-        costAddition: assetType === "cost" ? Number(addition) : 0,
-        costDisposal: assetType === "cost" ? Number(disposal) : 0,
-        costClosing: assetType === "cost" ? Number(closingBalance) : 0,
-        openingDepreciation: assetType !== "cost" ? Number(openingBalance) : 0,
-        depreciationAddition: assetType !== "cost" ? Number(addition) : 0,
-        depreciationDisposal: assetType !== "cost" ? Number(disposal) : 0,
-        depreciationClosing: assetType !== "cost" ? Number(closingBalance) : 0
+        isCost: assetType === cost ? true : false,
+        openingCost: assetType === cost ? Number(openingBalance) : 0,
+        transferCost: assetType === cost ? Number(transfer) : 0,
+        transferDepreciation: assetType !== cost ? Number(transfer) : 0,
+        isTransferCostRemoved: assetType === cost ? transferChecked : false,
+        isTransferDepreciationRemoved: assetType !== cost ? transferChecked : false,
+        costAddition: assetType === cost ? Number(addition) : 0,
+        costDisposal: assetType === cost ? Number(disposal) : 0,
+        costClosing: assetType === cost ? Number(closingBalance) : 0,
+        openingDepreciation: assetType !== cost ? Number(openingBalance) : 0,
+        depreciationAddition: assetType !== cost ? Number(addition) : 0,
+        depreciationDisposal: assetType !== cost ? Number(disposal) : 0,
+        depreciationClosing: assetType !== cost ? Number(closingBalance) : 0
       });
       if (response.status === 200) {
         toast.show(
@@ -212,7 +226,7 @@ const FixedAssetMapping = ({
               name="openingBalance"
               control={control}
               rules={{ required: true }}
-              defaultValue="0"
+              defaultValue=""
               render={props => (
                 <InputText
                   style={{ width: 200 }}
@@ -233,7 +247,7 @@ const FixedAssetMapping = ({
               name="addition"
               control={control}
               rules={{ required: true }}
-              defaultValue="0"
+              defaultValue=""
               render={props => (
                 <InputText
                   style={{ width: 200 }}
@@ -252,7 +266,7 @@ const FixedAssetMapping = ({
               name="disposal"
               control={control}
               rules={{ required: true }}
-              defaultValue="0"
+              defaultValue=""
               render={props => (
                 <InputText
                   style={{ width: 200 }}
@@ -271,7 +285,7 @@ const FixedAssetMapping = ({
               name="transfer"
               control={control}
               rules={{ required: true }}
-              defaultValue="0"
+              defaultValue=""
               render={props => (
                 <InputText
                   style={{ width: 200 }}
