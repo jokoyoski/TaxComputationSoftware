@@ -41,3 +41,12 @@ export const fixedAssetMapping = async ({
     throw error;
   }
 };
+
+export const fixedAssetViewData = async ({ companyId, year }) => {
+  try {
+    const { data } = await axios.get(`/api/FixedAsset/${companyId}/${year}`);
+    return data;
+  } catch (error) {
+    throw error;
+  }
+};

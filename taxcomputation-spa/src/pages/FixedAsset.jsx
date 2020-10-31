@@ -7,10 +7,11 @@ import utils from "../utils";
 import { usePathParam, useResource } from "react-resource-router";
 import FixedAssetMapping from "../components/fixed_asset/FixedAssetMapping";
 import { fixedAssetModuleClassResource, trialBalanceResource } from "../routes/resources";
-import Loader from "../components/common/Loader";
+import PageLoader from "../components/common/PageLoader";
 import Error from "../components/common/Error";
 import { Toast } from "primereact/toast";
 import { useResources } from "../store/ResourcesStore";
+import FixedAssetView from "../components/fixed_asset/FixedAssetView";
 
 const FixedAsset = () => {
   const title = constants.modules.fixedAsset;
@@ -89,7 +90,7 @@ const FixedAsset = () => {
   if (trialBalanceError)
     return <Error title={title} error={trialBalanceError} refresh={trialBalanceRefresh} />;
 
-  if (!resources.moduleItems || !resources.trialBalance) return <Loader title={title} />;
+  if (!resources.moduleItems || !resources.trialBalance) return <PageLoader title={title} />;
 
   return (
     <Layout title={title}>
@@ -113,7 +114,11 @@ const FixedAsset = () => {
                 toastCallback={toastCallback}
               />
             ),
-            view: <ViewMode title={title}></ViewMode>
+            view: (
+              <ViewMode title={title} year={year}>
+                <FixedAssetView year={year} />
+              </ViewMode>
+            )
           }[mode]
         }
       </Main>

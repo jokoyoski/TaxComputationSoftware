@@ -6,7 +6,7 @@ import TrialBalanceTable from "../components/dashboard/TrialBalanceTable";
 import CompanyPicker from "../components/dashboard/CompanyPicker";
 import { useResource } from "react-resource-router";
 import { companiesResource } from "../routes/resources";
-import Loader from "../components/common/Loader";
+import PageLoader from "../components/common/PageLoader";
 import constants from "../constants";
 import Error from "../components/common/Error";
 import { useCompany } from "../store/CompanyStore";
@@ -61,7 +61,7 @@ const Dashboard = () => {
 
   if (error) return <Error title={title} error={error} refresh={refresh} />;
 
-  if (!resources.companies) return <Loader title={title} />;
+  if (!resources.companies) return <PageLoader title={title} />;
 
   return (
     <Layout title={title}>
