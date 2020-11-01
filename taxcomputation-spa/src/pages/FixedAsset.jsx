@@ -6,23 +6,21 @@ import constants from "../constants";
 import utils from "../utils";
 import { usePathParam, useResource } from "react-resource-router";
 import FixedAssetMapping from "../components/fixed_asset/FixedAssetMapping";
-import { assetClassResource, trialBalanceResource } from "../routes/resources";
-import Loader from "../components/common/Loader";
+import { fixedAssetModuleClassResource, trialBalanceResource } from "../routes/resources";
+import PageLoader from "../components/common/PageLoader";
 import Error from "../components/common/Error";
 import { Toast } from "primereact/toast";
+import { useResources } from "../store/ResourcesStore";
+import FixedAssetView from "../components/fixed_asset/FixedAssetView";
 
 const FixedAsset = () => {
   const title = constants.modules.fixedAsset;
   const toast = React.useRef();
-  const {
-    data: assetClass,
-    loading: assetClassLoading,
-    error: assetClassError,
-    refresh: assetClassRefresh
-  } = useResource(assetClassResource);
+  const { data: assetClass, error: assetClassError, refresh: assetClassRefresh } = useResource(
+    fixedAssetModuleClassResource
+  );
   const {
     data: trialBalance,
-    loading: trialBalanceLoading,
     error: trialBalanceError,
     refresh: trialBalanceRefresh
   } = useResource(trialBalanceResource);
@@ -30,6 +28,7 @@ const FixedAsset = () => {
   const [year, setYear] = React.useState(utils.currentYear());
   const [tbData, setTbData] = React.useState([]);
   const [assetClassSelectItems, setAssetClassSelectItems] = React.useState([]);
+  const [resources, { onTrialBalance, onModuleItems }] = useResources();
   const yearSelectItems = utils.getYears(year => ({
     label: year.toString(),
     value: year.toString()
@@ -47,21 +46,29 @@ const FixedAsset = () => {
   );
 
   React.useEffect(() => {
-    if (assetClass) {
+    if (assetClass) onModuleItems(assetClass);
+  }, [assetClass, onModuleItems]);
+
+  React.useEffect(() => {
+    if (resources.moduleItems) {
       setAssetClassSelectItems(
-        assetClass.map(({ id: assetClassId, name }) => ({
+        resources.moduleItems.map(({ id: assetClassId, name }) => ({
           label: name,
           value: assetClassId
         }))
       );
     }
-  }, [assetClass]);
+  }, [resources.moduleItems]);
 
   React.useEffect(() => {
-    if (trialBalance) {
+    if (trialBalance) onTrialBalance(trialBalance);
+  }, [onTrialBalance, trialBalance]);
+
+  React.useEffect(() => {
+    if (resources.trialBalance) {
       setTbData(
-        trialBalance
-          ? trialBalance
+        resources.trialBalance
+          ? resources.trialBalance
               .filter(
                 d =>
                   !(d.accountId === "" && d.item === "" && d.debit === 0 && d.credit === 0) &&
@@ -75,15 +82,15 @@ const FixedAsset = () => {
           : []
       );
     }
-  }, [trialBalance]);
-
-  if (assetClassLoading || trialBalanceLoading) return <Loader title={title} />;
+  }, [resources.trialBalance]);
 
   if (assetClassError)
     return <Error title={title} error={assetClassError} refresh={assetClassRefresh} />;
 
   if (trialBalanceError)
     return <Error title={title} error={trialBalanceError} refresh={trialBalanceRefresh} />;
+
+  if (!resources.moduleItems || !resources.trialBalance) return <PageLoader title={title} />;
 
   return (
     <Layout title={title}>
@@ -107,7 +114,11 @@ const FixedAsset = () => {
                 toastCallback={toastCallback}
               />
             ),
-            view: <ViewMode title={title}></ViewMode>
+            view: (
+              <ViewMode title={title} year={year}>
+                <FixedAssetView year={year} />
+              </ViewMode>
+            )
           }[mode]
         }
       </Main>

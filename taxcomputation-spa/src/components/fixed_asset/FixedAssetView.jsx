@@ -1,86 +1,153 @@
 import React from "react";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
+import { fixedAssetViewData } from "../../apis/FixedAsset";
+import { useCompany } from "../../store/CompanyStore";
+import utils from "../../utils";
+import Loader from "../common/Loader";
 
-const FixedAssetView = () => {
-  const [balancingAdjustmentData] = React.useState([
+const FixedAssetView = ({ year }) => {
+  const [{ companyId }] = useCompany();
+  const [loading, setLoading] = React.useState();
+  const [error, setError] = React.useState();
+  const [fixedAssetApiData, setFixedAssetApiData] = React.useState();
+  const [fixedAssetData, setFixedAssetData] = React.useState([
     {
-      category: <strong>Motor Vehicles</strong>,
-      credit: "",
-      balancingAllowance: "",
-      balancingCharge: "",
-      cost: "",
-      salesProceed: "",
-      twdv: ""
+      category: <strong>Cost</strong>
     },
     {
-      category: "Cost up to 2018 YOA",
-      credit: "₦14,694,750.00",
-      balancingAllowance: "",
-      balancingCharge: "",
-      cost: "₦14,694,750.00",
-      salesProceed: "",
-      twdv: ""
+      category: "Opening Balance",
+      key: "openingCost"
     },
     {
-      category: "Initial Allowance",
-      credit: "₦7,347,375.00",
-      balancingAllowance: "",
-      balancingCharge: "",
-      cost: "",
-      salesProceed: "",
-      twdv: ""
+      category: "Additions",
+      key: "costAddition"
     },
     {
-      category: "Annual allowances up to 2019",
-      credit: "₦3,673,688.00",
-      balancingAllowance: "",
-      balancingCharge: "",
-      cost: "",
-      salesProceed: "",
-      twdv: ""
+      category: "Disposal",
+      key: "costDisposal"
     },
     {
-      category: "Residue at 31.12.2019",
-      credit: "₦3,673,688.00",
-      balancingAllowance: "",
-      balancingCharge: "",
-      cost: "",
-      salesProceed: "",
-      twdv: "₦3,673,688.00"
+      category: <strong>As at 31/12/{year - 1}</strong>,
+      key: "costClosing"
     },
     {
-      category: "Sales Proceeds",
-      credit: "₦5,510,531.00",
-      balancingAllowance: "",
-      balancingCharge: "",
-      cost: "",
-      salesProceed: "₦5,510,531.00",
-      twdv: ""
+      category: null
     },
     {
-      category: "Balancing charge",
-      credit: "₦1,836,844.00",
-      balancingAllowance: "",
-      balancingCharge: "₦1,836,844.00",
-      cost: "",
-      salesProceed: "",
-      twdv: ""
+      category: <strong>Depreciation</strong>
+    },
+    {
+      category: "Opening Balance",
+      key: "openingDepreciation"
+    },
+    {
+      category: "Charged for the year",
+      key: "depreciationAddition"
+    },
+    {
+      category: "Disposal",
+      key: "depreciationDisposal"
+    },
+    {
+      category: <strong>As at 31/12/{year - 1}</strong>,
+      key: "depreciationClosing"
+    },
+    {
+      category: null
+    },
+    {
+      category: <strong>Net Book Value</strong>
+    },
+    {
+      category: <strong>As at 31/12/{year - 1}</strong>,
+      key: "netValue"
     }
   ]);
 
+  React.useEffect(() => {
+    const fetchFixedAssetViewData = async () => {
+      try {
+        setError(null);
+        setLoading(true);
+        const data = await fixedAssetViewData({ companyId, year });
+        setFixedAssetApiData(data.fixedAssetData);
+        setFixedAssetData(state => {
+          const newState = Array.from(state);
+          data.fixedAssetData.forEach((d, index) => {
+            newState.forEach(s => {
+              switch (s.key) {
+                case "openingCost":
+                  s[d.fixedAssetName] = d.openingCost;
+                  s.total = data.total.openingCostTotal;
+                  break;
+                case "costAddition":
+                  s[d.fixedAssetName] = d.costAddition;
+                  s.total = data.total.additionCostTotal;
+                  break;
+                case "costDisposal":
+                  s[d.fixedAssetName] = d.costDisposal;
+                  s.total = data.total.disposalCostTotal;
+                  break;
+                case "costClosing":
+                  s[d.fixedAssetName] = <strong>{d.costClosing}</strong>;
+                  s.total = <strong>{data.total.closingCostTotal}</strong>;
+                  break;
+                case "openingDepreciation":
+                  s[d.fixedAssetName] = d.openingDepreciation;
+                  s.total = data.total.openingDepreciationTotal;
+                  break;
+                case "depreciationAddition":
+                  s[d.fixedAssetName] = d.depreciationAddition;
+                  s.total = data.total.additionDepreciationTotal;
+                  break;
+                case "depreciationDisposal":
+                  s[d.fixedAssetName] = d.depreciationDisposal;
+                  s.total = data.total.disposalDepreciationTotal;
+                  break;
+                case "depreciationClosing":
+                  s[d.fixedAssetName] = <strong>{d.depreciationClosing}</strong>;
+                  s.total = <strong>{data.total.closingDepreciationTotal}</strong>;
+                  break;
+                case "netValue":
+                  s[d.fixedAssetName] = <strong>{data.netBookValue[index].value}</strong>;
+                  s.total = (
+                    <strong>
+                      {utils.currencyFormatter(
+                        data.netBookValue.reduce((acc, cur) => acc + Number(cur.value.slice(1)), 0)
+                      )}
+                    </strong>
+                  );
+                  break;
+                default:
+                  break;
+              }
+            });
+          });
+          return newState;
+        });
+      } catch (error) {
+        if (error.response) setError(error.response.data.errors[0]);
+        else setError(error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchFixedAssetViewData();
+  }, [companyId, year]);
+
+  if (error) return <p style={{ color: "#f00" }}>{error}</p>;
+
+  if (loading) return <Loader />;
+
   return (
-    <DataTable
-      value={balancingAdjustmentData}
-      className="p-datatable-gridlines"
-      style={{ marginTop: 40 }}>
+    <DataTable value={fixedAssetData} className="p-datatable-gridlines" style={{ marginTop: 40 }}>
       <Column field="category" header=""></Column>
-      <Column field="credit" header="₦"></Column>
-      <Column field="balancingAllowance" header="Balancing Allowance (₦)"></Column>
-      <Column field="balancingCharge" header="Balancing Charge (₦)"></Column>
-      <Column field="cost" header="Cost (₦)"></Column>
-      <Column field="salesProceed" header="Sales Proceed (₦)"></Column>
-      <Column field="twdv" header="TWDV"></Column>
+      {fixedAssetApiData &&
+        fixedAssetApiData.map(d => (
+          <Column key={d.fixedAssetName} field={d.fixedAssetName} header={`${d.fixedAssetName}`} />
+        ))}
+      <Column field="total" header="Total"></Column>
     </DataTable>
   );
 };

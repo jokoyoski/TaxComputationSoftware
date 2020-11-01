@@ -40,7 +40,7 @@ const CompanyPicker = ({
       focusOnShow={false}
       closeOnEscape={false}
       closable={false}
-      onHide={() => setShowCompanyPicker(false)}>
+      onHide={() => /* TODO: Fix here later */ setShowCompanyPicker(false)}>
       <div className="p-d-flex p-flex-column" style={{ height: 300 }}>
         <label htmlFor="companyNameInput" style={{ margin: "0px 0px 10px 0px" }}></label>
         <Dropdown
