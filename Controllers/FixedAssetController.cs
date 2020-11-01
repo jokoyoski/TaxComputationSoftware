@@ -70,23 +70,13 @@ namespace TaxComputationAPI.Controllers {
             }
         }
         
-        [HttpDelete ("{trialbalanceId}")]
+        [HttpPut("fixed-asset/{id}")]
         [Authorize]
-        public async Task<IActionResult> DeleteFixedAsset (int trialBalanceId) {
-            try {
-                if (trialBalanceId == 0) {
-                     return StatusCode (400, new { errors = new []{"No item was selected .} });
-                }
-                 await _fixedAssetService.DeleteFixedAsset(trialBalanceId);
+        public async Task<IActionResult> DeleteFixedAsset (int id) {
+            
+             await _fixedAssetService.DeleteFixedAsset(id);
                
                 return Ok ("Item Unmapped");
-
-            } catch (Exception ex) {
-                var email = User.FindFirst (ClaimTypes.Email).Value;
-                _logger.LogInformation ("Exception for {email}, {ex}", email, ex.Message);
-                 return StatusCode (500, new { errors = new []{"Error occured while trying to process your request please try again later !"} });
-                
-            }
         }
 
 
