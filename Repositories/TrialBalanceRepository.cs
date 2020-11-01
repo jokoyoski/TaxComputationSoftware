@@ -66,7 +66,7 @@ namespace TaxComputationAPI.Repositories
         public async Task<TrialBalance> UploadTrialBalance(TrialBalance model)
         {
             var response = _dataContext.TrialBalance.Add(model);
-            _dataContext.SaveChangesAsync();
+           await  _dataContext.SaveChangesAsync();
 
             return response.Entity;
         }
