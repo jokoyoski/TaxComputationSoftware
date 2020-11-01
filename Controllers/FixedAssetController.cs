@@ -75,7 +75,7 @@ namespace TaxComputationAPI.Controllers {
         public async Task<IActionResult> DeleteFixedAsset (int trialBalanceId) {
             try {
                 if (trialBalanceId == 0) {
-                     return StatusCode (400, new { errors = new []{"No item was selected} });
+                     return StatusCode (400, new { errors = new []{"No item was selected .} });
                 }
                  await _fixedAssetService.DeleteFixedAsset(trialBalanceId);
                
