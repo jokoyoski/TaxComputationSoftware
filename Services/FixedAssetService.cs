@@ -102,27 +102,18 @@ namespace TaxComputationAPI.Services
             }
             if (fixedAsset.TriBalanceId.Count > 0)
             {
-                var firstItemInArray = _trialBalanceRepository.GetTrialBalanceById(fixedAsset.TriBalanceId[0]);
-                if (firstItemInArray.IsCheck == true)
-                {
-                    foreach (var value in fixedAsset.TriBalanceId)
+                //var firstItemInArray = _trialBalanceRepository.GetTrialBalanceById(fixedAsset.TriBalanceId[0]);
+                
+                     foreach (var value in fixedAsset.TriBalanceId)
                     {
-                        await _trialBalanceRepository.UpdateTrialBalance(value, null, true); 
-                        _utilitiesRepository.DeleteTrialBalancingMapping(value);
-                    }
-
-                   
-                }else{
-                    foreach (var value in fixedAsset.TriBalanceId)
-                {
                     string trialBalanceValue = getMappedDetails.MappedTo("fixedasset");
                     await _trialBalanceRepository.UpdateTrialBalance(value, trialBalanceValue, false);
                      
-                }
+                    }
                 
-                var result=  await _fixedAssetRepository.SaveFixedAsset(fixedAsset);
-                 foreach (var value in fixedAsset.TriBalanceId)
-                {
+                  var result=  await _fixedAssetRepository.SaveFixedAsset(fixedAsset);
+                   foreach (var value in fixedAsset.TriBalanceId)
+                   {
                     if(fixedAsset.IsCost==true){
                      
                     _utilitiesRepository.AddTrialBalanceMapping(value,result,"fixedasset","cost");
@@ -135,7 +126,18 @@ namespace TaxComputationAPI.Services
                 
                 }
 
-                }
+               /* if (firstItemInArray.IsCheck == true)
+                {
+                    foreach (var value in fixedAsset.TriBalanceId)
+                    {
+                        await _trialBalanceRepository.UpdateTrialBalance(value, null, true); 
+                        _utilitiesRepository.DeleteTrialBalancingMapping(value);
+                    }
+
+                   
+                }else{
+                   
+                }*/
 
             }else{
                  var result=  await _fixedAssetRepository.SaveFixedAsset(fixedAsset);
@@ -218,6 +220,12 @@ namespace TaxComputationAPI.Services
             fixedAsset.total = total;
 
             return fixedAsset;
+        }
+
+        public  async Task DeleteFixedAsset(int fixedAssetId)
+        {
+             await _trialBalanceRepository.UpdateTrialBalance(fixedAssetId, null, true); 
+            _utilitiesRepository.DeleteTrialBalancingMapping(fixedAssetId);
         }
     }
 }

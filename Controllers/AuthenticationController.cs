@@ -75,9 +75,9 @@ namespace TaxComputationAPI.Controllers
              return StatusCode (500, new { errors = new []{"Error occured while trying to process your request please try again later !"} });
             
             }
-            
-
         }
+
+        
 
         [Authorize]
         [HttpPost("change-password")]
@@ -214,4 +214,3 @@ namespace TaxComputationAPI.Controllers
         }
 
     }
-}
