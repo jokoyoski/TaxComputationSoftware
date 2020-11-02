@@ -22,6 +22,7 @@ namespace TaxComputationAPI.Helpers
             CreateMap<ItemsMapping, ItemsMappingDto>().ReverseMap();
             CreateMap<ItemsMapping, ItemsMappingUpdateDto>().ReverseMap();
             CreateMap<ItemsMapping, ItemsMappingDeleteDto>().ReverseMap();
+            CreateMap<BalancingAdjustment, BalancingAdjustmentDto>().ReverseMap();
         }
     }
 }
