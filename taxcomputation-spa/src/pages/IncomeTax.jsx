@@ -32,7 +32,7 @@ const IncomeTax = () => {
               <MappingMode year={year} setYear={setYear} yearSelectItems={yearSelectItems} />
             ),
             view: (
-              <ViewMode title={title}>
+              <ViewMode title={title} year={year}>
                 <IncomeTaxView />
               </ViewMode>
             )

@@ -69,6 +69,16 @@ namespace TaxComputationAPI.Controllers {
                  return StatusCode (500, new { errors = new []{"Error Occured please try again later,please try again later..."} });
             }
         }
+        
+        [HttpPut("fixed-asset/{id}")]
+        [Authorize]
+        public async Task<IActionResult> DeleteFixedAsset (int id) {
+            
+             await _fixedAssetService.DeleteFixedAsset(id);
+               
+                return Ok ("Item Unmapped");
+        }
+
 
         [HttpGet ("{companyId}/{yearId}")]
         [Authorize]

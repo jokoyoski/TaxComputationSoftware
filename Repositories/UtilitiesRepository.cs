@@ -99,9 +99,10 @@ namespace TaxComputationAPI.Repositories
 
         public decimal GetAmount(int moduleId, string additionalInfo)
         {
+             decimal finalAmount = 0;
 
-            decimal finalAmount = 0;
-            var result = (from s in _context.TrialBalanceMapping
+               if(additionalInfo=="cost"){
+                   var result = (from s in _context.TrialBalanceMapping
                           join b in _context.TrialBalance on s.TrialBalanceId equals b.Id
                           where s.ModuleId == moduleId && s.AdditionalInfo == additionalInfo
                           select new Amount
@@ -115,6 +116,26 @@ namespace TaxComputationAPI.Repositories
             }
 
             return finalAmount;
+
+               }else{
+
+                var result = (from s in _context.TrialBalanceMapping
+                          join b in _context.TrialBalance on s.TrialBalanceId equals b.Id
+                          where s.ModuleId == moduleId && s.AdditionalInfo == additionalInfo
+                          select new Amount
+                          {
+                              amount = b.Credit
+                          }
+            ).OrderBy(x => x.amount).ToList();
+            foreach (var item in result)
+            {
+                finalAmount += item.amount;
+            }
+
+            return finalAmount;
+               }
+           
+          
         }
 
         public void AddTrialBalanceMapping(int trialBalanceId, int moduleId, string moduleCode, string additionalInfo)

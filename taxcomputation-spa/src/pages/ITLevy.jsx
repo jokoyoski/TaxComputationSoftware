@@ -25,7 +25,7 @@ const ITLevy = () => {
         year={year}
         setYear={setYear}
         yearSelectItems={yearSelectItems}>
-        <ViewMode title={title}>
+        <ViewMode title={title} year={year}>
           <ITLevyView />
         </ViewMode>
       </Main>

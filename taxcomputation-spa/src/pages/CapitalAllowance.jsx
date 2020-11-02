@@ -25,7 +25,7 @@ const CapitalAllowance = () => {
         year={year}
         setYear={setYear}
         yearSelectItems={yearSelectItems}>
-        <ViewMode title={title}>
+        <ViewMode title={title} year={year}>
           <CapitalAllowanceView />
         </ViewMode>
       </Main>

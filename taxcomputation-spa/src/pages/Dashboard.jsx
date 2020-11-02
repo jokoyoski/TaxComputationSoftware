@@ -6,20 +6,23 @@ import TrialBalanceTable from "../components/dashboard/TrialBalanceTable";
 import CompanyPicker from "../components/dashboard/CompanyPicker";
 import { useResource } from "react-resource-router";
 import { companiesResource } from "../routes/resources";
-import Loader from "../components/common/Loader";
+import PageLoader from "../components/common/PageLoader";
 import constants from "../constants";
 import Error from "../components/common/Error";
 import { useCompany } from "../store/CompanyStore";
 import { Toast } from "primereact/toast";
+import { useResources } from "../store/ResourcesStore";
 
 const Dashboard = () => {
   const title = constants.modules.dashboard;
   const toast = React.useRef();
-  const { data: companies, loading, error, refresh } = useResource(companiesResource);
+  const { data: companies, error, refresh } = useResource(companiesResource);
   const [showCompanyPicker, setShowCompanyPicker] = React.useState(true);
   const [showAddCompany, setShowAddCompany] = React.useState(false);
   const [companySelectItems, setCompanySelectItems] = React.useState(null);
+  const [refreshTrialBalanceTable, setRefreshTrialBalanceTable] = React.useState(true);
   const [company, { onSelectCompany }] = useCompany();
+  const [resources, { onCompanies }] = useResources();
 
   const toastCallback = React.useCallback(
     ({ severity, summary, detail }) => ({
@@ -39,9 +42,13 @@ const Dashboard = () => {
   }, [showAddCompany]);
 
   React.useEffect(() => {
-    if (companies) {
+    if (companies) onCompanies(companies);
+  }, [companies, onCompanies]);
+
+  React.useEffect(() => {
+    if (resources.companies) {
       setCompanySelectItems(
-        companies.map(
+        resources.companies.map(
           ({ id: companyId, companyName, companyDescription, cacNumber, tinNumber, isActive }) =>
             isActive && {
               name: companyName,
@@ -50,16 +57,27 @@ const Dashboard = () => {
         )
       );
     }
-  }, [companies]);
-
-  if (loading) return <Loader title={title} />;
+  }, [resources.companies]);
 
   if (error) return <Error title={title} error={error} refresh={refresh} />;
 
+  if (!resources.companies) return <PageLoader title={title} />;
+
   return (
     <Layout title={title}>
-      <FileUploader company={company} toast={toast.current} toastCallback={toastCallback} />
-      {company.companyId && <TrialBalanceTable company={company} />}
+      <FileUploader
+        company={company}
+        toast={toast.current}
+        toastCallback={toastCallback}
+        setRefreshTrialBalanceTable={setRefreshTrialBalanceTable}
+      />
+      {company.companyId && (
+        <TrialBalanceTable
+          company={company}
+          refreshTrialBalanceTable={refreshTrialBalanceTable}
+          setRefreshTrialBalanceTable={setRefreshTrialBalanceTable}
+        />
+      )}
       <AddCompanyForm
         showAddCompany={showAddCompany}
         setShowAddCompany={setShowAddCompany}
@@ -75,6 +93,7 @@ const Dashboard = () => {
           company={company}
           onSelectCompany={onSelectCompany}
           companySelectItems={companySelectItems}
+          setRefreshTrialBalanceTable={setRefreshTrialBalanceTable}
         />
       )}
       <Toast baseZIndex={1000} ref={el => (toast.current = el)} />

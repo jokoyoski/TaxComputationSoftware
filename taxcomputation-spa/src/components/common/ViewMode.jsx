@@ -1,14 +1,16 @@
 import React from "react";
+import { useCompany } from "../../store/CompanyStore";
 import ViewModeHeaders from "./ViewModeHeaders";
 
-const ViewMode = ({ title, children }) => {
+const ViewMode = ({ title, year, children }) => {
+  const [{ companyName }] = useCompany();
   return (
     <>
       <ViewModeHeaders
         headers={[
-          "ACCESS PENSION FUND CUSTODIAN LIMITED",
-          "2020 INCOME TAX COMPUTATIONS",
-          "AUDITED ACCOUNTS FOR THE YEAR ENDED 31 DECEMBER, 2019",
+          companyName.toUpperCase(),
+          `${year} INCOME TAX COMPUTATIONS`,
+          `AUDITED ACCOUNTS FOR THE YEAR ENDED 31 DECEMBER, ${year - 1}`,
           {
             "Fixed Asset": "ANALYSIS OF FIXED ASSET MOVEMENT",
             "Profit & Loss": "SUMMARY OF PROFIT & LOSS ACCOUNTS",

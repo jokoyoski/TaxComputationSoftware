@@ -6,7 +6,11 @@ import { Dropdown } from "primereact/dropdown";
 import utils from "../../utils";
 import { getTrialBalance } from "../../apis/TrialBalance";
 
-const TrialBalanceTable = ({ company: { companyId } }) => {
+const TrialBalanceTable = ({
+  company: { companyId },
+  refreshTrialBalanceTable,
+  setRefreshTrialBalanceTable
+}) => {
   const [year, setYear] = React.useState(utils.currentYear());
   const [yearSelectItems] = React.useState(utils.getYears());
   const [tbData, setTbData] = React.useState([]);
@@ -38,8 +42,11 @@ const TrialBalanceTable = ({ company: { companyId } }) => {
         setLoading(false);
       }
     };
-    fetchTrialBalance();
-  }, [companyId, year]);
+    if (refreshTrialBalanceTable) {
+      fetchTrialBalance();
+      setRefreshTrialBalanceTable(false);
+    }
+  }, [companyId, year, refreshTrialBalanceTable, setRefreshTrialBalanceTable]);
 
   return (
     <Card style={{ width: "100%" }}>
@@ -55,6 +62,7 @@ const TrialBalanceTable = ({ company: { companyId } }) => {
               options={yearSelectItems}
               onChange={e => {
                 setYear(e.value);
+                setRefreshTrialBalanceTable(true);
               }}
               placeholder="TB Year"
             />
