@@ -1,7 +1,7 @@
 import React from "react";
 import { InputText } from "primereact/inputtext";
 
-const PasswordInput = ({ placeholder, value, onChange }) => {
+const PasswordInput = ({ placeholder, autoComplete, value, onChange }) => {
   const [passwordReveal, setPasswordReveal] = React.useState(false);
 
   React.useEffect(() => setPasswordReveal(state => (!value ? false : state)), [value]);
@@ -11,6 +11,7 @@ const PasswordInput = ({ placeholder, value, onChange }) => {
       <InputText
         style={{ marginBottom: 5, width: "100%", paddingRight: 33 }}
         type={passwordReveal ? "text" : "password"}
+        autoComplete={autoComplete}
         placeholder={placeholder}
         value={value}
         onChange={onChange}

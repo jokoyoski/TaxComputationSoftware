@@ -71,6 +71,9 @@ body {
 
 .settings-item {
   cursor: pointer;
+  padding: 5px;
+  margin: 0px;
+  text-align: right;
   transition: background-color 0.3s;
 }
 
