@@ -44,6 +44,7 @@ namespace TaxComputationAPI.Data
        
 
         public DbSet<TrialBalanceMapping> TrialBalanceMapping {get;set;}
+        public DbSet<BalancingAdjustment> BalancingAdjustment { get; set; }
     }
 }
 
