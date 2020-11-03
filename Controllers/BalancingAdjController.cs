@@ -27,30 +27,30 @@ namespace TaxComputationAPI.Controllers
             _balancingAdjService = balancingAdjService;
         }
 
-        //[HttpPost("balancing-adjustment")]
-        //public async Task<IActionResult> CreateBalancingAdjustment(BalancingAdjustmentDto balancingAdjustmentDto)
-        //{
-        //    try
-        //    {
-        //        var assetMappingRecord = await _balancingAdjService.GetAssetMappingAsync(balancingAdjustmentDto.AssetName);
-        //        if (assetMappingRecord != null)
-        //        {
-        //            var error = new[] { "Asset mapping exist!" };
-        //            return StatusCode(400, new { errors = new { error } });
-        //        }
-        //        var assetMappingToAdd = _mapper.Map<BalancingAdjustment>(balancingAdjustmentDto);
-        //        assetMappingToAdd.AssetName = balancingAdjustmentDto.AssetName;
+        [HttpPost("balancing-adjustment")]
+        public async Task<IActionResult> CreateBalancingAdjustment(BalancingAdjustmentDto balancingAdjustmentDto)
+        {
+            try
+            {
+                var balancingAdjRecord = await _balancingAdjService.GetBalancingAdjAsync(balancingAdjustmentDto.AssetId);
+                if (balancingAdjRecord != null)
+                {
+                    var error = new[] { "Asset mapping exist!" };
+                    return StatusCode(400, new { errors = new { error } });
+                }
+                var balancingAdjToAdd = _mapper.Map<BalancingAdjustment>(balancingAdjustmentDto);
+                balancingAdjToAdd.AssetId = balancingAdjustmentDto.AssetId;
 
-        //        await _balancingAdjService.AddAssetMappingAsync(assetMappingToAdd);
+                await _balancingAdjService.AddBalancingAdjAsync(balancingAdjToAdd);
 
-        //        return Ok("Balancing Adjustment created successfully !!");
+                return Ok("Balancing Adjustment added successfully !!");
 
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        var error = new[] { "Error occured while trying to process your request please try again later !" };
-        //        return StatusCode(500, new { errors = new { error } });
-        //    }
-        //}
+            }
+            catch (Exception ex)
+            {
+                var error = new[] { "Error occured while trying to process your request please try again later !" };
+                return StatusCode(500, new { errors = new { error } });
+            }
+        }
     }
 }
