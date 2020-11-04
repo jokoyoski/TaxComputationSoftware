@@ -17,5 +17,7 @@ namespace TaxComputationAPI.Models
         public int SalesProceed { get; set; }
         public int BalancingCharge { get; set; }
         public int BalancingAllowance { get; set; }
+        public int Year { get; set; }
+        public int YearBought { get; set; }
     }
 }
