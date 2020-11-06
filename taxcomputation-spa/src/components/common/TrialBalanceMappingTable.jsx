@@ -3,6 +3,7 @@ import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { Button } from "primereact/button";
 import { fixedAssetUnmapping } from "../../apis/FixedAsset";
+import constants from "../../constants";
 
 const TrialBalanceMappingTable = ({
   tbData,
@@ -34,30 +35,46 @@ const TrialBalanceMappingTable = ({
       <Column field="item" header="Account Description"></Column>
       <Column field="debitAmt" header="Debit Amt"></Column>
       <Column field="creditAmt" header="Credit Amt"></Column>
-      <Column field="mappedTo" header="Mapped To"></Column>
-      <Column
-        field="unmap"
-        header="Unmap"
-        body={rowData =>
-          rowData.mappedTo && (
-            <Button
-              className="p-button-danger p-button-text"
-              label="Unmap"
-              onClick={async () => {
-                const response = await fixedAssetUnmapping({ id: rowData.id });
-                if (response.status === 200) {
-                  trialBalanceRefresh();
-                  toast.show(
-                    toastCallback({
-                      severity: "success",
-                      detail: response.data
-                    })
-                  );
-                }
-              }}
-            />
-          )
-        }></Column>
+      {tbData && tbData.some(d => d.mappedTo) && (
+        <Column field="mappedTo" header="Mapped To"></Column>
+      )}
+      {tbData && tbData.some(d => d.mappedTo) && (
+        <Column
+          field="unmap"
+          header="Unmap"
+          body={rowData =>
+            rowData.mappedTo && (
+              <Button
+                className="p-button-danger p-button-text"
+                label="Unmap"
+                onClick={async () => {
+                  try {
+                    const response = await fixedAssetUnmapping({ id: rowData.id });
+                    if (response.status === 200) {
+                      trialBalanceRefresh();
+                      toast.show(
+                        toastCallback({
+                          severity: "success",
+                          detail: response.data
+                        })
+                      );
+                    }
+                  } catch (error) {
+                    if (error.message === "Network Error") {
+                      return toast.show(
+                        toastCallback({
+                          severity: "success",
+                          detail: constants.networkErrorMessage
+                        })
+                      );
+                    }
+                    trialBalanceRefresh();
+                  }
+                }}
+              />
+            )
+          }></Column>
+      )}
     </DataTable>
   );
 };

@@ -36,6 +36,10 @@ const FixedAssetMapping = ({
   ];
 
   React.useEffect(() => {
+    trialBalanceRefresh();
+  }, [trialBalanceRefresh]);
+
+  React.useEffect(() => {
     if (selectedAccounts) {
       const value = selectedAccounts.reduce(
         (accumulator, current) => accumulator + current.debit,
