@@ -28,6 +28,10 @@ const FixedAssetView = ({ year }) => {
       key: "costDisposal"
     },
     {
+      category: "Transfer",
+      key: "transferCost"
+    },
+    {
       category: <strong>As at 31/12/{year - 1}</strong>,
       key: "costClosing"
     },
@@ -48,6 +52,10 @@ const FixedAssetView = ({ year }) => {
     {
       category: "Disposal",
       key: "depreciationDisposal"
+    },
+    {
+      category: "Transfer",
+      key: "transferDepreciation"
     },
     {
       category: <strong>As at 31/12/{year - 1}</strong>,
@@ -89,6 +97,10 @@ const FixedAssetView = ({ year }) => {
                   s[d.fixedAssetName] = d.costDisposal;
                   s.total = data.total.disposalCostTotal;
                   break;
+                case "transferCost":
+                  s[d.fixedAssetName] = d.transferCost;
+                  s.total = data.total.transferCostTotal;
+                  break;
                 case "costClosing":
                   s[d.fixedAssetName] = <strong>{d.costClosing}</strong>;
                   s.total = <strong>{data.total.closingCostTotal}</strong>;
@@ -105,6 +117,10 @@ const FixedAssetView = ({ year }) => {
                   s[d.fixedAssetName] = d.depreciationDisposal;
                   s.total = data.total.disposalDepreciationTotal;
                   break;
+                case "transferDepreciation":
+                  s[d.fixedAssetName] = d.transferDepreciation;
+                  s.total = data.total.transferDepreciationTotal;
+                  break;
                 case "depreciationClosing":
                   s[d.fixedAssetName] = <strong>{d.depreciationClosing}</strong>;
                   s.total = <strong>{data.total.closingDepreciationTotal}</strong>;
@@ -114,7 +130,10 @@ const FixedAssetView = ({ year }) => {
                   s.total = (
                     <strong>
                       {utils.currencyFormatter(
-                        data.netBookValue.reduce((acc, cur) => acc + Number(cur.value.slice(1)), 0)
+                        data.netBookValue.reduce(
+                          (acc, cur) => acc + Number(cur.value.slice(1).replace(",", "")),
+                          0
+                        )
                       )}
                     </strong>
                   );

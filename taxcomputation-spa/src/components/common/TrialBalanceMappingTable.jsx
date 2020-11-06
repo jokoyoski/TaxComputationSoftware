@@ -28,7 +28,7 @@ const TrialBalanceMappingTable = ({
             : toast.show(
                 toastCallback({
                   severity: "error",
-                  detail: "This item as been mapped"
+                  detail: "This item has been mapped"
                 })
               );
         } else {
