@@ -16,6 +16,7 @@ const FixedAssetMapping = ({
   yearSelectItems,
   assetClassSelectItems,
   tbData,
+  trialBalanceRefresh,
   toast,
   toastCallback
 }) => {
@@ -318,6 +319,9 @@ const FixedAssetMapping = ({
       </form>
       <TrialBalanceMappingTable
         tbData={tbData}
+        trialBalanceRefresh={trialBalanceRefresh}
+        toast={toast}
+        toastCallback={toastCallback}
         selectedAccounts={selectedAccounts}
         setSelectedAccounts={setSelectedAccounts}
       />
