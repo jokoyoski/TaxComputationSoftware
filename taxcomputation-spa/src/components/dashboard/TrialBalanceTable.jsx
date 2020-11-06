@@ -52,6 +52,9 @@ const TrialBalanceTable = ({
     <Card style={{ width: "100%" }}>
       <DataTable
         value={tbData}
+        paginator={!loading}
+        rows={10}
+        rowsPerPageOptions={[10, 20, 50, 100]}
         className="p-datatable-gridlines"
         header={
           <div className="p-d-flex p-ai-center p-jc-between">

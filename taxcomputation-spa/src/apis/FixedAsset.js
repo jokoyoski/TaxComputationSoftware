@@ -50,3 +50,11 @@ export const fixedAssetViewData = async ({ companyId, year }) => {
     throw error;
   }
 };
+
+export const fixedAssetUnmapping = async ({ id }) => {
+  try {
+    return await axios.put(`/api/FixedAsset/fixed-asset/${id}`);
+  } catch (error) {
+    throw error;
+  }
+};

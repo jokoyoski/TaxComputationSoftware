@@ -16,6 +16,7 @@ const FixedAssetMapping = ({
   yearSelectItems,
   assetClassSelectItems,
   tbData,
+  trialBalanceRefresh,
   toast,
   toastCallback
 }) => {
@@ -33,6 +34,10 @@ const FixedAssetMapping = ({
     { label: "Cost", value: cost },
     { label: "Depreciation", value: depreciation }
   ];
+
+  React.useEffect(() => {
+    trialBalanceRefresh();
+  }, [trialBalanceRefresh]);
 
   React.useEffect(() => {
     if (selectedAccounts) {
@@ -318,6 +323,9 @@ const FixedAssetMapping = ({
       </form>
       <TrialBalanceMappingTable
         tbData={tbData}
+        trialBalanceRefresh={trialBalanceRefresh}
+        toast={toast}
+        toastCallback={toastCallback}
         selectedAccounts={selectedAccounts}
         setSelectedAccounts={setSelectedAccounts}
       />
