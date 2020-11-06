@@ -23,8 +23,14 @@ const TrialBalanceMappingTable = ({
       selection={selectedAccounts}
       onSelectionChange={e => {
         if (e.value.length > 0) {
-          !tbData.find(d => d.id === e.value[e.value.length - 1].id).mappedTo &&
-            setSelectedAccounts(e.value);
+          !tbData.find(d => d.id === e.value[e.value.length - 1].id).mappedTo
+            ? setSelectedAccounts(e.value)
+            : toast.show(
+                toastCallback({
+                  severity: "error",
+                  detail: "This item as been mapped"
+                })
+              );
         } else {
           setSelectedAccounts(e.value);
         }
