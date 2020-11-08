@@ -5,10 +5,17 @@ using TaxComputationAPI.Helpers.Response;
 namespace TaxComputationAPI.Response
 {
 
-    public class AddBalancingAdjustmentResponse : Response<List<BalancingAdjustment>>
+    public class AddBalancingAdjustmentResponse : Response<BalancingAdjustmentDisplay>
     {
     }
 
+
+    public class BalancingAdjustmentDisplay
+    {
+        public string Company { get; set; }
+        public string BalancingAdjustmentYear { get; set; }
+        public List<BalancingAdjustment> BalancingAdjustments { get; set; }
+    }
 
     public class BalancingAdjustment
     {

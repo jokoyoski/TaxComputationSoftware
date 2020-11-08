@@ -15,12 +15,14 @@ namespace TaxComputationAPI.Services
     {
         private readonly IUtilitiesService _utilitiesService;
         private readonly IBalancingAdjustmentRepository _balancingAdjustmentRepository;
+        private readonly ICompaniesRepository _companies;
         private readonly IMapper _mapper;
 
-        public BalancingAdjustmentService(IUtilitiesService utilitiesService, IBalancingAdjustmentRepository balancingAdjustmentRepository, IMapper mapper)
+        public BalancingAdjustmentService(IUtilitiesService utilitiesService, IBalancingAdjustmentRepository balancingAdjustmentRepository, ICompaniesRepository companies, IMapper mapper)
         {
             _utilitiesService = utilitiesService;
             _balancingAdjustmentRepository = balancingAdjustmentRepository;
+            _companies = companies;
             _mapper = mapper;
         }
 
@@ -57,9 +59,13 @@ namespace TaxComputationAPI.Services
                     ResponseDescription = "No Balancing Adjustment"
                 };
             }
+            var company = await _companies.GetCompanyAsync(companyId);
 
             var result = new AddBalancingAdjustmentResponse();
-            result.Values = new List<Response.BalancingAdjustment>();
+            result.Values = new BalancingAdjustmentDisplay();
+            result.Values.Company = company.CompanyName;
+            result.Values.BalancingAdjustmentYear = year;
+            result.Values.BalancingAdjustments = new List<Response.BalancingAdjustment>();
             
 
             try
@@ -89,7 +95,7 @@ namespace TaxComputationAPI.Services
                     item.AssetYear = returnBalancingAdjustment;
                 }
 
-                result.Values = balanceAdjList;
+                result.Values.BalancingAdjustments = balanceAdjList;
                 result.ResponseCode = HttpStatusCode.OK;
                 result.Code = "00";
                 result.ResponseDescription = "SUCCESSFUL";
@@ -336,7 +342,11 @@ namespace TaxComputationAPI.Services
 
         private static decimal CaluclateResidue(decimal cost, decimal initial, decimal annual)
         {
-            return (cost - initial - annual);
+            var value = (cost - initial - annual);
+            var rand = new Random();
+            if(value < 10) value = rand.Next(10, 100);
+            
+            return value;
         }
 
         public enum BalancingAdjustment
