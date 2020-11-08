@@ -137,6 +137,16 @@ namespace TaxComputationAPI.Services
             {
                 var assetClass = await _utilitiesService.GetAssetMappingById(addBalanceAdjustmentDto.AssetId);
 
+                if (assetClass == null)
+                {
+                    return new AddBalancingAdjustmentResponse
+                    {
+                        ResponseCode = HttpStatusCode.BadRequest,
+                        Code = "10",
+                        ResponseDescription = "Asset class not found"
+                    };
+                }
+
                 var balanceAdjEx = await _balancingAdjustmentRepository.GetBalancingAdjustment(addBalanceAdjustmentDto.CompanyId, addBalanceAdjustmentDto.Year);
 
                 Models.BalancingAdjustment assetBalancing = default(Models.BalancingAdjustment);
@@ -147,15 +157,6 @@ namespace TaxComputationAPI.Services
                 }
 
 
-                if (assetClass == null)
-                {
-                    return new AddBalancingAdjustmentResponse
-                    {
-                        ResponseCode = HttpStatusCode.BadRequest,
-                        Code = "10",
-                        ResponseDescription = "Asset class not found"
-                    };
-                }
 
                 int initailRatio = assetClass.Initial;
                 int annualRatio = assetClass.Annual;

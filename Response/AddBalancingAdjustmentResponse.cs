@@ -34,14 +34,9 @@ namespace TaxComputationAPI.Response
         public decimal BalancingCharge { get; set; }
         public decimal BalancingAllowance { get; set; }
         public decimal SalesProceed { get; set; }
-        public string CostStatement { get; set; }
         public string YearBought { get; set;}
         public decimal Residue { get; set; }
 
-        public YearBoughtAdjustment()
-        {
-            CostStatement = $"Cost up to {Cost} YOA";
-        }
     }
     
 }
