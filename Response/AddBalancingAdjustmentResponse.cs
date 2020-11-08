@@ -12,6 +12,7 @@ namespace TaxComputationAPI.Response
 
     public class BalancingAdjustment
     {
+        public int Id { get; set; }
         public int AssetId { get; set; }
         public string AssetName { get; set; }
 
@@ -25,7 +26,10 @@ namespace TaxComputationAPI.Response
         public decimal AnnualAllowance { get; set; }
         public decimal BalancingCharge { get; set; }
         public decimal BalancingAllowance { get; set; }
+        public decimal SalesProceed { get; set; }
         public string CostStatement { get; set; }
+        public string YearBought { get; set;}
+        public decimal Residue { get; set; }
 
         public YearBoughtAdjustment()
         {

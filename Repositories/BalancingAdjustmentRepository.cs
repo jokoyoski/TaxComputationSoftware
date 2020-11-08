@@ -36,6 +36,22 @@ namespace TaxComputationAPI.Repositories
             
         }
 
+        public async Task<List<BalancingAdjustmentYearBought>> GetBalancingAdjustmentYearBougthAssetId(int balancingAdjustmentId, int assetId)
+        {
+            if(balancingAdjustmentId <= 0) throw new ArgumentNullException(nameof(balancingAdjustmentId));
+
+            if(assetId <= 0) throw new ArgumentNullException(nameof(assetId));
+
+            try
+            {
+                return await _context.BalancingAdjustmentYearBought.Where(p => p.BalancingAdjustmentId == balancingAdjustmentId && p.AssestId == assetId).ToListAsync();
+            }
+            catch(Exception e)
+            {
+                throw new SystemException(e.Message);
+            }
+        }
+
         public async Task<List<BalancingAdjustmentYearBought>> GetBalancingAdjustmentYeatBought(int balancingAdjustmentId, int asssetId)
         {
             if(balancingAdjustmentId <= 0) throw new ArgumentNullException(nameof(balancingAdjustmentId));

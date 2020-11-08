@@ -7,6 +7,7 @@ using TaxComputationAPI.Response;
 using TaxComputationAPI.Dto;
 using TaxComputationAPI.Interfaces;
 using TaxComputationAPI.Repositories;
+using System.Linq;
 
 namespace TaxComputationAPI.Services
 {
@@ -47,27 +48,48 @@ namespace TaxComputationAPI.Services
 
             var balancingAdjustment = await _balancingAdjustmentRepository.GetBalancingAdjustment(companyId, year);
 
+            if(balancingAdjustment == null)
+            {
+                return new AddBalancingAdjustmentResponse
+                {
+                    ResponseCode = HttpStatusCode.NotFound,
+                    Code = "01",
+                    ResponseDescription = "No Balancing Adjustment"
+                };
+            }
+
             var result = new AddBalancingAdjustmentResponse();
             result.Values = new List<Response.BalancingAdjustment>();
+            
 
             try
             {
-                foreach (var item in balancingAdjustment)
+                var balanceAdjList = new List<TaxComputationAPI.Response.BalancingAdjustment>();
+
+                foreach(var item in balancingAdjustment)
                 {
                     var asset = await _utilitiesService.GetAssetMappingById(item.AssetId);
+                    
                     var balanceAdj = new TaxComputationAPI.Response.BalancingAdjustment
                     {
+                        Id = item.Id,
                         AssetId = asset.Id,
                         AssetName = asset.AssetName
                     };
 
-                    var balanceAdjYearBought = await _balancingAdjustmentRepository.GetBalancingAdjustmentYeatBought(item.Id, balanceAdj.AssetId);
+                    balanceAdjList.Add(balanceAdj);
+                }
+
+                foreach (var item in balanceAdjList)
+                {
+                    var balanceAdjYearBought = await _balancingAdjustmentRepository.GetBalancingAdjustmentYeatBought(item.Id, item.AssetId);
 
                     var returnBalancingAdjustment = _mapper.Map<List<TaxComputationAPI.Response.YearBoughtAdjustment>>(balanceAdjYearBought);
 
-                    balanceAdj.AssetYear = returnBalancingAdjustment;
-                    result.Values.Add(balanceAdj);
+                    item.AssetYear = returnBalancingAdjustment;
                 }
+
+                result.Values = balanceAdjList;
                 result.ResponseCode = HttpStatusCode.OK;
                 result.Code = "00";
                 result.ResponseDescription = "SUCCESSFUL";
@@ -89,7 +111,7 @@ namespace TaxComputationAPI.Services
                 return new AddBalancingAdjustmentResponse
                 {
                     ResponseCode = HttpStatusCode.BadRequest,
-                    Code = "10",
+                    Code = "12",
                     ResponseDescription = "balancing adjustment object is null"
                 };
             }
@@ -99,7 +121,7 @@ namespace TaxComputationAPI.Services
                 return new AddBalancingAdjustmentResponse
                 {
                     ResponseCode = HttpStatusCode.BadRequest,
-                    Code = "10",
+                    Code = "12",
                     ResponseDescription = "AssetId is less than or equal 0"
                 };
             }
@@ -108,6 +130,16 @@ namespace TaxComputationAPI.Services
             try
             {
                 var assetClass = await _utilitiesService.GetAssetMappingById(addBalanceAdjustmentDto.AssetId);
+
+                var balanceAdjEx = await _balancingAdjustmentRepository.GetBalancingAdjustment(addBalanceAdjustmentDto.CompanyId, addBalanceAdjustmentDto.Year);
+
+                Models.BalancingAdjustment assetBalancing = default(Models.BalancingAdjustment);
+
+                if (balanceAdjEx != null)
+                {
+                    assetBalancing = balanceAdjEx.Where(p => p.AssetId == assetClass.Id).SingleOrDefault();
+                }
+
 
                 if (assetClass == null)
                 {
@@ -147,17 +179,19 @@ namespace TaxComputationAPI.Services
                         DateCreated = DateTime.UtcNow,
                         Year = addBalanceAdjustmentDto.Year,
                     };
-
-                    var r1 = await _balancingAdjustmentRepository.SaveBalancingAdjustment(b1);
+                    
+                    if(assetBalancing == null) await _balancingAdjustmentRepository.SaveBalancingAdjustment(b1);
 
                     var bb1 = new TaxComputationAPI.Models.BalancingAdjustmentYearBought
                     {
+                        Cost = addBalanceAdjustmentDto.Cost,
                         Residue = residue,
                         AssestId = addBalanceAdjustmentDto.AssetId,
                         InitialAllowance = 0,
                         AnnualAllowance = 0,
                         SalesProceed = addBalanceAdjustmentDto.SalesProceed,
-                        BalancingAdjustmentId = b1.Id
+                        BalancingAdjustmentId = assetBalancing == null ? b1.Id : assetBalancing.Id,
+                        YearBought = addBalanceAdjustmentDto.YearBought
                     };
 
                     if (balancingAdjustment.Item1 == BalancingAdjustment.BalancingAllowance) bb1.BalancingAllowance = balancingAdjustment.Item2;
@@ -188,16 +222,18 @@ namespace TaxComputationAPI.Services
                         Year = addBalanceAdjustmentDto.Year,
                     };
 
-                    var r2 = await _balancingAdjustmentRepository.SaveBalancingAdjustment(b2);
+                    if(assetBalancing == null) await _balancingAdjustmentRepository.SaveBalancingAdjustment(b2);
 
                     var bb2 = new TaxComputationAPI.Models.BalancingAdjustmentYearBought
                     {
+                        Cost = addBalanceAdjustmentDto.Cost,
                         Residue = residue,
                         AssestId = addBalanceAdjustmentDto.AssetId,
                         InitialAllowance = 0,
                         AnnualAllowance = 0,
                         SalesProceed = addBalanceAdjustmentDto.SalesProceed,
-                        BalancingAdjustmentId = b2.Id
+                        BalancingAdjustmentId = assetBalancing == null ? b2.Id : assetBalancing.Id,
+                        YearBought = addBalanceAdjustmentDto.YearBought
                     };
 
                     if (balancingAdjustment.Item1 == BalancingAdjustment.BalancingAllowance) bb2.BalancingAllowance = balancingAdjustment.Item2;
@@ -210,9 +246,10 @@ namespace TaxComputationAPI.Services
                     {
                         ResponseCode = HttpStatusCode.OK,
                         Code = "00",
-                        ResponseDescription = "Balancing Adjustment successfully calculate"
+                        ResponseDescription = "Balancing Adjustment successfully calculated"
                     };
                 }
+
 
                 var initialCost = CalculateInitialAllowance(addBalanceAdjustmentDto.Cost, initailRatio, assetLifeCycle, assetLifeSpan);
 
@@ -230,16 +267,18 @@ namespace TaxComputationAPI.Services
                     Year = addBalanceAdjustmentDto.Year,
                 };
 
-                var r3 = await _balancingAdjustmentRepository.SaveBalancingAdjustment(b3);
+                if(assetBalancing == null) await _balancingAdjustmentRepository.SaveBalancingAdjustment(b3);
 
                 var bb3 = new TaxComputationAPI.Models.BalancingAdjustmentYearBought
                 {
+                    Cost = addBalanceAdjustmentDto.Cost,
                     Residue = residue,
                     AssestId = addBalanceAdjustmentDto.AssetId,
                     InitialAllowance = initialCost,
                     AnnualAllowance = annualCost,
                     SalesProceed = addBalanceAdjustmentDto.SalesProceed,
-                    BalancingAdjustmentId = b3.Id
+                    BalancingAdjustmentId = assetBalancing == null ? b3.Id : assetBalancing.Id,
+                    YearBought = addBalanceAdjustmentDto.YearBought
                 };
 
                 if (balancingAdjustment.Item1 == BalancingAdjustment.BalancingAllowance) bb3.BalancingAllowance = balancingAdjustment.Item2;
@@ -252,7 +291,7 @@ namespace TaxComputationAPI.Services
                 {
                     ResponseCode = HttpStatusCode.OK,
                     Code = "00",
-                    ResponseDescription = "Balancing Adjustment successfully calculate"
+                    ResponseDescription = "Balancing Adjustment successfully calculated"
                 };
 
             }
@@ -269,22 +308,15 @@ namespace TaxComputationAPI.Services
 
         private static decimal CalculateInitialAllowance(decimal cost, int initialRatio, int assetLifeCycle, int assetLifeSpan)
         {
-            if (assetLifeCycle == assetLifeSpan)
-            {
-                return cost * (initialRatio / 100);
-            }
-
-            return 0;
+            var value = (cost * initialRatio) / 100;
+            return value;
         }
 
         private static decimal CalculateAnnualAllowance(decimal cost, decimal initialCost, int annualRatio, int assetLifeCycle, int assetLifeSpan)
         {
-            if (assetLifeCycle < assetLifeSpan)
-            {
-                return 0;
-            }
-
-            return (cost - initialCost) * (annualRatio / 100) * assetLifeSpan;
+            var diff = (cost - initialCost);
+            var value = (diff * annualRatio  * assetLifeSpan) / 100;
+            return value;
         }
 
         private static Tuple<BalancingAdjustment, decimal> CalculateBalancingAdjustment(decimal salesProceed, decimal residue)

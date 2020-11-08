@@ -29,7 +29,7 @@ namespace TaxComputationAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddBalancingAdjustment(AddBalanceAdjustmentDto addBalanceAdjustmentDto)
+        public async Task<IActionResult> AddBalancingAdjustment([FromForm] AddBalanceAdjustmentDto addBalanceAdjustmentDto)
         {
             if(addBalanceAdjustmentDto == null) return BadRequest("Invalid input");
 

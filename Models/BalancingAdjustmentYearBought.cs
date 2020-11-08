@@ -8,6 +8,7 @@ namespace TaxComputationAPI.Models
     {
         public int Id { get; set; }
         public int AssestId { get; set; }
+        public decimal Cost { get; set; }
         public decimal InitialAllowance { get; set; }
         public decimal AnnualAllowance { get; set; }
         public decimal SalesProceed { get; set; }
