@@ -13,11 +13,11 @@ namespace TaxComputationAPI.Services
     public class BalancingAdjustmentService : IBalancingAdjustmentService
     {
 
-        private readonly UtilitiesService _utilitiesService;
-        private readonly BalancingAdjustmentRepository _balancingAdjustmentRepository;
+        private readonly IUtilitiesService _utilitiesService;
+        private readonly IBalancingAdjustmentRepository _balancingAdjustmentRepository;
         private readonly IMapper _mapper;
 
-        public BalancingAdjustmentService(UtilitiesService utilitiesService, BalancingAdjustmentRepository balancingAdjustmentRepository, IMapper mapper)
+        public BalancingAdjustmentService(IUtilitiesService utilitiesService, IBalancingAdjustmentRepository balancingAdjustmentRepository, IMapper mapper)
         {
             _utilitiesService = utilitiesService;
             _balancingAdjustmentRepository = balancingAdjustmentRepository;
