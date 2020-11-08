@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
-using TaxComputationSoftware.Models;
+using TaxComputationAPI.Models;
 
-namespace TaxComputationSoftware.Interfaces
+namespace TaxComputationAPI.Interfaces
 {
     public interface IAuthenticationRepository
     {

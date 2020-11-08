@@ -1,8 +1,8 @@
 using System.Threading.Tasks;
-using TaxComputationSoftware.Interfaces;
-using TaxComputationSoftware.Models;
+using TaxComputationAPI.Interfaces;
+using TaxComputationAPI.Models;
 
-namespace TaxComputationSoftware.Services
+namespace TaxComputationAPI.Services
 {
     public class AuthenticationService : IAuthenticationService
     {

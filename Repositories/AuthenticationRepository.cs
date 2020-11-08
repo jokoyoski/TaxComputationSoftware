@@ -3,10 +3,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using TaxComputationAPI.Data;
-using TaxComputationSoftware.Interfaces;
-using TaxComputationSoftware.Models;
+using TaxComputationAPI.Interfaces;
+using TaxComputationAPI.Models;
 
-namespace TaxComputationSoftware.Repositories
+namespace TaxComputationAPI.Repositories
 {
     public class AuthenticationRepository : IAuthenticationRepository
     {

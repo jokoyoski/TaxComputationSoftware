@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using TaxComputationAPI.Helpers.Response;
 
-namespace TaxComputation.Response
+namespace TaxComputationAPI.Response
 {
 
-    public class AddBalancingAdjustmentResponse : Response<BalancingAdjustment>
+    public class AddBalancingAdjustmentResponse : Response<List<BalancingAdjustment>>
     {
     }
 

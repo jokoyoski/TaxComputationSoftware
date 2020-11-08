@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using TaxComputationAPI.Models;
-using TaxComputationSoftware.Models;
+using TaxComputationAPI.Models;
 
 namespace TaxComputationAPI.Data
 {
@@ -42,6 +42,9 @@ namespace TaxComputationAPI.Data
         public DbSet<AssetMapping> AssetMapping { get; set; }
          public DbSet<UserCode> UserCodes { get; set; }
        
+       public DbSet<BalancingAdjustment> BalancingAdjustment { get; set; }
+
+       public DbSet<BalancingAdjustmentYearBought> BalancingAdjustmentYearBought { get; set; }
 
         public DbSet<TrialBalanceMapping> TrialBalanceMapping {get;set;}
     }

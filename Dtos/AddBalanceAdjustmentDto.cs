@@ -1,5 +1,5 @@
 
-namespace TaxComputationSoftware.Dto
+namespace TaxComputationAPI.Dto
 {
     public class AddBalanceAdjustmentDto
     {
