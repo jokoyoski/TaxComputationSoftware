@@ -10,7 +10,12 @@ export default {
     }
     return years;
   },
-  defaultMode: title => (constants.nonMappedModules.includes(title) ? "view" : "mapping"),
+  defaultMode: title =>
+    constants.nonMappedModules.includes(title)
+      ? "view"
+      : title === constants.modules.balancingAdjustment
+      ? "adding"
+      : "mapping",
   saveState: (state, stateName) => {
     try {
       const serializedState = JSON.stringify(state);
@@ -38,5 +43,12 @@ export default {
     });
 
     return formatter.format(value);
-  }
+  },
+  toastCallback: ({ severity, summary, detail }) => ({
+    severity,
+    summary,
+    detail,
+    life: constants.toastLifeTime,
+    closable: false
+  })
 };

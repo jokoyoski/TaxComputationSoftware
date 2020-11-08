@@ -9,6 +9,7 @@ import { changePassword } from "../../apis/Authentication";
 import constants from "../../constants";
 import { useAuth } from "../../store/AuthStore";
 import { useCompany } from "../../store/CompanyStore";
+import utils from "../../utils";
 
 const ChangePassword = ({ setShowChangePassword }) => {
   const [routerState] = useRouter();
@@ -17,23 +18,13 @@ const ChangePassword = ({ setShowChangePassword }) => {
   const [, { resetCompany }] = useCompany();
   const [loading, setLoading] = React.useState(false);
   const toast = React.useRef();
-  const toastCallback = React.useCallback(
-    ({ severity, summary, detail }) => ({
-      severity,
-      summary,
-      detail,
-      life: constants.toastLifeTime,
-      closable: false
-    }),
-    []
-  );
 
   React.useEffect(() => {
     if (routerState.location.state)
       toast.current.show(
-        toastCallback({ severity: "success", detail: routerState.location.state })
+        utils.toastCallback({ severity: "success", detail: routerState.location.state })
       );
-  }, [routerState, toastCallback]);
+  }, [routerState]);
 
   const onSubmit = async data => {
     if (loading) return;
@@ -42,7 +33,7 @@ const ChangePassword = ({ setShowChangePassword }) => {
     // display error notification if current password and new password are the same
     if (currentPassword === newPassword) {
       toast.current.show(
-        toastCallback({
+        utils.toastCallback({
           severity: "error",
           detail: "Current Password and New Password cannot be the same"
         })
@@ -61,7 +52,7 @@ const ChangePassword = ({ setShowChangePassword }) => {
         const { data } = error.response;
         // display error as toast notification
         toast.current.show(
-          toastCallback({
+          utils.toastCallback({
             severity: "error",
             summary: "Error",
             detail: data.message || data.errors.NewPassword[0]
@@ -70,7 +61,7 @@ const ChangePassword = ({ setShowChangePassword }) => {
       } else {
         // network errors
         toast.current.show(
-          toastCallback({
+          utils.toastCallback({
             severity: "error",
             summary: "Network Error",
             detail: constants.networkErrorMessage

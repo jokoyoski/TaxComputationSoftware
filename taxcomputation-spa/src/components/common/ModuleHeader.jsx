@@ -4,7 +4,10 @@ import constants from "../../constants";
 
 const ModuleHeader = ({ title, mode, setMode, year, setYear, yearSelectItems }) => {
   const modeSelectItems = [
-    { label: "Mapping - Mode", value: "mapping" },
+    {
+      label: title === constants.modules.balancingAdjustment ? "Adding - Mode" : "Mapping - Mode",
+      value: title === constants.modules.balancingAdjustment ? "adding" : "mapping"
+    },
     { label: "View - Mode", value: "view" }
   ];
 
@@ -12,7 +15,14 @@ const ModuleHeader = ({ title, mode, setMode, year, setYear, yearSelectItems }) 
     <div className="p-d-flex p-jc-center p-flex-column" style={{ width: "100%" }}>
       <div className="p-d-flex p-ai-center p-jc-between" style={{ padding: "0px 20px" }}>
         <p style={{ fontSize: 18, fontWeight: 600 }}>
-          {title} - {{ mapping: "Mapping", view: "View" }[mode]}
+          {title}
+          {
+            {
+              adding: " - Adding",
+              mapping: " - Mapping",
+              view: " - View"
+            }[mode]
+          }
         </p>
         <div>
           {mode === "view" && (

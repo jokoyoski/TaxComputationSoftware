@@ -8,6 +8,7 @@ import { forgotPassword } from "../apis/Authentication";
 import constants from "../constants";
 import { useAuth } from "../store/AuthStore";
 import { Link, Redirect, useRouterActions } from "react-resource-router";
+import utils from "../utils";
 
 const ForgotPassword = () => {
   const { errors, handleSubmit, control } = useForm();
@@ -15,16 +16,6 @@ const ForgotPassword = () => {
   const { push } = useRouterActions();
   const [loading, setLoading] = React.useState(false);
   const toast = React.useRef();
-  const toastCallback = React.useCallback(
-    ({ severity, summary, detail }) => ({
-      severity,
-      summary,
-      detail,
-      life: constants.toastLifeTime,
-      closable: false
-    }),
-    []
-  );
 
   const onSubmit = async data => {
     if (loading) return;
@@ -41,11 +32,13 @@ const ForgotPassword = () => {
           data: { message }
         } = error.response;
         // display error as toast notification
-        toast.current.show(toastCallback({ severity: "error", summary: "Error", detail: message }));
+        toast.current.show(
+          utils.toastCallback({ severity: "error", summary: "Error", detail: message })
+        );
       } else {
         // network errors
         toast.current.show(
-          toastCallback({
+          utils.toastCallback({
             severity: "error",
             summary: "Network Error",
             detail: constants.networkErrorMessage

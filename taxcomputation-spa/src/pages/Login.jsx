@@ -9,6 +9,7 @@ import constants from "../constants";
 import { useAuth } from "../store/AuthStore";
 import { Link, Redirect, useRouter, useRouterActions } from "react-resource-router";
 import PasswordInput from "../components/common/PasswordInput";
+import utils from "../utils";
 
 const Login = () => {
   const [routerState] = useRouter();
@@ -17,23 +18,13 @@ const Login = () => {
   const { push } = useRouterActions();
   const [loading, setLoading] = React.useState(false);
   const toast = React.useRef();
-  const toastCallback = React.useCallback(
-    ({ severity, summary, detail }) => ({
-      severity,
-      summary,
-      detail,
-      life: constants.toastLifeTime,
-      closable: false
-    }),
-    []
-  );
 
   React.useEffect(() => {
     if (routerState.location.state)
       toast.current.show(
-        toastCallback({ severity: "success", detail: routerState.location.state })
+        utils.toastCallback({ severity: "success", detail: routerState.location.state })
       );
-  }, [routerState, toastCallback]);
+  }, [routerState]);
 
   const onSubmit = async data => {
     if (loading) return;
@@ -57,13 +48,13 @@ const Login = () => {
         // display all errors as toast notification
         errors.map(err =>
           toast.current.show(
-            toastCallback({ severity: "error", summary: "Login Error", detail: err })
+            utils.toastCallback({ severity: "error", summary: "Login Error", detail: err })
           )
         );
       } else {
         // network errors
         toast.current.show(
-          toastCallback({
+          utils.toastCallback({
             severity: "error",
             summary: "Network Error",
             detail: constants.networkErrorMessage

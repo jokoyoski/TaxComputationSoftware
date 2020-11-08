@@ -34,17 +34,6 @@ const FixedAsset = () => {
     value: year.toString()
   }));
 
-  const toastCallback = React.useCallback(
-    ({ severity, summary, detail }) => ({
-      severity,
-      summary,
-      detail,
-      life: constants.toastLifeTime,
-      closable: false
-    }),
-    []
-  );
-
   React.useEffect(() => {
     if (assetClass) onModuleItems(assetClass);
   }, [assetClass, onModuleItems]);
@@ -112,7 +101,6 @@ const FixedAsset = () => {
                 tbData={tbData}
                 trialBalanceRefresh={trialBalanceRefresh}
                 toast={toast.current}
-                toastCallback={toastCallback}
               />
             ),
             view: (

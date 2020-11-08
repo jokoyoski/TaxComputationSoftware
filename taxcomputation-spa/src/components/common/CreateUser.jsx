@@ -7,21 +7,12 @@ import PasswordInput from "./PasswordInput";
 import constants from "../../constants";
 import { InputText } from "primereact/inputtext";
 import { addUser } from "../../apis/Users";
+import utils from "../../utils";
 
 const CreateUser = ({ setShowCreateUser }) => {
   const { errors, handleSubmit, control } = useForm();
   const [loading, setLoading] = React.useState(false);
   const toast = React.useRef();
-  const toastCallback = React.useCallback(
-    ({ severity, summary, detail }) => ({
-      severity,
-      summary,
-      detail,
-      life: constants.toastLifeTime,
-      closable: false
-    }),
-    []
-  );
 
   const onSubmit = async data => {
     if (loading) return;
@@ -41,7 +32,7 @@ const CreateUser = ({ setShowCreateUser }) => {
       });
       if (response.status === 201) {
         toast.current.show(
-          toastCallback({
+          utils.toastCallback({
             severity: "success",
             detail: "User created successfully"
           })
@@ -54,7 +45,7 @@ const CreateUser = ({ setShowCreateUser }) => {
         const { data } = error.response;
         // display error as toast notification
         toast.current.show(
-          toastCallback({
+          utils.toastCallback({
             severity: "error",
             summary: data[0].code,
             detail: data[0].description
@@ -63,7 +54,7 @@ const CreateUser = ({ setShowCreateUser }) => {
       } else {
         // network errors
         toast.current.show(
-          toastCallback({
+          utils.toastCallback({
             severity: "error",
             summary: "Network Error",
             detail: constants.networkErrorMessage

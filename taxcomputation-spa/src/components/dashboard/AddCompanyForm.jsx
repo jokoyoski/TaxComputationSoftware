@@ -5,8 +5,9 @@ import { Button } from "primereact/button";
 import { useForm, Controller } from "react-hook-form";
 import { addCompany } from "../../apis/Companies";
 import constants from "../../constants";
+import utils from "../../utils";
 
-const AddCompanyForm = ({ showAddCompany, setShowAddCompany, toast, toastCallback, refresh }) => {
+const AddCompanyForm = ({ showAddCompany, setShowAddCompany, toast, refresh }) => {
   const { errors, handleSubmit, control } = useForm();
   const [loading, setLoading] = React.useState(false);
 
@@ -18,7 +19,9 @@ const AddCompanyForm = ({ showAddCompany, setShowAddCompany, toast, toastCallbac
     try {
       const response = await addCompany({ companyName, cacNumber, tinNumber, companyDescription });
       if (response.status === 201) {
-        toast.show(toastCallback({ severity: "success", detail: "Company added successfully" }));
+        toast.show(
+          utils.toastCallback({ severity: "success", detail: "Company added successfully" })
+        );
         setTimeout(() => {
           setLoading(false);
           setShowAddCompany(false);
@@ -36,16 +39,16 @@ const AddCompanyForm = ({ showAddCompany, setShowAddCompany, toast, toastCallbac
         // display all errors as toast notification
         companyError &&
           companyError.map(err =>
-            toast.show(toastCallback({ severity: "error", summary: "Error", detail: err }))
+            toast.show(utils.toastCallback({ severity: "error", summary: "Error", detail: err }))
           );
         CompanyDescription &&
           CompanyDescription.map(err =>
-            toast.show(toastCallback({ severity: "error", summary: "Error", detail: err }))
+            toast.show(utils.toastCallback({ severity: "error", summary: "Error", detail: err }))
           );
       } else {
         // network errors
         toast.show(
-          toastCallback({
+          utils.toastCallback({
             summary: "Network Error",
             detail: constants.networkErrorMessage
           })
