@@ -12,7 +12,6 @@ namespace TaxComputationAPI.Services
 {
     public class BalancingAdjustmentService : IBalancingAdjustmentService
     {
-
         private readonly IUtilitiesService _utilitiesService;
         private readonly IBalancingAdjustmentRepository _balancingAdjustmentRepository;
         private readonly IMapper _mapper;
@@ -30,7 +29,8 @@ namespace TaxComputationAPI.Services
             {
                 return new AddBalancingAdjustmentResponse
                 {
-                    ResponseCode = HttpStatusCode.BadRequest.ToString(),
+                    ResponseCode = HttpStatusCode.BadRequest,
+                    Code = "10",
                     ResponseDescription = "Invalid companyId"
                 };
             }
@@ -39,7 +39,8 @@ namespace TaxComputationAPI.Services
             {
                 return new AddBalancingAdjustmentResponse
                 {
-                    ResponseCode = HttpStatusCode.BadRequest.ToString(),
+                    ResponseCode = HttpStatusCode.BadRequest,
+                    Code = "10",
                     ResponseDescription = "Invalid year"
                 };
             }
@@ -47,7 +48,7 @@ namespace TaxComputationAPI.Services
             var balancingAdjustment = await _balancingAdjustmentRepository.GetBalancingAdjustment(companyId, year);
 
             var result = new AddBalancingAdjustmentResponse();
-            result.values = new List<Response.BalancingAdjustment>();
+            result.Values = new List<Response.BalancingAdjustment>();
 
             try
             {
@@ -65,15 +66,16 @@ namespace TaxComputationAPI.Services
                     var returnBalancingAdjustment = _mapper.Map<List<TaxComputationAPI.Response.YearBoughtAdjustment>>(balanceAdjYearBought);
 
                     balanceAdj.AssetYear = returnBalancingAdjustment;
-                    result.values.Add(balanceAdj);
+                    result.Values.Add(balanceAdj);
                 }
-
-                result.ResponseCode = HttpStatusCode.OK.ToString();
+                result.ResponseCode = HttpStatusCode.OK;
+                result.Code = "00";
                 result.ResponseDescription = "SUCCESSFUL";
             }
             catch (Exception e)
             {
-                result.ResponseCode = HttpStatusCode.ExpectationFailed.ToString();
+                result.ResponseCode = HttpStatusCode.ExpectationFailed;
+                result.Code = "11";
                 result.ResponseDescription = $"AN EXCEPTION OCCURRED: {e.Message}";
             }
 
@@ -86,7 +88,8 @@ namespace TaxComputationAPI.Services
             {
                 return new AddBalancingAdjustmentResponse
                 {
-                    ResponseCode = HttpStatusCode.BadRequest.ToString(),
+                    ResponseCode = HttpStatusCode.BadRequest,
+                    Code = "10",
                     ResponseDescription = "balancing adjustment object is null"
                 };
             }
@@ -95,7 +98,8 @@ namespace TaxComputationAPI.Services
             {
                 return new AddBalancingAdjustmentResponse
                 {
-                    ResponseCode = HttpStatusCode.BadRequest.ToString(),
+                    ResponseCode = HttpStatusCode.BadRequest,
+                    Code = "10",
                     ResponseDescription = "AssetId is less than or equal 0"
                 };
             }
@@ -109,7 +113,8 @@ namespace TaxComputationAPI.Services
                 {
                     return new AddBalancingAdjustmentResponse
                     {
-                        ResponseCode = HttpStatusCode.NotFound.ToString(),
+                        ResponseCode = HttpStatusCode.BadRequest,
+                        Code = "10",
                         ResponseDescription = "Asset class not found"
                     };
                 }
@@ -163,7 +168,8 @@ namespace TaxComputationAPI.Services
 
                     return new AddBalancingAdjustmentResponse
                     {
-                        ResponseCode = HttpStatusCode.OK.ToString(),
+                        ResponseCode = HttpStatusCode.OK,
+                        Code = "00",
                         ResponseDescription = "N/B: Asset exceeded it's lifespan"
                     };
                 }
@@ -202,7 +208,8 @@ namespace TaxComputationAPI.Services
 
                     return new AddBalancingAdjustmentResponse
                     {
-                        ResponseCode = HttpStatusCode.OK.ToString(),
+                        ResponseCode = HttpStatusCode.OK,
+                        Code = "00",
                         ResponseDescription = "Balancing Adjustment successfully calculate"
                     };
                 }
@@ -243,7 +250,8 @@ namespace TaxComputationAPI.Services
 
                 return new AddBalancingAdjustmentResponse
                 {
-                    ResponseCode = HttpStatusCode.OK.ToString(),
+                    ResponseCode = HttpStatusCode.OK,
+                    Code = "00",
                     ResponseDescription = "Balancing Adjustment successfully calculate"
                 };
 
@@ -252,7 +260,8 @@ namespace TaxComputationAPI.Services
             {
                 return new AddBalancingAdjustmentResponse
                 {
-                    ResponseCode = HttpStatusCode.ExpectationFailed.ToString(),
+                    ResponseCode = HttpStatusCode.ExpectationFailed,
+                    Code = "11",
                     ResponseDescription = $"AN EXCEPTION OCCURRED: {e.Message}"
                 };
             }
