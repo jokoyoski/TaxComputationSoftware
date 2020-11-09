@@ -25,3 +25,14 @@ export const balancingAdjustmentAdding = async ({
     throw error;
   }
 };
+
+export const balancingAdjustmentViewData = async ({ companyId, year }) => {
+  try {
+    const { data } = await axios.get(
+      `/api/BalancingAdjustment?companyId=${companyId}&year=${year}`
+    );
+    return data;
+  } catch (error) {
+    throw error;
+  }
+};

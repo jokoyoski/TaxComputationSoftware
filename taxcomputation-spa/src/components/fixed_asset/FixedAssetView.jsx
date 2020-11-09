@@ -7,6 +7,7 @@ import utils from "../../utils";
 import Loader from "../common/Loader";
 
 const FixedAssetView = ({ year }) => {
+  const isMounted = React.useRef(false);
   const [{ companyId }] = useCompany();
   const [loading, setLoading] = React.useState();
   const [error, setError] = React.useState();
@@ -74,85 +75,92 @@ const FixedAssetView = ({ year }) => {
   ]);
 
   React.useEffect(() => {
+    isMounted.current = true;
     const fetchFixedAssetViewData = async () => {
       try {
         setError(null);
         setLoading(true);
         const data = await fixedAssetViewData({ companyId, year });
-        setFixedAssetApiData(data.fixedAssetData);
-        setFixedAssetData(state => {
-          const newState = Array.from(state);
-          data.fixedAssetData.forEach((d, index) => {
-            newState.forEach(s => {
-              switch (s.key) {
-                case "openingCost":
-                  s[d.fixedAssetName] = d.openingCost;
-                  s.total = data.total.openingCostTotal;
-                  break;
-                case "costAddition":
-                  s[d.fixedAssetName] = d.costAddition;
-                  s.total = data.total.additionCostTotal;
-                  break;
-                case "costDisposal":
-                  s[d.fixedAssetName] = d.costDisposal;
-                  s.total = data.total.disposalCostTotal;
-                  break;
-                case "transferCost":
-                  s[d.fixedAssetName] = d.transferCost;
-                  s.total = data.total.transferCostTotal;
-                  break;
-                case "costClosing":
-                  s[d.fixedAssetName] = <strong>{d.costClosing}</strong>;
-                  s.total = <strong>{data.total.closingCostTotal}</strong>;
-                  break;
-                case "openingDepreciation":
-                  s[d.fixedAssetName] = d.openingDepreciation;
-                  s.total = data.total.openingDepreciationTotal;
-                  break;
-                case "depreciationAddition":
-                  s[d.fixedAssetName] = d.depreciationAddition;
-                  s.total = data.total.additionDepreciationTotal;
-                  break;
-                case "depreciationDisposal":
-                  s[d.fixedAssetName] = d.depreciationDisposal;
-                  s.total = data.total.disposalDepreciationTotal;
-                  break;
-                case "transferDepreciation":
-                  s[d.fixedAssetName] = d.transferDepreciation;
-                  s.total = data.total.transferDepreciationTotal;
-                  break;
-                case "depreciationClosing":
-                  s[d.fixedAssetName] = <strong>{d.depreciationClosing}</strong>;
-                  s.total = <strong>{data.total.closingDepreciationTotal}</strong>;
-                  break;
-                case "netValue":
-                  s[d.fixedAssetName] = <strong>{data.netBookValue[index].value}</strong>;
-                  s.total = (
-                    <strong>
-                      {utils.currencyFormatter(
-                        data.netBookValue.reduce(
-                          (acc, cur) => acc + Number(cur.value.slice(1).replace(",", "")),
-                          0
-                        )
-                      )}
-                    </strong>
-                  );
-                  break;
-                default:
-                  break;
-              }
+        if (isMounted.current) {
+          setFixedAssetApiData(data.fixedAssetData);
+          setFixedAssetData(state => {
+            const newState = Array.from(state);
+            data.fixedAssetData.forEach((d, index) => {
+              newState.forEach(s => {
+                switch (s.key) {
+                  case "openingCost":
+                    s[d.fixedAssetName] = d.openingCost;
+                    s.total = data.total.openingCostTotal;
+                    break;
+                  case "costAddition":
+                    s[d.fixedAssetName] = d.costAddition;
+                    s.total = data.total.additionCostTotal;
+                    break;
+                  case "costDisposal":
+                    s[d.fixedAssetName] = d.costDisposal;
+                    s.total = data.total.disposalCostTotal;
+                    break;
+                  case "transferCost":
+                    s[d.fixedAssetName] = d.transferCost;
+                    s.total = data.total.transferCostTotal;
+                    break;
+                  case "costClosing":
+                    s[d.fixedAssetName] = <strong>{d.costClosing}</strong>;
+                    s.total = <strong>{data.total.closingCostTotal}</strong>;
+                    break;
+                  case "openingDepreciation":
+                    s[d.fixedAssetName] = d.openingDepreciation;
+                    s.total = data.total.openingDepreciationTotal;
+                    break;
+                  case "depreciationAddition":
+                    s[d.fixedAssetName] = d.depreciationAddition;
+                    s.total = data.total.additionDepreciationTotal;
+                    break;
+                  case "depreciationDisposal":
+                    s[d.fixedAssetName] = d.depreciationDisposal;
+                    s.total = data.total.disposalDepreciationTotal;
+                    break;
+                  case "transferDepreciation":
+                    s[d.fixedAssetName] = d.transferDepreciation;
+                    s.total = data.total.transferDepreciationTotal;
+                    break;
+                  case "depreciationClosing":
+                    s[d.fixedAssetName] = <strong>{d.depreciationClosing}</strong>;
+                    s.total = <strong>{data.total.closingDepreciationTotal}</strong>;
+                    break;
+                  case "netValue":
+                    s[d.fixedAssetName] = <strong>{data.netBookValue[index].value}</strong>;
+                    s.total = (
+                      <strong>
+                        {utils.currencyFormatter(
+                          data.netBookValue.reduce(
+                            (acc, cur) => acc + Number(cur.value.slice(1).replace(",", "")),
+                            0
+                          )
+                        )}
+                      </strong>
+                    );
+                    break;
+                  default:
+                    break;
+                }
+              });
             });
+            return newState;
           });
-          return newState;
-        });
+        }
       } catch (error) {
-        if (error.response) setError(error.response.data.errors[0]);
-        else setError(error.message);
+        if (isMounted.current) {
+          if (error.response) setError(error.response.data.errors[0]);
+          else setError(error.message);
+        }
       } finally {
-        setLoading(false);
+        if (isMounted.current) setLoading(false);
       }
     };
     fetchFixedAssetViewData();
+
+    return () => (isMounted.current = false);
   }, [companyId, year]);
 
   if (error) return <p style={{ color: "#f00" }}>{error}</p>;

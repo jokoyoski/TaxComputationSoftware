@@ -11,41 +11,47 @@ const TrialBalanceTable = ({
   refreshTrialBalanceTable,
   setRefreshTrialBalanceTable
 }) => {
+  const isMounted = React.useRef(false);
   const [year, setYear] = React.useState(utils.currentYear());
   const [yearSelectItems] = React.useState(utils.getYears());
   const [tbData, setTbData] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
 
   React.useEffect(() => {
+    isMounted.current = true;
     const fetchTrialBalance = async () => {
       setLoading(true);
       try {
         const data = await getTrialBalance({ companyId, year });
-        setTbData(
-          data
-            ? data.map(d => {
-                if (d.accountId === "" && d.item === "" && d.debit === 0 && d.credit === 0) {
-                  return { ...d, debit: "", credit: "" };
-                } else {
-                  return {
-                    ...d,
-                    debitAmt: utils.currencyFormatter(d.debit),
-                    creditAmt: utils.currencyFormatter(d.credit)
-                  };
-                }
-              })
-            : []
-        );
+        if (isMounted.current) {
+          setTbData(
+            data
+              ? data.map(d => {
+                  if (d.accountId === "" && d.item === "" && d.debit === 0 && d.credit === 0) {
+                    return { ...d, debit: "", credit: "" };
+                  } else {
+                    return {
+                      ...d,
+                      debitAmt: utils.currencyFormatter(d.debit),
+                      creditAmt: utils.currencyFormatter(d.credit)
+                    };
+                  }
+                })
+              : []
+          );
+        }
       } catch (error) {
         console.log(error);
       } finally {
-        setLoading(false);
+        if (isMounted.current) setLoading(false);
       }
     };
     if (refreshTrialBalanceTable) {
       fetchTrialBalance();
-      setRefreshTrialBalanceTable(false);
+      if (isMounted.current) setRefreshTrialBalanceTable(false);
     }
+
+    return () => (isMounted.current = false);
   }, [companyId, year, refreshTrialBalanceTable, setRefreshTrialBalanceTable]);
 
   return (
