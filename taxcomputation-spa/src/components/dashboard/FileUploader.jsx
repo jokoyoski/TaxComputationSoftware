@@ -6,12 +6,7 @@ import utils from "../../utils";
 import { uploadTrialBalance } from "../../apis/TrialBalance";
 import constants from "../../constants";
 
-const FileUploader = ({
-  company: { companyId },
-  toast,
-  toastCallback,
-  setRefreshTrialBalanceTable
-}) => {
+const FileUploader = ({ company: { companyId }, toast, setRefreshTrialBalanceTable }) => {
   const [file, setFile] = React.useState();
   const [year, setYear] = React.useState();
   const [yearSelectItems] = React.useState(utils.getYears());
@@ -21,13 +16,15 @@ const FileUploader = ({
     if (loading) return;
 
     if (!file && !year) {
-      toast.show(toastCallback({ severity: "error", detail: "Add TB File and Select TB Year" }));
+      toast.show(
+        utils.toastCallback({ severity: "error", detail: "Add TB File and Select TB Year" })
+      );
       return;
     } else if (!file) {
-      toast.show(toastCallback({ severity: "error", detail: "Add TB File" }));
+      toast.show(utils.toastCallback({ severity: "error", detail: "Add TB File" }));
       return;
     } else if (!year) {
-      toast.show(toastCallback({ severity: "error", detail: "Select TB Year" }));
+      toast.show(utils.toastCallback({ severity: "error", detail: "Select TB Year" }));
       return;
     }
 
@@ -39,12 +36,12 @@ const FileUploader = ({
         setYear(null);
         setFile(null);
         setRefreshTrialBalanceTable(true);
-        toast.show(toastCallback({ severity: "success", detail: response.data }));
+        toast.show(utils.toastCallback({ severity: "success", detail: response.data }));
       }
     } catch (error) {
       if (error.response) {
         toast.show(
-          toastCallback({
+          utils.toastCallback({
             severity: "error",
             summary: "Error",
             detail: "An error occurred, kindly contact your admin"
@@ -53,7 +50,7 @@ const FileUploader = ({
       } else {
         // network errors
         toast.show(
-          toastCallback({
+          utils.toastCallback({
             summary: "Network Error",
             detail: constants.networkErrorMessage
           })

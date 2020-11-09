@@ -115,8 +115,8 @@ export const routes = [
     path: `${constants.routes.balancing_adjustment}${modePathParam}`,
     name: "BALANCING_ADJUSTMENT",
     exact: true,
-    component: RouteGuard(BalancingAdjustment)
-    //resources: [aboutResource],
+    component: RouteGuard(BalancingAdjustment),
+    resources: [fixedAssetModuleClassResource]
   },
   {
     path: "*",

@@ -1,7 +1,7 @@
 export default {
   startYear: 1980,
   toastLifeTime: 6000,
-  modes: ["mapping", "view"],
+  modes: ["adding", "mapping", "view"],
   modules: {
     dashboard: "Dashboard",
     fixedAsset: "Fixed Asset",

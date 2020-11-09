@@ -17,8 +17,7 @@ const FixedAssetMapping = ({
   assetClassSelectItems,
   tbData,
   trialBalanceRefresh,
-  toast,
-  toastCallback
+  toast
 }) => {
   const cost = "cost";
   const depreciation = "depreciation";
@@ -57,7 +56,7 @@ const FixedAssetMapping = ({
 
     if (selectedAccounts.length === 0) {
       toast.show(
-        toastCallback({
+        utils.toastCallback({
           severity: "error",
           detail: "Select at least one account from the trial balance table"
         })
@@ -67,7 +66,7 @@ const FixedAssetMapping = ({
 
     if (isNaN(openingBalance)) {
       toast.show(
-        toastCallback({
+        utils.toastCallback({
           severity: "error",
           detail: "Opening balance is not a number"
         })
@@ -75,7 +74,7 @@ const FixedAssetMapping = ({
       return;
     } else if (isNaN(addition)) {
       toast.show(
-        toastCallback({
+        utils.toastCallback({
           severity: "error",
           detail: `${assetType === cost ? "Addition" : "Charge per year"} value is not a number`
         })
@@ -83,7 +82,7 @@ const FixedAssetMapping = ({
       return;
     } else if (isNaN(disposal)) {
       toast.show(
-        toastCallback({
+        utils.toastCallback({
           severity: "error",
           detail: "Disposal value is not a number"
         })
@@ -91,7 +90,7 @@ const FixedAssetMapping = ({
       return;
     } else if (isNaN(transfer)) {
       toast.show(
-        toastCallback({
+        utils.toastCallback({
           severity: "error",
           detail: "Transfer value is not a number"
         })
@@ -124,13 +123,12 @@ const FixedAssetMapping = ({
       });
       if (response.status === 200) {
         toast.show(
-          toastCallback({ severity: "success", detail: "Fixed asset mapped successfully" })
+          utils.toastCallback({ severity: "success", detail: "Fixed asset mapped successfully" })
         );
       }
     } catch (error) {
-      // network errors
       toast.show(
-        toastCallback({
+        utils.toastCallback({
           severity: "error",
           summary: "Network Error",
           detail: constants.networkErrorMessage
@@ -325,7 +323,6 @@ const FixedAssetMapping = ({
         tbData={tbData}
         trialBalanceRefresh={trialBalanceRefresh}
         toast={toast}
-        toastCallback={toastCallback}
         selectedAccounts={selectedAccounts}
         setSelectedAccounts={setSelectedAccounts}
       />

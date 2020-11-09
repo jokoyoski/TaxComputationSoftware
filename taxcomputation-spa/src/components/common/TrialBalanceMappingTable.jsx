@@ -4,14 +4,14 @@ import { Column } from "primereact/column";
 import { Button } from "primereact/button";
 import { fixedAssetUnmapping } from "../../apis/FixedAsset";
 import constants from "../../constants";
+import utils from "../../utils";
 
 const TrialBalanceMappingTable = ({
   tbData,
   selectedAccounts,
   setSelectedAccounts,
   trialBalanceRefresh,
-  toast,
-  toastCallback
+  toast
 }) => {
   return (
     <DataTable
@@ -26,9 +26,9 @@ const TrialBalanceMappingTable = ({
           !tbData.find(d => d.id === e.value[e.value.length - 1].id).mappedTo
             ? setSelectedAccounts(e.value)
             : toast.show(
-                toastCallback({
+                utils.toastCallback({
                   severity: "error",
-                  detail: "This item as been mapped"
+                  detail: "This item has been mapped"
                 })
               );
         } else {
@@ -59,7 +59,7 @@ const TrialBalanceMappingTable = ({
                     if (response.status === 200) {
                       trialBalanceRefresh();
                       toast.show(
-                        toastCallback({
+                        utils.toastCallback({
                           severity: "success",
                           detail: response.data
                         })
@@ -68,7 +68,7 @@ const TrialBalanceMappingTable = ({
                   } catch (error) {
                     if (error.message === "Network Error") {
                       return toast.show(
-                        toastCallback({
+                        utils.toastCallback({
                           severity: "success",
                           detail: constants.networkErrorMessage
                         })

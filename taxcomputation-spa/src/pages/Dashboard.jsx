@@ -24,17 +24,6 @@ const Dashboard = () => {
   const [company, { onSelectCompany }] = useCompany();
   const [resources, { onCompanies }] = useResources();
 
-  const toastCallback = React.useCallback(
-    ({ severity, summary, detail }) => ({
-      severity,
-      summary,
-      detail,
-      life: constants.toastLifeTime,
-      closable: false
-    }),
-    []
-  );
-
   React.useEffect(() => {
     if (!showAddCompany) {
       setShowCompanyPicker(true);
@@ -68,7 +57,6 @@ const Dashboard = () => {
       <FileUploader
         company={company}
         toast={toast.current}
-        toastCallback={toastCallback}
         setRefreshTrialBalanceTable={setRefreshTrialBalanceTable}
       />
       {company.companyId && (
@@ -82,7 +70,6 @@ const Dashboard = () => {
         showAddCompany={showAddCompany}
         setShowAddCompany={setShowAddCompany}
         toast={toast.current}
-        toastCallback={toastCallback}
         refresh={refresh}
       />
       {company.companyId === null && (
