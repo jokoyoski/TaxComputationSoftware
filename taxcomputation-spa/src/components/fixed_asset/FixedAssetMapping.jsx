@@ -127,7 +127,6 @@ const FixedAssetMapping = ({
         );
       }
     } catch (error) {
-      // network errors
       toast.show(
         utils.toastCallback({
           severity: "error",
