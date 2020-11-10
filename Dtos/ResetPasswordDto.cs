@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace TaxComputationSoftware.Dtos
+namespace TaxComputationAPI.Dtos
 {
     public class ResetPasswordDto
     {

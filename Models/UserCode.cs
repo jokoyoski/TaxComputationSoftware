@@ -1,6 +1,6 @@
 using System;
 
-namespace TaxComputationSoftware.Models
+namespace TaxComputationAPI.Models
 {
     public class UserCode
     {

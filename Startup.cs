@@ -21,10 +21,6 @@ using TaxComputationAPI.Models;
 using TaxComputationAPI.Models.CustomHandler;
 using TaxComputationAPI.Repositories;
 using TaxComputationAPI.Services;
-using TaxComputationSoftware.Interfaces;
-using TaxComputationSoftware.Repositories;
-using TaxComputationSoftware.Services;
-
 namespace TaxComputationAPI
 {
     public class Startup
@@ -78,7 +74,9 @@ namespace TaxComputationAPI
             });
 
             services.AddScoped<IUsersRepository, UsersRepository>();
+            services.AddScoped<IBalancingAdjustmentRepository, BalancingAdjustmentRepository>();
             services.AddScoped<IUsersService, UsersService>();
+            services.AddScoped<IBalancingAdjustmentService, BalancingAdjustmentService>();
             services.AddScoped<ICompaniesRepository, CompaniesRepository>();
             services.AddScoped<IFixedAssetService, FixedAssetService>();
             services.AddScoped<IFixedAssetRepository, FixedAssetRepository>();

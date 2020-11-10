@@ -14,9 +14,9 @@ using Microsoft.IdentityModel.Tokens;
 using TaxComputationAPI.Dtos;
 using TaxComputationAPI.Helpers;
 using TaxComputationAPI.Models;
-using TaxComputationSoftware.Dtos;
-using TaxComputationSoftware.Helpers;
-using TaxComputationSoftware.Interfaces;
+using TaxComputationAPI.Dtos;
+using TaxComputationAPI.Helpers;
+using TaxComputationAPI.Interfaces;
 
 namespace TaxComputationAPI.Controllers
 {

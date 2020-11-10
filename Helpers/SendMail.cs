@@ -2,7 +2,7 @@ using System.Threading.Tasks;
 using SendGrid;
 using SendGrid.Helpers.Mail;
 
-namespace TaxComputationSoftware.Helpers
+namespace TaxComputationAPI.Helpers
 {
     public class SendMail
     {
