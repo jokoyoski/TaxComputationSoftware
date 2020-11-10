@@ -47,7 +47,7 @@ namespace TaxComputationAPI
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>()
-                    .UseUrls("http://*:5007");
+                    .UseUrls("http://*:5000");
                 });
 
        
