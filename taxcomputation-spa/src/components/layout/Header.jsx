@@ -5,6 +5,7 @@ import { useRouterActions } from "react-resource-router";
 import constants from "../../constants";
 import ChangePassword from "../common/ChangePassword";
 import CreateUser from "../common/CreateUser";
+import { useResources } from "../../store/ResourcesStore";
 
 const Header = ({ title, loading }) => {
   const { replace } = useRouterActions();
@@ -12,10 +13,12 @@ const Header = ({ title, loading }) => {
   const [showChangePassword, setShowChangePassword] = React.useState();
   const [showCreateUser, setShowCreateUser] = React.useState();
   const [{ companyName }, { resetCompany }] = useCompany();
+  const [, { resetResources }] = useResources();
 
   const onSwitchCompany = () => {
     setShowSettings(false);
     resetCompany();
+    resetResources();
     replace(constants.routes.dashboard);
   };
 

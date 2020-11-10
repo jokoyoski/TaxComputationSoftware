@@ -11,7 +11,7 @@ const ResourcesStore = createStore({
     onCompanies: companies => ({ setState }) => setState({ companies }),
     onModuleItems: moduleItems => ({ setState }) => setState({ moduleItems }),
     onTrialBalance: trialBalance => ({ setState }) => setState({ trialBalance }),
-    resetReource: () => ({ setState }) =>
+    resetResources: () => ({ setState }) =>
       setState({
         companies: null,
         moduleItems: null,
