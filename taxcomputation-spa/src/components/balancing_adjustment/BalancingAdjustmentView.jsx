@@ -23,57 +23,61 @@ const BalancingAdjustmentView = ({ year }) => {
         if (isMounted.current) {
           setBalancingAdjustmentData(() => {
             const tableData = [];
-            data.values.balancingAdjustments.forEach((d, index) => {
+            data.values.balancingAdjustments.forEach((balancingAdjustment, index) => {
               const assetNameRow = {};
-              const costRow = {};
-              const initialAllowanceRow = {};
-              const annualAllowanceRow = {};
-              const residueRow = {};
-              const salesProceedRow = {};
-              const balanceRow = {};
               const emptyRow = {};
 
-              assetNameRow.category = <strong>{d.assetName}</strong>;
-
-              costRow.category = `Cost up to ${d.assetYear[0].yearBought} YOA`;
-              costRow.credit = utils.currencyFormatter(d.assetYear[0].cost);
-              costRow.cost = utils.currencyFormatter(d.assetYear[0].cost);
-
-              initialAllowanceRow.category = "Initial Allowance";
-              initialAllowanceRow.credit = utils.currencyFormatter(d.assetYear[0].initialAllowance);
-
-              annualAllowanceRow.category = `Annual allowances up to ${year - 1}`;
-              annualAllowanceRow.credit = utils.currencyFormatter(d.assetYear[0].annualAllowance);
-
-              residueRow.category = `Residue at 31.12.${year - 1}`;
-              residueRow.credit = utils.currencyFormatter(d.assetYear[0].residue);
-              residueRow.twdv = utils.currencyFormatter(d.assetYear[0].residue);
-
-              salesProceedRow.category = "Sales Proceeds";
-              salesProceedRow.credit = utils.currencyFormatter(d.assetYear[0].salesProceed);
-              salesProceedRow.salesProceed = utils.currencyFormatter(d.assetYear[0].salesProceed);
-
-              if (d.balancingCharge > 0) {
-                balanceRow.category = "Balancing Charge";
-                balanceRow.credit = utils.currencyFormatter(d.assetYear[0].balancingCharge);
-                balanceRow.balancingCharge = utils.currencyFormatter(
-                  d.assetYear[0].balancingCharge
-                );
-              } else {
-                balanceRow.category = "Balancing Allowance";
-                balanceRow.credit = utils.currencyFormatter(d.assetYear[0].balancingAllowance);
-                balanceRow.balancingCharge = utils.currencyFormatter(
-                  d.assetYear[0].balancingAllowance
-                );
-              }
+              assetNameRow.category = <strong>{balancingAdjustment.assetName}</strong>;
 
               tableData.push(assetNameRow);
-              tableData.push(costRow);
-              tableData.push(initialAllowanceRow);
-              tableData.push(annualAllowanceRow);
-              tableData.push(residueRow);
-              tableData.push(salesProceedRow);
-              tableData.push(balanceRow);
+
+              balancingAdjustment.assetYear.forEach((assetYear, index) => {
+                const costRow = {};
+                const initialAllowanceRow = {};
+                const annualAllowanceRow = {};
+                const residueRow = {};
+                const salesProceedRow = {};
+                const balanceRow = {};
+
+                costRow.category = `Cost up to ${assetYear.yearBought} YOA`;
+                costRow.credit = utils.currencyFormatter(assetYear.cost);
+                costRow.cost = utils.currencyFormatter(assetYear.cost);
+
+                initialAllowanceRow.category = "Initial Allowance";
+                initialAllowanceRow.credit = utils.currencyFormatter(assetYear.initialAllowance);
+
+                annualAllowanceRow.category = `Annual allowances up to ${year - 1}`;
+                annualAllowanceRow.credit = utils.currencyFormatter(assetYear.annualAllowance);
+
+                residueRow.category = `Residue at 31.12.${year - 1}`;
+                residueRow.credit = utils.currencyFormatter(assetYear.residue);
+                residueRow.twdv = utils.currencyFormatter(assetYear.residue);
+
+                salesProceedRow.category = "Sales Proceeds";
+                salesProceedRow.credit = utils.currencyFormatter(assetYear.salesProceed);
+                salesProceedRow.salesProceed = utils.currencyFormatter(assetYear.salesProceed);
+
+                if (assetYear.balancingCharge > 0) {
+                  balanceRow.category = "Balancing Charge";
+                  balanceRow.credit = utils.currencyFormatter(assetYear.balancingCharge);
+                  balanceRow.balancingCharge = utils.currencyFormatter(assetYear.balancingCharge);
+                } else {
+                  balanceRow.category = "Balancing Allowance";
+                  balanceRow.credit = utils.currencyFormatter(assetYear.balancingAllowance);
+                  balanceRow.balancingCharge = utils.currencyFormatter(
+                    assetYear.balancingAllowance
+                  );
+                }
+
+                tableData.push(costRow);
+                tableData.push(initialAllowanceRow);
+                tableData.push(annualAllowanceRow);
+                tableData.push(residueRow);
+                tableData.push(salesProceedRow);
+                tableData.push(balanceRow);
+                if (index < balancingAdjustment.assetYear.length - 1) tableData.push(emptyRow);
+              });
+
               if (index < data.values.balancingAdjustments.length - 1) tableData.push(emptyRow);
             });
             return tableData;
