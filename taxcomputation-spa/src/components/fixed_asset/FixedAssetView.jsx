@@ -134,7 +134,7 @@ const FixedAssetView = ({ year }) => {
                       <strong>
                         {utils.currencyFormatter(
                           data.netBookValue.reduce(
-                            (acc, cur) => acc + Number(cur.value.slice(1).replace(",", "")),
+                            (acc, cur) => acc + Number(cur.value.slice(1).replace(/,/g, "")),
                             0
                           )
                         )}
