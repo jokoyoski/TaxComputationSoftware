@@ -19,7 +19,7 @@ const Header = ({ title, loading }) => {
     setShowSettings(false);
     resetCompany();
     resetResources();
-    replace(constants.routes.dashboard);
+    replace(constants.routes.home);
   };
 
   return (
