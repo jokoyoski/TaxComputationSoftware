@@ -6,12 +6,14 @@ import constants from "../../constants";
 import ChangePassword from "../common/ChangePassword";
 import CreateUser from "../common/CreateUser";
 import { useResources } from "../../store/ResourcesStore";
+import CreateAsset from "../common/CreateAsset";
 
 const Header = ({ title, loading }) => {
   const { replace } = useRouterActions();
   const [showSettings, setShowSettings] = React.useState();
   const [showChangePassword, setShowChangePassword] = React.useState();
   const [showCreateUser, setShowCreateUser] = React.useState();
+  const [showCreateAsset, setShowCreateAsset] = React.useState();
   const [{ companyName }, { resetCompany }] = useCompany();
   const [, { resetResources }] = useResources();
 
@@ -63,6 +65,14 @@ const Header = ({ title, loading }) => {
                     }}>
                     Create User
                   </p>
+                  <p
+                    className="settings-item"
+                    onClick={() => {
+                      setShowCreateAsset(!showCreateAsset);
+                      setShowSettings(false);
+                    }}>
+                    Create Asset
+                  </p>
                   <p className="settings-item" onClick={onSwitchCompany}>
                     Switch Company
                   </p>
@@ -82,6 +92,7 @@ const Header = ({ title, loading }) => {
       </div>
       {showChangePassword && <ChangePassword setShowChangePassword={setShowChangePassword} />}
       {showCreateUser && <CreateUser setShowCreateUser={setShowCreateUser} />}
+      {showCreateAsset && <CreateAsset setShowCreateAsset={setShowCreateAsset} />}
     </>
   );
 };
