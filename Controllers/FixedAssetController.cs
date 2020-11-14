@@ -47,6 +47,10 @@ namespace TaxComputationAPI.Controllers {
                     return StatusCode (400, new { errors = new []{"Please select a valid company"} });
                     
                 }
+
+              //  var amount=
+
+
            /*     if (createFixed.IsCost == true && (createFixed.CostAddition == 0 && createFixed.CostClosing == 0 && createFixed.CostDisposal == 0)) {
                    
                       return StatusCode (400, new { errors = new []{"PYou selected a Cost but didnt pass a cost input value"} });

@@ -17,6 +17,7 @@ using Newtonsoft.Json;
 using Serilog;
 using TaxComputationAPI.Data;
 using TaxComputationAPI.Interfaces;
+using TaxComputationAPI.Manager;
 using TaxComputationAPI.Models;
 using TaxComputationAPI.Models.CustomHandler;
 using TaxComputationAPI.Repositories;
@@ -89,6 +90,10 @@ namespace TaxComputationAPI
             services.AddScoped<IAuthenticationRepository, AuthenticationRepository>();
             services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddSingleton<IAuthorizationHandler,SystemAdminHandler>();
+            services.AddSingleton<ICapitalAllowanceService, CapitalAllowanceService>();
+            services.AddSingleton<ICapitalAllowanceRepository, CapitalAllowanceRepository>();
+            services.AddSingleton<DatabaseManager>();
+            services.Configure<ConnectionString>(_configuration.GetSection("ConnectionString"));
             services.AddDbContext<DataContext>(options => options.UseSqlServer(_configuration.GetConnectionString("DefaultConnection")));
             services.AddAutoMapper(typeof(Startup));
             services.AddCors();

@@ -8,8 +8,8 @@ namespace TaxComputationAPI.Interfaces
     public interface IFixedAssetService
     {
          Task SaveFixedAsset ( CreateFixedAssetDto fixedAsset);
-
-          Task DeleteFixedAsset (int fixedAssetId);
+        // decimal GetAmount(string type, List<int> trialBalance);
+         Task DeleteFixedAsset (int fixedAssetId);
          Task<TaxComputationAPI.Dtos.FixedAssetResponseDto> GetFixedAssetsByCompany(int companyId, int yearId);
     }
 }

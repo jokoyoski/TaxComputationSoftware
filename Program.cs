@@ -11,6 +11,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Serilog;
 using TaxComputationAPI.Data;
+using TaxComputationAPI.Manager;
 using TaxComputationAPI.Models;
 
 namespace TaxComputationAPI
@@ -25,11 +26,14 @@ namespace TaxComputationAPI
                var services = scope.ServiceProvider;
                try
                {
-                   var context = services.GetRequiredService<DataContext>();
-                   var userManager = services.GetRequiredService<UserManager<User>>();
-                   var roleManager = services.GetRequiredService<RoleManager<Role>>();
-                   context.Database.Migrate();
-                   Seed.SeedUsers(userManager, roleManager);
+                    var dbContext = services.GetRequiredService<DatabaseManager>();
+                   // var context = services.GetRequiredService<DataContext>();
+                    //var userManager = services.GetRequiredService<UserManager<User>>();
+                   // var roleManager = services.GetRequiredService<RoleManager<Role>>();
+                    //context.Database.Migrate();
+                   // Seed.SeedUsers(userManager, roleManager);
+                    dbContext.UpdateProcedure();
+                  
                }
                catch (Exception ex)
                {

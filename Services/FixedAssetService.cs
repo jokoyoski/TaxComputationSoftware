@@ -153,6 +153,17 @@ namespace TaxComputationAPI.Services
 
         }
 
+       /* public bool GetAmount(string type, List<int> trialBalance)
+        {
+            decimal totalNumber = 0;
+
+            foreach(var j in trialBalance) {
+                totalNumber= _utilitiesRepository.GetAmount(j,"cost");
+            }
+
+           
+        }*/
+
 
         public TaxComputationAPI.Dtos.FixedAssetResponseDto FormatAmount(FixedAssetResponse fixedAssetResponse)
         {
