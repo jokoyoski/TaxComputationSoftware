@@ -27,11 +27,11 @@ namespace TaxComputationAPI
                try
                {
                     var dbContext = services.GetRequiredService<DatabaseManager>();
-                   // var context = services.GetRequiredService<DataContext>();
-                    //var userManager = services.GetRequiredService<UserManager<User>>();
-                   // var roleManager = services.GetRequiredService<RoleManager<Role>>();
-                    //context.Database.Migrate();
-                   // Seed.SeedUsers(userManager, roleManager);
+                    var context = services.GetRequiredService<DataContext>();
+                    var userManager = services.GetRequiredService<UserManager<User>>();
+                    var roleManager = services.GetRequiredService<RoleManager<Role>>();
+                    context.Database.Migrate();
+                    Seed.SeedUsers(userManager, roleManager);
                     dbContext.UpdateProcedure();
                   
                }

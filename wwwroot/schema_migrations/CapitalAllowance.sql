@@ -75,13 +75,12 @@ GO
 
 
 --------------------------------------- STORED PROCEDURE TO  GET CAPITAL ALLOWANCE-----------------------------------------
-
-IF OBJECT_ID('N[dbo].[usp_Get_Capital_Allowance_By_CompanyId_Year]') IS nOT NULL
+IF OBJECT_ID('N[dbo].[usp_Get_Capital_Allowance_By_CompanyId_And_AssetIId]') IS nOT NULL
 BEGIN
-DROP procedure [dbo].[usp_Get_Capital_Allowance_By_CompanyId_Year]
+DROP procedure [dbo].[usp_Get_Capital_Allowance_By_CompanyId_And_AssetIId]
 END
 GO
-CREATE procedure usp_Get_Capital_Allowance_By_CompanyId_Year(
+CREATE procedure usp_Get_Capital_Allowance_By_CompanyId_And_AssetIId(
 @AssetId int,
 @CompanyId int
 
@@ -89,3 +88,5 @@ CREATE procedure usp_Get_Capital_Allowance_By_CompanyId_Year(
 AS
 
 select TaxYear,OpeningResidue,Addition,Disposal,Initial,Annual,Total,ClosingResidue,YearsToGo from [dbo].[CapitalAllowance] where CompanyId=@CompanyId AND AssetId=@AssetId
+GO
+

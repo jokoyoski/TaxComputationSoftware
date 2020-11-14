@@ -27,7 +27,7 @@ namespace TaxComputationAPI.Repositories
                 
                 parameters.Add("@CompanyId", companyId);
                 parameters.Add("@AssetId", assetId);
-                var record = await conn.QueryMultipleAsync("dbo].[usp_Get_Capital_Allowance_By_CompanyId_Year]", parameters, commandType: CommandType.StoredProcedure);
+                var record = await conn.QueryMultipleAsync("[dbo].[usp_Get_Capital_Allowance_By_CompanyId_And_AssetIId]", parameters, commandType: CommandType.StoredProcedure);
                 var result = await record.ReadAsync<CapitalAllowance>();
                 return result;
             }
