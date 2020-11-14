@@ -321,8 +321,9 @@ namespace TaxComputationAPI.Services
 
         private static decimal CalculateAnnualAllowance(decimal cost, decimal initialCost, int annualRatio, int assetLifeCycle, int assetLifeSpan)
         {
-            var diff = (cost - initialCost);
-            var value = (diff * annualRatio  * assetLifeSpan) / 100;
+            //var diff = (initialCost);
+            // var value=50/
+            var value = initialCost / assetLifeSpan * assetLifeCycle;
             return value;
         }
 
