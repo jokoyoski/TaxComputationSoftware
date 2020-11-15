@@ -2,7 +2,7 @@ import React from "react";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 
-const CapitalAllowanceView = () => {
+const CapitalAllowanceView = ({ year }) => {
   const [balancingAllowanceData] = React.useState([
     {
       category: <strong>Motor Vehicles</strong>,
