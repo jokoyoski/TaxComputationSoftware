@@ -50,8 +50,8 @@ namespace TaxComputationAPI
             Host.CreateDefaultBuilder(args) .UseSerilog((ctx, config) => { config.ReadFrom.Configuration(ctx.Configuration); })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseStartup<Startup>()
-                    .UseUrls("http://*:5000");
+                    webBuilder.UseStartup<Startup>();
+                    // .UseUrls("http://*:5000");
                 });
 
        
