@@ -41,9 +41,13 @@ create table FixedAsset(
  TransferDepreciation varchar(20) null,
  DepreciationDisposal varchar(200),
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
  DepreciationClosing varchar(200),
 >>>>>>> 2860c1f490c9ea7bbea7c9b73660e82b40328612
+=======
+ DepreciationClosing varchar(200),
+>>>>>>> 1426fd094a857e6b88a91df7198e2e70c47629fb
  DepreciationAddition varchar(200),
  IsTransferDepreciationRemoved bit,
  )
@@ -76,9 +80,13 @@ create procedure usp_Insert_Fixed_Asset(
  @DepreciationAddition varchar(20),
  @DepreciationDisposal varchar(20),
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
  @DepreciationClosing varchar(200),
 >>>>>>> 2860c1f490c9ea7bbea7c9b73660e82b40328612
+=======
+ @DepreciationClosing varchar(200),
+>>>>>>> 1426fd094a857e6b88a91df7198e2e70c47629fb
  @type varchar (20),
  @IsTransferDepreciationRemoved bit
 )
@@ -99,10 +107,14 @@ begin
 UPDATE [dbo].[FixedAsset]
 SET CompanyId = @CompanyId, YearId = @YearId, AssetId=@AssetId ,OpeningDepreciation=@OpeningDepreciation,DepreciationAddition=@DepreciationAddition,DepreciationDisposal=@DepreciationDisposal,
 <<<<<<< HEAD
+<<<<<<< HEAD
 TransferDepreciation=@TransferDepreciation,IsTransferDepreciationRemoved=@IsTransferDepreciationRemoved
 =======
 TransferDepreciation=@TransferDepreciation,IsTransferDepreciationRemoved=@IsTransferDepreciationRemoved,DepreciationClosing=@DepreciationClosing
 >>>>>>> 2860c1f490c9ea7bbea7c9b73660e82b40328612
+=======
+TransferDepreciation=@TransferDepreciation,IsTransferDepreciationRemoved=@IsTransferDepreciationRemoved,DepreciationClosing=@DepreciationClosing
+>>>>>>> 1426fd094a857e6b88a91df7198e2e70c47629fb
 WHERE CompanyId=@CompanyId and YearId=@YearId and AssetId=@AssetId
 END
 end
@@ -144,9 +156,13 @@ INSERT [dbo].[FixedAsset](
  DepreciationAddition,
  DepreciationDisposal,
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
  DepreciationClosing,
 >>>>>>> 2860c1f490c9ea7bbea7c9b73660e82b40328612
+=======
+ DepreciationClosing,
+>>>>>>> 1426fd094a857e6b88a91df7198e2e70c47629fb
  IsTransferDepreciationRemoved
 )
 values(
@@ -159,9 +175,13 @@ values(
 @DepreciationAddition,
 @DepreciationDisposal,
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 @DepreciationClosing,
 >>>>>>> 2860c1f490c9ea7bbea7c9b73660e82b40328612
+=======
+@DepreciationClosing,
+>>>>>>> 1426fd094a857e6b88a91df7198e2e70c47629fb
 @IsTransferDepreciationRemoved
 )
 end

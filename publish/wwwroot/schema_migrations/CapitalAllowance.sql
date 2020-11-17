@@ -91,6 +91,9 @@ AS
 select TaxYear,OpeningResidue,Addition,Disposal,Initial,Annual,Total,ClosingResidue,YearsToGo from [dbo].[CapitalAllowance] where CompanyId=@CompanyId AND AssetId=@AssetId
 <<<<<<< HEAD
 GO
+<<<<<<< HEAD
 =======
 GO
 >>>>>>> 2860c1f490c9ea7bbea7c9b73660e82b40328612
+=======
+>>>>>>> 1426fd094a857e6b88a91df7198e2e70c47629fb
