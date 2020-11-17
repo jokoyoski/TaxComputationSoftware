@@ -59,7 +59,8 @@ GO
 CREATE PROCEDURE [usp_Insert_Track_Trial_Balance](
 @CompanyId INT,
 @YearId   INT,
-@DateCreated  DATETIME2(7)
+@DateCreated  DATETIME2(7),
+@Id int OUTPUT
 )
 AS
 
@@ -75,6 +76,8 @@ VALUES
  @YearId,
  @DateCreated
 )
+SET @Id = SCOPE_IDENTITY()
+SELECT @Id
 GO
 
 
@@ -96,7 +99,9 @@ CREATE PROCEDURE [usp_Insert_Trial_Balance](
 @MappedTo   NVARCHAR (max),
 @IsCheck   BIT,
 @AccountId  NVARCHAR (max),
-@TrackId    INT
+@IsRemoved BIT,
+@TrackId    INT,
+@Id int OUTPUT
 )
 AS
 
@@ -108,6 +113,7 @@ INSERT [dbo].[TrialBalance]
  MappedTo,
  IsCheck,
  AccountId,
+ IsRemoved,
  TrackId
 )
 VALUES
@@ -118,8 +124,11 @@ VALUES
  @MappedTo,
  @IsCheck,
  @AccountId,
+ @IsRemoved,
  @TrackId
 )
+SET @Id = SCOPE_IDENTITY()
+SELECT @Id
 GO
 
 
@@ -127,7 +136,7 @@ PRINT('========================================Creating select all stored proced
 
 ------------------------------------------------STORED PROCEDURE TO  GET TRACK TRIAL BALANCE BY COMPANYID AND YEARID---------------------------------------------
 
-IF OBJECT_ID('[dbo].[usp_GetTrackTrialBalance_By_CompanyId_And_YearId') IS NOT NULL
+IF OBJECT_ID('[dbo].[usp_GetTrackTrialBalance_By_CompanyId_And_YearId]') IS NOT NULL
 BEGIN
 DROP PROCEDURE [dbo].[usp_GetTrackTrialBalance_By_CompanyId_And_YearId]
 END
@@ -144,7 +153,7 @@ PRINT('========================================Creating get trial balance by tra
 
 ------------------------------------------------ STORED PROCEDURE TO  GET TRIAL BALANCE BY TRIAL BALANCE TABLE--------------------------------------------
 
-IF OBJECT_ID('[dbo].[usp_GetTrialBalance_By_TrackingId') IS NOT NULL
+IF OBJECT_ID('[dbo].[usp_GetTrialBalance_By_TrackingId]') IS NOT NULL
 BEGIN
 DROP PROCEDURE [dbo].[usp_GetTrialBalance_By_TrackingId]
 END
@@ -160,7 +169,7 @@ PRINT('========================================Delete from trial balance by trai
 
 ------------------------------------------------ STORED PROCEDURE TO DELETE TRIAL BALANCE BY TRIALID BALANCE TABLE--------------------------------------------
 
-IF OBJECT_ID('[dbo].[usp_DeleteTrialBalance_By_Id') IS NOT NULL
+IF OBJECT_ID('[dbo].[usp_DeleteTrialBalance_By_Id]') IS NOT NULL
 BEGIN
 DROP PROCEDURE [dbo].[usp_DeleteTrialBalance_By_Id]
 END
@@ -177,7 +186,7 @@ PRINT('========================================Get from trial balance by Id stor
 
 ------------------------------------------------ STORED PROCEDURE TO GET TRIAL BALANCE BY TRIALID BALANCE TABLE--------------------------------------------
 
-IF OBJECT_ID('[dbo].[usp_GetTrialBalance_By_Id') IS NOT NULL
+IF OBJECT_ID('[dbo].[usp_GetTrialBalance_By_Id]') IS NOT NULL
 BEGIN
 DROP PROCEDURE [dbo].[usp_GetTrialBalance_By_Id]
 END
@@ -193,7 +202,7 @@ PRINT('========================================Get from trial balance by Id stor
 
 ------------------------------------------------ STORED PROCEDURE TO GET TRIAL BALANCE BY TRIALID BALANCE TABLE--------------------------------------------
 
-IF OBJECT_ID('[dbo].[usp_UpdateTrialBalance') IS NOT NULL
+IF OBJECT_ID('[dbo].[usp_UpdateTrialBalance]') IS NOT NULL
 BEGIN
 DROP PROCEDURE [dbo].[usp_UpdateTrialBalance]
 END
