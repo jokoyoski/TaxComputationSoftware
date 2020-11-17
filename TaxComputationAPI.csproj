@@ -52,6 +52,7 @@
     <None Remove="taxcomputation-spa\build\runtime.config.js" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="wwwroot\schema_migrations\" />
     <Folder Include="Manager\" />
     <Folder Include="Dao\" />
   </ItemGroup>
