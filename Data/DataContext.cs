@@ -35,18 +35,19 @@ namespace TaxComputationAPI.Data
 
         public DbSet<Company> Company { get; set; }
         public DbSet<FixedAsset> FixedAsset {get;set;}
-         public DbSet<FinancialYear> FinancialYear {get;set;}
+        public DbSet<FinancialYear> FinancialYear { get;set;}
        // public DbSet<AssetClass> AssetClass {get;set;}
-       public DbSet<TrialBalance> TrialBalance {get;set;}
-         public DbSet<TrackTrialBalance> TrackTrialBalance { get; set; }
+        public DbSet<TrialBalance> TrialBalance {get;set;}
+        public DbSet<TrackTrialBalance> TrackTrialBalance { get; set; }
         public DbSet<AssetMapping> AssetMapping { get; set; }
-         public DbSet<UserCode> UserCodes { get; set; }
+        public DbSet<UserCode> UserCodes { get; set; }
        
        public DbSet<BalancingAdjustment> BalancingAdjustment { get; set; }
 
        public DbSet<BalancingAdjustmentYearBought> BalancingAdjustmentYearBought { get; set; }
 
         public DbSet<TrialBalanceMapping> TrialBalanceMapping {get;set;}
+        public DbSet<BalancingAdjustment> BalancingAdjustment { get; set; }
     }
 }
 
