@@ -25,33 +25,7 @@
     <PackageReference Include="Dapper" Version="2.0.35" />
   </ItemGroup>
   <ItemGroup>
-    <Content Remove="wwwroot\favicon.ico" />
-    <Content Remove="wwwroot\index.html" />
-    <Content Remove="wwwroot\logo512.png" />
-    <Content Remove="wwwroot\asset-manifest.json" />
-    <Content Remove="wwwroot\manifest.json" />
-    <Content Remove="wwwroot\service-worker.js" />
-    <Content Remove="wwwroot\robots.txt" />
-    <Content Remove="wwwroot\runtime.config.js" />
-    <Content Remove="wwwroot\logo192.png" />
-    <Content Remove="wwwroot\asset-manifest.json" />
-    <Content Remove="wwwroot\favicon.ico" />
-    <Content Remove="wwwroot\index.html" />
-    <Content Remove="wwwroot\logo192.png" />
-    <Content Remove="wwwroot\logo512.png" />
-    <Content Remove="wwwroot\manifest.json" />
-    <Content Remove="wwwroot\runtime.config.js" />
-    <Content Remove="wwwroot\service-worker.js" />
-    <Content Remove="wwwroot\robots.txt" />
-    <Content Remove="taxcomputation-spa\build\manifest.json" />
-    <Content Remove="taxcomputation-spa\build\asset-manifest.json" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Remove="taxcomputation-spa\build\logo512.png" />
-    <None Remove="taxcomputation-spa\build\robots.txt" />
-    <None Remove="taxcomputation-spa\build\runtime.config.js" />
-  </ItemGroup>
-  <ItemGroup>
+    <Folder Include="wwwroot\schema_migrations\" />
     <Folder Include="Manager\" />
     <Folder Include="Dao\" />
   </ItemGroup>
