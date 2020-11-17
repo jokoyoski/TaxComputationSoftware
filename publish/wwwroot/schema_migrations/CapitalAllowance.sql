@@ -89,4 +89,8 @@ CREATE procedure [dbo].[usp_Get_Capital_Allowance_By_CompanyId_And_AssetId](
 AS
 
 select TaxYear,OpeningResidue,Addition,Disposal,Initial,Annual,Total,ClosingResidue,YearsToGo from [dbo].[CapitalAllowance] where CompanyId=@CompanyId AND AssetId=@AssetId
+<<<<<<< HEAD
 GO
+=======
+GO
+>>>>>>> 2860c1f490c9ea7bbea7c9b73660e82b40328612

@@ -101,8 +101,8 @@ export const routes = [
     path: `${constants.routes.capital_allowance}${modePathParam}`,
     name: "CAPITAL_ALLOWANCE",
     exact: true,
-    component: RouteGuard(CapitalAllowance)
-    //resources: [aboutResource],
+    component: RouteGuard(CapitalAllowance),
+    resources: [fixedAssetModuleClassResource]
   },
   {
     path: `${constants.routes.investment_allowance}${modePathParam}`,

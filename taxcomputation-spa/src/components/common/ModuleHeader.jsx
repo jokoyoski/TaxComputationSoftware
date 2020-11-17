@@ -3,10 +3,11 @@ import { Dropdown } from "primereact/dropdown";
 import constants from "../../constants";
 
 const ModuleHeader = ({ title, mode, setMode, year, setYear, yearSelectItems }) => {
+  const addingModules = [constants.modules.balancingAdjustment, constants.modules.capitalAllowance];
   const modeSelectItems = [
     {
-      label: title === constants.modules.balancingAdjustment ? "Adding - Mode" : "Mapping - Mode",
-      value: title === constants.modules.balancingAdjustment ? "adding" : "mapping"
+      label: addingModules.includes(title) ? "Adding - Mode" : "Mapping - Mode",
+      value: addingModules.includes(title) ? "adding" : "mapping"
     },
     { label: "View - Mode", value: "view" }
   ];
