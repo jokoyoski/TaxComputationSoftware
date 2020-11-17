@@ -24,12 +24,13 @@ GO
 
 
 
-IF OBJECT_ID('N[dbo].[usp_Insert_Capital_Allowance]') IS nOT NULL
+IF OBJECT_ID('[dbo].[usp_Insert_Capital_Allowance]') IS NOT NULL
 BEGIN
 DROP procedure [dbo].[usp_Insert_Capital_Allowance]
+PRINT('OK')
 END
 GO
-CREATE procedure usp_Insert_Capital_Allowance(
+CREATE procedure [usp_Insert_Capital_Allowance](
 @AssetId int,
 @CompanyId int,
 @TaxYear   varchar(10),
@@ -75,12 +76,12 @@ GO
 
 
 --------------------------------------- STORED PROCEDURE TO  GET CAPITAL ALLOWANCE-----------------------------------------
-IF OBJECT_ID('N[dbo].[usp_Get_Capital_Allowance_By_CompanyId_And_AssetIId]') IS nOT NULL
+IF OBJECT_ID('[dbo].[usp_Get_Capital_Allowance_By_CompanyId_And_AssetId]') IS nOT NULL
 BEGIN
-DROP procedure [dbo].[usp_Get_Capital_Allowance_By_CompanyId_And_AssetIId]
+DROP procedure [dbo].[usp_Get_Capital_Allowance_By_CompanyId_And_AssetId]
 END
 GO
-CREATE procedure usp_Get_Capital_Allowance_By_CompanyId_And_AssetIId(
+CREATE procedure [dbo].[usp_Get_Capital_Allowance_By_CompanyId_And_AssetId](
 @AssetId int,
 @CompanyId int
 
@@ -89,4 +90,3 @@ AS
 
 select TaxYear,OpeningResidue,Addition,Disposal,Initial,Annual,Total,ClosingResidue,YearsToGo from [dbo].[CapitalAllowance] where CompanyId=@CompanyId AND AssetId=@AssetId
 GO
-
