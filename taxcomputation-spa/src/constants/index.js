@@ -30,7 +30,7 @@ export default {
     investment_allowance: "/investment_allowance",
     balancing_adjustment: "/balancing_adjustment"
   },
-  nonMappedModules: ["Minimum Tax", "Capital Allowance", "Investment Allowance", "I.T Levy"],
+  nonMappedModules: ["Minimum Tax", "Investment Allowance", "I.T Levy"],
   mappingCode: {
     fixedasset: "fixedasset",
     profitandloss: "profitandloss",

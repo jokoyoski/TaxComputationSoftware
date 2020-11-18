@@ -13,7 +13,7 @@ export default {
   defaultMode: title =>
     constants.nonMappedModules.includes(title)
       ? "view"
-      : title === constants.modules.balancingAdjustment
+      : [constants.modules.balancingAdjustment, constants.modules.capitalAllowance].includes(title)
       ? "adding"
       : "mapping",
   saveState: (state, stateName) => {
