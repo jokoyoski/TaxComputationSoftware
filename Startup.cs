@@ -94,6 +94,8 @@ namespace TaxComputationAPI
             services.AddSingleton<IAuthorizationHandler,SystemAdminHandler>();
             services.AddSingleton<ICapitalAllowanceService, CapitalAllowanceService>();
             services.AddSingleton<ICapitalAllowanceRepository, CapitalAllowanceRepository>();
+            services.AddSingleton<IProfitAndLossService, ProfitAndLossService>();
+            services.AddSingleton<IProfitAndLossRepository, ProfitAndLossRepository>();
             services.AddSingleton<DatabaseManager>();
             services.Configure<ConnectionString>(_configuration.GetSection("ConnectionString"));
             services.AddDbContext<DataContext>(options => options.UseSqlServer(_configuration.GetConnectionString("DefaultConnection")));
