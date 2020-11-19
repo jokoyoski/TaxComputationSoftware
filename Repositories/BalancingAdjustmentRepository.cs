@@ -17,13 +17,11 @@ namespace TaxComputationAPI.Repositories
     {
         private readonly DatabaseManager _databaseManager;
         private readonly ILogger<BalancingAdjustment> _logger;
-        private readonly DataContext _context;
 
-        public BalancingAdjustmentRepository(DatabaseManager databaseManger, ILogger<BalancingAdjustment> logger, DataContext context)
+        public BalancingAdjustmentRepository(DatabaseManager databaseManger, ILogger<BalancingAdjustment> logger)
         {
             _databaseManager = databaseManger;
             _logger = logger;
-            _context = context;
         }
 
         public async Task<List<BalancingAdjustment>> GetBalancingAdjustment(int companyId, string year)
@@ -101,7 +99,6 @@ namespace TaxComputationAPI.Repositories
 
                     return result.ToList();
                 }
-                //return await _context.BalancingAdjustmentYearBought.Where(p => p.BalancingAdjustmentId == balancingAdjustmentId && p.AssestId == assetId).ToListAsync();
             }
             catch (Exception e)
             {
@@ -143,8 +140,7 @@ namespace TaxComputationAPI.Repositories
 
                     return result.ToList();
                 }
-                //return await _context.BalancingAdjustmentYearBought.Where(p => p.BalancingAdjustmentId == balancingAdjustmentId && p.AssestId == assetId).ToListAsync();
-            }
+             }
             catch (Exception e)
             {
                 throw new SystemException(e.Message);

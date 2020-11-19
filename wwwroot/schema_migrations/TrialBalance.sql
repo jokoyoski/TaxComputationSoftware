@@ -22,7 +22,7 @@ CREATE TABLE [dbo].[TrackTrialBalance](
 END
 GO
 
-PRINT('========================================Creating Trial Balance Table=======================================================')
+PRINT('========================================Creating Trial Balance Mapping Table=======================================================')
 
 ---------------------------------------CREATE TRIAL BALANCE TABLE-----------------------------------------
 
@@ -45,6 +45,29 @@ CREATE TABLE [dbo].[TrialBalance](
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 END
 GO
+
+
+PRINT('========================================Creating Trial Balance Mapping Table=======================================================')
+
+---------------------------------------CREATE TRIAL BALANCE MAPPING TABLE-----------------------------------------
+
+
+IF NOT EXISTS(SELECT 1 FROM sysobjects WHERE type = 'U' and name = 'TrialBalanceMapping')
+BEGIN
+CREATE TABLE [dbo].[TrialBalanceMapping](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[TrialBalanceId] [int] NOT NULL,
+	[ModuleId] [int] NOT NULL,
+	[ModuleCode] [nvarchar](max) NULL,
+	[AdditionalInfo] [nvarchar](max) NULL,
+ CONSTRAINT [PK_TrialBalanceMapping] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+END
+GO
+
 
 PRINT('========================================Creating Insert stored procedure into trial balance table===================================================')
 
@@ -149,7 +172,7 @@ AS
 SELECT * FROM [dbo].[TrackTrialBalance] WHERE CompanyId=@CompanyId AND YearId=@YearId
 GO
 
-PRINT('========================================Creating get trial balance by trackId stored procedure from trial balance table===================================================')
+PRINT('========================Creating get trial balance by trackId stored procedure from trial balance table===========================================')
 
 ------------------------------------------------ STORED PROCEDURE TO  GET TRIAL BALANCE BY TRIAL BALANCE TABLE--------------------------------------------
 
@@ -165,7 +188,7 @@ AS
 SELECT * FROM [dbo].[TrialBalance] WHERE TrackId=@TrackId
 GO
 
-PRINT('========================================Delete from trial balance by trailId stored procedure from trial balance table===================================================')
+PRINT('=====================================Delete from trial balance by trailId stored procedure from trial balance table=====================================')
 
 ------------------------------------------------ STORED PROCEDURE TO DELETE TRIAL BALANCE BY TRIALID BALANCE TABLE--------------------------------------------
 
@@ -182,7 +205,7 @@ DELETE FROM [dbo].[TrialBalance] WHERE Id=@TrailId
 GO
 
 
-PRINT('========================================Get from trial balance by Id stored procedure from trial balance table===================================================')
+PRINT('===================================Get from trial balance by Id stored procedure from trial balance table==========================================')
 
 ------------------------------------------------ STORED PROCEDURE TO GET TRIAL BALANCE BY TRIALID BALANCE TABLE--------------------------------------------
 
@@ -198,7 +221,7 @@ AS
 SELECT * FROM [dbo].[TrialBalance] WHERE Id=@TrailId
 GO
 
-PRINT('========================================Get from trial balance by Id stored procedure from trial balance table===================================================')
+PRINT('====================================================Update trial balance table===========================================================')
 
 ------------------------------------------------ STORED PROCEDURE TO GET TRIAL BALANCE BY TRIALID BALANCE TABLE--------------------------------------------
 
@@ -225,4 +248,103 @@ UPDATE [dbo].[TrialBalance]
 SET IsCheck = 1, IsRemoved = 1, MappedTo=@mappedTo
 WHERE Id=@TrailId
 END
+GO
+
+
+PRINT('========================================Creating Insert stored procedure into trial balance mapping table===================================================')
+
+---------------------------------------------STORED PROCEDURE TO  INSERT INTO TRIAL BALANCE MAPPING TABLE-----------------------------------------
+
+IF OBJECT_ID('[dbo].[usp_Insert_Trial_Balance_Mapping]') IS NOT NULL
+BEGIN
+DROP PROCEDURE [dbo].[usp_Insert_Trial_Balance_Mapping]
+PRINT('OK')
+END
+GO
+CREATE PROCEDURE [dbo].[usp_Insert_Trial_Balance_Mapping](
+	@TrialBalanceId INT,
+	@ModuleId INT,
+	@ModuleCode NVARCHAR(max),
+	@AdditionalInfo NVARCHAR(max)
+)
+AS
+
+INSERT [dbo].[TrialBalanceMapping]
+(
+    TrialBalanceId,
+    ModuleId,
+    ModuleCode,
+    AdditionalInfo
+)
+VALUES
+(
+    @TrialBalanceId,
+	@ModuleId,
+	@ModuleCode,
+	@AdditionalInfo
+)
+GO
+
+
+PRINT('========================================Creating delete stored procedure from trial balance mapping table===============================================')
+
+---------------------------------------------------- STORED PROCEDURE TO  DELETE FORM TRIAL BALANCE MAPPING TABLE----------------------------------------------
+
+IF OBJECT_ID('[dbo].[usp_Delete_Trial_Balance_Mapping]') IS NOT NULL
+BEGIN
+DROP PROCEDURE [dbo].[usp_Delete_Trial_Balance_Mapping]
+PRINT('OK')
+END
+GO
+CREATE PROCEDURE [dbo].[usp_Delete_Trial_Balance_Mapping](
+	@Id INT
+)
+AS
+DELETE FROM [dbo].[TrialBalanceMapping] WHERE Id = @Id
+GO
+
+
+PRINT('===============================================Creating get amount debit stored procedure===================================================')
+
+------------------------------------------------------- STORED PROCEDURE TO  GET AMOUNT DEBIT---------------------------------------------------
+
+
+IF OBJECT_ID('[dbo].[usp_Get_Amount_Debit]') IS nOT NULL
+BEGIN
+DROP procedure [dbo].[usp_Get_Amount_Debit]
+END
+GO
+CREATE procedure [dbo].[usp_Get_Amount_Debit](
+@ModuleId int,
+@AdditionalInfo int
+)
+AS
+
+select [dbo].[TrialBalance].Debit  from [dbo].[TrialBalanceMapping]
+inner join [dbo].[TrialBalance] on [dbo].[TrialBalanceMapping].TrialBalanceId = [dbo].[TrialBalance].Id
+where [dbo].[TrialBalanceMapping].ModuleId=@ModuleId and [dbo].[TrialBalanceMapping].AdditionalInfo=@AdditionalInfo
+order by [dbo].[TrialBalance].Debit DESC
+GO
+
+
+PRINT('========================================Creating get amount credit stored procedure===================================================')
+
+------------------------------------------------------- STORED PROCEDURE TO  GET AMOUNT CREDIT---------------------------------------------------
+
+
+IF OBJECT_ID('[dbo].[usp_Get_Amount_Credit]') IS nOT NULL
+BEGIN
+DROP procedure [dbo].[usp_Get_Amount_Credit]
+END
+GO
+CREATE procedure [dbo].[usp_Get_Amount_Credit](
+@ModuleId int,
+@AdditionalInfo int
+)
+AS
+
+select [dbo].[TrialBalance].Credit  from [dbo].[TrialBalanceMapping]
+inner join [dbo].[TrialBalance] on [dbo].[TrialBalanceMapping].TrialBalanceId = [dbo].[TrialBalance].Id
+where [dbo].[TrialBalanceMapping].ModuleId=@ModuleId and [dbo].[TrialBalanceMapping].AdditionalInfo=@AdditionalInfo
+order by [dbo].[TrialBalance].Credit DESC
 GO
