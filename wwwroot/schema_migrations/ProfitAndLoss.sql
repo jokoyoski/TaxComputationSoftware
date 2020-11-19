@@ -7,11 +7,19 @@ BEGIN
  OtherIncome  int,
  CostOfSales   int,
  OtherOperatingIncome   int,
- OperatingExpense  int
+ OperatingExpense  int,
+ YearId int,
+ CompanyId int,
+ GrossProfit int,
+ GrossLoss int,
+ OtherOperatingGain int,
+ OtherOperatingLoss int,
+ LossBeforeTaxation int,
+ ProfitBeforeTaxation int
  )
 END
 GO
---------------------------------------- STORED PROCEDURE TO  GET ASSET MAPPING -----------------------------------------
+--------------------------------------- STORED PROCEDURE TO  GET PROFIT AND LOSS -----------------------------------------
 IF OBJECT_ID('[dbo].[usp_Get_Profit_And_Loss]') IS nOT NULL
 BEGIN
 DROP procedure [dbo].[usp_Get_Profit_And_Loss]
@@ -21,4 +29,59 @@ CREATE procedure [dbo].[usp_Get_Profit_And_Loss]
 AS
 
 select * from [dbo].[ProfitAndLoss] 
+GO
+
+-------------------------------------- STORED PROCEDURE TO  INSERT PROFIT AND LOSS -----------------------------------------
+IF OBJECT_ID('[dbo].[usp_Insert_Profit_And_Loss]') IS nOT NULL
+BEGIN
+DROP procedure [dbo].[usp_Insert_Profit_And_Loss]
+END
+GO
+CREATE procedure usp_Insert_Profit_And_Loss(
+@Revenue   int,
+ @OtherIncome  int,
+ @CostOfSales   int,
+ @OtherOperatingIncome   int,
+ @OperatingExpense  int,
+ @YearId int,
+ @CompanyId int,
+ @GrossProfit int,
+ @GrossLoss int,
+ @OtherOperatingGain int,
+ @OtherOperatingLoss int,
+ @LossBeforeTaxation int,
+ @ProfitBeforeTaxation int
+)
+AS
+
+INSERT [dbo].[ProfitAndLoss](
+ Revenue,
+ OtherIncome,
+ CostOfSales,
+ OtherOperatingIncome,
+ OperatingExpense,
+ YearId,
+ CompanyId,
+ GrossProfit,
+ GrossLoss,
+ OtherOperatingGain,
+ OtherOperatingLoss,
+ LossBeforeTaxation,
+ ProfitBeforeTaxation
+)
+VALUES(
+ @Revenue,
+ @OtherIncome,
+ @CostOfSales,
+ @OtherOperatingIncome,
+ @OperatingExpense,
+ @YearId,
+ @CompanyId,
+ @GrossProfit,
+ @GrossLoss,
+ @OtherOperatingGain,
+ @OtherOperatingLoss,
+ @LossBeforeTaxation,
+ @ProfitBeforeTaxation
+)
 GO
