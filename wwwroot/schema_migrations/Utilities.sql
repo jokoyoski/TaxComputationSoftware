@@ -148,7 +148,7 @@ select *
 from [dbo].[FinancialYear]
 GO
 
---------------------------------------- STORED PROCEDURE TO  GET ASSET ASSETMAPPING BY ID -----------------------------------------
+--------------------------------------- STORED PROCEDURE TO  GET ASSET FINANCIALYEAR BY ID -----------------------------------------
 IF OBJECT_ID('[dbo].[usp_Get_Financial_Year_By_Id]') IS nOT NULL
 BEGIN
   DROP procedure [dbo].[usp_Get_Financial_Year_By_Id]
