@@ -52,24 +52,7 @@ getdate(),
 )
 GO
 
-
-
-
---------------------------------------- STORED PROCEDURE TO  GET ALL USERS -----------------------------------------
-
-IF OBJECT_ID('[dbo].[usp_Get_Users') IS NOT NULL
-BEGIN
-DROP procedure [dbo].[usp_Get_User_By_Email]
-END
-GO
-CREATE procedure [dbo].[usp_Get_User_By_Email]
-AS
-
-SELECT Email,PasswordHash,PhoneNumber,FirstName,LastName,DateCreated,IsActive from [dbo].[Users]
-GO
-
 --------------------------------------- STORED PROCEDURE TO  GET USER BY EMAIL -----------------------------------------
-
 IF OBJECT_ID('[dbo].[usp_Get_User_By_Email]') IS NOT NULL
 BEGIN
 DROP procedure [dbo].[usp_Get_User_By_Email]

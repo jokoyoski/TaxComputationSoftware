@@ -15,23 +15,9 @@ const AddCompanyForm = ({ showAddCompany, setShowAddCompany, toast, refresh }) =
     if (loading) return;
 
     setLoading(true);
-    const {
-      companyName,
-      cacNumber,
-      tinNumber,
-      companyDescription,
-      openingYear,
-      closingYear
-    } = data;
+    const { companyName, cacNumber, tinNumber, companyDescription } = data;
     try {
-      const response = await addCompany({
-        companyName,
-        cacNumber,
-        tinNumber,
-        companyDescription,
-        openingYear,
-        closingYear
-      });
+      const response = await addCompany({ companyName, cacNumber, tinNumber, companyDescription });
       if (response.status === 201) {
         toast.show(
           utils.toastCallback({ severity: "success", detail: "Company added successfully" })
@@ -46,22 +32,17 @@ const AddCompanyForm = ({ showAddCompany, setShowAddCompany, toast, refresh }) =
       setLoading(false);
       if (error.response) {
         const {
-          data: { errors }
+          data: {
+            errors: { error: companyError, CompanyDescription }
+          }
         } = error.response;
-        // display main error as toast notification
-        if (!errors?.error?.companyError && !errors?.error?.CompanyDescription) {
-          errors.map(err =>
-            toast.show(utils.toastCallback({ severity: "error", summary: "Error", detail: err }))
-          );
-          return;
-        }
         // display all errors as toast notification
-        errors?.error?.companyError &&
-          errors.error.companyError.map(err =>
+        companyError &&
+          companyError.map(err =>
             toast.show(utils.toastCallback({ severity: "error", summary: "Error", detail: err }))
           );
-        errors?.error?.CompanyDescription &&
-          errors.error.CompanyDescription.map(err =>
+        CompanyDescription &&
+          CompanyDescription.map(err =>
             toast.show(utils.toastCallback({ severity: "error", summary: "Error", detail: err }))
           );
       } else {
@@ -106,97 +87,49 @@ const AddCompanyForm = ({ showAddCompany, setShowAddCompany, toast, refresh }) =
             <span style={{ fontSize: 12, color: "red" }}>Company Name is required</span>
           )}
         </div>
-        <div className="p-d-flex">
-          <div className="p-d-flex p-flex-column" style={{ marginBottom: 15, marginRight: 10 }}>
-            <label htmlFor="cacNumberInput" style={{ marginBottom: 10 }}>
-              Cac Number
-            </label>
-            <Controller
-              name="cacNumber"
-              control={control}
-              rules={{ required: true }}
-              defaultValue=""
-              render={props => (
-                <InputText
-                  style={{ marginBottom: 5, width: "100%" }}
-                  id="cacNumberInput"
-                  value={props.value}
-                  onChange={e => props.onChange(e.target.value)}
-                />
-              )}
-            />
-            {errors.cacNumber && (
-              <span style={{ fontSize: 12, color: "red" }}>Cac Number is required</span>
+        <div className="p-d-flex p-flex-column" style={{ marginBottom: 15 }}>
+          <label htmlFor="cacNumberInput" style={{ marginBottom: 10 }}>
+            Cac Number
+          </label>
+          <Controller
+            name="cacNumber"
+            control={control}
+            rules={{ required: true }}
+            defaultValue=""
+            render={props => (
+              <InputText
+                style={{ marginBottom: 5, width: "100%" }}
+                id="cacNumberInput"
+                value={props.value}
+                onChange={e => props.onChange(e.target.value)}
+              />
             )}
-          </div>
-          <div className="p-d-flex p-flex-column" style={{ marginBottom: 15, marginLeft: 10 }}>
-            <label htmlFor="tinNumberInput" style={{ marginBottom: 10 }}>
-              Tin Number
-            </label>
-            <Controller
-              name="tinNumber"
-              control={control}
-              rules={{ required: true }}
-              defaultValue=""
-              render={props => (
-                <InputText
-                  style={{ marginBottom: 5, width: "100%" }}
-                  id="tinNumberInput"
-                  value={props.value}
-                  onChange={e => props.onChange(e.target.value)}
-                />
-              )}
-            />
-            {errors.tinNumber && (
-              <span style={{ fontSize: 12, color: "red" }}>Tin Number is required</span>
-            )}
-          </div>
+          />
+          {errors.cacNumber && (
+            <span style={{ fontSize: 12, color: "red" }}>Cac Number is required</span>
+          )}
         </div>
-        <div className="p-d-flex">
-          <div className="p-d-flex p-flex-column" style={{ marginBottom: 15, marginRight: 10 }}>
-            <label htmlFor="openingYearInput" style={{ marginBottom: 10 }}>
-              Opening Year
-            </label>
-            <Controller
-              name="openingYear"
-              control={control}
-              rules={{ required: true }}
-              defaultValue=""
-              render={props => (
-                <InputText
-                  style={{ marginBottom: 5, width: "100%" }}
-                  id="openingYearInput"
-                  value={props.value}
-                  onChange={e => props.onChange(e.target.value)}
-                />
-              )}
-            />
-            {errors.openingYear && (
-              <span style={{ fontSize: 12, color: "red" }}>Opening Year is required</span>
+        <div className="p-d-flex p-flex-column" style={{ marginBottom: 15 }}>
+          <label htmlFor="tinNumberInput" style={{ marginBottom: 10 }}>
+            Tin Number
+          </label>
+          <Controller
+            name="tinNumber"
+            control={control}
+            rules={{ required: true }}
+            defaultValue=""
+            render={props => (
+              <InputText
+                style={{ marginBottom: 5, width: "100%" }}
+                id="tinNumberInput"
+                value={props.value}
+                onChange={e => props.onChange(e.target.value)}
+              />
             )}
-          </div>
-          <div className="p-d-flex p-flex-column" style={{ marginBottom: 15, marginLeft: 10 }}>
-            <label htmlFor="closingYearInput" style={{ marginBottom: 10 }}>
-              Closing Year
-            </label>
-            <Controller
-              name="closingYear"
-              control={control}
-              rules={{ required: true }}
-              defaultValue=""
-              render={props => (
-                <InputText
-                  style={{ marginBottom: 5, width: "100%" }}
-                  id="closingYearInput"
-                  value={props.value}
-                  onChange={e => props.onChange(e.target.value)}
-                />
-              )}
-            />
-            {errors.closingYear && (
-              <span style={{ fontSize: 12, color: "red" }}>Closing Year is required</span>
-            )}
-          </div>
+          />
+          {errors.tinNumber && (
+            <span style={{ fontSize: 12, color: "red" }}>Tin Number is required</span>
+          )}
         </div>
         <div className="p-d-flex p-flex-column" style={{ marginBottom: 15 }}>
           <label htmlFor="companyDescriptionInput" style={{ marginBottom: 10 }}>

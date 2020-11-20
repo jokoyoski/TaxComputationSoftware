@@ -53,8 +53,6 @@ CompanyDescription varchar(200),
 CacNumber nvarchar(max) null,
 TinNumber nvarchar(max)null,
 DateCreated datetime null,
-OpeningYear datetime  null,
-ClosingYear datetime  null,
 IsActive bit null,
 
  )
@@ -74,8 +72,6 @@ create procedure usp_Insert_Company(
 @CacNumber nvarchar(max) null,
 @TinNumber nvarchar(max)null,
 @DateCreated datetime  null,
-@OpeningYear datetime  null,
-@ClosingYear datetime  null,
 @IsActive bit null
 )
 AS
@@ -87,8 +83,6 @@ CompanyDescription,
 CacNumber,
 TinNumber,
 DateCreated,
-OpeningYear,
-ClosingYear,
 IsActive
 )
 values(
@@ -98,7 +92,5 @@ values(
 @CacNumber,
 @TinNumber,
 @DateCreated,
-@OpeningYear,
-@ClosingYear,
 @IsActive
 )

@@ -64,6 +64,7 @@ const MappingMode = ({ year, setYear, yearSelectItems }) => {
       </form>
       <DataTable
         value={allAccount}
+        className="p-datatable-gridlines"
         selection={selectedAccounts}
         onSelectionChange={e => {
           setSelectedAccounts(e.value);

@@ -15,7 +15,7 @@ const ITLevyView = () => {
   ]);
 
   return (
-    <DataTable value={itLevyData} style={{ marginTop: 40 }}>
+    <DataTable value={itLevyData} className="p-datatable-gridlines" style={{ marginTop: 40 }}>
       <Column field="category" header=""></Column>
       <Column field="credit" header="₦"></Column>
     </DataTable>

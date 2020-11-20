@@ -21,9 +21,6 @@ namespace TaxComputationAPI.Services
             return await _companiesRepository.GetCompaniesAsync(pagination);
         }
 
-      
-
-
         public async Task<Company> GetCompanyAsync(int id)
         {
             return await _companiesRepository.GetCompanyAsync(id);
@@ -44,8 +41,5 @@ namespace TaxComputationAPI.Services
         {
             return await  _companiesRepository.GetCompanyByTinAsync(tinNumber);
         }
-
-
-
     }
 }

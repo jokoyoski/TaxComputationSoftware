@@ -14,8 +14,6 @@ namespace TaxComputationAPI.Models
         public string CacNumber { get; set; }
         public string TinNumber { get; set; }
         public DateTime DateCreated { get; set; }
-        public DateTime OpeningYear { get; set; }
-        public DateTime ClosingYear { get; set; }
         public bool IsActive { get; set; }
     }
 }

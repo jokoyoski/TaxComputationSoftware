@@ -24,7 +24,7 @@ namespace TaxComputationAPI.Controllers {
         }
 
         [HttpGet ()]
-        //[Authorize]
+        [Authorize]
         public async Task<IActionResult> GetTrialBalance (int companyId, int yearId) {
 
             if (companyId <= 0 && yearId <= 0) return BadRequest ($"{companyId} and {yearId} are required");
@@ -43,7 +43,7 @@ namespace TaxComputationAPI.Controllers {
         }
 
         [HttpPost ()]
-        //[Authorize]
+        [Authorize]
         public async Task<IActionResult> UploadTrialBalance ([FromForm] UploadTrackTrialBalanceDto excel) {
             try {
 

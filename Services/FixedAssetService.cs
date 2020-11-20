@@ -17,13 +17,11 @@ namespace TaxComputationAPI.Services
         private readonly IFixedAssetRepository _fixedAssetRepository;
         private readonly ITrialBalanceRepository _trialBalanceRepository;
         private readonly IUtilitiesRepository _utilitiesRepository;
-        private readonly ICapitalAllowanceService _capitalAllowanceService;
-        public FixedAssetService(IFixedAssetRepository fixedAssetRepository, ICapitalAllowanceService capitalAllowanceService, IUtilitiesRepository utilitiesRepository, ITrialBalanceRepository trialBalanceRepository)
+        public FixedAssetService(IFixedAssetRepository fixedAssetRepository, IUtilitiesRepository utilitiesRepository, ITrialBalanceRepository trialBalanceRepository)
         {
             _fixedAssetRepository = fixedAssetRepository;
             _trialBalanceRepository = trialBalanceRepository;
             _utilitiesRepository = utilitiesRepository;
-            _capitalAllowanceService = capitalAllowanceService;
         }
 
         public async Task<TaxComputationAPI.Dtos.FixedAssetResponseDto> GetFixedAssetsByCompany(int companyId, int yearId)
@@ -56,17 +54,17 @@ namespace TaxComputationAPI.Services
                 openingCostTotal += x.OpeningCost;
                 adddtionCostTotal += x.CostAddition;
                 disposalCostTotal += x.CostDisposal;
-                closingCostTotal += await _utilitiesRepository.GetAmount(x.Id, "cost");
+                closingCostTotal += _utilitiesRepository.GetAmount(x.Id, "cost");
                 openingDepreciationTotal += x.OpeningDepreciation;
                 adddtionDepreciationTotal += x.DepreciationAddition;
                 disposalDepreciationTotal += x.DepreciationDisposal;
-                closingDepreciationTotal += await _utilitiesRepository.GetAmount(x.Id, "depreciation");
+                closingDepreciationTotal += _utilitiesRepository.GetAmount(x.Id, "depreciation");
                 transferCostTotal += x.TransferCost;
                 transferDepreciationTotal = x.TransferDepreciation;
 
                 netBookValues.Add(new NetBookValue
                 {
-                    value = await _utilitiesRepository.GetAmount(x.Id, "cost") - await _utilitiesRepository.GetAmount(x.Id, "depreciation")
+                    value = _utilitiesRepository.GetAmount(x.Id, "cost") - _utilitiesRepository.GetAmount(x.Id, "depreciation")
                 });
 
 
@@ -86,7 +84,7 @@ namespace TaxComputationAPI.Services
             };
             result.netBookValue = netBookValues;
 
-            return await FormatAmount(result);
+            return FormatAmount(result);
         }
 
         public async Task SaveFixedAsset(CreateFixedAssetDto fixedAsset)
@@ -113,38 +111,41 @@ namespace TaxComputationAPI.Services
                 }
 
                 var result = await _fixedAssetRepository.SaveFixedAsset(fixedAsset);
-                if (fixedAsset.IsCost)
-                {
-                    await _capitalAllowanceService.SaveCapitalAllowanceFromFixedAsset(fixedAsset.CostAddition, fixedAsset.YearId.ToString(), fixedAsset.CompanyId, fixedAsset.AssetId);
-
-                }
-
                 foreach (var value in fixedAsset.TriBalanceId)
                 {
                     if (fixedAsset.IsCost == true)
                     {
 
-                        await _utilitiesRepository.AddTrialBalanceMapping(value, result, "fixedasset", "cost");
+                        _utilitiesRepository.AddTrialBalanceMapping(value, result, "fixedasset", "cost");
                     }
                     else
                     {
 
-                        await _utilitiesRepository.AddTrialBalanceMapping(value, result, "fixedasset", "depreciation");
+                        _utilitiesRepository.AddTrialBalanceMapping(value, result, "fixedasset", "depreciation");
 
                     }
 
 
                 }
 
+                /* if (firstItemInArray.IsCheck == true)
+                 {
+                     foreach (var value in fixedAsset.TriBalanceId)
+                     {
+                         await _trialBalanceRepository.UpdateTrialBalance(value, null, true); 
+                         _utilitiesRepository.DeleteTrialBalancingMapping(value);
+                     }
+
+
+                 }else{
+
+                 }*/
+
             }
             else
             {
                 var result = await _fixedAssetRepository.SaveFixedAsset(fixedAsset);
-                 if(fixedAsset.IsCost){
-                       await _capitalAllowanceService.SaveCapitalAllowanceFromFixedAsset(fixedAsset.CostAddition, fixedAsset.YearId.ToString(), fixedAsset.CompanyId, fixedAsset.AssetId);
 
-                 }
-             
             }
 
 
@@ -152,19 +153,19 @@ namespace TaxComputationAPI.Services
 
         }
 
-        /* public bool GetAmount(string type, List<int> trialBalance)
-         {
-             decimal totalNumber = 0;
+       /* public bool GetAmount(string type, List<int> trialBalance)
+        {
+            decimal totalNumber = 0;
 
-             foreach(var j in trialBalance) {
-                 totalNumber= _utilitiesRepository.GetAmount(j,"cost");
-             }
+            foreach(var j in trialBalance) {
+                totalNumber= _utilitiesRepository.GetAmount(j,"cost");
+            }
+
+           
+        }*/
 
 
-         }*/
-
-
-        public  async Task<TaxComputationAPI.Dtos.FixedAssetResponseDto> FormatAmount(FixedAssetResponse fixedAssetResponse)
+        public TaxComputationAPI.Dtos.FixedAssetResponseDto FormatAmount(FixedAssetResponse fixedAssetResponse)
         {
             List<FixedAssetData> fixedAssetDatas = new List<FixedAssetData>();
             List<TaxComputationAPI.Dtos.NetBookValue> netBookValues = new List<TaxComputationAPI.Dtos.NetBookValue>();
@@ -179,11 +180,11 @@ namespace TaxComputationAPI.Services
                 fixedAssetData.OpeningCost = $"{Utilities.FormatAmount(asset.OpeningCost)}";
                 fixedAssetData.CostAddition = $"{Utilities.FormatAmount(asset.CostAddition)}";
                 fixedAssetData.CostDisposal = $"({Utilities.FormatAmount(asset.CostDisposal)})";
-                fixedAssetData.CostClosing = $"{Utilities.FormatAmount(await _utilitiesRepository.GetAmount(asset.Id, "cost"))}";
+                fixedAssetData.CostClosing = $"{Utilities.FormatAmount(_utilitiesRepository.GetAmount(asset.Id, "cost"))}";
                 fixedAssetData.OpeningDepreciation = $"{Utilities.FormatAmount(asset.OpeningDepreciation)}";
                 fixedAssetData.DepreciationAddition = $"{Utilities.FormatAmount(asset.DepreciationAddition)}";
                 fixedAssetData.DepreciationDisposal = $"({Utilities.FormatAmount(asset.DepreciationDisposal)})";
-                fixedAssetData.DepreciationClosing = $"{Utilities.FormatAmount(await _utilitiesRepository.GetAmount(asset.Id, "depreciation"))}";
+                fixedAssetData.DepreciationClosing = $"{Utilities.FormatAmount(_utilitiesRepository.GetAmount(asset.Id, "depreciation"))}";
                 if (asset.IsTransferDepreciationRemoved == true)
                 {
                     fixedAssetData.TransferDepreciation = $"({Utilities.FormatAmount(asset.TransferDepreciation)})";
@@ -239,7 +240,7 @@ namespace TaxComputationAPI.Services
         public async Task DeleteFixedAsset(int fixedAssetId)
         {
             await _trialBalanceRepository.UpdateTrialBalance(fixedAssetId, null, true);
-            await _utilitiesRepository.DeleteTrialBalancingMapping(fixedAssetId);
+            _utilitiesRepository.DeleteTrialBalancingMapping(fixedAssetId);
         }
     }
 }

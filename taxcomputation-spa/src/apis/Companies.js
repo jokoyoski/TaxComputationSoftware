@@ -1,21 +1,12 @@
 import axios from "axios";
 
-export const addCompany = async ({
-  companyName,
-  companyDescription,
-  cacNumber,
-  tinNumber,
-  openingYear,
-  closingYear
-}) => {
+export const addCompany = async ({ companyName, companyDescription, cacNumber, tinNumber }) => {
   try {
     return await axios.post("/api/Companies/add-company", {
       companyName,
       companyDescription,
       cacNumber,
-      tinNumber,
-      openingYear,
-      closingYear
+      tinNumber
     });
   } catch (error) {
     throw error;

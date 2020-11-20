@@ -86,14 +86,12 @@ namespace TaxComputationAPI
             services.AddScoped<IUtilitiesService, UtilitiesService>();
             services.AddScoped<ITrialBalanceService, TrialBalanceService>();
             services.AddScoped<ITrialBalanceRepository, TrialBalanceRepository>();
-            services.AddScoped<IBalancingAdjService, BalancingAdjService>();
-            services.AddScoped<IBalancingAdjRepository, BalancingAdjRepository>();
             services.AddScoped<IUtilitiesRepository, UtilitiesRepository>();
             services.AddScoped<IAuthenticationRepository, AuthenticationRepository>();
             services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddSingleton<IAuthorizationHandler,SystemAdminHandler>();
-            services.AddScoped<ICapitalAllowanceService, CapitalAllowanceService>();
-            services.AddScoped<ICapitalAllowanceRepository, CapitalAllowanceRepository>();
+            services.AddSingleton<ICapitalAllowanceService, CapitalAllowanceService>();
+            services.AddSingleton<ICapitalAllowanceRepository, CapitalAllowanceRepository>();
             services.AddSingleton<DatabaseManager>();
             services.Configure<ConnectionString>(_configuration.GetSection("ConnectionString"));
             services.AddDbContext<DataContext>(options => options.UseSqlServer(_configuration.GetConnectionString("DefaultConnection")));

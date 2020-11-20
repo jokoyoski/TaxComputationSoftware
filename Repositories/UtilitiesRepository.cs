@@ -1,486 +1,161 @@
-﻿using Dapper;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using TaxComputationAPI.Data;
 using TaxComputationAPI.Helpers.Response;
 using TaxComputationAPI.Interfaces;
-using TaxComputationAPI.Manager;
 using TaxComputationAPI.Models;
 
 namespace TaxComputationAPI.Repositories
 {
     public class UtilitiesRepository : IUtilitiesRepository
     {
-        private readonly DatabaseManager _databaseManager;
-        private readonly ILogger<UtilitiesRepository> _logger;
-
-        public UtilitiesRepository(DatabaseManager databaseManager, ILogger<UtilitiesRepository> logger)
+        private readonly DataContext _context;
+        public UtilitiesRepository(DataContext context)
         {
-            _databaseManager = databaseManager;
-            _logger = logger;
+            _context = context;
+
         }
 
-        public async Task<List<FinancialYear>> GetFinancialYearAsync()
+     
+
+
+        public Task<List<FinancialYear>> GetFinancialYearAsync()
         {
-            var result = default(IEnumerable<FinancialYear>);
-
-            using (IDbConnection conn = await _databaseManager.DatabaseConnection())
-            {
-                if (conn.State == ConnectionState.Closed) conn.Open();
-
-                DynamicParameters parameters = new DynamicParameters();
-
-                try
-                {
-                    result = await conn.QueryAsync<FinancialYear>("[dbo].[usp_Get_Financial_Year]", parameters, commandType: CommandType.StoredProcedure);
-                    conn.Close();
-                }
-                catch (Exception e)
-                {
-                    _logger.LogError($"{e.Message}");
-
-                    throw e;
-                }
-
-                return result.ToList();
-            }
+            var year = _context.FinancialYear.ToListAsync();
+            return year;
         }
 
         public async Task AddFinancialYearAsync(FinancialYear financialYear)
         {
-            if (financialYear == null) throw new ArgumentNullException(nameof(financialYear));
 
-            try
-            {
-
-                using (IDbConnection conn = await _databaseManager.DatabaseConnection())
-                {
-                    if (conn.State == ConnectionState.Closed) conn.Open();
-
-                    DynamicParameters parameters = new DynamicParameters();
-
-                    parameters.Add("@Name", financialYear.Name);
-
-                    try
-                    {
-                        var respone = conn.Execute("[dbo].[usp_Insert_Financial_Year]", parameters, commandType: CommandType.StoredProcedure);
-                        conn.Close();
-                    }
-                    catch (Exception e)
-                    {
-
-                        _logger.LogError($"{e.Message}");
-
-                        throw e;
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                throw new SystemException(e.Message);
-            }
+            await _context.FinancialYear.AddAsync(financialYear);
+            await _context.SaveChangesAsync();
         }
+
+
 
         public async Task<FinancialYear> GetFinancialYearAsync(int year)
         {
-            if (year <= 0) throw new ArgumentNullException(nameof(year));
-
-            var result = default(FinancialYear);
-
-            using (IDbConnection conn = await _databaseManager.DatabaseConnection())
-            {
-                if (conn.State == ConnectionState.Closed) conn.Open();
-
-                DynamicParameters parameters = new DynamicParameters();
-
-                parameters.Add("@Id", year);
-
-                try
-                {
-                    result = conn.QueryFirstOrDefault<FinancialYear>("[dbo].[usp_Get_Financial_Year_By_Id]", parameters, commandType: CommandType.StoredProcedure);
-                    conn.Close();
-                }
-                catch (Exception e)
-                {
-                    _logger.LogError($"{e.Message}");
-
-                    throw e;
-                }
-
-                return result;
-            }
+            var financialYear = _context.FinancialYear.FirstOrDefault(x => x.Name == year);
+            return financialYear;
         }
 
         public async Task<List<AssetMapping>> GetAssetMappingAsync()
         {
-            var result = default(IEnumerable<AssetMapping>);
-
-            using (IDbConnection conn = await _databaseManager.DatabaseConnection())
-            {
-                if (conn.State == ConnectionState.Closed) conn.Open();
-
-                DynamicParameters parameters = new DynamicParameters();
-
-                try
-                {
-                    result = await conn.QueryAsync<AssetMapping>("[dbo].[usp_Get_Asset_Mapping]", parameters, commandType: CommandType.StoredProcedure);
-                    conn.Close();
-                }
-                catch (Exception e)
-                {
-                    _logger.LogError($"{e.Message}");
-
-                    throw e;
-                }
-
-                return result.ToList();
-            }
+            var mapping = _context.AssetMapping.ToList();
+            return mapping;
         }
 
         public async Task<AssetMapping> GetAssetMappingAsync(string Name)
         {
-            if (string.IsNullOrEmpty(Name)) throw new ArgumentNullException(nameof(Name));
-
-            var result = default(AssetMapping);
-
-            using (IDbConnection conn = await _databaseManager.DatabaseConnection())
-            {
-                if (conn.State == ConnectionState.Closed) conn.Open();
-
-                DynamicParameters parameters = new DynamicParameters();
-
-                parameters.Add("@AssetName", Name);
-
-                try
-                {
-                    result = conn.QueryFirstOrDefault<AssetMapping>("[dbo].[usp_Get_AssetMapping_By_AssetName]", parameters, commandType: CommandType.StoredProcedure);
-                    conn.Close();
-                }
-                catch (Exception e)
-                {
-                    _logger.LogError($"{e.Message}");
-
-                    throw e;
-                }
-
-                return result;
-            }
+            var assetMapping = _context.AssetMapping.FirstOrDefault(x => x.AssetName == Name);
+            return assetMapping;
         }
 
         public async Task<AssetMapping> GetAssetMappingById(int Id)
         {
-            if (Id <= 0) throw new ArgumentNullException(nameof(Id));
-
-            var result = default(AssetMapping);
-
-            using (IDbConnection conn = await _databaseManager.DatabaseConnection())
-            {
-                if (conn.State == ConnectionState.Closed) conn.Open();
-
-                DynamicParameters parameters = new DynamicParameters();
-
-                parameters.Add("@Id", Id);
-
-                try
-                {
-                    result = conn.QueryFirstOrDefault<AssetMapping>("[dbo].[usp_Get_Asset_Mapping_By_Id]", parameters, commandType: CommandType.StoredProcedure);
-                    conn.Close();
-                }
-                catch (Exception e)
-                {
-                    _logger.LogError($"{e.Message}");
-
-                    throw e;
-                }
-
-                return result;
-            }
+            var assetMapping = _context.AssetMapping.FirstOrDefault(x => x.Id == Id);
+            return assetMapping;
         }
 
         public async Task AddAssetMappingAsync(AssetMapping assetMapping)
         {
-            if (assetMapping == null) throw new ArgumentNullException(nameof(assetMapping));
 
-            try
-            {
-
-                using (IDbConnection conn = await _databaseManager.DatabaseConnection())
-                {
-                    if (conn.State == ConnectionState.Closed) conn.Open();
-
-                    DynamicParameters parameters = new DynamicParameters();
-
-                    parameters.Add("@Name", assetMapping.AssetName);
-
-                    parameters.Add("@Initial", assetMapping.Initial);
-
-                    parameters.Add("@Annual", assetMapping.Annual);
-
-                    try
-                    {
-                        var respone = conn.Execute("[dbo].[usp_Insert_Asset_Mapping]", parameters, commandType: CommandType.StoredProcedure);
-                        conn.Close();
-                    }
-                    catch (Exception e)
-                    {
-
-                        _logger.LogError($"{e.Message}");
-
-                        throw e;
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                throw new SystemException(e.Message);
-            }
+            await _context.AssetMapping.AddAsync(assetMapping);
+            await _context.SaveChangesAsync();
         }
 
         public async Task UpdateAssetMappingAsync(AssetMapping assetMapping)
         {
-            if (assetMapping == null) throw new ArgumentNullException(nameof(assetMapping));
-
-            try
-            {
-
-                using (IDbConnection conn = await _databaseManager.DatabaseConnection())
-                {
-                    if (conn.State == ConnectionState.Closed) conn.Open();
-
-
-                    DynamicParameters parameters = new DynamicParameters();
-
-
-                    parameters.Add("@Id", assetMapping.Id);
-
-                    parameters.Add("@Name", assetMapping.AssetName);
-
-                    parameters.Add("@Initial", assetMapping.Initial);
-
-                    parameters.Add("@Annual", assetMapping.Annual);
-
-                    try
-                    {
-                        var respone = conn.Execute("[dbo].[usp_Update_Asset_Mapping]", parameters, commandType: CommandType.StoredProcedure);
-                        conn.Close();
-                    }
-                    catch (Exception e)
-                    {
-
-                        _logger.LogError($"{e.Message}");
-
-                        throw e;
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                throw new SystemException(e.Message);
-            }
+            var result = _context.AssetMapping.FirstOrDefault(x => x.Id == assetMapping.Id);
+            result.Annual = assetMapping.Annual;
+            result.AssetName = assetMapping.AssetName;
+            result.Initial = assetMapping.Initial;
+            _context.SaveChanges();
         }
-        
+
         public async Task DeleteAssetMappingAsync(AssetMapping assetMapping)
         {
-
-            if (assetMapping == null) throw new ArgumentNullException(nameof(assetMapping));
-
-            try
-            {
-
-                using (IDbConnection conn = await _databaseManager.DatabaseConnection())
-                {
-                    if (conn.State == ConnectionState.Closed) conn.Open();
-
-
-                    DynamicParameters parameters = new DynamicParameters();
-
-
-                    parameters.Add("@Id", assetMapping.Id);
-
-                    try
-                    {
-                        var respone = conn.Execute("[dbo].[usp_Delete_Asset_Mapping]", parameters, commandType: CommandType.StoredProcedure);
-                        conn.Close();
-                    }
-                    catch (Exception e)
-                    {
-
-                        _logger.LogError($"{e.Message}");
-
-                        throw e;
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                throw new SystemException(e.Message);
-            }
+            var result = _context.AssetMapping.FirstOrDefault(x => x.Id == assetMapping.Id);
+            _context.Remove(result);
+            _context.SaveChanges();
         }
 
-        public async Task<decimal> GetAmount(int moduleId, string additionalInfo)
+      
+
+       
+
+       
+
+      
+
+       
+
+
+       
+
+        public decimal GetAmount(int moduleId, string additionalInfo)
         {
-            decimal finalAmount = 0;
+             decimal finalAmount = 0;
 
-            var result = default(IEnumerable<Amount>);
-
-
-            if (additionalInfo == "cost")
+               if(additionalInfo=="cost"){
+                   var result = (from s in _context.TrialBalanceMapping
+                          join b in _context.TrialBalance on s.TrialBalanceId equals b.Id
+                          where s.ModuleId == moduleId && s.AdditionalInfo == additionalInfo
+                          select new Amount
+                          {
+                              amount = b.Debit
+                          }
+            ).OrderBy(x => x.amount).ToList();
+            foreach (var item in result)
             {
-                
-
-
-                using (IDbConnection conn = await _databaseManager.DatabaseConnection())
-                {
-                    if (conn.State == ConnectionState.Closed) conn.Open();
-
-                    DynamicParameters parameters = new DynamicParameters();
-
-                    parameters.Add("@ModuleId", moduleId);
-                    parameters.Add("@AdditionalInfo", additionalInfo);
-
-                    try
-                    {
-                        result = await conn.QueryAsync<Amount>("[dbo].[usp_Get_Amount_Debit]", parameters, commandType: CommandType.StoredProcedure);
-                        conn.Close();
-                    }
-                    catch (Exception e)
-                    {
-                        _logger.LogError($"{e.Message}");
-
-                        throw e;
-                    }
-
-                    result = result.ToList();
-                }
-
-                foreach (var item in result)
-                {
-                    finalAmount += item.amount;
-                }
-
-                return finalAmount;
-
-            }
-            else
-            {
-
-                using (IDbConnection conn = await _databaseManager.DatabaseConnection())
-                {
-                    if (conn.State == ConnectionState.Closed) conn.Open();
-
-                    DynamicParameters parameters = new DynamicParameters();
-
-                    parameters.Add("@ModuleId", moduleId);
-                    parameters.Add("@AdditionalInfo", additionalInfo);
-
-                    try
-                    {
-                        result = await conn.QueryAsync<Amount>("[dbo].[usp_Get_Amount_Credit]", parameters, commandType: CommandType.StoredProcedure);
-                        conn.Close();
-                    }
-                    catch (Exception e)
-                    {
-                        _logger.LogError($"{e.Message}");
-
-                        throw e;
-                    }
-
-                    result = result.ToList();
-                }
-
-                foreach (var item in result)
-                {
-                    finalAmount += item.amount;
-                }
-
-                return finalAmount;
+                finalAmount += item.amount;
             }
 
+            return finalAmount;
 
+               }else{
+
+                var result = (from s in _context.TrialBalanceMapping
+                          join b in _context.TrialBalance on s.TrialBalanceId equals b.Id
+                          where s.ModuleId == moduleId && s.AdditionalInfo == additionalInfo
+                          select new Amount
+                          {
+                              amount = b.Credit
+                          }
+            ).OrderBy(x => x.amount).ToList();
+            foreach (var item in result)
+            {
+                finalAmount += item.amount;
+            }
+
+            return finalAmount;
+               }
+           
+          
         }
 
-        public async Task AddTrialBalanceMapping(int trialBalanceId, int moduleId, string moduleCode, string additionalInfo)
+        public void AddTrialBalanceMapping(int trialBalanceId, int moduleId, string moduleCode, string additionalInfo)
         {
-            if (trialBalanceId <= 0) throw new ArgumentNullException(nameof(trialBalanceId));
-
-            try
+            var trialBalanceMapping = new TrialBalanceMapping
             {
-
-                using (IDbConnection conn = await _databaseManager.DatabaseConnection())
-                {
-                    if (conn.State == ConnectionState.Closed) conn.Open();
-
-                    DynamicParameters parameters = new DynamicParameters();
-
-                    parameters.Add("@TrialBalanceId", trialBalanceId);
-
-                    parameters.Add("@ModuleId", moduleId);
-
-                    parameters.Add("@ModuleCode", moduleCode);
-
-                    parameters.Add("@AdditionalInfo", additionalInfo);
-
-                    try
-                    {
-                        var respone = conn.Execute("[dbo].[usp_Insert_Trial_Balance_Mapping]", parameters, commandType: CommandType.StoredProcedure);
-                        conn.Close();
-                    }
-                    catch (Exception e)
-                    {
-
-                        _logger.LogError($"{e.Message}");
-
-                        throw e;
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                throw new SystemException(e.Message);
-            }
-
+                ModuleCode = moduleCode,
+                AdditionalInfo = additionalInfo,
+                ModuleId = moduleId,
+                TrialBalanceId = trialBalanceId
+            };
+            _context.TrialBalanceMapping.Add(trialBalanceMapping);
+             _context.SaveChanges();
         }
 
-        public async Task DeleteTrialBalancingMapping(int trialBalanceId)
+        public void DeleteTrialBalancingMapping(int trialBalanceId)
         {
-            if (trialBalanceId <= 0) throw new ArgumentNullException(nameof(trialBalanceId));
-
-            try
-            {
-
-                using (IDbConnection conn = await _databaseManager.DatabaseConnection())
-                {
-                    if (conn.State == ConnectionState.Closed) conn.Open();
-
-
-                    DynamicParameters parameters = new DynamicParameters();
-
-
-                    parameters.Add("@Id", trialBalanceId);
-
-                    try
-                    {
-                        var respone = conn.Execute("[dbo].[usp_Delete_Trial_Balance_Mapping]", parameters, commandType: CommandType.StoredProcedure);
-                        conn.Close();
-                    }
-                    catch (Exception e)
-                    {
-
-                        _logger.LogError($"{e.Message}");
-
-                        throw e;
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                throw new SystemException(e.Message);
-            }
+            var item = _context.TrialBalanceMapping.FirstOrDefault(x => x.TrialBalanceId == trialBalanceId);
+            _context.Remove(item);
+             _context.SaveChanges();
         }
     }
 }
