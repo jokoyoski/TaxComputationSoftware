@@ -15,7 +15,7 @@ BEGIN
 END
 GO
 
---------------------------------------- STORED PROCEDURE TO  INSERT ASSET ASSETMAPPING -----------------------------------------
+--------------------------------------- STORED PROCEDURE TO  INSERT ASSET MAPPING -----------------------------------------
 IF OBJECT_ID('[dbo].[usp_Insert_Asset_Mapping]') IS nOT NULL
 BEGIN
   DROP procedure [dbo].[usp_Insert_Asset_Mapping]
@@ -42,7 +42,7 @@ VALUES
 )
 GO
 
---------------------------------------- STORED PROCEDURE TO  INSERT ASSET ASSETMAPPING -----------------------------------------
+--------------------------------------- STORED PROCEDURE TO  UPDATE ASSET MAPPING -----------------------------------------
 IF OBJECT_ID('[dbo].[usp_Update_Asset_Mapping]') IS nOT NULL
 BEGIN
   DROP procedure [dbo].[usp_Update_Asset_Mapping]
@@ -63,7 +63,7 @@ UPDATE [dbo].[AssetMapping]
   WHERE  Id = @Id  
 GO
 
---------------------------------------- STORED PROCEDURE TO  INSERT ASSET ASSETMAPPING -----------------------------------------
+--------------------------------------- STORED PROCEDURE TO  DELETE ASSET MAPPING -----------------------------------------
 IF OBJECT_ID('[dbo].[usp_Delete_Asset_Mapping]') IS nOT NULL
 BEGIN
   DROP procedure [dbo].[usp_Delete_Asset_Mapping]
@@ -103,7 +103,6 @@ select *
 from [dbo].[AssetMapping]
 where Id = @Id
 GO
---------------------------------------- STORED PROCEDURE TO  UPDATE ASSET ASSETMAPPING BY ID -----------------------------------------
 
 --------------------------------------- CREATE FINANCIAL YEAR -----------------------------------------
 IF NOT EXISTS(SELECT 1
@@ -149,7 +148,7 @@ select *
 from [dbo].[FinancialYear]
 GO
 
---------------------------------------- STORED PROCEDURE TO  GET ASSET ASSETMAPPING BY ID -----------------------------------------
+--------------------------------------- STORED PROCEDURE TO  GET ASSET FINANCIALYEAR BY ID -----------------------------------------
 IF OBJECT_ID('[dbo].[usp_Get_Financial_Year_By_Id]') IS nOT NULL
 BEGIN
   DROP procedure [dbo].[usp_Get_Financial_Year_By_Id]
@@ -166,7 +165,7 @@ where Id = @Id
 GO
 
 
---------------------------------------- STORED PROCEDURE TO  GET ASSET ASSETMAPPING BY ID -----------------------------------------
+--------------------------------------- STORED PROCEDURE TO  GET ASSET MAPPING BY ASSETNAME -----------------------------------------
 IF OBJECT_ID('[dbo].[usp_Get_AssetMapping_By_AssetName]') IS nOT NULL
 BEGIN
   DROP procedure [dbo].[usp_Get_AssetMapping_By_AssetName]
@@ -180,4 +179,19 @@ AS
 select *
 from [dbo].[AssetMapping]
 where AssetName = @AssetName
+GO
+
+--------------------------------------- STORED PROCEDURE TO  CREATE PROFIT AND LOSS MAPPING -------------------------------------------------------
+IF NOT EXISTS(SELECT 1 FROM sysobjects WHERE type = 'U' and name = 'ProfitAndLossMapping')
+BEGIN
+   create table ProfitAndLossMapping(
+
+ Id   int identity(1,1) NOT NULL ,
+ Revenue   int,
+ OtherIncome  int,
+ CostOfSales   int,
+ OtherOperatingIncome   int,
+ OperatingExpense  int
+ )
+END
 GO

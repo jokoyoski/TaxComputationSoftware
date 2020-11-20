@@ -215,7 +215,7 @@ namespace TaxComputationAPI.Repositories
 
                     DynamicParameters parameters = new DynamicParameters();
 
-                    parameters.Add("@Name", assetMapping.AssetName);
+                    parameters.Add("@AssetName", assetMapping.AssetName);
 
                     parameters.Add("@Initial", assetMapping.Initial);
 
@@ -258,7 +258,7 @@ namespace TaxComputationAPI.Repositories
 
                     parameters.Add("@Id", assetMapping.Id);
 
-                    parameters.Add("@Name", assetMapping.AssetName);
+                    parameters.Add("@AssetName", assetMapping.AssetName);
 
                     parameters.Add("@Initial", assetMapping.Initial);
 
