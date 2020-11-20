@@ -4,7 +4,18 @@ import ModuleHeader from "../common/ModuleHeader";
 import constants from "../../constants";
 import utils from "../../utils";
 
-const Main = ({ title, mode, setMode, year, setYear, yearSelectItems, children }) => {
+const Main = ({
+  title,
+  mode,
+  setMode,
+  year,
+  setYear,
+  yearSelectItems,
+  assetId,
+  setAssetId,
+  assetClassSelectItems,
+  children
+}) => {
   if (!constants.modes.includes(mode)) setMode(utils.defaultMode(title));
 
   return (
@@ -16,7 +27,10 @@ const Main = ({ title, mode, setMode, year, setYear, yearSelectItems, children }
           setMode={setMode}
           year={year}
           setYear={setYear}
+          assetId={assetId}
+          setAssetId={setAssetId}
           yearSelectItems={yearSelectItems}
+          assetClassSelectItems={assetClassSelectItems}
         />
       }
       style={{ width: "100%" }}>

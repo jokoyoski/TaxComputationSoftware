@@ -2,7 +2,17 @@ import React from "react";
 import { Dropdown } from "primereact/dropdown";
 import constants from "../../constants";
 
-const ModuleHeader = ({ title, mode, setMode, year, setYear, yearSelectItems }) => {
+const ModuleHeader = ({
+  title,
+  mode,
+  setMode,
+  year,
+  setYear,
+  assetId,
+  setAssetId,
+  yearSelectItems,
+  assetClassSelectItems
+}) => {
   const addingModules = [constants.modules.balancingAdjustment, constants.modules.capitalAllowance];
   const modeSelectItems = [
     {
@@ -26,17 +36,33 @@ const ModuleHeader = ({ title, mode, setMode, year, setYear, yearSelectItems }) 
           }
         </p>
         <div>
-          {mode === "view" && (
-            <Dropdown
-              style={{ width: 180, marginRight: 20 }}
-              placeholder="Select year"
-              value={year}
-              options={yearSelectItems}
-              onChange={e => {
-                setYear(e.value);
-              }}
-            />
-          )}
+          {mode === "view" ? (
+            title !== constants.modules.capitalAllowance ? (
+              <Dropdown
+                style={{ width: 180, marginRight: 20 }}
+                placeholder="Select year"
+                value={year}
+                options={yearSelectItems}
+                onChange={e => {
+                  setYear(e.value);
+                }}
+              />
+            ) : (
+              <>
+                {assetId && (
+                  <Dropdown
+                    style={{ width: 180, marginRight: 20 }}
+                    placeholder="Select asset"
+                    value={assetId}
+                    options={assetClassSelectItems}
+                    onChange={e => {
+                      setAssetId(e.value);
+                    }}
+                  />
+                )}
+              </>
+            )
+          ) : null}
           <Dropdown
             style={{ width: 180 }}
             value={mode}
