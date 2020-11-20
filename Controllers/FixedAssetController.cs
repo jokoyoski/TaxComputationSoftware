@@ -43,11 +43,6 @@ namespace TaxComputationAPI.Controllers {
                     return StatusCode (400, new { errors = new []{"Please select a valid year"} });
                 }
 
-                 if (createFixed.AssetId <=0) {
-                    
-                    return StatusCode (400, new { errors = new []{"Please select a valid asset class"} });
-                }
-
                 if (createFixed.CompanyId == 0) {
                     return StatusCode (400, new { errors = new []{"Please select a valid company"} });
                     

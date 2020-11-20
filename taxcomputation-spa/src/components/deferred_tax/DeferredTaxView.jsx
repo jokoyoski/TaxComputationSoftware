@@ -32,7 +32,7 @@ const DeferredTaxView = () => {
   ]);
 
   return (
-    <DataTable value={deferredTaxData} style={{ marginTop: 40 }}>
+    <DataTable value={deferredTaxData} className="p-datatable-gridlines" style={{ marginTop: 40 }}>
       <Column field="category" header=""></Column>
       <Column field="debit" header="₦"></Column>
       <Column field="credit" header="₦"></Column>

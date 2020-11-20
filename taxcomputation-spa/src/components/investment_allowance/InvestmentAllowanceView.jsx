@@ -15,7 +15,10 @@ const InvestmentAllowanceView = () => {
   ]);
 
   return (
-    <DataTable value={investmentAllowanceData} style={{ marginTop: 40 }}>
+    <DataTable
+      value={investmentAllowanceData}
+      className="p-datatable-gridlines"
+      style={{ marginTop: 40 }}>
       <Column field="category" header="Additions to:"></Column>
       <Column field="credit" header="₦"></Column>
     </DataTable>

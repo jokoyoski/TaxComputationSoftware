@@ -52,24 +52,7 @@ getdate(),
 )
 GO
 
-
-
-
---------------------------------------- STORED PROCEDURE TO  GET ALL USERS -----------------------------------------
-
-IF OBJECT_ID('[dbo].[usp_Get_Users') IS NOT NULL
-BEGIN
-DROP procedure [dbo].[usp_Get_User_By_Email]
-END
-GO
-CREATE procedure [dbo].[usp_Get_User_By_Email]
-AS
-
-SELECT Email,PasswordHash,PhoneNumber,FirstName,LastName,DateCreated,IsActive from [dbo].[Users]
-GO
-
---------------------------------------- STORED PROCEDURE TO  GET USER BY EMAIL -----------------------------------------
-
+--------------------------------------- STORED PROCEDURE TO  GET USER -----------------------------------------
 IF OBJECT_ID('[dbo].[usp_Get_User_By_Email]') IS NOT NULL
 BEGIN
 DROP procedure [dbo].[usp_Get_User_By_Email]
@@ -83,40 +66,5 @@ AS
 SELECT Email,PasswordHash,PhoneNumber,FirstName,LastName,DateCreated,IsActive from [dbo].[Users] WHERE Email = @Email
 GO
 
---------------------------------------- STORED PROCEDURE TO  CREATE USERCODES TABLE -----------------------------------------
 
-IF NOT EXISTS(SELECT 1 FROM sysobjects WHERE type = 'U' and name = 'UserCodes')
-BEGIN
-CREATE TABLE UserCodes(
-Id int identity(1,1) NOT NULL,
-Email varchar(50),
-Code varchar(4)
-DateCreated datetime,
-)
-END
-GO
 
---------------------------------------- STORED PROCEDURE TO  GET USER BY CODE -----------------------------------------
-IF OBJECT_ID('[dbo].[usp_Get_User_By_Code]') IS NOT NULL
-BEGIN
-DROP procedure [dbo].[usp_Get_User_By_Code]
-END
-GO
-CREATE procedure [dbo].[usp_Get_User_By_Code](
-@Code varchar(4)
-)
-AS
-
-SELECT Email,Code,DateCreated from [dbo].[UserCodes] WHERE Code = @Code
-GO
-
---------------------------------------- STORED PROCEDURE TO  UPDATE PASSWORD -----------------------------------------
-
-IF EXISTS(SELECT FROM Users where Email=@Email)
-BEGIN
-UPDATE [dbo].[Users](
-@PasswordHash varchar(max)
-)
-SET PasswordHash = @PasswordHash
-WHERE Email=@Email
-END

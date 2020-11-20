@@ -32,7 +32,7 @@ const IncomeTaxView = () => {
   ]);
 
   return (
-    <DataTable value={incomeTaxData} style={{ marginTop: 40 }}>
+    <DataTable value={incomeTaxData} className="p-datatable-gridlines" style={{ marginTop: 40 }}>
       <Column field="category" header=""></Column>
       <Column field="debit" header="₦"></Column>
       <Column field="credit" header="₦"></Column>

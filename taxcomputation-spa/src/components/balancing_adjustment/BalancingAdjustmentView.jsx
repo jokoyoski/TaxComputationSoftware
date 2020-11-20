@@ -102,12 +102,13 @@ const BalancingAdjustmentView = ({ year }) => {
   if (loading) return <Loader />;
 
   if (balancingAdjustmentData.length === 0)
-    return (
-      <p style={{ color: "#f00" }}>Currently, no data for the selected year for this company</p>
-    );
+    return <p style={{ color: "#f00" }}>Currently, no data for the selected company</p>;
 
   return (
-    <DataTable value={balancingAdjustmentData} style={{ marginTop: 40 }}>
+    <DataTable
+      value={balancingAdjustmentData}
+      className="p-datatable-gridlines"
+      style={{ marginTop: 40 }}>
       <Column field="category" header=""></Column>
       <Column field="credit" header=""></Column>
       <Column field="balancingAllowance" header="Balancing Allowance"></Column>

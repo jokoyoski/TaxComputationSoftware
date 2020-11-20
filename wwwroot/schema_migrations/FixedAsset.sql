@@ -18,25 +18,6 @@ GO
 
 
 
-IF OBJECT_ID('[dbo].[usp_Get_Fixed_Asset_By_CompanyId_And_YearId_AssetId]') IS nOT NULL
-BEGIN
-DROP procedure [dbo].[usp_Get_Fixed_Asset_By_CompanyId_And_YearId_AssetId]
-END
-GO
-CREATE procedure usp_Get_Fixed_Asset_By_CompanyId_And_YearId_AssetId(
-@CompanyId int,
-@YearId int,
-@AssetId int
-)
-AS
-select * from   [dbo].[FixedAsset] where CompanyId=@CompanyId and AssetId=@AssetId and YearId=@YearId
-GO
-
-
-
-
-
-
 
 
 
