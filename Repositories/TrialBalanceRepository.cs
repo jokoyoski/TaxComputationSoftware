@@ -5,76 +5,202 @@ using System.Linq;
 using TaxComputationAPI.Models;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
+using System.Data;
+using TaxComputationAPI.Manager;
+using Dapper;
+using System;
+using Microsoft.Extensions.Logging;
 
 namespace TaxComputationAPI.Repositories
 {
     public class TrialBalanceRepository : ITrialBalanceRepository
     {
-        private readonly DataContext _dataContext;
-        
-        public TrialBalanceRepository(DataContext dataContext)
+        private readonly DatabaseManager _databaseManager;
+        private readonly ILogger<TrialBalanceRepository> _logger;
+
+        public TrialBalanceRepository(DatabaseManager databaseManager, ILogger<TrialBalanceRepository> logger)
         {
-            _dataContext = dataContext;
+            _databaseManager = databaseManager;
+            _logger = logger;
         }
 
-        public async Task UpdateTrialBalance(int trialBalanceId, string mappedTo,bool IsDelete)
+        public async Task UpdateTrialBalance(int trialBalanceId, string mappedTo, bool IsDelete)
         {
-            var record = _dataContext.TrialBalance.FirstOrDefault(x => x.Id == trialBalanceId);
-            if(IsDelete){
-               record.IsCheck = false;
-               record.IsRemoved=false;
-                record.MappedTo = mappedTo;
-                _dataContext.SaveChanges();
-            }else{
-                  record.IsCheck = true;
-                  record.IsRemoved=true;
-                 record.MappedTo = mappedTo;
-                _dataContext.SaveChanges();
+            using (IDbConnection conn = await _databaseManager.DatabaseConnection())
+            {
+                if (conn.State == ConnectionState.Closed) conn.Open();
+
+                DynamicParameters parameters = new DynamicParameters();
+
+                parameters.Add("@TrailId", trialBalanceId);
+                parameters.Add("@mappedTo", mappedTo);
+                parameters.Add("@IsDelete", IsDelete);
+
+                try
+                {
+                    conn.Execute("[dbo].[usp_UpdateTrialBalance]", parameters, commandType: CommandType.StoredProcedure);
+                    conn.Close();
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError($"{e.Message}");
+                    throw e;
+                }
             }
-            
         }
 
         public async Task<TrackTrialBalance> GetTrackTrialBalance(int companyId, int yearId)
         {
-    
-            var response = _dataContext.TrackTrialBalance.Where(p => p.CompanyId == companyId && p.YearId == yearId).ToList().LastOrDefault();
-            return response;
+            var result = default(TrackTrialBalance);
+
+            using (IDbConnection conn = await _databaseManager.DatabaseConnection())
+            {
+                if (conn.State == ConnectionState.Closed) conn.Open();
+
+                DynamicParameters parameters = new DynamicParameters();
+
+                parameters.Add("@YearId", yearId);
+                parameters.Add("@CompanyId", companyId);
+
+                try
+                {
+                    result = conn.QueryFirstOrDefault<TrackTrialBalance>("[dbo].[usp_GetTrackTrialBalance_By_CompanyId_And_YearId]", parameters, commandType: CommandType.StoredProcedure);
+                    conn.Close();
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError($"{e.Message}");
+
+                    throw e;
+                }
+
+                return result;
+            }
         }
 
         public async Task<List<TrialBalance>> GetTrialBalance(int trackId)
         {
-            var response = _dataContext.TrialBalance.Where(predicate => predicate.TrackId == trackId).ToList();
-            return response;
+            var result = default(IEnumerable<TrialBalance>);
+
+            using (IDbConnection conn = await _databaseManager.DatabaseConnection())
+            {
+                if (conn.State == ConnectionState.Closed) conn.Open();
+
+                DynamicParameters parameters = new DynamicParameters();
+
+                parameters.Add("@TrackId", trackId);
+
+                try
+                {
+                    result = await conn.QueryAsync<TrialBalance>("[dbo].[usp_GetTrialBalance_By_TrackingId]", parameters, commandType: CommandType.StoredProcedure);
+                    conn.Close();
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError($"{e.Message}");
+
+                    throw e;
+                }
+
+                return result.ToList();
+            }
         }
 
         public async Task<TrackTrialBalance> AddTrackTrialBalance(TrackTrialBalance model)
         {
-            var response = _dataContext.TrackTrialBalance.Add(model);
-            _dataContext.SaveChanges();
+            var result = default(TrackTrialBalance);
 
-            return response.Entity;
+            using (IDbConnection conn = await _databaseManager.DatabaseConnection())
+            {
+                if (conn.State == ConnectionState.Closed) conn.Open();
+
+                DynamicParameters parameters = new DynamicParameters();
+
+                parameters.Add("@Id", model.Id);
+                parameters.Add("@CompanyId", model.CompanyId);
+                parameters.Add("@YearId", model.YearId);
+                parameters.Add("@DateCreated", model.DateCreated);
+
+                try
+                {
+                    var respone = conn.Execute("[dbo].[usp_Insert_Track_Trial_Balance]", parameters, commandType: CommandType.StoredProcedure);
+                    conn.Close();
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError($"{e.Message}");
+
+                    throw e;
+                }
+
+                return result = model;
+            }
         }
 
         public async Task<TrialBalance> RemoveTrackTrialBalance(TrialBalance trialBalance)
         {
-            var response = _dataContext.TrialBalance.Remove(trialBalance);
-            _dataContext.SaveChanges();
+            var result = default(TrialBalance);
 
-            return response.Entity;
+            using (IDbConnection conn = await _databaseManager.DatabaseConnection())
+            {
+                if (conn.State == ConnectionState.Closed) conn.Open();
+
+                DynamicParameters parameters = new DynamicParameters();
+
+
+                parameters.Add("@TrailId", trialBalance.Id);
+
+                try
+                {
+                    var respone = conn.Execute("[dbo].[usp_DeleteTrialBalance_By_Id]", parameters, commandType: CommandType.StoredProcedure);
+                    conn.Close();
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError($"{e.Message}");
+
+                    throw e;
+                }
+
+                return result;
+            }
         }
 
         public async Task<TrialBalance> UploadTrialBalance(TrialBalance model)
         {
-            var response = _dataContext.TrialBalance.Add(model);
-           await  _dataContext.SaveChangesAsync();
+             var result = default(TrialBalance);
 
-            return response.Entity;
-        }
+            using (IDbConnection conn = await _databaseManager.DatabaseConnection())
+            {
+                if (conn.State == ConnectionState.Closed) conn.Open();
 
-        public  TrialBalance GetTrialBalanceById(int trialBalanceId)
-        {
-           var trialBalance=_dataContext.TrialBalance.FirstOrDefault(x=>x.Id==trialBalanceId);
-           return trialBalance;
+                DynamicParameters parameters = new DynamicParameters();
+
+                parameters.Add("@Id", model.Id);
+                parameters.Add("@Item", model.Item);
+                parameters.Add("@Debit", model.Debit);
+                parameters.Add("@Credit", model.Credit);
+                parameters.Add("@MappedTo", model.MappedTo);
+                parameters.Add("@IsCheck", model.IsCheck);
+                parameters.Add("@AccountId", model.AccountId);
+                parameters.Add("@TrackId", model.TrackId);
+                parameters.Add("@IsRemoved", model.IsRemoved);
+
+
+                try
+                {
+                    var respone = conn.Execute("[dbo].[usp_Insert_Trial_Balance]", parameters, commandType: CommandType.StoredProcedure);
+                    conn.Close();
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError($"{e.Message}");
+
+                    throw e;
+                }
+
+                return result = model;
+            }
         }
     }
 }

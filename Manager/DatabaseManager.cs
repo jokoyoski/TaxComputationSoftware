@@ -35,7 +35,7 @@ namespace TaxComputationAPI.Manager
         public List<string> DatabaseScriptList() {
             return new List<string>
             {
-                "CapitalAllowance","FixedAsset"
+                "CapitalAllowance","FixedAsset","TrialBalance","BalancingAdjustment","Utilities","Company"
             };
         }
 

@@ -18,42 +18,42 @@ namespace TaxComputationAPI.Repositories
 {
     public class FixedAssetRepository : IFixedAssetRepository
     {
-        private readonly DataContext _dataContext;
+        
         private readonly IMapper _mapper;
         private readonly DatabaseManager _databaseManager;
-        public FixedAssetRepository(DataContext dataContext, IMapper mapper, DatabaseManager databaseManager)
+        public FixedAssetRepository(IMapper mapper, DatabaseManager databaseManager)
         {
-            _dataContext = dataContext;
+           
             _mapper = mapper;
             _databaseManager = databaseManager;
         }
 
+
+         public async Task<FixedAsset> GetFixedAssetsByCompanyYearIdAssetId(int companyId, int yearId,int assetId)
+        {
+           
+            using (IDbConnection conn = await _databaseManager.DatabaseConnection())
+            {
+                if (conn.State == ConnectionState.Closed)
+                    conn.Open();
+
+                DynamicParameters parameters = new DynamicParameters();
+
+                parameters.Add("@CompanyId", companyId);
+                parameters.Add("@YearId", yearId);
+                parameters.Add("@AssetId", assetId);
+                var record = await conn.QueryFirstAsync<FixedAsset>("[dbo].[usp_Get_Fixed_Asset_By_CompanyId_And_YearId_AssetId]", parameters, commandType: CommandType.StoredProcedure);
+                return record;
+
+            }
+
+            
+
+        }
+
         public async Task<FixedAssetResponse> GetFixedAssetsByCompany(int companyId, int yearId)
         {
-            /* var result = (from s in _dataContext.FixedAsset
-                           join b in _dataContext.FinancialYear on s.YearId equals b.Name
-                           join c in _dataContext.AssetMapping on s.AssetId equals c.Id
-                           join x in _dataContext.Company on s.CompanyId equals x.Id
-                           where s.CompanyId == companyId && s.YearId == yearId
-                           select new FixedAssetData
-                           {
-                               Id = s.Id,
-                               CompanyName = x.CompanyName,
-                               Year = b.Name,
-                               FixedAssetName = c.AssetName,
-                               OpeningCost = s.OpeningCost,
-                               CostAddition = s.CostAddition,
-                               CostDisposal = s.CostDisposal,
-                               OpeningDepreciation = s.OpeningDepreciation,
-                               DepreciationAddition = s.DepreciationAddition,
-                               DepreciationDisposal = s.DepreciationAddition,
-                               TransferCost = s.TransferCost,
-                               TransferDepreciation = s.TransferDepreciation,
-                               IsTransferCostRemoved = s.IsTransferCostRemoved,
-                               IsTransferDepreciationRemoved = s.IsTransferDepreciationRemoved
-
-                           }
-             ).OrderBy(x => x.Id);*/
+           
             using (IDbConnection conn = await _databaseManager.DatabaseConnection())
             {
                 if (conn.State == ConnectionState.Closed)
@@ -81,77 +81,57 @@ namespace TaxComputationAPI.Repositories
         {
            int valueId=0;
             var value = _mapper.Map<FixedAsset>(fixedAssetDto);
-            var record = _dataContext.FixedAsset.FirstOrDefault(x => x.CompanyId == value.CompanyId && x.YearId == value.YearId && x.AssetId == fixedAssetDto.AssetId);
-            if (record == null && fixedAssetDto.IsCost == true)
+            if(fixedAssetDto.IsCost){
+            using (IDbConnection con = await _databaseManager.DatabaseConnection())
             {
-                var fixedAsset = new FixedAsset
-                {
-                    CompanyId = fixedAssetDto.CompanyId,
-                    YearId = fixedAssetDto.YearId,
-                    AssetId = fixedAssetDto.AssetId,
-                    OpeningCost = fixedAssetDto.OpeningCost,
-                    CostAddition = fixedAssetDto.CostAddition,
-                    CostDisposal = fixedAssetDto.CostDisposal,
-                    TransferCost = fixedAssetDto.TransferCost,
-                    IsTransferCostRemoved = fixedAssetDto.IsTransferCostRemoved
+                if (con.State == ConnectionState.Closed)
+                    con.Open();
 
-                };
-                await _dataContext.AddAsync(fixedAsset);
-                 _dataContext.SaveChanges();
-                  valueId=fixedAsset.Id;
-
+                DynamicParameters parameters = new DynamicParameters();
+                parameters.Add("@CompanyId", fixedAssetDto.CompanyId);
+                parameters.Add("@YearId", fixedAssetDto.YearId);
+                parameters.Add("@AssetId", fixedAssetDto.AssetId);
+                parameters.Add("@OpeningCost", fixedAssetDto.OpeningCost);
+                parameters.Add("@TransferCost", fixedAssetDto.TransferCost);
+                parameters.Add("@CostAddition", fixedAssetDto.CostAddition);
+                parameters.Add("@CostDisposal", fixedAssetDto.CostDisposal);
+                parameters.Add("@IsTransferCostRemoved", fixedAssetDto.IsTransferCostRemoved);
+                parameters.Add("@OpeningDepreciation", fixedAssetDto.OpeningDepreciation);
+                parameters.Add("@TransferDepreciation", fixedAssetDto.TransferDepreciation);
+                parameters.Add("@DepreciationAddition", fixedAssetDto.DepreciationAddition);
+                parameters.Add("@DepreciationDisposal", fixedAssetDto.DepreciationDisposal);
+                parameters.Add("@type", "Cost");
+                parameters.Add("@IsTransferDepreciationRemoved", fixedAssetDto.IsTransferDepreciationRemoved);
+               int rowAffected = con.Execute("[dbo].[usp_Insert_Fixed_Asset]", parameters, commandType: CommandType.StoredProcedure);
+                return rowAffected;
             }
-            else if (record == null && fixedAssetDto.IsCost == false)
+            }else{
+
+                 using (IDbConnection con = await _databaseManager.DatabaseConnection())
             {
-                var fixedAsset = new FixedAsset
-                {
-                    CompanyId = fixedAssetDto.CompanyId,
-                    YearId = fixedAssetDto.YearId,
-                    AssetId = fixedAssetDto.AssetId,
-                    OpeningDepreciation = fixedAssetDto.OpeningDepreciation,
-                    DepreciationAddition = fixedAssetDto.DepreciationAddition,
-                    DepreciationDisposal = fixedAssetDto.DepreciationDisposal,
-                    TransferDepreciation = fixedAssetDto.TransferDepreciation,
-                    IsTransferDepreciationRemoved = fixedAssetDto.IsTransferDepreciationRemoved
+                if (con.State == ConnectionState.Closed)
+                    con.Open();
 
-
-                };
-                await _dataContext.AddAsync(fixedAsset);
-                _dataContext.SaveChanges();
-                 valueId=fixedAsset.Id;
-
+                DynamicParameters parameters = new DynamicParameters();
+                parameters.Add("@CompanyId", fixedAssetDto.CompanyId);
+                parameters.Add("@YearId", fixedAssetDto.YearId);
+                parameters.Add("@AssetId", fixedAssetDto.AssetId);
+                parameters.Add("@OpeningCost", fixedAssetDto.OpeningCost);
+                parameters.Add("@TransferCost", fixedAssetDto.TransferCost);
+                parameters.Add("@CostAddition", fixedAssetDto.CostAddition);
+                parameters.Add("@CostDisposal", fixedAssetDto.CostDisposal);
+                parameters.Add("@IsTransferCostRemoved", fixedAssetDto.IsTransferCostRemoved);
+                parameters.Add("@OpeningDepreciation", fixedAssetDto.OpeningDepreciation);
+                parameters.Add("@TransferDepreciation", fixedAssetDto.TransferDepreciation);
+                parameters.Add("@DepreciationAddition", fixedAssetDto.DepreciationAddition);
+                parameters.Add("@DepreciationDisposal", fixedAssetDto.DepreciationDisposal);
+                parameters.Add("@type", "Cost");
+                parameters.Add("@IsTransferDepreciationRemoved", fixedAssetDto.IsTransferDepreciationRemoved);
+                int rowAffected = con.Execute("[dbo].[usp_Insert_Fixed_Asset]", parameters, commandType: CommandType.StoredProcedure);
+                return rowAffected;
             }
-            else if (record != null && fixedAssetDto.IsCost == true)
-            {
-
-                record.CompanyId = fixedAssetDto.CompanyId;
-                record.YearId = fixedAssetDto.YearId;
-                record.AssetId = fixedAssetDto.AssetId;
-                record.OpeningCost = fixedAssetDto.OpeningCost;
-                record.CostAddition = fixedAssetDto.CostAddition;
-                record.CostDisposal = fixedAssetDto.CostDisposal;
-                record.TransferCost = fixedAssetDto.TransferCost;
-                record.IsTransferCostRemoved = fixedAssetDto.IsTransferCostRemoved;
-                 valueId=record.Id;
-                 _dataContext.SaveChanges();
-
             }
-            else if (record != null && fixedAssetDto.IsCost == false)
-            {
-                record.CompanyId = fixedAssetDto.CompanyId;
-                record.YearId = fixedAssetDto.YearId;
-                record.AssetId = fixedAssetDto.AssetId;
-                record.OpeningDepreciation = fixedAssetDto.OpeningDepreciation;
-                record.DepreciationAddition = fixedAssetDto.DepreciationAddition;
-                record.DepreciationDisposal = fixedAssetDto.DepreciationDisposal;
-                record.TransferDepreciation = fixedAssetDto.TransferDepreciation;
-                record.IsTransferDepreciationRemoved = fixedAssetDto.IsTransferDepreciationRemoved;
-                 valueId=record.Id;
-                 _dataContext.SaveChanges();
-            }
-            
-            return valueId;
-        }
+             }
     }
 }
 

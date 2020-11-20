@@ -4,16 +4,18 @@ namespace TaxComputationAPI.Models
     public class CapitalAllowance
     {
         public string TaxYear { get; set; }
-        public string OpeningResidue { get; set; }
-        public string Addition { get; set; }
-        public string Disposal { get; set; }
-        public string Initial { get; set; }
-        public string Annual { get; set; }
-        public string Total { get;set;}
-        public string ClosingResidue { get; set; }
+        public decimal  OpeningResidue { get; set; }
+        public decimal Addition { get; set; }
+        public decimal Disposal { get; set; }
+        public decimal Initial { get; set; }
+        public decimal Annual { get; set; }
+        public decimal Total { get;set;}
+        public decimal ClosingResidue { get; set; }
         public string YearsToGo { get; set; }
         public int CompanyId { get; set; }
         public int AssetId { get; set; }
+        
+        public  string Year { get; set; }
 
     }
 }

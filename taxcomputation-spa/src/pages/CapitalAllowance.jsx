@@ -22,6 +22,7 @@ const CapitalAllowance = () => {
   const [resources, { onModuleItems }] = useResources();
   const [mode, setMode] = usePathParam("mode");
   const [year, setYear] = React.useState(utils.currentYear());
+  const [assetId, setAssetId] = React.useState();
   const [assetClassSelectItems, setAssetClassSelectItems] = React.useState([]);
   const yearSelectItems = utils.getYears(year => ({
     label: year.toString(),
@@ -40,6 +41,7 @@ const CapitalAllowance = () => {
           value: assetClassId
         }))
       );
+      setAssetId(resources.moduleItems[0].id);
     }
   }, [resources.moduleItems]);
 
@@ -56,7 +58,10 @@ const CapitalAllowance = () => {
         setMode={setMode}
         year={year}
         setYear={setYear}
-        yearSelectItems={yearSelectItems}>
+        yearSelectItems={yearSelectItems}
+        assetId={assetId}
+        setAssetId={setAssetId}
+        assetClassSelectItems={assetClassSelectItems}>
         {
           {
             adding: (
@@ -68,7 +73,7 @@ const CapitalAllowance = () => {
             ),
             view: (
               <ViewMode title={title} year={year}>
-                <CapitalAllowanceView year={year} />
+                <CapitalAllowanceView assetId={assetId} />
               </ViewMode>
             )
           }[mode]

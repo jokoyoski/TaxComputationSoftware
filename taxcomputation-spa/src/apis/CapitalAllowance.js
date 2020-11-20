@@ -31,3 +31,12 @@ export const capitalAllowanceAdding = async ({
     throw error;
   }
 };
+
+export const capitalAllowanceViewData = async ({ companyId, assetId }) => {
+  try {
+    const { data } = await axios.get(`/api/CapitalAllowance/${companyId}/${assetId}`);
+    return data;
+  } catch (error) {
+    throw error;
+  }
+};
