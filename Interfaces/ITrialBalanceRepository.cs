@@ -12,9 +12,6 @@ namespace TaxComputationAPI.Interfaces
 
         Task<List<TrialBalance>> GetTrialBalance(int trackId);
 
-        TrialBalance GetTrialBalanceById(int trialBalance);
-
-
         Task<TrackTrialBalance> AddTrackTrialBalance(TrackTrialBalance model);
 
         Task<TrialBalance> UploadTrialBalance(TrialBalance model);

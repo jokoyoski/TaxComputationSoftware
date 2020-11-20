@@ -6,95 +6,233 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using TaxComputationAPI.Models;
 using TaxComputationAPI.Interfaces;
+using TaxComputationAPI.Manager;
+using System.Data;
+using Dapper;
+using Microsoft.Extensions.Logging;
 
 namespace TaxComputationAPI.Repositories
 {
     public class BalancingAdjustmentRepository : IBalancingAdjustmentRepository
     {
-        private readonly DataContext _context;
+        private readonly DatabaseManager _databaseManager;
+        private readonly ILogger<BalancingAdjustment> _logger;
 
-        public BalancingAdjustmentRepository(DataContext context)
+        public BalancingAdjustmentRepository(DatabaseManager databaseManger, ILogger<BalancingAdjustment> logger)
         {
-            _context = context;
+            _databaseManager = databaseManger;
+            _logger = logger;
         }
 
         public async Task<List<BalancingAdjustment>> GetBalancingAdjustment(int companyId, string year)
         {
-            if(companyId <= 0) throw new ArgumentNullException(nameof(companyId));
+            if (companyId <= 0) throw new ArgumentNullException(nameof(companyId));
 
-            if(string.IsNullOrEmpty(year)) throw new ArgumentNullException(nameof(year));
+            if (string.IsNullOrEmpty(year)) throw new ArgumentNullException(nameof(year));
 
             try
             {
-                return await _context.BalancingAdjustment.Where(p => p.ComapnyId == companyId && p.Year == year).ToListAsync();
+                var result = default(IEnumerable<BalancingAdjustment>);
+
+                using (IDbConnection conn = await _databaseManager.DatabaseConnection())
+                {
+                    if (conn.State == ConnectionState.Closed) conn.Open();
+
+                    DynamicParameters parameters = new DynamicParameters();
+
+                    parameters.Add("@CompanyId", companyId);
+                    parameters.Add("@Year", year);
+
+                    try
+                    {
+                        result = await conn.QueryAsync<BalancingAdjustment>("[dbo].[usp_GetBalancingAdjustment_By_CompanyId_And_YearId]", parameters, commandType: CommandType.StoredProcedure);
+                        conn.Close();
+                    }
+                    catch (Exception e)
+                    {
+                        _logger.LogError($"{e.Message}");
+
+                        throw e;
+                    }
+
+                    return result.ToList();
+                }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 throw new SystemException(e.Message);
             }
 
-            
+
         }
 
         public async Task<List<BalancingAdjustmentYearBought>> GetBalancingAdjustmentYearBougthAssetId(int balancingAdjustmentId, int assetId)
         {
-            if(balancingAdjustmentId <= 0) throw new ArgumentNullException(nameof(balancingAdjustmentId));
+            if (balancingAdjustmentId <= 0) throw new ArgumentNullException(nameof(balancingAdjustmentId));
 
-            if(assetId <= 0) throw new ArgumentNullException(nameof(assetId));
+            if (assetId <= 0) throw new ArgumentNullException(nameof(assetId));
 
             try
             {
-                return await _context.BalancingAdjustmentYearBought.Where(p => p.BalancingAdjustmentId == balancingAdjustmentId && p.AssestId == assetId).ToListAsync();
+                var result = default(IEnumerable<BalancingAdjustmentYearBought>);
+
+                using (IDbConnection conn = await _databaseManager.DatabaseConnection())
+                {
+                    if (conn.State == ConnectionState.Closed) conn.Open();
+
+                    DynamicParameters parameters = new DynamicParameters();
+
+                    parameters.Add("@BalancingAdjustmentId", balancingAdjustmentId);
+                    parameters.Add("@AssetId", assetId);
+
+                    try
+                    {
+                        result = await conn.QueryAsync<BalancingAdjustmentYearBought>("[dbo].[usp_GetBalancingAdjustment_BalancingAdjustmentId_AssetId]", parameters, commandType: CommandType.StoredProcedure);
+                        conn.Close();
+                    }
+                    catch (Exception e)
+                    {
+                        _logger.LogError($"{e.Message}");
+
+                        throw e;
+                    }
+
+                    return result.ToList();
+                }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 throw new SystemException(e.Message);
             }
         }
 
-        public async Task<List<BalancingAdjustmentYearBought>> GetBalancingAdjustmentYeatBought(int balancingAdjustmentId, int asssetId)
+        public async Task<List<BalancingAdjustmentYearBought>> GetBalancingAdjustmentYeatBought(int balancingAdjustmentId, int assetId)
         {
-            if(balancingAdjustmentId <= 0) throw new ArgumentNullException(nameof(balancingAdjustmentId));
 
-            if(asssetId <= 0) throw new ArgumentNullException(nameof(asssetId));
+            if (balancingAdjustmentId <= 0) throw new ArgumentNullException(nameof(balancingAdjustmentId));
+
+            if (assetId <= 0) throw new ArgumentNullException(nameof(assetId));
 
             try
             {
-                return await _context.BalancingAdjustmentYearBought.Where(p => p.AssestId == asssetId && p.BalancingAdjustmentId == balancingAdjustmentId).ToListAsync();
-            }
-            catch(Exception e)
+                var result = default(IEnumerable<BalancingAdjustmentYearBought>);
+
+                using (IDbConnection conn = await _databaseManager.DatabaseConnection())
+                {
+                    if (conn.State == ConnectionState.Closed) conn.Open();
+
+                    DynamicParameters parameters = new DynamicParameters();
+
+                    parameters.Add("@BalancingAdjustmentId", balancingAdjustmentId);
+                    parameters.Add("@AssetId", assetId);
+
+                    try
+                    {
+                        result = await conn.QueryAsync<BalancingAdjustmentYearBought>("[dbo].[usp_GetBalancingAdjustment_BalancingAdjustmentId_AssetId]", parameters, commandType: CommandType.StoredProcedure);
+                        conn.Close();
+                    }
+                    catch (Exception e)
+                    {
+                        _logger.LogError($"{e.Message}");
+
+                        throw e;
+                    }
+
+                    return result.ToList();
+                }
+             }
+            catch (Exception e)
             {
                 throw new SystemException(e.Message);
             }
+
         }
 
         public async Task<BalancingAdjustment> SaveBalancingAdjustment(BalancingAdjustment balancingAdjustment)
         {
-            if(balancingAdjustment == null) throw new ArgumentNullException(nameof(balancingAdjustment));
+            if (balancingAdjustment == null) throw new ArgumentNullException(nameof(balancingAdjustment));
 
-            try 
+            try
             {
-                var result = _context.BalancingAdjustment.Add(balancingAdjustment);
-                await _context.SaveChangesAsync();
-                return result.Entity;
+                var result = default(BalancingAdjustment);
+
+                using (IDbConnection conn = await _databaseManager.DatabaseConnection())
+                {
+                    if (conn.State == ConnectionState.Closed) conn.Open();
+
+                    DynamicParameters parameters = new DynamicParameters();
+
+                    parameters.Add("@Id", balancingAdjustment.Id);
+                    parameters.Add("@AssetId", balancingAdjustment.AssetId);
+                    parameters.Add("@CompanyId", balancingAdjustment.ComapnyId);
+                    parameters.Add("@Year", balancingAdjustment.Year);
+                    parameters.Add("@DateCreated", balancingAdjustment.DateCreated);
+
+                    try
+                    {
+                        var respone = conn.Execute("[dbo].[usp_Insert_Balance_Adjustment]", parameters, commandType: CommandType.StoredProcedure);
+                        conn.Close();
+                    }
+                    catch (Exception e)
+                    {
+                        _logger.LogError($"{e.Message}");
+
+                        throw e;
+                    }
+
+                    return result = balancingAdjustment;
+                }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 throw new SystemException(e.Message);
-            }         
+            }
         }
 
         public async Task<BalancingAdjustmentYearBought> SaveBalancingAdjustmentYeatBought(BalancingAdjustmentYearBought balancingAdjustmentYearBought)
         {
-            if(balancingAdjustmentYearBought == null) throw new ArgumentNullException(nameof(balancingAdjustmentYearBought));
+            if (balancingAdjustmentYearBought == null) throw new ArgumentNullException(nameof(balancingAdjustmentYearBought));
 
+          
             try
             {
-                var result = _context.BalancingAdjustmentYearBought.Add(balancingAdjustmentYearBought);
-                await _context.SaveChangesAsync();
-                return result.Entity;
+                var result = default(BalancingAdjustmentYearBought);
+
+                using (IDbConnection conn = await _databaseManager.DatabaseConnection())
+                {
+                    if (conn.State == ConnectionState.Closed) conn.Open();
+
+                    DynamicParameters parameters = new DynamicParameters();
+
+                    parameters.Add("@Id", balancingAdjustmentYearBought.Id);
+                    parameters.Add("@AssestId", balancingAdjustmentYearBought.AssestId);
+                    parameters.Add("@Cost", balancingAdjustmentYearBought.Cost);
+                    parameters.Add("@InitialAllowance", balancingAdjustmentYearBought.InitialAllowance);
+                    parameters.Add("@AnnualAllowance", balancingAdjustmentYearBought.AnnualAllowance);
+                    parameters.Add("@SalesProceed", balancingAdjustmentYearBought.SalesProceed);
+                    parameters.Add("@Residue", balancingAdjustmentYearBought.Residue);
+                    parameters.Add("@BalancingAllowance", balancingAdjustmentYearBought.BalancingAllowance);
+                    parameters.Add("@BalancingCharge", balancingAdjustmentYearBought.BalancingCharge);
+                    parameters.Add("@YearBought", balancingAdjustmentYearBought.YearBought);
+                    parameters.Add("@BalancingAdjustmentId", balancingAdjustmentYearBought.BalancingAdjustmentId);
+                    parameters.Add("@DateCreated", balancingAdjustmentYearBought.DateCreated);
+
+                    try
+                    {
+                        var respone = conn.Execute("[dbo].[usp_Insert_Balance_Adjustment_YearBought]", parameters, commandType: CommandType.StoredProcedure);
+                        conn.Close();
+                    }
+                    catch (Exception e)
+                    {
+                        _logger.LogError($"{e.Message}");
+
+                        throw e;
+                    }
+
+                    return result = balancingAdjustmentYearBought;
+                }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 throw new SystemException(e.Message);
             }
