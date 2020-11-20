@@ -59,11 +59,11 @@ namespace TaxComputationAPI.Controllers
                     return StatusCode(400, new { errors = new[] { "Please select an asset" } });
                 }
                 var record = await _capitalAllowanceService.GetCapitalAllowance(assetId, companyId);
-                var list = record.ToList();
-                if (list.Count <= 0) {
+               
+                if (record.capitalAllowances.Count <= 0) {
                     return NotFound(new { errors = new[] { "Record not found!!!" } });
                 }
-                return Ok(list);
+                return Ok(record);
 
             }
             catch (Exception ex)

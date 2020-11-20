@@ -17,11 +17,13 @@ namespace TaxComputationAPI.Services
         private readonly IFixedAssetRepository _fixedAssetRepository;
         private readonly ITrialBalanceRepository _trialBalanceRepository;
         private readonly IUtilitiesRepository _utilitiesRepository;
-        public FixedAssetService(IFixedAssetRepository fixedAssetRepository, IUtilitiesRepository utilitiesRepository, ITrialBalanceRepository trialBalanceRepository)
+        private readonly ICapitalAllowanceService _capitalAllowanceService;
+        public FixedAssetService(IFixedAssetRepository fixedAssetRepository, ICapitalAllowanceService capitalAllowanceService, IUtilitiesRepository utilitiesRepository, ITrialBalanceRepository trialBalanceRepository)
         {
             _fixedAssetRepository = fixedAssetRepository;
             _trialBalanceRepository = trialBalanceRepository;
             _utilitiesRepository = utilitiesRepository;
+            _capitalAllowanceService = capitalAllowanceService;
         }
 
         public async Task<TaxComputationAPI.Dtos.FixedAssetResponseDto> GetFixedAssetsByCompany(int companyId, int yearId)
@@ -111,12 +113,20 @@ namespace TaxComputationAPI.Services
                 }
 
                 var result = await _fixedAssetRepository.SaveFixedAsset(fixedAsset);
+                if (fixedAsset.IsCost)
+                {
+                    await _capitalAllowanceService.SaveCapitalAllowanceFromFixedAsset(fixedAsset.CostAddition, fixedAsset.YearId.ToString(), fixedAsset.CompanyId, fixedAsset.AssetId);
+
+                }
+
                 foreach (var value in fixedAsset.TriBalanceId)
                 {
                     if (fixedAsset.IsCost == true)
                     {
 
                         _utilitiesRepository.AddTrialBalanceMapping(value, result, "fixedasset", "cost");
+
+
                     }
                     else
                     {
@@ -128,24 +138,17 @@ namespace TaxComputationAPI.Services
 
                 }
 
-                /* if (firstItemInArray.IsCheck == true)
-                 {
-                     foreach (var value in fixedAsset.TriBalanceId)
-                     {
-                         await _trialBalanceRepository.UpdateTrialBalance(value, null, true); 
-                         _utilitiesRepository.DeleteTrialBalancingMapping(value);
-                     }
 
-
-                 }else{
-
-                 }*/
 
             }
             else
             {
                 var result = await _fixedAssetRepository.SaveFixedAsset(fixedAsset);
+                 if(fixedAsset.IsCost){
+                       await _capitalAllowanceService.SaveCapitalAllowanceFromFixedAsset(fixedAsset.CostAddition, fixedAsset.YearId.ToString(), fixedAsset.CompanyId, fixedAsset.AssetId);
 
+                 }
+             
             }
 
 
@@ -153,16 +156,16 @@ namespace TaxComputationAPI.Services
 
         }
 
-       /* public bool GetAmount(string type, List<int> trialBalance)
-        {
-            decimal totalNumber = 0;
+        /* public bool GetAmount(string type, List<int> trialBalance)
+         {
+             decimal totalNumber = 0;
 
-            foreach(var j in trialBalance) {
-                totalNumber= _utilitiesRepository.GetAmount(j,"cost");
-            }
+             foreach(var j in trialBalance) {
+                 totalNumber= _utilitiesRepository.GetAmount(j,"cost");
+             }
 
-           
-        }*/
+
+         }*/
 
 
         public TaxComputationAPI.Dtos.FixedAssetResponseDto FormatAmount(FixedAssetResponse fixedAssetResponse)
