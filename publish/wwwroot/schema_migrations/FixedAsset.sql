@@ -18,6 +18,25 @@ GO
 
 
 
+IF OBJECT_ID('[dbo].[usp_Get_Fixed_Asset_By_CompanyId_And_YearId_AssetId]') IS nOT NULL
+BEGIN
+DROP procedure [dbo].[usp_Get_Fixed_Asset_By_CompanyId_And_YearId_AssetId]
+END
+GO
+CREATE procedure usp_Get_Fixed_Asset_By_CompanyId_And_YearId_AssetId(
+@CompanyId int,
+@YearId int,
+@AssetId int
+)
+AS
+select * from   [dbo].[FixedAsset] where CompanyId=@CompanyId and AssetId=@AssetId and YearId=@YearId
+GO
+
+
+
+
+
+
 
 
 
@@ -40,14 +59,6 @@ create table FixedAsset(
  OpeningDepreciation varchar(20) null,
  TransferDepreciation varchar(20) null,
  DepreciationDisposal varchar(200),
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
- DepreciationClosing varchar(200),
->>>>>>> 2860c1f490c9ea7bbea7c9b73660e82b40328612
-=======
- DepreciationClosing varchar(200),
->>>>>>> 1426fd094a857e6b88a91df7198e2e70c47629fb
  DepreciationAddition varchar(200),
  IsTransferDepreciationRemoved bit,
  )
@@ -79,14 +90,6 @@ create procedure usp_Insert_Fixed_Asset(
  @TransferDepreciation varchar(20),
  @DepreciationAddition varchar(20),
  @DepreciationDisposal varchar(20),
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
- @DepreciationClosing varchar(200),
->>>>>>> 2860c1f490c9ea7bbea7c9b73660e82b40328612
-=======
- @DepreciationClosing varchar(200),
->>>>>>> 1426fd094a857e6b88a91df7198e2e70c47629fb
  @type varchar (20),
  @IsTransferDepreciationRemoved bit
 )
@@ -106,15 +109,7 @@ begin
 begin
 UPDATE [dbo].[FixedAsset]
 SET CompanyId = @CompanyId, YearId = @YearId, AssetId=@AssetId ,OpeningDepreciation=@OpeningDepreciation,DepreciationAddition=@DepreciationAddition,DepreciationDisposal=@DepreciationDisposal,
-<<<<<<< HEAD
-<<<<<<< HEAD
 TransferDepreciation=@TransferDepreciation,IsTransferDepreciationRemoved=@IsTransferDepreciationRemoved
-=======
-TransferDepreciation=@TransferDepreciation,IsTransferDepreciationRemoved=@IsTransferDepreciationRemoved,DepreciationClosing=@DepreciationClosing
->>>>>>> 2860c1f490c9ea7bbea7c9b73660e82b40328612
-=======
-TransferDepreciation=@TransferDepreciation,IsTransferDepreciationRemoved=@IsTransferDepreciationRemoved,DepreciationClosing=@DepreciationClosing
->>>>>>> 1426fd094a857e6b88a91df7198e2e70c47629fb
 WHERE CompanyId=@CompanyId and YearId=@YearId and AssetId=@AssetId
 END
 end
@@ -155,14 +150,6 @@ INSERT [dbo].[FixedAsset](
  TransferDepreciation,
  DepreciationAddition,
  DepreciationDisposal,
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
- DepreciationClosing,
->>>>>>> 2860c1f490c9ea7bbea7c9b73660e82b40328612
-=======
- DepreciationClosing,
->>>>>>> 1426fd094a857e6b88a91df7198e2e70c47629fb
  IsTransferDepreciationRemoved
 )
 values(
@@ -174,14 +161,6 @@ values(
 @TransferDepreciation,
 @DepreciationAddition,
 @DepreciationDisposal,
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-@DepreciationClosing,
->>>>>>> 2860c1f490c9ea7bbea7c9b73660e82b40328612
-=======
-@DepreciationClosing,
->>>>>>> 1426fd094a857e6b88a91df7198e2e70c47629fb
 @IsTransferDepreciationRemoved
 )
 end

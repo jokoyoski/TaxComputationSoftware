@@ -1,11 +1,14 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Dapper;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using TaxComputationAPI.Data;
 using TaxComputationAPI.Helpers;
 using TaxComputationAPI.Interfaces;
+using TaxComputationAPI.Manager;
 using TaxComputationAPI.Models;
 
 namespace TaxComputationAPI.Repositories
@@ -13,34 +16,101 @@ namespace TaxComputationAPI.Repositories
     public class CompaniesRepository : ICompaniesRepository
     {
         private readonly DataContext _context;
-        public CompaniesRepository(DataContext context)
+        private readonly DatabaseManager _databaseManager;
+        public CompaniesRepository(DataContext context,  DatabaseManager databaseManager)
         {
             _context = context;
+            _databaseManager = databaseManager;
 
         }
 
         public async Task<Company> GetCompanyAsync(int id)
         {
-            var company = await _context.Company.FirstOrDefaultAsync(x => x.Id == id);
-            return company;
+
+
+            using (IDbConnection conn = await _databaseManager.DatabaseConnection())
+            {
+                if (conn.State == ConnectionState.Closed)
+                    conn.Open();
+
+                DynamicParameters parameters = new DynamicParameters();
+
+                parameters.Add("@Id", id);
+               
+                var record = await conn.QueryFirstAsync<Company>("[dbo].[usp_Get_Company_By_Id]", parameters, commandType: CommandType.StoredProcedure);
+                return record;
+            }
+
+           
         }
 
         public async Task<Company> GetCompanyByTinAsync(string tinNumber)
         {
-            var company = await _context.Company.FirstOrDefaultAsync(x => x.TinNumber == tinNumber);
-            return company;
+            try
+            {
+                using (IDbConnection conn = await _databaseManager.DatabaseConnection())
+                {
+                    if (conn.State == ConnectionState.Closed)
+                        conn.Open();
+
+                    DynamicParameters parameters = new DynamicParameters();
+
+                    parameters.Add("@TinNumber", tinNumber);
+
+                    var record =  conn.QueryFirstOrDefault<Company>("[dbo].[usp_Get_Company_By_Tin]", parameters, commandType: CommandType.StoredProcedure);
+                    return record;
+                }
+            }
+            catch (Exception ex) {
+
+
+            }
+
+            return null;
         }
 
+     
       
         public async Task AddCompanyAsync(Company company) {
 
-            await _context.Company.AddAsync(company);
-            await _context.SaveChangesAsync();
+            int rowAffected = 0;
+            using (IDbConnection con = await _databaseManager.DatabaseConnection())
+            {
+                if (con.State == ConnectionState.Closed)
+                    con.Open();
+
+                DynamicParameters parameters = new DynamicParameters();
+                parameters.Add("@CompanyName", company.CompanyName);
+                parameters.Add("@CompanyDescription", company.CompanyDescription);
+                parameters.Add("@CacNumber", company.CompanyDescription);
+                parameters.Add("@TinNumber", company.TinNumber);
+                parameters.Add("@DateCreated", company.DateCreated);
+                parameters.Add("@OpeningYear", company.OpeningYear);
+                parameters.Add("@ClosingYear", company.ClosingYear);
+                parameters.Add("@IsActive", company.IsActive);
+                rowAffected = con.Execute("[dbo].[usp_Insert_Company]", parameters, commandType: CommandType.StoredProcedure);
+            }
+
+           
         }
+
+
+
+
+
         public async Task<PagedList<Company>> GetCompaniesAsync(PaginationParams pagination)
         {
-            var companies = _context.Company.AsQueryable();
-            return await PagedList<Company>.CreateAsync(companies, pagination.PageNumber, pagination.PageSIze);
+            using (IDbConnection conn = await _databaseManager.DatabaseConnection())
+            {
+                if (conn.State == ConnectionState.Closed)
+                    conn.Open();
+
+                DynamicParameters parameters = new DynamicParameters();
+                var record = await conn.QueryMultipleAsync("[dbo].[usp_Get_All_Company]", parameters, commandType: CommandType.StoredProcedure);
+                var result = await record.ReadAsync<Company>();
+                return await PagedList<Company>.CreateAsync(result, pagination.PageNumber, pagination.PageSIze);
+            }
+          
         }
     }
 }

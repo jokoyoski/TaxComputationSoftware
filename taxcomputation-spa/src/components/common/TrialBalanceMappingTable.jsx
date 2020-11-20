@@ -19,7 +19,6 @@ const TrialBalanceMappingTable = ({
       paginator
       rows={10}
       rowsPerPageOptions={[10, 20, 50, 100]}
-      className="p-datatable-gridlines"
       selection={selectedAccounts}
       onSelectionChange={e => {
         if (e.value.length > 0) {
