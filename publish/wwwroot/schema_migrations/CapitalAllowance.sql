@@ -89,11 +89,78 @@ CREATE procedure [dbo].[usp_Get_Capital_Allowance_By_CompanyId_And_AssetId](
 AS
 
 select TaxYear,OpeningResidue,Addition,Disposal,Initial,Annual,Total,ClosingResidue,YearsToGo from [dbo].[CapitalAllowance] where CompanyId=@CompanyId AND AssetId=@AssetId
-<<<<<<< HEAD
 GO
-<<<<<<< HEAD
-=======
+
+
+
+
+
+
+--------------------------------------- STORED PROCEDURE TO  GET CAPITAL aALLOWANCE BY ASSET ,COMPANY AND YEAR-----------------------------------------
+
+IF OBJECT_ID('[dbo].[usp_Get_Capital_Allowance_By_CompanyId_And_AssetId_And_Year]') IS nOT NULL
+BEGIN
+DROP procedure [dbo].[usp_Get_Capital_Allowance_By_CompanyId_And_AssetId_And_Year]
+END
 GO
->>>>>>> 2860c1f490c9ea7bbea7c9b73660e82b40328612
-=======
->>>>>>> 1426fd094a857e6b88a91df7198e2e70c47629fb
+CREATE procedure [dbo].[usp_Get_Capital_Allowance_By_CompanyId_And_AssetId_And_Year](
+@AssetId int,
+@CompanyId int,
+@Year varchar(20)
+)
+AS
+
+select TaxYear,OpeningResidue,Addition,Disposal,Initial,Annual,Total,ClosingResidue,YearsToGo from [dbo].[CapitalAllowance] where CompanyId=@CompanyId AND AssetId=@AssetId AND TaxYear=@Year
+GO
+
+
+
+
+
+--------------------------------------- STORED PROCEDURE TO  UPDATE CAPITAL ALLOWANCE FROM BALACING ADJUSTEMNT-----------------------------------------
+
+IF OBJECT_ID('[dbo].[Update_Capital_Allowance_From_Balancing_Ajustment]') IS nOT NULL
+BEGIN
+DROP procedure [dbo].[Update_Capital_Allowance_From_Balancing_Ajustment]
+END
+GO
+CREATE procedure [dbo].[Update_Capital_Allowance_From_Balancing_Ajustment](
+@TaxYear int,
+@OpeningResidue varchar(20),
+@ClosingResidue varchar(20),
+@CompanyId int,
+@AssetId int
+
+)
+AS
+
+UPDATE [dbo].[CapitalAllowance]
+set OpeningResidue=@OpeningResidue, ClosingResidue=@ClosingResidue   WHERE CompanyId=@CompanyId and AssetId=@AssetId and TaxYear=@TaxYear
+GO
+
+
+--------------------------------------- STORED PROCEDURE TO  GET UPDATE CAPITAL ALLOWANCE BY FIXEDASSET-----------------------------------------
+
+IF OBJECT_ID('[dbo].[Update_Capital_Allowance_From_Fixed_Asset]') IS nOT NULL
+BEGIN
+DROP procedure [dbo].[Update_Capital_Allowance_From_Fixed_Asset]
+END
+GO
+CREATE procedure [dbo].[Update_Capital_Allowance_From_Fixed_Asset](
+@TaxYear int,
+@OpeningResidue varchar(20),
+@ClosingResidue varchar(20),
+@Annual varchar(20),
+@Initial varchar(20),
+@Total  varchar(20),
+@YearsToGo varchar(20),
+@CompanyId int,
+@AssetId int
+
+)
+AS
+
+UPDATE [dbo].[CapitalAllowance]
+set OpeningResidue=@OpeningResidue, ClosingResidue=@ClosingResidue ,Annual=@Annual, Initial=@Initial,Total=@Total,YearsToGo=@YearsToGo   WHERE CompanyId=@CompanyId and AssetId=@AssetId and TaxYear=@TaxYear
+
+GO
