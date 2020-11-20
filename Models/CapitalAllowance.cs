@@ -14,6 +14,7 @@ namespace TaxComputationAPI.Models
         public string YearsToGo { get; set; }
         public int CompanyId { get; set; }
         public int AssetId { get; set; }
+        
         public  string Year { get; set; }
 
     }
