@@ -240,7 +240,8 @@ namespace TaxComputationAPI.Services
                         AnnualAllowance = 0,
                         SalesProceed = addBalanceAdjustmentDto.SalesProceed,
                         BalancingAdjustmentId = assetBalancing == null ? b2.Id : assetBalancing.Id,
-                        YearBought = addBalanceAdjustmentDto.YearBought
+                        YearBought = addBalanceAdjustmentDto.YearBought,
+                        DateCreated = DateTime.UtcNow
                     };
 
                     if (balancingAdjustment.Item1 == BalancingAdjustment.BalancingAllowance) bb2.BalancingAllowance = balancingAdjustment.Item2;

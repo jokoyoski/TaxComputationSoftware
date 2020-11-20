@@ -59,12 +59,12 @@ PRINT('============================================Creating balancing adjustment
 
 ------------------------------------------------STORED PROCEDURE TO  GET TRACK TRIAL BALANCE BY COMPANYID AND YEARID---------------------------------------------
 
-IF OBJECT_ID('[dbo].[usp_GetBalancingAdjustment_By_CompanyId_And_YearId') IS NOT NULL
+IF OBJECT_ID('[dbo].[usp_GetBalancingAdjustment_By_CompanyId_And_YearId]') IS NOT NULL
 BEGIN
-    DROP PROCEDURE [dbo].[usp_GetBalancingAdjustment_By_CompanyId_And_Year]
+DROP PROCEDURE [dbo].[usp_GetBalancingAdjustment_By_CompanyId_And_YearId]
 END
 GO
-CREATE PROCEDURE [dbo].[usp_GetBalancingAdjustment_By_CompanyId_And_Year](
+CREATE PROCEDURE [dbo].[usp_GetBalancingAdjustment_By_CompanyId_And_YearId](
     @Year nvarchar(max),
     @CompanyId int
 )
@@ -79,19 +79,19 @@ PRINT('============================================Creating balancing adjustment
 
 ------------------------------------------------STORED PROCEDURE TO  GET TRACK TRIAL BALANCE BY COMPANYID AND YEARID---------------------------------------------
 
-IF OBJECT_ID('[dbo].[usp_GetBalancingAdjustment_YearBought_AssetId') IS NOT NULL
+IF OBJECT_ID('[dbo].[usp_GetBalancingAdjustment_BalancingAdjustmentId_AssetId]') IS NOT NULL
 BEGIN
-    DROP PROCEDURE [dbo].[usp_GetBalancingAdjustment_YearBought_AssetId]
+DROP PROCEDURE [dbo].[usp_GetBalancingAdjustment_BalancingAdjustmentId_AssetId]
 END
 GO
-CREATE PROCEDURE [dbo].[usp_GetBalancingAdjustment_YearBought_AssetId](
+CREATE PROCEDURE [dbo].[usp_GetBalancingAdjustment_BalancingAdjustmentId_AssetId](
     @AssetId nvarchar(max),
-    @YearBought int
+    @BalancingAdjustmentId int
 )
 AS
 SELECT *
 FROM [dbo].[BalancingAdjustmentYearBought]
-WHERE AssestId=@AssetId AND YearBought=@YearBought
+WHERE AssestId=@AssetId AND BalancingAdjustmentId=@BalancingAdjustmentId
 GO
 
 
@@ -99,9 +99,9 @@ PRINT('============================================Creating balancing adjustment
 
 ------------------------------------------------STORED PROCEDURE TO  GET TRACK TRIAL BALANCE BY COMPANYID AND YEARID---------------------------------------------
 
-IF OBJECT_ID('[dbo].[usp_GetBalancingAdjustment_YearBought_AssetId') IS NOT NULL
+IF OBJECT_ID('[dbo].[usp_GetBalancingAdjustment_YearBought_AssetId]') IS NOT NULL
 BEGIN
-    DROP PROCEDURE [dbo].[usp_GetBalancingAdjustment_YearBought_AssetId]
+DROP PROCEDURE [dbo].[usp_GetBalancingAdjustment_YearBought_AssetId]
 END
 GO
 CREATE PROCEDURE [dbo].[usp_GetBalancingAdjustment_YearBought_AssetId](
@@ -121,11 +121,12 @@ PRINT('========================================Creating Insert stored procedure 
 
 IF OBJECT_ID('[dbo].[usp_Insert_Balance_Adjustment]') IS NOT NULL
 BEGIN
-    DROP PROCEDURE [dbo].[usp_Insert_Balance_Adjustment]
-    PRINT('OK')
+DROP PROCEDURE [dbo].[usp_Insert_Balance_Adjustment]
+PRINT('OK')
 END
 GO
-CREATE PROCEDURE [usp_Insert_Balance_Adjustment](
+CREATE PROCEDURE [dbo].[usp_Insert_Balance_Adjustment](
+    @Id int OUTPUT,
     @AssetId int,
     @ComapnyId int,
     @Year nvarchar (max),
@@ -147,6 +148,8 @@ VALUES
         @Year,
         @DateCreated
 )
+SET @Id = SCOPE_IDENTITY()
+SELECT @Id
 GO
 
 
@@ -156,11 +159,11 @@ PRINT('========================================Creating Insert stored procedure 
 
 IF OBJECT_ID('[dbo].[usp_Insert_Balance_Adjustment_YearBought]') IS NOT NULL
 BEGIN
-    DROP PROCEDURE [dbo].[usp_Insert_Balance_Adjustment_YearBought]
-    PRINT('OK')
+DROP PROCEDURE [dbo].[usp_Insert_Balance_Adjustment_YearBought]
+PRINT('OK')
 END
 GO
-CREATE PROCEDURE [usp_Insert_Balance_Adjustment_YearBought](
+CREATE PROCEDURE [dbo].[usp_Insert_Balance_Adjustment_YearBought](
     @AssestId int,
     @Cost decimal(18, 2),
     @InitialAllowance decimal(18, 2),
@@ -171,7 +174,8 @@ CREATE PROCEDURE [usp_Insert_Balance_Adjustment_YearBought](
     @BalancingCharge decimal(18, 2),
     @DateCreated datetime2(7),
     @YearBought nvarchar(max),
-    @BalancingAdjustmentId int
+    @BalancingAdjustmentId int,
+    @Id int OUTPUT
 )
 AS
 
@@ -203,4 +207,7 @@ VALUES
     @YearBought,
     @BalancingAdjustmentId
 )
+SET @Id = SCOPE_IDENTITY()
+SELECT @Id
 GO
+

@@ -11,20 +11,26 @@ namespace TaxComputationAPI.Interfaces
        
         Task<FinancialYear> GetFinancialYearAsync(int yearId);
         
-        decimal GetAmount(int moduleId, string additionalInfo);
+        Task<decimal> GetAmount(int moduleId, string additionalInfo);
+
         Task<List<FinancialYear>> GetFinancialYearAsync();
+
         Task AddFinancialYearAsync(FinancialYear financialClass);
 
         Task<List<AssetMapping>> GetAssetMappingAsync();
+
         Task<AssetMapping> GetAssetMappingAsync(string Name);
+
         Task<AssetMapping> GetAssetMappingById(int Id);
+
         Task AddAssetMappingAsync(AssetMapping asset);
+
         Task UpdateAssetMappingAsync(AssetMapping asset);
+
         Task DeleteAssetMappingAsync(AssetMapping asset);
 
-      
-        void  AddTrialBalanceMapping (int trialBalanceId, int moduleId,string moduleCode,string additionalInfo);
+        Task  AddTrialBalanceMapping (int trialBalanceId, int moduleId,string moduleCode,string additionalInfo);
 
-        void  DeleteTrialBalancingMapping(int trialBalanceId);
+        Task  DeleteTrialBalancingMapping(int trialBalanceId);
     }
 }
