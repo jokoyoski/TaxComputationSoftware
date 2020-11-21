@@ -101,6 +101,37 @@ namespace TaxComputationAPI.Services
                     Name=item.AssetName
                 });
                }
+            }else if (code == "profitandloss")
+            {
+                moduleTypes.Add(new ModuleTypeDto
+                {
+                    Id = 1,
+                    Name = "Revenue"
+                });
+
+                moduleTypes.Add(new ModuleTypeDto
+                {
+                    Id = 2,
+                    Name = "Cost Of Sales"
+                });
+
+                moduleTypes.Add(new ModuleTypeDto
+                {
+                    Id = 3,
+                    Name = "Other Operating Income"
+                });
+
+                moduleTypes.Add(new ModuleTypeDto
+                {
+                    Id = 4,
+                    Name = "Other Operating Type"
+                });
+
+                moduleTypes.Add(new ModuleTypeDto
+                {
+                    Id = 5,
+                    Name = "Operating Expenses"
+                });
             }
 
             return moduleTypes;

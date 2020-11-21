@@ -7,18 +7,16 @@ namespace TaxComputationAPI.Dtos
 {
     public class ProfitAndLossDto
     {
-        public int Revenue { get; set; }
-        public int OtherIncome { get; set; }
-        public int CostOfSales { get; set; }
-        public int OtherOperatingIncome { get; set; }
-        public int OperatingExpense { get; set; }
-        public int YearId { get; set; }
-        public int CompanyId { get; set; }
-        public int GrossProfit { get; set; }
-        public int GrossLoss { get; set; }
-        public int OtherOperatingGain { get; set; }
-        public int OtherOperatingLoss { get; set; }
-        public int LossBeforeTaxation { get; set; }
-        public int ProfitBeforeTaxation { get; set; }
+        public string Revenue { get; set; }
+        public string OtherIncome { get; set; }
+        public string CostOfSales { get; set; }
+        public string OtherOperatingIncome { get; set; }
+        public string OperatingExpense { get; set; }
+        public string GrossProfit { get; set; }
+        public string GrossLoss { get; set; }
+        public string OtherOperatingGain { get; set; }
+        public string OtherOperatingLoss { get; set; }
+        public string LossBeforeTaxation { get; set; }
+        public string ProfitBeforeTaxation { get; set; }
     }
 }

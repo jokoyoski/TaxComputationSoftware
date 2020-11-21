@@ -1,8 +1,9 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
-using TaxComputationAPI.Dtos;
+ using TaxComputationAPI.Dtos;
 using TaxComputationAPI.Models;
+using TrialBalance = TaxComputationAPI.Models.TrialBalance;
 
 namespace TaxComputationAPI.Interfaces
 {

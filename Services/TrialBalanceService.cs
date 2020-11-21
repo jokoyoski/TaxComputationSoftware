@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 using Aspose.Cells;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using TaxComputationAPI.Dtos;
 using TaxComputationAPI.Interfaces;
 using TaxComputationAPI.Models;
-using TaxComputationAPI.Dtos;
+using TrialBalance = TaxComputationAPI.Models.TrialBalance;
+//using TaxComputationAPI.Dtos;
 
 namespace TaxComputationAPI.Services
 {
