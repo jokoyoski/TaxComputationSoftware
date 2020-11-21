@@ -78,6 +78,37 @@ namespace TaxComputationAPI.Repositories
             }
         }
 
+
+
+         public async Task<TrialBalanceMapping> GetTrialBalanceMappingRecordByTrialBalanceId(int trialBalanceId)
+        {
+            var result = default(TrialBalanceMapping);
+
+            using (IDbConnection conn = await _databaseManager.DatabaseConnection())
+            {
+                if (conn.State == ConnectionState.Closed) conn.Open();
+
+                DynamicParameters parameters = new DynamicParameters();
+
+                parameters.Add("@TrialBalanceId", trialBalanceId);
+                
+
+                try
+                {
+                    result = conn.QueryFirstOrDefault<TrialBalanceMapping>("[dbo].[usp_Get_From_TrialBalanceMapping_With_TrialBalanceId]", parameters, commandType: CommandType.StoredProcedure);
+                    conn.Close();
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError($"{e.Message}");
+
+                    throw e;
+                }
+
+                return result;
+            }
+        }
+
         public async Task<List<TrialBalance>> GetTrialBalance(int trackId)
         {
             var result = default(IEnumerable<TrialBalance>);

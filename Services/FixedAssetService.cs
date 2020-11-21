@@ -118,22 +118,29 @@ namespace TaxComputationAPI.Services
                     await _capitalAllowanceService.SaveCapitalAllowanceFromFixedAsset(fixedAsset.CostAddition, fixedAsset.YearId.ToString(), fixedAsset.CompanyId, fixedAsset.AssetId);
 
                 }
-
+                var record=await _fixedAssetRepository.GetFixedAssetsByCompanyYearIdAssetId(fixedAsset.CompanyId,fixedAsset.YearId,fixedAsset.AssetId);
+               
                 foreach (var value in fixedAsset.TriBalanceId)
                 {
-                    if (fixedAsset.IsCost == true)
+                     var trialBalanceMapping=await _trialBalanceRepository.GetTrialBalanceMappingRecordByTrialBalanceId(value);
+                    if(trialBalanceMapping==null){
+
+                        if (fixedAsset.IsCost == true)
                     {
 
-                        await _utilitiesRepository.AddTrialBalanceMapping(value, result, "fixedasset", "cost");
+                        await _utilitiesRepository.AddTrialBalanceMapping(value, record.Id, "fixedasset", "cost");
                     }
                     else
                     {
 
-                        await _utilitiesRepository.AddTrialBalanceMapping(value, result, "fixedasset", "depreciation");
+                        await _utilitiesRepository.AddTrialBalanceMapping(value, record.Id, "fixedasset", "depreciation");
 
                     }
 
 
+
+                    }
+                    
                 }
 
             }
@@ -236,10 +243,10 @@ namespace TaxComputationAPI.Services
             return fixedAsset;
         }
 
-        public async Task DeleteFixedAsset(int fixedAssetId)
+        public async Task DeleteFixedAsset(int trialbalanceId)
         {
-            await _trialBalanceRepository.UpdateTrialBalance(fixedAssetId, null, true);
-            await _utilitiesRepository.DeleteTrialBalancingMapping(fixedAssetId);
+            await _trialBalanceRepository.UpdateTrialBalance(trialbalanceId, null, true);  //fice
+            await _utilitiesRepository.DeleteTrialBalancingMapping(trialbalanceId);
         }
     }
 }

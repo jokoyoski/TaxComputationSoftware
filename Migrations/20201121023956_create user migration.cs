@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace TaxComputationAPI.Migrations
 {
-    public partial class balancingadjustmenttable : Migration
+    public partial class createusermigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -50,167 +50,6 @@ namespace TaxComputationAPI.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AssetMapping",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    AssetName = table.Column<string>(nullable: true),
-                    Initial = table.Column<int>(nullable: false),
-                    Annual = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AssetMapping", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "BalancingAdjustment",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    AssetId = table.Column<int>(nullable: false),
-                    ComapnyId = table.Column<int>(nullable: false),
-                    Year = table.Column<string>(nullable: true),
-                    DateCreated = table.Column<DateTime>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_BalancingAdjustment", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "BalancingAdjustmentYearBought",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    AssestId = table.Column<int>(nullable: false),
-                    Cost = table.Column<decimal>(nullable: false),
-                    InitialAllowance = table.Column<decimal>(nullable: false),
-                    AnnualAllowance = table.Column<decimal>(nullable: false),
-                    SalesProceed = table.Column<decimal>(nullable: false),
-                    Residue = table.Column<decimal>(nullable: false),
-                    BalancingAllowance = table.Column<decimal>(nullable: false),
-                    BalancingCharge = table.Column<decimal>(nullable: false),
-                    DateCreated = table.Column<DateTime>(nullable: false),
-                    YearBought = table.Column<string>(nullable: true),
-                    BalancingAdjustmentId = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_BalancingAdjustmentYearBought", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Company",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    CompanyName = table.Column<string>(nullable: true),
-                    CompanyDescription = table.Column<string>(nullable: true),
-                    CacNumber = table.Column<string>(nullable: true),
-                    TinNumber = table.Column<string>(nullable: true),
-                    DateCreated = table.Column<DateTime>(nullable: false),
-                    IsActive = table.Column<bool>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Company", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "FinancialYear",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_FinancialYear", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "FixedAsset",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    CompanyId = table.Column<int>(nullable: false),
-                    YearId = table.Column<int>(nullable: false),
-                    AssetId = table.Column<int>(nullable: false),
-                    OpeningCost = table.Column<long>(nullable: false),
-                    TransferCost = table.Column<long>(nullable: false),
-                    CostAddition = table.Column<long>(nullable: false),
-                    CostDisposal = table.Column<long>(nullable: false),
-                    IsTransferCostRemoved = table.Column<bool>(nullable: false),
-                    OpeningDepreciation = table.Column<long>(nullable: false),
-                    TransferDepreciation = table.Column<long>(nullable: false),
-                    DepreciationAddition = table.Column<long>(nullable: false),
-                    DepreciationDisposal = table.Column<long>(nullable: false),
-                    IsTransferDepreciationRemoved = table.Column<bool>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_FixedAsset", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "TrackTrialBalance",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    CompanyId = table.Column<int>(nullable: false),
-                    YearId = table.Column<int>(nullable: false),
-                    DateCreated = table.Column<DateTime>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_TrackTrialBalance", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "TrialBalance",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    AccountId = table.Column<string>(nullable: true),
-                    Item = table.Column<string>(nullable: true),
-                    Debit = table.Column<decimal>(nullable: false),
-                    Credit = table.Column<decimal>(nullable: false),
-                    MappedTo = table.Column<string>(nullable: true),
-                    IsCheck = table.Column<bool>(nullable: false),
-                    IsRemoved = table.Column<bool>(nullable: false),
-                    TrackId = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_TrialBalance", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "TrialBalanceMapping",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    TrialBalanceId = table.Column<int>(nullable: false),
-                    ModuleId = table.Column<int>(nullable: false),
-                    ModuleCode = table.Column<string>(nullable: true),
-                    AdditionalInfo = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_TrialBalanceMapping", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -390,33 +229,6 @@ namespace TaxComputationAPI.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
-
-            migrationBuilder.DropTable(
-                name: "AssetMapping");
-
-            migrationBuilder.DropTable(
-                name: "BalancingAdjustment");
-
-            migrationBuilder.DropTable(
-                name: "BalancingAdjustmentYearBought");
-
-            migrationBuilder.DropTable(
-                name: "Company");
-
-            migrationBuilder.DropTable(
-                name: "FinancialYear");
-
-            migrationBuilder.DropTable(
-                name: "FixedAsset");
-
-            migrationBuilder.DropTable(
-                name: "TrackTrialBalance");
-
-            migrationBuilder.DropTable(
-                name: "TrialBalance");
-
-            migrationBuilder.DropTable(
-                name: "TrialBalanceMapping");
 
             migrationBuilder.DropTable(
                 name: "UserCodes");

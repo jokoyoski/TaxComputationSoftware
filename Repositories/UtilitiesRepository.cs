@@ -283,7 +283,7 @@ namespace TaxComputationAPI.Repositories
                 throw new SystemException(e.Message);
             }
         }
-        
+
         public async Task DeleteAssetMappingAsync(AssetMapping assetMapping)
         {
 
@@ -326,16 +326,17 @@ namespace TaxComputationAPI.Repositories
         {
             decimal finalAmount = 0;
 
-            var result = default(IEnumerable<Amount>);
+            // var result = default(IEnumerable<Amount>);
 
 
             if (additionalInfo == "cost")
             {
-                
+
 
 
                 using (IDbConnection conn = await _databaseManager.DatabaseConnection())
                 {
+                    var result = default(IEnumerable<DebitAmount>);
                     if (conn.State == ConnectionState.Closed) conn.Open();
 
                     DynamicParameters parameters = new DynamicParameters();
@@ -345,7 +346,16 @@ namespace TaxComputationAPI.Repositories
 
                     try
                     {
-                        result = await conn.QueryAsync<Amount>("[dbo].[usp_Get_Amount_Debit]", parameters, commandType: CommandType.StoredProcedure);
+                        result = await conn.QueryAsync<DebitAmount>("[dbo].[usp_Get_Amount_Debit]", parameters, commandType: CommandType.StoredProcedure);
+                        //var record = await result.ReadAsync<Amount>();
+                        //var results = record.ToList();
+                        foreach (var item in result)
+                        {
+                            finalAmount += item.Debit;
+                            // return finalAmount;
+                        }
+
+                        return finalAmount;
                         conn.Close();
                     }
                     catch (Exception e)
@@ -355,15 +365,10 @@ namespace TaxComputationAPI.Repositories
                         throw e;
                     }
 
-                    result = result.ToList();
+
                 }
 
-                foreach (var item in result)
-                {
-                    finalAmount += item.amount;
-                }
 
-                return finalAmount;
 
             }
             else
@@ -380,8 +385,20 @@ namespace TaxComputationAPI.Repositories
 
                     try
                     {
-                        result = await conn.QueryAsync<Amount>("[dbo].[usp_Get_Amount_Credit]", parameters, commandType: CommandType.StoredProcedure);
+                        var result = await conn.QueryAsync<CreditAmount>("[dbo].[usp_Get_Amount_Credit]", parameters, commandType: CommandType.StoredProcedure);
+                        //var record = await result.ReadAsync<Amount>();
+                        //var results = record.ToList();
+                        foreach (var item in result)
+                        {
+                            finalAmount += item.Credit;
+                            //return finalAmount;
+                        }
+
                         conn.Close();
+                        return finalAmount;
+
+
+
                     }
                     catch (Exception e)
                     {
@@ -390,15 +407,11 @@ namespace TaxComputationAPI.Repositories
                         throw e;
                     }
 
-                    result = result.ToList();
+
                 }
 
-                foreach (var item in result)
-                {
-                    finalAmount += item.amount;
-                }
 
-                return finalAmount;
+
             }
 
 

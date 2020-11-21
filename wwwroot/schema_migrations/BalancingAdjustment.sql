@@ -14,7 +14,7 @@ BEGIN
     (
         [Id] [int] IDENTITY(1,1) NOT NULL,
         [AssetId] [int] NOT NULL,
-        [ComapnyId] [int] NOT NULL,
+        [CompanyId] [int] NOT NULL,
         [Year] [nvarchar](max) NULL,
         [DateCreated] [datetime2](7) NOT NULL,
         CONSTRAINT [PK_BalancingAdjustment] PRIMARY KEY CLUSTERED 
@@ -71,7 +71,7 @@ CREATE PROCEDURE [dbo].[usp_GetBalancingAdjustment_By_CompanyId_And_YearId](
 AS
 SELECT *
 FROM [dbo].[BalancingAdjustment]
-WHERE ComapnyId=@CompanyId AND Year=@Year
+WHERE CompanyId=@CompanyId AND Year=@Year
 GO
 
 
@@ -128,7 +128,7 @@ GO
 CREATE PROCEDURE [dbo].[usp_Insert_Balance_Adjustment](
     @Id int OUTPUT,
     @AssetId int,
-    @ComapnyId int,
+    @CompanyId int,
     @Year nvarchar (max),
     @DateCreated datetime2 (7)
 )
@@ -137,14 +137,14 @@ AS
 INSERT [dbo].[BalancingAdjustment]
 (
     AssetId,
-    ComapnyId,
+    CompanyId,
     Year,
     DateCreated
 )
 VALUES
 (
         @AssetId,
-        @ComapnyId,
+        @CompanyId,
         @Year,
         @DateCreated
 )

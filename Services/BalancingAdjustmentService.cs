@@ -273,7 +273,7 @@ namespace TaxComputationAPI.Services
                 {
                     AssetId = addBalanceAdjustmentDto.AssetId,
                     ComapnyId = addBalanceAdjustmentDto.CompanyId,
-                    DateCreated = DateTime.UtcNow,
+                    DateCreated = DateTime.Now,
                     Year = addBalanceAdjustmentDto.Year,
                 };
 
@@ -288,7 +288,8 @@ namespace TaxComputationAPI.Services
                     AnnualAllowance = annualCost,
                     SalesProceed = addBalanceAdjustmentDto.SalesProceed,
                     BalancingAdjustmentId = assetBalancing == null ? b3.Id : assetBalancing.Id,
-                    YearBought = addBalanceAdjustmentDto.YearBought
+                    YearBought = addBalanceAdjustmentDto.YearBought,
+                    DateCreated=DateTime.Now
                 };
 
                 if (balancingAdjustment.Item1 == BalancingAdjustment.BalancingAllowance) bb3.BalancingAllowance = balancingAdjustment.Item2;

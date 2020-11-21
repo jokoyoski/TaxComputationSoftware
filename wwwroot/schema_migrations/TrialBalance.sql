@@ -58,8 +58,8 @@ CREATE TABLE [dbo].[TrialBalanceMapping](
 	[Id] [int] IDENTITY(1,1) NOT NULL,
 	[TrialBalanceId] [int] NOT NULL,
 	[ModuleId] [int] NOT NULL,
-	[ModuleCode] [nvarchar](max) NULL,
-	[AdditionalInfo] [nvarchar](max) NULL,
+	[ModuleCode] [varchar](max) NULL,
+	[AdditionalInfo] [varchar](max) NULL,
  CONSTRAINT [PK_TrialBalanceMapping] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
@@ -316,7 +316,7 @@ END
 GO
 CREATE procedure [dbo].[usp_Get_Amount_Debit](
 @ModuleId int,
-@AdditionalInfo int
+@AdditionalInfo varchar(20)
 )
 AS
 
@@ -339,7 +339,7 @@ END
 GO
 CREATE procedure [dbo].[usp_Get_Amount_Credit](
 @ModuleId int,
-@AdditionalInfo int
+@AdditionalInfo varchar(20)
 )
 AS
 
@@ -347,4 +347,23 @@ select [dbo].[TrialBalance].Credit  from [dbo].[TrialBalanceMapping]
 inner join [dbo].[TrialBalance] on [dbo].[TrialBalanceMapping].TrialBalanceId = [dbo].[TrialBalance].Id
 where [dbo].[TrialBalanceMapping].ModuleId=@ModuleId and [dbo].[TrialBalanceMapping].AdditionalInfo=@AdditionalInfo
 order by [dbo].[TrialBalance].Credit DESC
+GO
+
+
+
+
+--------------------------------------- STORED PROCEDURE TO  GET ASSET MAPPING BY ASSETNAME -----------------------------------------
+IF OBJECT_ID('[dbo].[usp_Get_From_TrialBalanceMapping_With_TrialBalanceId]') IS nOT NULL
+BEGIN
+  DROP procedure [dbo].[usp_Get_From_TrialBalanceMapping_With_TrialBalanceId]
+END
+GO
+CREATE procedure [dbo].[usp_Get_From_TrialBalanceMapping_With_TrialBalanceId](
+  @TrialBalanceId int
+)
+AS
+
+select *
+from [dbo].[TrialBalanceMapping]
+where TrialBalanceId = @TrialBalanceId
 GO

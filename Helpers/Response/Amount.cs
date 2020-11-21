@@ -1,7 +1,13 @@
 namespace TaxComputationAPI.Helpers.Response
 {
-    public class Amount
+    public class DebitAmount
     {
-        public decimal amount {get;set;}
+        public decimal Debit {get;set;}
+    }
+
+
+    public class CreditAmount
+    {
+        public decimal Credit {get;set;}
     }
 }
