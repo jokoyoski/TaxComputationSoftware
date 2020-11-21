@@ -15,6 +15,7 @@ const TrialBalanceMappingTable = ({
 }) => {
   return (
     <DataTable
+      className="p-datatable-gridlines"
       value={tbData}
       paginator
       rows={10}

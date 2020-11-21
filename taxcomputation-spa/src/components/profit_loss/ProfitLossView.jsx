@@ -27,7 +27,7 @@ const ProfitLossView = () => {
   ]);
 
   return (
-    <DataTable value={plData} style={{ marginTop: 40 }}>
+    <DataTable className="p-datatable-gridlines" value={plData} style={{ marginTop: 40 }}>
       <Column field="category" header=""></Column>
       <Column field="total" header="Total"></Column>
     </DataTable>

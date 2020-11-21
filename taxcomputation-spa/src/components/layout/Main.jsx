@@ -33,7 +33,7 @@ const Main = ({
           assetClassSelectItems={assetClassSelectItems}
         />
       }
-      style={{ width: "100%" }}>
+      style={{ width: "100%", overflowX: "auto" }}>
       {children}
     </Card>
   );

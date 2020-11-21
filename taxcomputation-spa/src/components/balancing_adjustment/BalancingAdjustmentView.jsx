@@ -107,7 +107,10 @@ const BalancingAdjustmentView = ({ year }) => {
     );
 
   return (
-    <DataTable value={balancingAdjustmentData} style={{ marginTop: 40 }}>
+    <DataTable
+      className="p-datatable-gridlines"
+      value={balancingAdjustmentData}
+      style={{ marginTop: 40 }}>
       <Column field="category" header=""></Column>
       <Column field="credit" header=""></Column>
       <Column field="balancingAllowance" header="Balancing Allowance"></Column>
