@@ -1,53 +1,53 @@
 import React from "react";
-import ViewMode from "../components/common/ViewMode";
 import Layout from "../components/layout";
-import Main from "../components/layout/Main";
-import constants from "../constants";
+import ProfitAndLossView from "../components/profit_loss/ProfitAndLossView";
+import ViewMode from "../components/common/ViewMode";
 import utils from "../utils";
+import Main from "../components/layout/Main";
 import { usePathParam, useResource } from "react-resource-router";
-import FixedAssetMapping from "../components/fixed_asset/FixedAssetMapping";
-import { fixedAssetModuleClassResource, trialBalanceResource } from "../routes/resources";
+import constants from "../constants";
+import { profitandlossModuleClassResource, trialBalanceResource } from "../routes/resources";
+import { useResources } from "../store/ResourcesStore";
 import PageLoader from "../components/common/PageLoader";
 import Error from "../components/common/Error";
 import { Toast } from "primereact/toast";
-import { useResources } from "../store/ResourcesStore";
-import FixedAssetView from "../components/fixed_asset/FixedAssetView";
+import ProfitAndLossMapping from "../components/profit_loss/ProfitAndLossMapping";
 
-const FixedAsset = () => {
-  const title = constants.modules.fixedAsset;
+const ProfitAndLoss = () => {
+  const title = constants.modules.profit_loss;
   const toast = React.useRef();
   const { data: assetClass, error: assetClassError, refresh: assetClassRefresh } = useResource(
-    fixedAssetModuleClassResource
+    profitandlossModuleClassResource
   );
   const {
     data: trialBalance,
     error: trialBalanceError,
     refresh: trialBalanceRefresh
   } = useResource(trialBalanceResource);
+  const [tbData, setTbData] = React.useState([]);
   const [mode, setMode] = usePathParam("mode");
   const [year, setYear] = React.useState(utils.currentYear());
-  const [tbData, setTbData] = React.useState([]);
   const [assetClassSelectItems, setAssetClassSelectItems] = React.useState([]);
-  const [resources, { onTrialBalance, onFixedAssetModuleItems }] = useResources();
+  const [resources, { onTrialBalance, onProfitAndLossModuleItems }] = useResources();
   const yearSelectItems = utils.getYears(year => ({
     label: year.toString(),
     value: year.toString()
   }));
 
   React.useEffect(() => {
-    if (assetClass) onFixedAssetModuleItems(assetClass);
-  }, [assetClass, onFixedAssetModuleItems]);
+    if (assetClass) onProfitAndLossModuleItems(assetClass);
+  }, [assetClass, onProfitAndLossModuleItems]);
 
   React.useEffect(() => {
-    if (resources.fixedAssetModuleItems) {
+    if (resources.profitAndLossModuleItems) {
       setAssetClassSelectItems(
-        resources.fixedAssetModuleItems.map(({ id: assetClassId, name }) => ({
+        resources.profitAndLossModuleItems.map(({ id: assetClassId, name }) => ({
           label: name,
           value: assetClassId
         }))
       );
     }
-  }, [resources.fixedAssetModuleItems]);
+  }, [resources.profitAndLossModuleItems]);
 
   React.useEffect(() => {
     if (trialBalance) onTrialBalance(trialBalance);
@@ -63,7 +63,7 @@ const FixedAsset = () => {
   if (trialBalanceError)
     return <Error title={title} error={trialBalanceError} refresh={trialBalanceRefresh} />;
 
-  if (!resources.fixedAssetModuleItems || !resources.trialBalance)
+  if (!resources.profitAndLossModuleItems || !resources.trialBalance)
     return <PageLoader title={title} />;
 
   return (
@@ -78,7 +78,7 @@ const FixedAsset = () => {
         {
           {
             mapping: (
-              <FixedAssetMapping
+              <ProfitAndLossMapping
                 year={year}
                 setYear={setYear}
                 yearSelectItems={yearSelectItems}
@@ -90,7 +90,7 @@ const FixedAsset = () => {
             ),
             view: (
               <ViewMode title={title} year={year}>
-                <FixedAssetView year={year} />
+                <ProfitAndLossView />
               </ViewMode>
             )
           }[mode]
@@ -101,4 +101,4 @@ const FixedAsset = () => {
   );
 };
 
-export default FixedAsset;
+export default ProfitAndLoss;

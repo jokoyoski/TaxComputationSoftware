@@ -8,7 +8,7 @@ import { resetPassword } from "../apis/Authentication";
 import constants from "../constants";
 import { useAuth } from "../store/AuthStore";
 import { Link, Redirect, useRouter, useRouterActions } from "react-resource-router";
-import PasswordInput from "../components/common/PasswordInput";
+import PasswordController from "../components/controllers/PasswordController";
 import utils from "../utils";
 
 const ResetPassword = () => {
@@ -100,7 +100,7 @@ const ResetPassword = () => {
               rules={{ required: true }}
               defaultValue=""
               render={props => (
-                <PasswordInput
+                <PasswordController
                   placeholder="New Password"
                   value={props.value}
                   onChange={e => props.onChange(e.target.value)}

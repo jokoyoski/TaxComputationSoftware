@@ -2,7 +2,7 @@ import React from "react";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 
-const ProfitLossView = () => {
+const ProfitAndLossView = () => {
   const [plData] = React.useState([
     {
       category: "Revenue",
@@ -34,4 +34,4 @@ const ProfitLossView = () => {
   );
 };
 
-export default ProfitLossView;
+export default ProfitAndLossView;

@@ -3,13 +3,17 @@ import { createStore, createHook } from "react-sweet-state";
 const ResourcesStore = createStore({
   initialState: {
     companies: null,
-    moduleItems: null,
+    fixedAssetModuleItems: null,
+    profitAndLossModuleItems: null,
     trialBalance: null
   },
   actions: {
     initResource: initialState => ({ setState }) => setState(initialState),
     onCompanies: companies => ({ setState }) => setState({ companies }),
-    onModuleItems: moduleItems => ({ setState }) => setState({ moduleItems }),
+    onFixedAssetModuleItems: fixedAssetModuleItems => ({ setState }) =>
+      setState({ fixedAssetModuleItems }),
+    onProfitAndLossModuleItems: profitAndLossModuleItems => ({ setState }) =>
+      setState({ profitAndLossModuleItems }),
     onTrialBalance: trialBalance => ({ setState }) => setState({ trialBalance }),
     resetResources: () => ({ setState }) =>
       setState({

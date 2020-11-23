@@ -16,6 +16,12 @@ export const fixedAssetModuleClassResource = createResource({
   getData: () => getModuleItems({ moduleCode: "fixedasset" })
 });
 
+export const profitandlossModuleClassResource = createResource({
+  type: "PROFIT_AND_LOSS_MODULE_CLASS",
+  getKey: () => "profitandlossModuleClass",
+  getData: () => getModuleItems({ moduleCode: "profitandloss" })
+});
+
 export const trialBalanceResource = createResource({
   type: "TRIAL_BALANCE",
   getKey: () => "trialBalance",
