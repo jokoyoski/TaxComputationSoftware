@@ -24,6 +24,7 @@ namespace TaxComputationAPI.Helpers
             CreateMap<ItemsMapping, ItemsMappingDeleteDto>().ReverseMap();
             CreateMap<TaxComputationAPI.Models.BalancingAdjustmentYearBought, TaxComputationAPI.Response.YearBoughtAdjustment>().ReverseMap();
             CreateMap<ProfitAndLoss, ProfitAndLossDto>().ReverseMap();
+            CreateMap<ITLevy, ITLevyDto>().ReverseMap();
         }
     }
 }
