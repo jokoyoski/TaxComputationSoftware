@@ -76,6 +76,7 @@ const ProfitAndLossMapping = ({
           errors={errors}
           controllerName="profitAndLossId"
           label="Profit and Loss Item"
+          placeholder="Select Item"
           width={250}
           required
           dropdownOptions={assetClassSelectItems}

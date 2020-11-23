@@ -11,6 +11,7 @@ const DropdownController = ({
   required,
   otherRules,
   dropdownOptions,
+  placeholder,
   onChangeCallback,
   errorMessage = "",
   defaultValue = ""
@@ -28,6 +29,7 @@ const DropdownController = ({
             style={{ marginBottom: 5, width: width || 200 }}
             value={props.value}
             options={dropdownOptions}
+            placeholder={placeholder}
             onChange={e => {
               props.onChange(e.target.value);
               if (onChangeCallback) onChangeCallback(e.target.value);

@@ -19,3 +19,12 @@ export const profitAndLossMapping = async ({
     throw error;
   }
 };
+
+export const profitAndLossViewData = async ({ companyId, year }) => {
+  try {
+    const { data } = await axios.get(`/api/ProfitAndLoss/${companyId}/${year}`);
+    return data;
+  } catch (error) {
+    throw error;
+  }
+};

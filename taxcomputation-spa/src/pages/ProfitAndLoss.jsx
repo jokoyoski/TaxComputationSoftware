@@ -90,7 +90,7 @@ const ProfitAndLoss = () => {
             ),
             view: (
               <ViewMode title={title} year={year}>
-                <ProfitAndLossView />
+                <ProfitAndLossView year={year} />
               </ViewMode>
             )
           }[mode]
