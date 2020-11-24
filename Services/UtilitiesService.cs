@@ -124,13 +124,13 @@ namespace TaxComputationAPI.Services
                 moduleTypes.Add(new ModuleTypeDto
                 {
                     Id = 4,
-                    Name = "Other Operating Type"
+                    Name = "Operating Expenses"
                 });
 
                 moduleTypes.Add(new ModuleTypeDto
                 {
                     Id = 5,
-                    Name = "Operating Expenses"
+                    Name = "Other Operating Type"
                 });
             }
 

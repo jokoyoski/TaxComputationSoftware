@@ -95,7 +95,40 @@ namespace TaxComputationAPI.Repositories
 
                 try
                 {
-                    result = conn.QueryFirstOrDefault<TrialBalanceMapping>("[dbo].[usp_Get_From_TrialBalanceMapping_With_TrialBalanceId]", parameters, commandType: CommandType.StoredProcedure);
+                    result = conn.QueryFirstOrDefault<TrialBalanceMapping>("[dbo].[usp_Get_From_TrialBalance_With_TrialBalanceId]", parameters, commandType: CommandType.StoredProcedure);
+                    conn.Close();
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError($"{e.Message}");
+
+                    throw e;
+                }
+
+                return result;
+            }
+        }
+
+
+
+
+
+         public async Task<TrialBalance> GetTrialBalanceById(int trialBalanceId)
+        {
+            var result = default(TrialBalance);
+
+            using (IDbConnection conn = await _databaseManager.DatabaseConnection())
+            {
+                if (conn.State == ConnectionState.Closed) conn.Open();
+
+                DynamicParameters parameters = new DynamicParameters();
+
+                parameters.Add("@TrialBalanceId", trialBalanceId);
+                
+
+                try
+                {
+                    result = conn.QueryFirstOrDefault<TrialBalance>("[dbo].[usp_Get_From_TrialBalance_With_TrialBalanceId]", parameters, commandType: CommandType.StoredProcedure);
                     conn.Close();
                 }
                 catch (Exception e)

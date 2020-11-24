@@ -1,4 +1,3 @@
-
 PRINT('================================================Trial Balance Script Started==============================================')
 
 
@@ -366,4 +365,24 @@ AS
 select *
 from [dbo].[TrialBalanceMapping]
 where TrialBalanceId = @TrialBalanceId
+GO
+
+
+
+
+
+--------------------------------------- STORED PROCEDURE TO  GET ASSET MAPPING BY ASSETNAME -----------------------------------------
+IF OBJECT_ID('[dbo].[usp_Get_From_TrialBalance_With_TrialBalanceId]') IS nOT NULL
+BEGIN
+  DROP procedure [dbo].[usp_Get_From_TrialBalance_With_TrialBalanceId]
+END
+GO
+CREATE procedure [dbo].[usp_Get_From_TrialBalance_With_TrialBalanceId](
+  @TrialBalanceId int
+)
+AS
+
+select *
+from [dbo].[TrialBalance]
+where Id = @TrialBalanceId
 GO

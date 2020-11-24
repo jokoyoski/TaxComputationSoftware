@@ -16,5 +16,11 @@ namespace TaxComputationAPI.Helpers
            value=String.Concat(value.Where(c => !Char.IsWhiteSpace(c)));
            return $"₦{value}";
         }
+
+
+         public static decimal GetDecimal(object amount)
+        {
+           return Convert.ToDecimal(amount);
+        }
     }
 }

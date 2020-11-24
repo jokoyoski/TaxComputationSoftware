@@ -8,7 +8,7 @@ namespace TaxComputationAPI.Dtos
 
         public int ProfitAndLossId { get; set; }
 
-        public List<TrialBalance> TrialBalanceList { get; set; }
+        public List<TrialBalanceValue> TrialBalanceList { get; set; }
 
         public int CompanyId { get; set; }
 
@@ -20,10 +20,11 @@ namespace TaxComputationAPI.Dtos
 
 
 
-    public  class TrialBalance
+    public  class TrialBalanceValue
     {
-        public int TrialBalalnceId { get; set; }
+        public int TrialBalanceId { get; set; }
 
+        public bool  IsCredit { get; set; }
 
         public bool IsDebit { get; set; }
 
