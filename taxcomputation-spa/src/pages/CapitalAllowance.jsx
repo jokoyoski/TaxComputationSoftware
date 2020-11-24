@@ -19,7 +19,7 @@ const CapitalAllowance = () => {
   const { data: assetClass, error: assetClassError, refresh: assetClassRefresh } = useResource(
     fixedAssetModuleClassResource
   );
-  const [resources, { onModuleItems }] = useResources();
+  const [resources, { onFixedAssetModuleItems }] = useResources();
   const [mode, setMode] = usePathParam("mode");
   const [year, setYear] = React.useState(utils.currentYear());
   const [assetId, setAssetId] = React.useState();
@@ -30,8 +30,8 @@ const CapitalAllowance = () => {
   }));
 
   React.useEffect(() => {
-    if (assetClass) onModuleItems(assetClass);
-  }, [assetClass, onModuleItems]);
+    if (assetClass) onFixedAssetModuleItems(assetClass);
+  }, [assetClass, onFixedAssetModuleItems]);
 
   React.useEffect(() => {
     if (resources.moduleItems) {
