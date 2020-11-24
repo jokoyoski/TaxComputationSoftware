@@ -37,13 +37,13 @@ const CapitalAllowanceView = ({ assetId }) => {
               .map(capitalAllowance => ({
                 ...capitalAllowance,
                 taxYear: <strong>{capitalAllowance.taxYear}</strong>,
-                openingResidue: utils.currencyFormatter(capitalAllowance.openingResidue),
-                addition: utils.currencyFormatter(capitalAllowance.addition),
-                disposal: utils.currencyFormatter(capitalAllowance.disposal),
-                initial: utils.currencyFormatter(capitalAllowance.initial),
-                annual: utils.currencyFormatter(capitalAllowance.annual),
-                total: utils.currencyFormatter(capitalAllowance.total),
-                closingResidue: utils.currencyFormatter(capitalAllowance.closingResidue)
+                openingResidue: capitalAllowance.openingResidue,
+                addition: capitalAllowance.addition,
+                disposal: capitalAllowance.disposal,
+                initial: capitalAllowance.initial,
+                annual: capitalAllowance.annual,
+                total: capitalAllowance.total,
+                closingResidue: capitalAllowance.closingResidue
               }))
               .concat([
                 {
