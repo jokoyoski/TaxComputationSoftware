@@ -43,7 +43,7 @@ namespace TaxComputationAPI.Services
 
             }
 
-            var profitAndLoss = ComputeProfitAndLoss(value, createProfitAndLoss.CompanyId, createProfitAndLoss.Year, createProfitAndLoss.ProfitAndLossId);
+            var profitAndLoss = ComputeProfitAndLoss(value, createProfitAndLoss.CompanyId, createProfitAndLoss.YearId, createProfitAndLoss.ProfitAndLossId);
 
             await _profitAndLossRepository.UpdateProfitAndLoss(profitAndLoss);
         }

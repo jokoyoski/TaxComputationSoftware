@@ -61,9 +61,9 @@ namespace TaxComputationAPI.Controllers
             try
             {
                 var profitAndLoss = await _profitAndLossService.GetProfitAndLossByCompanyIdAndYear(companyId, yearId);
-                if (profitAndLoss.Count < 0)
+                if (profitAndLoss.Count <=0)
                 {
-                    return NotFound("No record Found!");
+                    return StatusCode (404, new { errors = new []{"Record not found at this time please try again later"} });
                 }
                 return Ok(profitAndLoss);
 

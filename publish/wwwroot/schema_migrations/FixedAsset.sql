@@ -1,4 +1,7 @@
-﻿IF OBJECT_ID('[dbo].[usp_Get_Fixed_Asset_By_CompanyId_And_YearId]') IS nOT NULL
+﻿
+--------------------------------------- STORED PROCEDURE TO  GET FIXED ASSET BY COMPANYID,YEARID-----------------------------------------
+
+IF OBJECT_ID('[dbo].[usp_Get_Fixed_Asset_By_CompanyId_And_YearId]') IS nOT NULL
 BEGIN
 DROP procedure [dbo].[usp_Get_Fixed_Asset_By_CompanyId_And_YearId]
 END
@@ -16,6 +19,9 @@ where [dbo].[FixedAsset].CompanyId=@CompanyId and [dbo].[FixedAsset].YearId=@Yea
 order by Id
 GO
 
+
+
+--------------------------------------- STORED PROCEDURE TO  GET FIXED ASSET BY COMPANYID,YEARID AND ASSETID-----------------------------------------
 
 
 IF OBJECT_ID('[dbo].[usp_Get_Fixed_Asset_By_CompanyId_And_YearId_AssetId]') IS nOT NULL

@@ -12,7 +12,7 @@ namespace TaxComputationAPI.Dtos
 
         public int CompanyId { get; set; }
 
-        public int Year { get; set; }
+        public int YearId { get; set; }
     }
 
 
