@@ -125,7 +125,7 @@ namespace TaxComputationAPI.Services
                      var trialBalanceMapping=await _trialBalanceRepository.GetTrialBalanceMappingRecordByTrialBalanceId(value);
                     if(trialBalanceMapping==null){
 
-                        if (fixedAsset.IsCost == true)
+                    if (fixedAsset.IsCost == true)
                     {
 
                         await _utilitiesRepository.AddTrialBalanceMapping(value, record.Id, "fixedasset", "cost");

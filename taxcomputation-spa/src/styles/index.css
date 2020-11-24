@@ -6,6 +6,27 @@ body {
   background-color: #f5f6f8;
 }
 
+/* The emerging W3C standard
+   that is currently Firefox-only */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(180, 180, 180) #f5f6f8;
+}
+
+/* Works on Chrome/Edge/Safari */
+*::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+*::-webkit-scrollbar-track {
+  background: #f5f6f8;
+}
+*::-webkit-scrollbar-thumb {
+  background-color: rgb(180, 180, 180);
+  border-radius: 20px;
+  border: 3px solid #f5f6f8;
+}
+
 .accent-color {
   color: #2196f3;
 }

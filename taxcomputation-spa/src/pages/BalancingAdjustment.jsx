@@ -20,7 +20,7 @@ const BalancingAdjustment = () => {
     fixedAssetModuleClassResource
   );
   const [mode, setMode] = usePathParam("mode");
-  const [resources, { onModuleItems }] = useResources();
+  const [resources, { onFixedAssetModuleItems }] = useResources();
   const [assetClassSelectItems, setAssetClassSelectItems] = React.useState([]);
   const [year, setYear] = React.useState(utils.currentYear());
   const yearSelectItems = utils.getYears(year => ({
@@ -29,8 +29,8 @@ const BalancingAdjustment = () => {
   }));
 
   React.useEffect(() => {
-    if (assetClass) onModuleItems(assetClass);
-  }, [assetClass, onModuleItems]);
+    if (assetClass) onFixedAssetModuleItems(assetClass);
+  }, [assetClass, onFixedAssetModuleItems]);
 
   React.useEffect(() => {
     if (resources.moduleItems) {

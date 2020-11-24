@@ -33,10 +33,8 @@ namespace TaxComputationAPI.Controllers
             try
             {
 
-
-               
-
-                 return Ok("saved successfully");
+                await _profitAndLossService.SaveProfitAndLoss(profitAndLoss);
+                return Ok("saved successfully");
 
             }
             catch (Exception ex)
@@ -62,50 +60,11 @@ namespace TaxComputationAPI.Controllers
             }
             try
             {
-                List<ProfitAndLossDto> profitAndLoss = new List<ProfitAndLossDto>();
-                profitAndLoss.Add(new ProfitAndLossDto
+                var profitAndLoss = await _profitAndLossService.GetProfitAndLossByCompanyIdAndYear(companyId, yearId);
+                if (profitAndLoss.Count <=0)
                 {
-
-                    Revenue = "3000",
-                    CostOfSales = "(300000)",
-                    GrossLoss = "(30585850.0)",
-                    OtherOperatingIncome = "0",
-                    OtherOperatingGain = "2900",
-                    OperatingExpense = "(202002020)",
-                    LossBeforeTaxation = "(27777)"
-
-
-                });
-
-                profitAndLoss.Add(new ProfitAndLossDto
-                {
-
-                    Revenue = "3000",
-                    CostOfSales = "(300000)",
-                    GrossLoss = "(30585850.0)",
-                    OtherOperatingIncome = "0",
-                    OtherOperatingGain = "2900",
-                    OperatingExpense = "(202002020)",
-                    LossBeforeTaxation = "(27777)"
-
-
-                });
-
-
-                profitAndLoss.Add(new ProfitAndLossDto
-                {
-
-                    Revenue = "3000",
-                    CostOfSales = "(300000)",
-                    GrossLoss = "(30585850.0)",
-                    OtherOperatingIncome = "0",
-                    OtherOperatingGain = "2900",
-                    OperatingExpense = "(202002020)",
-                    LossBeforeTaxation = "(27777)"
-
-
-                });
-               
+                    return StatusCode (404, new { errors = new []{"Record not found at this time please try again later"} });
+                }
                 return Ok(profitAndLoss);
 
             }

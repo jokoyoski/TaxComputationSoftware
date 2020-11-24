@@ -28,50 +28,34 @@ const FixedAsset = () => {
   const [year, setYear] = React.useState(utils.currentYear());
   const [tbData, setTbData] = React.useState([]);
   const [assetClassSelectItems, setAssetClassSelectItems] = React.useState([]);
-  const [resources, { onTrialBalance, onModuleItems }] = useResources();
+  const [resources, { onTrialBalance, onFixedAssetModuleItems }] = useResources();
   const yearSelectItems = utils.getYears(year => ({
     label: year.toString(),
     value: year.toString()
   }));
 
   React.useEffect(() => {
-    if (assetClass) onModuleItems(assetClass);
-  }, [assetClass, onModuleItems]);
+    if (assetClass) onFixedAssetModuleItems(assetClass);
+  }, [assetClass, onFixedAssetModuleItems]);
 
   React.useEffect(() => {
-    if (resources.moduleItems) {
+    if (resources.fixedAssetModuleItems) {
       setAssetClassSelectItems(
-        resources.moduleItems.map(({ id: assetClassId, name }) => ({
+        resources.fixedAssetModuleItems.map(({ id: assetClassId, name }) => ({
           label: name,
           value: assetClassId
         }))
       );
     }
-  }, [resources.moduleItems]);
+  }, [resources.fixedAssetModuleItems]);
 
   React.useEffect(() => {
     if (trialBalance) onTrialBalance(trialBalance);
   }, [onTrialBalance, trialBalance]);
 
   React.useEffect(() => {
-    if (resources.trialBalance) {
-      setTbData(
-        resources.trialBalance
-          ? resources.trialBalance
-              .filter(
-                d =>
-                  !(d.accountId === "" && d.item === "" && d.debit === 0 && d.credit === 0) &&
-                  !d.item.toLowerCase().includes("total")
-              )
-              .map(d => ({
-                ...d,
-                debitAmt: utils.currencyFormatter(d.debit),
-                creditAmt: utils.currencyFormatter(d.credit)
-              }))
-          : []
-      );
-    }
-  }, [resources.trialBalance]);
+    utils.onTbData(resources, setTbData);
+  }, [resources]);
 
   if (assetClassError)
     return <Error title={title} error={assetClassError} refresh={assetClassRefresh} />;
@@ -79,7 +63,8 @@ const FixedAsset = () => {
   if (trialBalanceError)
     return <Error title={title} error={trialBalanceError} refresh={trialBalanceRefresh} />;
 
-  if (!resources.moduleItems || !resources.trialBalance) return <PageLoader title={title} />;
+  if (!resources.fixedAssetModuleItems || !resources.trialBalance)
+    return <PageLoader title={title} />;
 
   return (
     <Layout title={title}>

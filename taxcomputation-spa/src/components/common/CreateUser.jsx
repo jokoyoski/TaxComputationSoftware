@@ -3,7 +3,7 @@ import { Card } from "primereact/card";
 import { Button } from "primereact/button";
 import { Toast } from "primereact/toast";
 import { useForm, Controller } from "react-hook-form";
-import PasswordInput from "./PasswordInput";
+import PasswordController from "../controllers/PasswordController";
 import constants from "../../constants";
 import { InputText } from "primereact/inputtext";
 import { addUser } from "../../apis/Users";
@@ -92,7 +92,7 @@ const CreateUser = ({ setShowCreateUser }) => {
               rules={{ required: true }}
               defaultValue=""
               render={props => (
-                <PasswordInput
+                <PasswordController
                   placeholder="Password"
                   autoComplete="new-password"
                   value={props.value}

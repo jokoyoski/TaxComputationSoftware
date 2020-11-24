@@ -93,16 +93,26 @@ const CapitalAllowanceView = ({ assetId }) => {
     );
 
   return (
-    <DataTable value={capitalAllowanceData} style={{ marginTop: 40 }}>
-      <Column field="taxYear" header="Tax Year"></Column>
-      <Column field="openingResidue" header="Opening Residue"></Column>
-      <Column field="addition" header="Addition"></Column>
-      <Column field="disposal" header="Disposal"></Column>
-      <Column field="initial" header="Initial"></Column>
-      <Column field="annual" header="Annual"></Column>
-      <Column field="total" header="Total"></Column>
-      <Column field="closingResidue" header="Closing Residue"></Column>
-      <Column field="yearsToGo" header="Yr to go"></Column>
+    <DataTable
+      className="p-datatable-gridlines"
+      value={capitalAllowanceData}
+      style={{ marginTop: 40, width: 1200 }}
+      scrollable>
+      <Column field="taxYear" header="Tax Year" headerStyle={{ width: "6em" }}></Column>
+      <Column
+        field="openingResidue"
+        header="Opening Residue"
+        headerStyle={{ width: "10em" }}></Column>
+      <Column field="addition" header="Addition" headerStyle={{ width: "10em" }}></Column>
+      <Column field="disposal" header="Disposal" headerStyle={{ width: "10em" }}></Column>
+      <Column field="initial" header="Initial" headerStyle={{ width: "10em" }}></Column>
+      <Column field="annual" header="Annual" headerStyle={{ width: "10em" }}></Column>
+      <Column field="total" header="Total" headerStyle={{ width: "10em" }}></Column>
+      <Column
+        field="closingResidue"
+        header="Closing Residue"
+        headerStyle={{ width: "10em" }}></Column>
+      <Column field="yearsToGo" header="Yr to go" headerStyle={{ width: "6em" }}></Column>
     </DataTable>
   );
 };

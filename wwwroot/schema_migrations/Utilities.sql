@@ -183,17 +183,3 @@ from [dbo].[AssetMapping]
 where AssetName = @AssetName
 GO
 
---------------------------------------- STORED PROCEDURE TO  CREATE PROFIT AND LOSS MAPPING -------------------------------------------------------
-IF NOT EXISTS(SELECT 1 FROM sysobjects WHERE type = 'U' and name = 'ProfitAndLossMapping')
-BEGIN
-   create table ProfitAndLossMapping(
-
- Id   int identity(1,1) NOT NULL ,
- Revenue   int,
- OtherIncome  int,
- CostOfSales   int,
- OtherOperatingIncome   int,
- OperatingExpense  int
- )
-END
-GO
