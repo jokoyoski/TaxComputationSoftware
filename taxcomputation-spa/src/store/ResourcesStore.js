@@ -18,7 +18,8 @@ const ResourcesStore = createStore({
     resetResources: () => ({ setState }) =>
       setState({
         companies: null,
-        moduleItems: null,
+        fixedAssetModuleItems: null,
+        profitAndLossModuleItems: null,
         trialBalance: null
       })
   },
