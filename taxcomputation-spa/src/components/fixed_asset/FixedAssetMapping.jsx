@@ -1,7 +1,5 @@
 import React from "react";
-import { Dropdown } from "primereact/dropdown";
 import { Button } from "primereact/button";
-import { InputText } from "primereact/inputtext";
 import { Checkbox } from "primereact/checkbox";
 import utils from "../../utils";
 import { Controller, useForm } from "react-hook-form";
@@ -9,6 +7,8 @@ import { useCompany } from "../../store/CompanyStore";
 import constants from "../../constants";
 import { fixedAssetMapping } from "../../apis/FixedAsset";
 import TrialBalanceMappingTable from "../common/TrialBalanceMappingTable";
+import DropdownController from "../controllers/DropdownController";
+import InputController from "../controllers/InputController";
 
 const FixedAssetMapping = ({
   year,
@@ -143,164 +143,87 @@ const FixedAssetMapping = ({
     <>
       <form className="p-d-flex p-flex-column p-jc-between" onSubmit={handleSubmit(onSubmit)}>
         <div className="p-d-flex p-ai-start p-jc-between" style={{ marginBottom: 20 }}>
-          <div className="p-d-flex p-flex-column">
-            <p style={{ marginBottom: 5, marginTop: 0 }}>Fixed Asset Class</p>
-            <Controller
-              name="assetClass"
-              control={control}
-              rules={{ required: true }}
-              defaultValue=""
-              render={props => (
-                <Dropdown
-                  style={{ marginBottom: 5, width: 200 }}
-                  value={props.value}
-                  options={assetClassSelectItems}
-                  onChange={e => props.onChange(e.target.value)}
-                />
-              )}
-            />
-            {errors.assetClass && (
-              <span style={{ fontSize: 12, color: "red" }}>Fixed Asset Class is required</span>
-            )}
-          </div>
-          <div className="p-d-flex p-flex-column">
-            <p style={{ marginBottom: 5, marginTop: 0 }}>Cost / Depreciation</p>
-            <Controller
-              name="assetType"
-              control={control}
-              rules={{ required: true }}
-              defaultValue=""
-              render={props => (
-                <Dropdown
-                  style={{ marginBottom: 5, width: 200 }}
-                  value={props.value}
-                  options={typeSelectItems}
-                  onChange={e => {
-                    props.onChange(e.target.value);
-                    setSelectedAssetType(e.target.value);
-                  }}
-                />
-              )}
-            />
-            {errors.assetType && (
-              <span style={{ fontSize: 12, color: "red" }}>Fixed Asset Type is required</span>
-            )}
-          </div>
-          <div className="p-d-flex p-flex-column">
-            <p style={{ marginBottom: 5, marginTop: 0 }}>Year</p>
-            <Controller
-              name="year"
-              control={control}
-              rules={{ required: true }}
-              defaultValue={year}
-              render={_ => (
-                <Dropdown
-                  style={{ marginBottom: 5, width: 200 }}
-                  value={year}
-                  options={yearSelectItems}
-                  onChange={e => setYear(e.target.value)}
-                  placeholder="Year"
-                />
-              )}
-            />
-            {errors.year && <span style={{ fontSize: 12, color: "red" }}>Year is required</span>}
-          </div>
-          <div className="p-d-flex p-flex-column">
-            <p style={{ marginBottom: 5, marginTop: 0 }}>Closing Balance</p>
-            <Controller
-              name="closingBalance"
-              control={control}
-              defaultValue={closingBalanceAmt}
-              render={_ => (
-                <InputText
-                  disabled
-                  style={{ width: 200 }}
-                  placeholder="Closing Balance"
-                  value={closingBalanceAmt}
-                />
-              )}
-            />
-          </div>
+          <DropdownController
+            Controller={Controller}
+            control={control}
+            errors={errors}
+            controllerName="assetClass"
+            label="Fixed Asset Class"
+            required
+            dropdownOptions={assetClassSelectItems}
+            errorMessage="Fixed Asset Class is required"
+          />
+          <DropdownController
+            Controller={Controller}
+            control={control}
+            errors={errors}
+            controllerName="assetType"
+            label="Cost / Depreciation"
+            required
+            dropdownOptions={typeSelectItems}
+            onChangeCallback={setSelectedAssetType}
+            errorMessage="Fixed Asset Type is required"
+          />
+          <DropdownController
+            Controller={Controller}
+            control={control}
+            errors={errors}
+            controllerName="year"
+            label="Year"
+            required
+            dropdownOptions={yearSelectItems}
+            onChangeCallback={setYear}
+            errorMessage="Year is required"
+            defaultValue={year}
+          />
+          <InputController
+            Controller={Controller}
+            control={control}
+            errors={errors}
+            controllerName="closingBalance"
+            label="Closing Balance"
+            disabled
+            placeholder="Closing Balance"
+            defaultValue={closingBalanceAmt}
+          />
         </div>
         <div className="p-d-flex p-ai-start p-jc-between">
-          <div className="p-d-flex p-flex-column">
-            <p style={{ marginBottom: 5, marginTop: 0 }}>Opening Balance</p>
-            <Controller
-              name="openingBalance"
-              control={control}
-              rules={{ required: true }}
-              defaultValue=""
-              render={props => (
-                <InputText
-                  style={{ width: 200 }}
-                  value={props.value}
-                  onChange={e => props.onChange(e.target.value)}
-                />
-              )}
-            />
-            {errors.openingBalance && (
-              <span style={{ fontSize: 12, color: "red" }}>Opening Balance is required</span>
-            )}
-          </div>
-          <div className="p-d-flex p-flex-column">
-            <p style={{ marginBottom: 5, marginTop: 0 }}>
-              {selectedAssetType === "depreciation" ? "Charge per year" : "Addition"}
-            </p>
-            <Controller
-              name="addition"
-              control={control}
-              rules={{ required: true }}
-              defaultValue=""
-              render={props => (
-                <InputText
-                  style={{ width: 200 }}
-                  value={props.value}
-                  onChange={e => props.onChange(e.target?.value)}
-                />
-              )}
-            />
-            {errors.addition && (
-              <span style={{ fontSize: 12, color: "red" }}>Addition is required</span>
-            )}
-          </div>
-          <div className="p-d-flex p-flex-column">
-            <p style={{ marginBottom: 5, marginTop: 0 }}>Disposal</p>
-            <Controller
-              name="disposal"
-              control={control}
-              rules={{ required: true }}
-              defaultValue=""
-              render={props => (
-                <InputText
-                  style={{ width: 200 }}
-                  value={props.value}
-                  onChange={e => props.onChange(e.target?.value)}
-                />
-              )}
-            />
-            {errors.disposal && (
-              <span style={{ fontSize: 12, color: "red" }}>Disposal is required</span>
-            )}
-          </div>
-          <div className="p-d-flex p-flex-column">
-            <p style={{ marginBottom: 5, marginTop: 0 }}>Transfer</p>
-            <Controller
-              name="transfer"
-              control={control}
-              rules={{ required: true }}
-              defaultValue=""
-              render={props => (
-                <InputText
-                  style={{ width: 200 }}
-                  value={props.value}
-                  onChange={e => props.onChange(e.target?.value)}
-                />
-              )}
-            />
-            {errors.transfer && (
-              <span style={{ fontSize: 12, color: "red" }}>Transfer is required</span>
-            )}
-          </div>
+          <InputController
+            Controller={Controller}
+            control={control}
+            errors={errors}
+            controllerName="openingBalance"
+            label="Opening Balance"
+            required
+            errorMessage="Opening Balance is required"
+          />
+          <InputController
+            Controller={Controller}
+            control={control}
+            errors={errors}
+            controllerName="addition"
+            label={selectedAssetType === "depreciation" ? "Charge per year" : "Addition"}
+            required
+            errorMessage="Addition is required"
+          />
+          <InputController
+            Controller={Controller}
+            control={control}
+            errors={errors}
+            controllerName="disposal"
+            label="Disposal"
+            required
+            errorMessage="Disposal is required"
+          />
+          <InputController
+            Controller={Controller}
+            control={control}
+            errors={errors}
+            controllerName="transfer"
+            label="Transfer"
+            required
+            errorMessage="Transfer is required"
+          />
         </div>
         <div className="p-d-flex p-flex-column" style={{ marginTop: 20 }}>
           <div className="p-field-checkbox">

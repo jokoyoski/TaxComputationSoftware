@@ -1,7 +1,7 @@
 import React from "react";
 import { InputText } from "primereact/inputtext";
 
-const PasswordInput = ({ placeholder, autoComplete, value, onChange }) => {
+const PasswordController = ({ placeholder, autoComplete, value, onChange }) => {
   const [passwordReveal, setPasswordReveal] = React.useState(false);
 
   React.useEffect(() => setPasswordReveal(state => (!value ? false : state)), [value]);
@@ -31,4 +31,4 @@ const PasswordInput = ({ placeholder, autoComplete, value, onChange }) => {
   );
 };
 
-export default PasswordInput;
+export default PasswordController;

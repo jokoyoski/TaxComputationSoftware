@@ -168,7 +168,7 @@ const FixedAssetView = ({ year }) => {
   if (loading) return <Loader />;
 
   return (
-    <DataTable value={fixedAssetData} style={{ marginTop: 40 }}>
+    <DataTable className="p-datatable-gridlines" value={fixedAssetData} style={{ marginTop: 40 }}>
       <Column field="category" header=""></Column>
       {fixedAssetApiData &&
         fixedAssetApiData.map(d => (

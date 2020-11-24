@@ -4,7 +4,7 @@ import { Button } from "primereact/button";
 import { Toast } from "primereact/toast";
 import { useForm, Controller } from "react-hook-form";
 import { useRouter } from "react-resource-router";
-import PasswordInput from "./PasswordInput";
+import PasswordController from "../controllers/PasswordController";
 import { changePassword } from "../../apis/Authentication";
 import constants from "../../constants";
 import { useAuth } from "../../store/AuthStore";
@@ -82,7 +82,7 @@ const ChangePassword = ({ setShowChangePassword }) => {
               rules={{ required: true }}
               defaultValue=""
               render={props => (
-                <PasswordInput
+                <PasswordController
                   placeholder="Current Password"
                   value={props.value}
                   onChange={e => props.onChange(e.target.value)}
@@ -100,7 +100,7 @@ const ChangePassword = ({ setShowChangePassword }) => {
               rules={{ required: true }}
               defaultValue=""
               render={props => (
-                <PasswordInput
+                <PasswordController
                   placeholder="New Password"
                   value={props.value}
                   onChange={e => props.onChange(e.target.value)}

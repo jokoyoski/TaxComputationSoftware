@@ -12,12 +12,13 @@ import ITLevy from "../pages/ITLevy";
 import Login from "../pages/Login";
 import MinimumTax from "../pages/MinimumTax";
 import NotFound from "../pages/NotFound";
-import ProfitLoss from "../pages/ProfitLoss";
+import ProfitAndLoss from "../pages/ProfitAndLoss";
 import ResetPassword from "../pages/ResetPassword";
 import RouteGuard from "../RouteGuard";
 import {
   companiesResource,
   fixedAssetModuleClassResource,
+  profitandlossModuleClassResource,
   trialBalanceResource
 } from "./resources";
 
@@ -66,8 +67,8 @@ export const routes = [
     path: `${constants.routes.profit_loss}${modePathParam}`,
     name: "PROFIT_LOSS",
     exact: true,
-    component: RouteGuard(ProfitLoss)
-    //resources: [aboutResource],
+    component: RouteGuard(ProfitAndLoss),
+    resources: [profitandlossModuleClassResource, trialBalanceResource]
   },
   {
     path: `${constants.routes.income_tax}${modePathParam}`,
