@@ -34,21 +34,21 @@ const CapitalAllowance = () => {
   }, [assetClass, onFixedAssetModuleItems]);
 
   React.useEffect(() => {
-    if (resources.moduleItems) {
+    if (resources.fixedAssetModuleItems) {
       setAssetClassSelectItems(
-        resources.moduleItems.map(({ id: assetClassId, name }) => ({
+        resources.fixedAssetModuleItems.map(({ id: assetClassId, name }) => ({
           label: name,
           value: assetClassId
         }))
       );
-      setAssetId(resources.moduleItems[0].id);
+      setAssetId(resources.fixedAssetModuleItems[0].id);
     }
-  }, [resources.moduleItems]);
+  }, [resources.fixedAssetModuleItems]);
 
   if (assetClassError)
     return <Error title={title} error={assetClassError} refresh={assetClassRefresh} />;
 
-  if (!resources.moduleItems) return <PageLoader title={title} />;
+  if (!resources.fixedAssetModuleItems) return <PageLoader title={title} />;
 
   return (
     <Layout title={title}>
