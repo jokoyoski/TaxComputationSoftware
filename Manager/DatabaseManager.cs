@@ -59,6 +59,7 @@ namespace TaxComputationAPI.Manager
                         {
                             new SqlCommand(commandString, conn).ExecuteNonQuery();
                         }
+                        
                     }
 
                 }

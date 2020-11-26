@@ -60,7 +60,7 @@ namespace TaxComputationAPI.Controllers
                 }
                 var record = await _capitalAllowanceService.GetCapitalAllowance(assetId, companyId);
                
-                if (record.capitalAllowances.Count <= 0) {
+                if (record.capitalAllowances==null) {
                     return NotFound(new { errors = new[] { "Record not found!!!" } });
                 }
                 return Ok(record);
