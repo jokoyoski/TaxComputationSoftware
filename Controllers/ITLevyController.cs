@@ -14,10 +14,12 @@ namespace TaxComputationAPI.Controllers
     [ApiController]
     public class ITLevyController : ControllerBase
     {
+        private readonly ILogger<ITLevyController> _logger;
         private readonly IProfitAndLossService _profitAndLossService;
-        public ITLevyController(IProfitAndLossService profitAndLossService)
+        public ITLevyController(IProfitAndLossService profitAndLossService, ILogger<ITLevyController> logger)
         {
             _profitAndLossService = profitAndLossService;
+            _logger = logger;
         }
     }
 }
