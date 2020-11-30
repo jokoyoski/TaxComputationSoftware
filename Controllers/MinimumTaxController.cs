@@ -3,27 +3,25 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using TaxComputationAPI.Dtos;
 using TaxComputationAPI.Interfaces;
 
 namespace TaxComputationAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ITLevyController : ControllerBase
+    public class MinimumTaxController : ControllerBase
     {
         private readonly ILogger<ITLevyController> _logger;
         private readonly IProfitAndLossService _profitAndLossService;
-        private readonly IITLevyService _itLevyService;
-        public ITLevyController(IProfitAndLossService profitAndLossService, IITLevyService itLevyService, ILogger<ITLevyController> logger)
+        private readonly IMinimumTaxService _minimumTaxService;
+        public MinimumTaxController(IProfitAndLossService profitAndLossService, IMinimumTaxService minimumTaxService, ILogger<ITLevyController> logger)
         {
             _profitAndLossService = profitAndLossService;
-            _itLevyService = itLevyService;
+            _minimumTaxService = minimumTaxService;
             _logger = logger;
         }
 
@@ -38,8 +36,8 @@ namespace TaxComputationAPI.Controllers
             }
             try
             {
-                var itLevy = await _itLevyService.GetITLevyByCompanyIdAndYear(companyId, yearId);
-                
+                var itLevy = await _minimumTaxService.GetMinimumTaxByCompanyIdAndYear(companyId, yearId);
+
                 return Ok(itLevy);
 
             }
