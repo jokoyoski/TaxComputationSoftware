@@ -14,3 +14,4 @@ namespace TaxComputationAPI.Interfaces
         Task SaveProfitAndLoss(CreateProfitAndLoss createProfitAndLoss);
     }
 }
+ 
