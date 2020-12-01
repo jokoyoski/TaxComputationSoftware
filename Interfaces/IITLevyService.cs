@@ -8,6 +8,6 @@ namespace TaxComputationAPI.Interfaces
 {
     public interface IITLevyService
     {
-        Task<decimal> GetITLevyByCompanyIdAndYear(int companyId, int yearId);
+        Task<ITLevyViewDto> GetITLevyByCompanyIdAndYear(int companyId, int yearId);
     }
 }

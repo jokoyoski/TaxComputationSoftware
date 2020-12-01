@@ -2,20 +2,21 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TaxComputationAPI.Dtos;
 using TaxComputationAPI.Interfaces;
 
 namespace TaxComputationAPI.Services
 {
     public class MinimumTaxService : IMinimumTaxService
     {
-        public async Task<decimal> GetMinimumTaxByCompanyIdAndYear(int companyId, int yearId)
+
+        private readonly IMinimumTaxRepository _minimumTaxRepository;
+
+        public MinimumTaxService(IMinimumTaxRepository minimumTaxRepository) => _minimumTaxRepository = minimumTaxRepository;
+        public async Task<MinimumTaxViewDto> GetMinimumTaxByCompanyIdAndYear(int companyId, int yearId)
         {
-
-
-            decimal turnover = 0;
-            decimal onePercentTurnover = turnover * 1 / 100;
-
-            return onePercentTurnover;
+            var record = await _minimumTaxRepository.GetMinimumTaxByCompanyIdAndYearId(companyId, yearId);
+            return record;
         }
     }
 }

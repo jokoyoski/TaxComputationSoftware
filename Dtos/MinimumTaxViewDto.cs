@@ -7,7 +7,6 @@ namespace TaxComputationAPI.Dtos
 {
     public class MinimumTaxViewDto
     {
-        public string Item { get; set; }
         public int CompanyId { get; set; }
         public int YearId { get; set; }
 

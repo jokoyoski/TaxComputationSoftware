@@ -9,14 +9,13 @@ namespace TaxComputationAPI.Services
 {
     public class ITLevyService : IITLevyService
     {
-        public async Task<decimal> GetITLevyByCompanyIdAndYear(int companyId, int yearId)
+        private readonly IITLevyRepository _iTLevyRepository;
+
+        public ITLevyService(IITLevyRepository iTLevyRepository) => _iTLevyRepository = iTLevyRepository;
+        public async Task<ITLevyViewDto> GetITLevyByCompanyIdAndYear(int companyId, int yearId)
         {
-
-
-            decimal turnover = 0;
-            decimal fivePercentTurnover = turnover * 5 / 100;
-
-            return fivePercentTurnover;
+            var record = await _iTLevyRepository.GetITLevyByCompanyIdAndYearId(companyId, yearId);
+            return record;
         }
     }
 }
