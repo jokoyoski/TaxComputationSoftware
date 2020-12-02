@@ -26,15 +26,7 @@ namespace TaxComputationAPI
 {
     public class Startup
     {
-        public  Startup(IWebHostEnvironment env){
-          var builder= new ConfigurationBuilder();
-
-          if(env.IsDevelopment()){
-          builder.SetBasePath(env.ContentRootPath).AddJsonFile("appsettings.json",optional:true, reloadOnChange:true);
-          }
-          builder.AddEnvironmentVariables();
-         _configuration=builder.Build();
-        }
+        
         private readonly IConfiguration _configuration;
         public Startup(IConfiguration configuration)
         {
