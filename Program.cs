@@ -32,7 +32,7 @@ namespace TaxComputationAPI
                     var roleManager = services.GetRequiredService<RoleManager<Role>>();
                     context.Database.Migrate();
                     Seed.SeedUsers(userManager, roleManager);
-                    dbContext.UpdateProcedure();
+                  //  dbContext.UpdateProcedure();
                   
                }
                catch (Exception ex)
