@@ -103,6 +103,10 @@ namespace TaxComputationAPI
             services.AddScoped<ICapitalAllowanceRepository, CapitalAllowanceRepository>();
             services.AddScoped<IProfitAndLossService, ProfitAndLossService>();
             services.AddScoped<IProfitAndLossRepository, ProfitAndLossRepository>();
+            services.AddScoped<IMinimumTaxRepository, MinimumTaxRepository>();
+            services.AddScoped<IMinimumTaxService, MinimumTaxService>();
+            services.AddScoped<IITLevyRepository, ITLevyRepository>();
+            services.AddScoped<IITLevyService, ITLevyService>();
             services.AddSingleton<DatabaseManager>();
             services.Configure<ConnectionString>(_configuration.GetSection("ConnectionString"));
             services.AddDbContext<DataContext>(options => options.UseSqlServer(_configuration.GetConnectionString("DefaultConnection")));
