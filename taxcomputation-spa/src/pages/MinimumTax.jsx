@@ -26,7 +26,7 @@ const MinimumTax = () => {
         setYear={setYear}
         yearSelectItems={yearSelectItems}>
         <ViewMode title={title} year={year}>
-          <MinimumTaxView />
+          <MinimumTaxView year={year} />
         </ViewMode>
       </Main>
     </Layout>
