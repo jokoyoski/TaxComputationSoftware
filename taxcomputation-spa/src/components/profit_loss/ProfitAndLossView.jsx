@@ -13,6 +13,8 @@ const ProfitAndLossView = ({ year }) => {
   const [profitAndLossApiData, setProfitAndLossApiData] = React.useState([]);
 
   React.useEffect(() => {
+    if (!companyId) return;
+
     isMounted.current = true;
     const fetchProfitAndLossViewData = async () => {
       try {
