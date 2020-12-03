@@ -127,6 +127,15 @@ const FixedAssetMapping = ({
         );
       }
     } catch (error) {
+      if (error.response.data.errors) {
+        toast.show(
+          utils.toastCallback({
+            severity: "error",
+            detail: error.response.data.errors[0]
+          })
+        );
+        return;
+      }
       toast.show(
         utils.toastCallback({
           severity: "error",
