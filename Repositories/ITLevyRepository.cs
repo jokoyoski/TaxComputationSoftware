@@ -12,16 +12,8 @@ namespace TaxComputationAPI.Repositories
     {
         public async Task<ITLevyViewDto> GetITLevyByCompanyIdAndYearId(int companyId, int yearId)
         {
-            try
-            {
-                return new ITLevyViewDto { CompanyId = 1, YearId = 2020, turnOver = 10,  fivePercentTurnOver = 10 };
-            }
-            catch (Exception ex)
-            {
-
-            }
-
-            return new ITLevyViewDto { CompanyId = 1, YearId = 2020, turnOver = 10, fivePercentTurnOver = 10 };
+           
+            return new ITLevyViewDto { ProfitBeforeTaxation="30000.30", ITLevyAt1PercentThereIn="300.23"};
         }
     }
 }

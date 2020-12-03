@@ -7,11 +7,7 @@ namespace TaxComputationAPI.Dtos
 {
     public class ITLevyViewDto
     {
-        public int CompanyId { get; set; }
-        public int YearId { get; set; }
-
-        public decimal turnOver { get; set; }
-
-        public decimal fivePercentTurnOver { get; set; }
+        public string ProfitBeforeTaxation { get; set; }
+        public string ITLevyAt1PercentThereIn { get; set; }
     }
 }

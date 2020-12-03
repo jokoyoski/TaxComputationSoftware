@@ -95,7 +95,7 @@ namespace TaxComputationAPI.Repositories
 
                 try
                 {
-                    result = conn.QueryFirstOrDefault<TrialBalanceMapping>("[dbo].[usp_Get_From_TrialBalance_With_TrialBalanceId]", parameters, commandType: CommandType.StoredProcedure);
+                    result = conn.QueryFirstOrDefault<TrialBalanceMapping>("[dbo].[usp_Get_From_TrialBalanceMapping_With_TrialBalanceId]", parameters, commandType: CommandType.StoredProcedure);
                     conn.Close();
                 }
                 catch (Exception e)
@@ -110,7 +110,7 @@ namespace TaxComputationAPI.Repositories
         }
 
 
-
+        
 
 
          public async Task<TrialBalance> GetTrialBalanceById(int trialBalanceId)

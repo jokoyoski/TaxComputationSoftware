@@ -50,7 +50,8 @@ namespace TaxComputationAPI.Services
             var disposal = 0;
 
             decimal initial = addition * assetDetails.Initial / 100;
-            var annual = addition - initial / totalNoOfYears;
+            var value=addition - initial ;
+            var annual = value/ totalNoOfYears;
             var total = initial + annual;
             var closingResidue = addition - total;
             var remianingYears = totalNoOfYears - 1;
@@ -90,7 +91,8 @@ namespace TaxComputationAPI.Services
 
             var residueValue = residue;
             var previousRecord = await _capitalAllowanceRepository.GetCapitalAllowanceByAssetIdYear(assetId, companyId, year);
-            decimal openingValue = previousRecord.OpeningResidue - residue;
+            if(previousRecord!=null){
+             decimal openingValue = previousRecord.OpeningResidue - residue;
             decimal closingValue = openingValue - previousRecord.Total;
             var capitalAllowance = new CapitalAllowance
             {
@@ -106,6 +108,10 @@ namespace TaxComputationAPI.Services
 
             return await _capitalAllowanceRepository.UpdateCapitalAllowanceBybalancingAdjustment(capitalAllowance);
 
+            }
+
+            return 0;
+            
         }
 
 

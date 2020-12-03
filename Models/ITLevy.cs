@@ -9,8 +9,7 @@ namespace TaxComputationAPI.Models
     {
         [Key]
         public int Id { get; set; }
-
-        public decimal turnover { get; set; }
-        public decimal fivePercentTurnover { get; set; }
+        public decimal ProfitBeforeTaxation { get; set; }
+        public decimal ITLevyAt1PercentThereIn { get; set; }
     }
 }

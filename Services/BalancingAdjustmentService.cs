@@ -208,6 +208,7 @@ namespace TaxComputationAPI.Services
                     if (balancingAdjustment.Item1 == BalancingAdjustment.BalancingCharge) bb1.BalancingCharge = balancingAdjustment.Item2;
 
                     var ba1 = await _balancingAdjustmentRepository.SaveBalancingAdjustmentYeatBought(bb1);
+                    await  _capitalAllowanceService.SaveCapitalAllowanceFromBalancingAdjustment(residue, addBalanceAdjustmentDto.YearBought, addBalanceAdjustmentDto.CompanyId, addBalanceAdjustmentDto.AssetId);
 
                     return new AddBalancingAdjustmentResponse
                     {
@@ -251,6 +252,7 @@ namespace TaxComputationAPI.Services
                     if (balancingAdjustment.Item1 == BalancingAdjustment.BalancingCharge) bb2.BalancingCharge = balancingAdjustment.Item2;
 
                     var ba2 = await _balancingAdjustmentRepository.SaveBalancingAdjustmentYeatBought(bb2);
+                    await  _capitalAllowanceService.SaveCapitalAllowanceFromBalancingAdjustment(residue, addBalanceAdjustmentDto.YearBought, addBalanceAdjustmentDto.CompanyId, addBalanceAdjustmentDto.AssetId);
 
                    return new AddBalancingAdjustmentResponse
                    {
@@ -297,7 +299,7 @@ namespace TaxComputationAPI.Services
                 if (balancingAdjustment.Item1 == BalancingAdjustment.BalancingCharge) bb3.BalancingCharge = balancingAdjustment.Item2;
 
                 var ba3 = await _balancingAdjustmentRepository.SaveBalancingAdjustmentYeatBought(bb3);
-               await  _capitalAllowanceService.SaveCapitalAllowanceFromBalancingAdjustment(residue, addBalanceAdjustmentDto.Year, addBalanceAdjustmentDto.CompanyId, addBalanceAdjustmentDto.AssetId);
+               await  _capitalAllowanceService.SaveCapitalAllowanceFromBalancingAdjustment(residue, addBalanceAdjustmentDto.YearBought, addBalanceAdjustmentDto.CompanyId, addBalanceAdjustmentDto.AssetId);
 
                 return new AddBalancingAdjustmentResponse
                 {

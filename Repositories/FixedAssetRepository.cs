@@ -125,7 +125,7 @@ namespace TaxComputationAPI.Repositories
                 parameters.Add("@TransferDepreciation", fixedAssetDto.TransferDepreciation);
                 parameters.Add("@DepreciationAddition", fixedAssetDto.DepreciationAddition);
                 parameters.Add("@DepreciationDisposal", fixedAssetDto.DepreciationDisposal);
-                parameters.Add("@type", "Cost");
+                parameters.Add("@type", "Costdd");
                 parameters.Add("@IsTransferDepreciationRemoved", fixedAssetDto.IsTransferDepreciationRemoved);
                 int rowAffected = con.Execute("[dbo].[usp_Insert_Fixed_Asset]", parameters, commandType: CommandType.StoredProcedure);
                 return rowAffected;

@@ -118,40 +118,42 @@ namespace TaxComputationAPI.Services
                     await _capitalAllowanceService.SaveCapitalAllowanceFromFixedAsset(fixedAsset.CostAddition, fixedAsset.YearId.ToString(), fixedAsset.CompanyId, fixedAsset.AssetId);
 
                 }
-                var record=await _fixedAssetRepository.GetFixedAssetsByCompanyYearIdAssetId(fixedAsset.CompanyId,fixedAsset.YearId,fixedAsset.AssetId);
-               
+                var record = await _fixedAssetRepository.GetFixedAssetsByCompanyYearIdAssetId(fixedAsset.CompanyId, fixedAsset.YearId, fixedAsset.AssetId);
+
                 foreach (var value in fixedAsset.TriBalanceId)
                 {
-                     var trialBalanceMapping=await _trialBalanceRepository.GetTrialBalanceMappingRecordByTrialBalanceId(value);
-                    if(trialBalanceMapping==null){
-
-                    if (fixedAsset.IsCost == true)
+                    var trialBalanceMapping = await _trialBalanceRepository.GetTrialBalanceMappingRecordByTrialBalanceId(value);
+                    if (trialBalanceMapping == null)
                     {
 
-                        await _utilitiesRepository.AddTrialBalanceMapping(value, record.Id, "fixedasset", "cost");
+                        if (fixedAsset.IsCost == true)
+                        {
+
+                            await _utilitiesRepository.AddTrialBalanceMapping(value, record.Id, "fixedasset", "cost");
+                        }
+                        else
+                        {
+
+                            await _utilitiesRepository.AddTrialBalanceMapping(value, record.Id, "fixedasset", "depreciation");
+
+                        }
+
+
+
                     }
-                    else
-                    {
 
-                        await _utilitiesRepository.AddTrialBalanceMapping(value, record.Id, "fixedasset", "depreciation");
-
-                    }
-
-
-
-                    }
-                    
                 }
 
             }
             else
             {
                 var result = await _fixedAssetRepository.SaveFixedAsset(fixedAsset);
-                 if(fixedAsset.IsCost){
-                       await _capitalAllowanceService.SaveCapitalAllowanceFromFixedAsset(fixedAsset.CostAddition, fixedAsset.YearId.ToString(), fixedAsset.CompanyId, fixedAsset.AssetId);
+                if (fixedAsset.IsCost)
+                {
+                    await _capitalAllowanceService.SaveCapitalAllowanceFromFixedAsset(fixedAsset.CostAddition, fixedAsset.YearId.ToString(), fixedAsset.CompanyId, fixedAsset.AssetId);
 
-                 }
-             
+                }
+
             }
 
 
@@ -171,7 +173,7 @@ namespace TaxComputationAPI.Services
          }*/
 
 
-        public  async Task<TaxComputationAPI.Dtos.FixedAssetResponseDto> FormatAmount(FixedAssetResponse fixedAssetResponse)
+        public async Task<TaxComputationAPI.Dtos.FixedAssetResponseDto> FormatAmount(FixedAssetResponse fixedAssetResponse)
         {
             List<FixedAssetData> fixedAssetDatas = new List<FixedAssetData>();
             List<TaxComputationAPI.Dtos.NetBookValue> netBookValues = new List<TaxComputationAPI.Dtos.NetBookValue>();
@@ -241,6 +243,33 @@ namespace TaxComputationAPI.Services
             fixedAsset.total = total;
 
             return fixedAsset;
+        }
+
+        public async Task<decimal> GetAmount(List<int> trialBalances, bool isCost)
+        {
+            decimal amount = 0;
+            if (isCost)
+            {
+                foreach (var item in trialBalances)
+                {
+                    var value = await _trialBalanceRepository.GetTrialBalanceById(item);
+
+                    amount += value.Debit;
+                }
+
+                return amount;
+            }else{
+                 foreach (var item in trialBalances)
+                {
+                    var value = await _trialBalanceRepository.GetTrialBalanceById(item);
+
+                    amount += value.Credit;
+                }
+
+                return amount;
+            }
+
+
         }
 
         public async Task DeleteFixedAsset(int trialbalanceId)
