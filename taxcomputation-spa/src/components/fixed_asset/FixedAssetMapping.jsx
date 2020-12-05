@@ -42,7 +42,7 @@ const FixedAssetMapping = ({
     if (selectedAccounts) {
       const value = selectedAccounts.reduce(
         (accumulator, current) =>
-          accumulator + selectedAssetType === cost ? current.debit : current.credit,
+          accumulator + (selectedAssetType === cost ? current.debit : current.credit),
         0
       );
       setClosingBalance(value);
@@ -128,6 +128,16 @@ const FixedAssetMapping = ({
         );
       }
     } catch (error) {
+      if (error.response.data === undefined) {
+        toast.show(
+          utils.toastCallback({
+            severity: "error",
+            detail: error.message
+          })
+        );
+        return;
+      }
+
       if (error.response.data.errors) {
         toast.show(
           utils.toastCallback({
