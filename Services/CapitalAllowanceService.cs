@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TaxComputationAPI.Dtos;
+using TaxComputationAPI.Helpers;
 using TaxComputationAPI.Interfaces;
 using TaxComputationAPI.Models;
+using TaxComputationSoftware.Dtos;
 
 namespace TaxComputationAPI.Services
 {
@@ -21,33 +23,35 @@ namespace TaxComputationAPI.Services
 
         public async Task<CapitalAllowanceDto> GetCapitalAllowance(int assetId, int companyId)
         {
-           
-            var capitalAllowance=await _capitalAllowanceRepository.GetCapitalAllowance(assetId, companyId);
+
+            var capitalAllowance = await _capitalAllowanceRepository.GetCapitalAllowance(assetId, companyId);
+
 
             return GetCapitalAllowance(capitalAllowance.ToList());
         }
 
         public Task<int> SaveCapitalAllowance(CapitalAllowance capitalAllowance)
         {
-           
+
             return _capitalAllowanceRepository.SaveCapitaLAllowance(capitalAllowance);
 
         }
 
 
 
-        public async Task<int> SaveCapitalAllowanceFromFixedAsset(decimal addition, string year,int companyId,int assetId)
+        public async Task<int> SaveCapitalAllowanceFromFixedAsset(decimal addition, string year, int companyId, int assetId)
         {
 
-             
+
             var assetDetails = await _utilitiesRepository.GetAssetMappingById(assetId);
             int totalNoOfYears = (int)100 / assetDetails.Annual;
-           
+
             var additionValue = addition;
             var disposal = 0;
-           
-            decimal initial  = addition * assetDetails.Initial / 100;
-            var annual = addition - initial / totalNoOfYears;
+
+            decimal initial = addition * assetDetails.Initial / 100;
+            var value=addition - initial ;
+            var annual = value/ totalNoOfYears;
             var total = initial + annual;
             var closingResidue = addition - total;
             var remianingYears = totalNoOfYears - 1;
@@ -60,7 +64,7 @@ namespace TaxComputationAPI.Services
                 OpeningResidue = closingResidue,
                 ClosingResidue = closingResidue,
                 Annual = annual,
-                Initial=0,
+                Initial = 0,
                 Total = total,
                 YearsToGo = remianingYears.ToString(),
                 CompanyId = companyId,
@@ -68,14 +72,15 @@ namespace TaxComputationAPI.Services
 
 
             };
-            if (previousRecord != null) {
+            if (previousRecord != null)
+            {
 
-               return  await _capitalAllowanceRepository.UpdateCapitalAllowanceByFixedAsset(capitalAllowance);
+                return await _capitalAllowanceRepository.UpdateCapitalAllowanceByFixedAsset(capitalAllowance);
 
             }
             else
             {
-               return  await _capitalAllowanceRepository.SaveCapitaLAllowance(capitalAllowance);
+                return await _capitalAllowanceRepository.SaveCapitaLAllowance(capitalAllowance);
             }
 
         }
@@ -86,7 +91,8 @@ namespace TaxComputationAPI.Services
 
             var residueValue = residue;
             var previousRecord = await _capitalAllowanceRepository.GetCapitalAllowanceByAssetIdYear(assetId, companyId, year);
-            decimal openingValue = previousRecord.OpeningResidue - residue;
+            if(previousRecord!=null){
+             decimal openingValue = previousRecord.OpeningResidue - residue;
             decimal closingValue = openingValue - previousRecord.Total;
             var capitalAllowance = new CapitalAllowance
             {
@@ -98,15 +104,20 @@ namespace TaxComputationAPI.Services
 
 
             };
-           
+
 
             return await _capitalAllowanceRepository.UpdateCapitalAllowanceBybalancingAdjustment(capitalAllowance);
 
+            }
+
+            return 0;
+            
         }
 
 
         private CapitalAllowanceDto GetCapitalAllowance(List<CapitalAllowance> capitalAllowances)
         {
+            var capitalAllowanceList = new List<CapitalAllowanceViewDto>();
             if (capitalAllowances.Count > 0)
             {
                 var capitalAllowanceDto = new CapitalAllowanceDto();
@@ -121,39 +132,54 @@ namespace TaxComputationAPI.Services
                 foreach (var item in capitalAllowances)
                 {
 
-                    if (item.OpeningResidue>0)
+                    if (item.OpeningResidue > 0)
                     {
-                        openingResidualTotal += item.OpeningResidue;
+                        openingResidualTotal += Utilities.GetDecimal(item.OpeningResidue);
                     }
 
-                    if (item.Addition>0)
+                    if (item.Addition > 0)
                     {
-                        additionTotal += item.Addition;
+                        additionTotal += Utilities.GetDecimal(item.Addition);
                     }
 
-                    if (item.Disposal>0)
+                    if (item.Disposal > 0)
                     {
-                        disposalTotal +=item.Disposal;
+                        disposalTotal += Utilities.GetDecimal(item.Disposal);
                     }
-                    if (item.Initial>0)
+                    if (item.Initial > 0)
                     {
-                        initialTotal += item.Initial;
+                        initialTotal += Utilities.GetDecimal(item.Initial);
                     }
-                    if (item.Annual>0)
+                    if (item.Annual > 0)
                     {
-                        annualTotal += item.Annual;
+                        annualTotal += Utilities.GetDecimal(item.Annual);
                     }
-                    if (item.Total>0)
+                    if (item.Total > 0)
                     {
-                        totalTotal += item.Total;
+                        totalTotal += Utilities.GetDecimal(item.Total);
                     }
-                    if (item.ClosingResidue>0)
+                    if (item.ClosingResidue > 0)
                     {
-                        closingResidueTotal += item.ClosingResidue;
+                        closingResidueTotal += Utilities.GetDecimal(item.ClosingResidue);
                     }
 
                 }
-
+                foreach (var x in capitalAllowances)
+                {
+                    var m = new CapitalAllowanceViewDto
+                    {
+                        TaxYear = x.TaxYear,
+                        OpeningResidue = Utilities.FormatAmount(x.OpeningResidue),
+                        Addition = Utilities.FormatAmount(x.Addition),
+                        Disposal = Utilities.FormatAmount(x.Disposal),
+                        Initial = Utilities.FormatAmount(x.Initial),
+                        Annual = Utilities.FormatAmount(x.Annual),
+                        Total = Utilities.FormatAmount(x.Total),
+                        YearsToGo = x.YearsToGo,
+                        ClosingResidue = Utilities.FormatAmount(x.ClosingResidue),
+                    };
+                    capitalAllowanceList.Add(m);
+                }
 
                 return new CapitalAllowanceDto()
                 {
@@ -164,7 +190,7 @@ namespace TaxComputationAPI.Services
                     AnnualTotal = annualTotal,
                     TotalTotal = totalTotal,
                     ClosingResidueTotal = closingResidueTotal,
-                    capitalAllowances = capitalAllowances
+                    capitalAllowances = capitalAllowanceList
 
 
 
@@ -175,8 +201,8 @@ namespace TaxComputationAPI.Services
             {
                 return new CapitalAllowanceDto();
             }
-        
-          
+
+
 
 
         }

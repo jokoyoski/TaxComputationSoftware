@@ -185,6 +185,7 @@ const FixedAssetMapping = ({
             disabled
             placeholder="Closing Balance"
             defaultValue={closingBalanceAmt}
+            value={closingBalanceAmt}
           />
         </div>
         <div className="p-d-flex p-ai-start p-jc-between">
