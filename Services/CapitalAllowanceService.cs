@@ -169,14 +169,14 @@ namespace TaxComputationAPI.Services
                     var m = new CapitalAllowanceViewDto
                     {
                         TaxYear = x.TaxYear,
-                        OpeningResidue = Utilities.FormatAmount(x.OpeningResidue),
-                        Addition = Utilities.FormatAmount(x.Addition),
-                        Disposal = Utilities.FormatAmount(x.Disposal),
-                        Initial = Utilities.FormatAmount(x.Initial),
-                        Annual = Utilities.FormatAmount(x.Annual),
-                        Total = Utilities.FormatAmount(x.Total),
+                        OpeningResidue = $"₦{Utilities.FormatAmount(x.OpeningResidue)}",
+                        Addition = $"₦{Utilities.FormatAmount(x.Addition)}",
+                        Disposal = $"₦{Utilities.FormatAmount(x.Disposal)}",
+                        Initial = $"₦{Utilities.FormatAmount(x.Initial)}",
+                        Annual = $"₦{Utilities.FormatAmount(x.Annual)}",
+                        Total = $"₦{Utilities.FormatAmount(x.Total)}",
                         YearsToGo = x.YearsToGo,
-                        ClosingResidue = Utilities.FormatAmount(x.ClosingResidue),
+                        ClosingResidue = $"₦{Utilities.FormatAmount(x.ClosingResidue)}",
                     };
                     capitalAllowanceList.Add(m);
                 }
