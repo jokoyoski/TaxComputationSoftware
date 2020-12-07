@@ -164,7 +164,7 @@ namespace TaxComputationAPI.Repositories
 
                     parameters.Add("@Id", balancingAdjustment.Id);
                     parameters.Add("@AssetId", balancingAdjustment.AssetId);
-                    parameters.Add("@CompanyId", balancingAdjustment.ComapnyId);
+                    parameters.Add("@CompanyId", balancingAdjustment.CompanyId);
                     parameters.Add("@Year", balancingAdjustment.Year);
                     parameters.Add("@DateCreated", balancingAdjustment.DateCreated);
 

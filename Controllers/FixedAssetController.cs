@@ -37,24 +37,24 @@ namespace TaxComputationAPI.Controllers
                 bool status = createFixed.IsCost ? true : false;
                 var value = await _fixedAssetService.GetAmount(createFixed.TriBalanceId, status);
 
-              /*  if (status)
+                if (status)
                 {
                     if (createFixed.IsTransferCostRemoved)
                     {
-                        var totalCost = createFixed.OpeningCost + createFixed.CostAddition - createFixed.CostDisposal;
-                        if (totalCost > value)
+                        var totalCost = createFixed.OpeningCost + createFixed.CostAddition - createFixed.CostDisposal -createFixed.TransferCost;
+                        if (totalCost != value)
                         {
-                            var error = new[] { "Your Input is more than the closing year value provided" };
-                            return StatusCode(400, new { errors = new { error } });
+                              return StatusCode (400, new { errors = new []{"Closing balance selected is not equal to your computataion"} });
+                          
                         }
                     }
                     else
                     {
-                        var totalCost = createFixed.OpeningCost + createFixed.CostAddition + createFixed.CostDisposal;
-                        if (totalCost > value)
+                        var totalCost = createFixed.OpeningCost + createFixed.CostAddition - createFixed.CostDisposal + createFixed.TransferCost;
+                        if (totalCost != value)
                         {
-                            var error = new[] { "Your Input is more than the closing year value provided" };
-                            return StatusCode(400, new { errors = new { error } });
+                                     return StatusCode (400, new { errors = new []{"Closing balance selected is not equal to your computataion"} });
+                   
                         }
                     }
 
@@ -63,23 +63,23 @@ namespace TaxComputationAPI.Controllers
                 {
                     if (createFixed.IsTransferDepreciationRemoved)
                     {
-                        var totalDepreciation = createFixed.OpeningDepreciation + createFixed.DepreciationAddition - createFixed.DepreciationDisposal;
-                        if (totalDepreciation > value)
+                        var totalDepreciation = createFixed.OpeningDepreciation + createFixed.DepreciationAddition - createFixed.DepreciationDisposal - createFixed.TransferDepreciation;
+                        if (totalDepreciation !=value)
                         {
-                            var error = new[] { "Your Input is more than the closing year value provided" };
-                            return StatusCode(400, new { errors = new { error } });
+                                     return StatusCode (400, new { errors = new []{"Closing balance selected is not equal to your computataion"} });
+                   
                         }
                     }
                     else
                     {
-                        var totalDepreciation = createFixed.OpeningDepreciation + createFixed.DepreciationAddition + createFixed.DepreciationDisposal;
-                        if (totalDepreciation > value)
+                        var totalDepreciation = createFixed.OpeningDepreciation + createFixed.DepreciationAddition - createFixed.DepreciationDisposal + createFixed.TransferDepreciation;
+                        if (totalDepreciation != value)
                         {
-                            var error = new[] { "Your Input is more than the closing year value provided" };
-                            return StatusCode(400, new { errors = new { error } });
+                                    return StatusCode (400, new { errors = new []{"Closing balance selected is not equal to your computataion"} });
+                   
                         }
                     }
-                }*/
+                }
 
                 if (createFixed == null)
                 {

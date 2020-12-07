@@ -103,10 +103,10 @@ namespace TaxComputationAPI.Services
 
 
                 var saveTrack = await _trialBalancerepository.AddTrackTrialBalance(track);
+                
+                var saved =  await _trialBalancerepository.GetTrackTrialBalance(upload.CompanyId, upload.YearId);
 
-                if(saveTrack == null) return;
-
-                trackId = (saveTrack.Id <= 0) ? 0 : track.Id;
+                trackId = saved.Id;
 
             }
 

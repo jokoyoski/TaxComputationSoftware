@@ -184,12 +184,16 @@ namespace TaxComputationAPI.Services
                     var b1 = new TaxComputationAPI.Models.BalancingAdjustment
                     {
                         AssetId = addBalanceAdjustmentDto.AssetId,
-                        ComapnyId = addBalanceAdjustmentDto.CompanyId,
-                        DateCreated = DateTime.UtcNow,
+                        CompanyId = addBalanceAdjustmentDto.CompanyId,
+                        DateCreated = DateTime.Now,
                         Year = addBalanceAdjustmentDto.Year,
                     };
                     
                     if(assetBalancing == null) await _balancingAdjustmentRepository.SaveBalancingAdjustment(b1);
+
+                    var balList = await _balancingAdjustmentRepository.GetBalancingAdjustment(b1.CompanyId, b1.Year);
+
+                    b1 = balList.LastOrDefault();
 
                     var bb1 = new TaxComputationAPI.Models.BalancingAdjustmentYearBought
                     {
@@ -200,7 +204,8 @@ namespace TaxComputationAPI.Services
                         AnnualAllowance = 0,
                         SalesProceed = addBalanceAdjustmentDto.SalesProceed,
                         BalancingAdjustmentId = assetBalancing == null ? b1.Id : assetBalancing.Id,
-                        YearBought = addBalanceAdjustmentDto.YearBought
+                        YearBought = addBalanceAdjustmentDto.YearBought,
+                        DateCreated = DateTime.Now
                     };
 
                     if (balancingAdjustment.Item1 == BalancingAdjustment.BalancingAllowance) bb1.BalancingAllowance = balancingAdjustment.Item2;
@@ -227,12 +232,16 @@ namespace TaxComputationAPI.Services
                     var b2 = new TaxComputationAPI.Models.BalancingAdjustment
                     {
                         AssetId = addBalanceAdjustmentDto.AssetId,
-                        ComapnyId = addBalanceAdjustmentDto.CompanyId,
+                        CompanyId = addBalanceAdjustmentDto.CompanyId,
                         DateCreated = DateTime.UtcNow,
                         Year = addBalanceAdjustmentDto.Year,
                     };
 
                     if(assetBalancing == null) await _balancingAdjustmentRepository.SaveBalancingAdjustment(b2);
+
+                    var balList0 = await _balancingAdjustmentRepository.GetBalancingAdjustment(b2.CompanyId, b2.Year);
+
+                    b2 = balList0.LastOrDefault();
 
                     var bb2 = new TaxComputationAPI.Models.BalancingAdjustmentYearBought
                     {
@@ -262,7 +271,6 @@ namespace TaxComputationAPI.Services
                     };
                 }
 
-
                 var initialCost = CalculateInitialAllowance(addBalanceAdjustmentDto.Cost, initailRatio, assetLifeCycle, assetLifeSpan);
 
                 var annualCost = CalculateAnnualAllowance(addBalanceAdjustmentDto.Cost, initialCost, annualRatio, assetLifeCycle, assetLifeSpan);
@@ -274,12 +282,16 @@ namespace TaxComputationAPI.Services
                 var b3 = new TaxComputationAPI.Models.BalancingAdjustment
                 {
                     AssetId = addBalanceAdjustmentDto.AssetId,
-                    ComapnyId = addBalanceAdjustmentDto.CompanyId,
+                    CompanyId = addBalanceAdjustmentDto.CompanyId,
                     DateCreated = DateTime.Now,
                     Year = addBalanceAdjustmentDto.Year,
                 };
 
                 if(assetBalancing == null) await _balancingAdjustmentRepository.SaveBalancingAdjustment(b3);
+
+                var balList1 = await _balancingAdjustmentRepository.GetBalancingAdjustment(b3.CompanyId, b3.Year);
+
+                b3 = balList1.LastOrDefault();
 
                 var bb3 = new TaxComputationAPI.Models.BalancingAdjustmentYearBought
                 {
@@ -299,7 +311,7 @@ namespace TaxComputationAPI.Services
                 if (balancingAdjustment.Item1 == BalancingAdjustment.BalancingCharge) bb3.BalancingCharge = balancingAdjustment.Item2;
 
                 var ba3 = await _balancingAdjustmentRepository.SaveBalancingAdjustmentYeatBought(bb3);
-               await  _capitalAllowanceService.SaveCapitalAllowanceFromBalancingAdjustment(residue, addBalanceAdjustmentDto.YearBought, addBalanceAdjustmentDto.CompanyId, addBalanceAdjustmentDto.AssetId);
+                await  _capitalAllowanceService.SaveCapitalAllowanceFromBalancingAdjustment(residue, addBalanceAdjustmentDto.YearBought, addBalanceAdjustmentDto.CompanyId, addBalanceAdjustmentDto.AssetId);
 
                 return new AddBalancingAdjustmentResponse
                 {
@@ -307,8 +319,6 @@ namespace TaxComputationAPI.Services
                     Code = "00",
                     ResponseDescription = "Balancing Adjustment successfully calculated"
                 };
-
-
             }
             catch (Exception e)
             {
