@@ -188,33 +188,33 @@ namespace TaxComputationAPI.Services
                 fixedAssetData.CompanyName = asset.CompanyName;
                 fixedAssetData.Year = asset.Year;
                 fixedAssetData.FixedAssetName = asset.FixedAssetName;
-                fixedAssetData.OpeningCost = $"{Utilities.FormatAmount(asset.OpeningCost)}";
-                fixedAssetData.CostAddition = $"{Utilities.FormatAmount(asset.CostAddition)}";
-                fixedAssetData.CostDisposal = $"({Utilities.FormatAmount(asset.CostDisposal)})";
-                fixedAssetData.CostClosing = $"{Utilities.FormatAmount(await _utilitiesRepository.GetAmount(asset.Id, "cost"))}";
-                fixedAssetData.OpeningDepreciation = $"{Utilities.FormatAmount(asset.OpeningDepreciation)}";
-                fixedAssetData.DepreciationAddition = $"{Utilities.FormatAmount(asset.DepreciationAddition)}";
-                fixedAssetData.DepreciationDisposal = $"({Utilities.FormatAmount(asset.DepreciationDisposal)})";
-                fixedAssetData.DepreciationClosing = $"{Utilities.FormatAmount(await _utilitiesRepository.GetAmount(asset.Id, "depreciation"))}";
+                fixedAssetData.OpeningCost = $"₦{Utilities.FormatAmount(asset.OpeningCost)}";
+                fixedAssetData.CostAddition = $"₦{Utilities.FormatAmount(asset.CostAddition)}";
+                fixedAssetData.CostDisposal = $"₦({Utilities.FormatAmount(asset.CostDisposal)})";
+                fixedAssetData.CostClosing = $"₦{Utilities.FormatAmount(await _utilitiesRepository.GetAmount(asset.Id, "cost"))}";
+                fixedAssetData.OpeningDepreciation = $"₦{Utilities.FormatAmount(asset.OpeningDepreciation)}";
+                fixedAssetData.DepreciationAddition = $"₦{Utilities.FormatAmount(asset.DepreciationAddition)}";
+                fixedAssetData.DepreciationDisposal = $"₦({Utilities.FormatAmount(asset.DepreciationDisposal)})";
+                fixedAssetData.DepreciationClosing = $"₦{Utilities.FormatAmount(await _utilitiesRepository.GetAmount(asset.Id, "depreciation"))}";
                 if (asset.IsTransferDepreciationRemoved == true)
                 {
-                    fixedAssetData.TransferDepreciation = $"({Utilities.FormatAmount(asset.TransferDepreciation)})";
+                    fixedAssetData.TransferDepreciation = $"₦({Utilities.FormatAmount(asset.TransferDepreciation)})";
                     transferDepreciationValue += -asset.TransferDepreciation;
                 }
                 else
                 {
-                    fixedAssetData.TransferDepreciation = $"{Utilities.FormatAmount(asset.TransferDepreciation)}";
+                    fixedAssetData.TransferDepreciation = $"₦{Utilities.FormatAmount(asset.TransferDepreciation)}";
                     transferDepreciationValue += asset.TransferDepreciation;
                 }
 
                 if (asset.IsTransferCostRemoved == true)
                 {
-                    fixedAssetData.TransferCost = $"({Utilities.FormatAmount(asset.TransferCost)})";
+                    fixedAssetData.TransferCost = $"₦({Utilities.FormatAmount(asset.TransferCost)})";
                     transferValue += -asset.TransferCost;
                 }
                 else
                 {
-                    fixedAssetData.TransferCost = $"{Utilities.FormatAmount(asset.TransferCost)}";
+                    fixedAssetData.TransferCost = $"₦{Utilities.FormatAmount(asset.TransferCost)}";
                     transferValue += asset.TransferCost;
                 }
 
@@ -235,16 +235,16 @@ namespace TaxComputationAPI.Services
 
             var total = new TaxComputationAPI.Dtos.Total
             {
-                OpeningCostTotal = $"{Utilities.FormatAmount(fixedAssetResponse.total.OpeningCostTotal)}",
-                AdditionCostTotal = $"{Utilities.FormatAmount(fixedAssetResponse.total.AdditionCostTotal)}",
-                ClosingCostTotal = $"{Utilities.FormatAmount(fixedAssetResponse.total.ClosingCostTotal)}",
-                DisposalCostTotal = $"({Utilities.FormatAmount(fixedAssetResponse.total.DisposalCostTotal)})",
-                OpeningDepreciationTotal = $"{Utilities.FormatAmount(fixedAssetResponse.total.OpeningDepreciationTotal)}",
-                AdditionDepreciationTotal = $"{Utilities.FormatAmount(fixedAssetResponse.total.AdditionDepreciationTotal)}",
-                DisposalDepreciationTotal = $"({Utilities.FormatAmount(fixedAssetResponse.total.DisposalDepreciationTotal)})",
-                ClosingDepreciationTotal = $"{Utilities.FormatAmount(fixedAssetResponse.total.ClosingDepreciationTotal)}",
-                TransferCostTotal = $"{Utilities.FormatAmount(transferValue)}",
-                TransferDepreciationTotal = $"{Utilities.FormatAmount(transferDepreciationValue)}",
+                OpeningCostTotal = $"₦{Utilities.FormatAmount(fixedAssetResponse.total.OpeningCostTotal)}",
+                AdditionCostTotal = $"₦{Utilities.FormatAmount(fixedAssetResponse.total.AdditionCostTotal)}",
+                ClosingCostTotal = $"₦{Utilities.FormatAmount(fixedAssetResponse.total.ClosingCostTotal)}",
+                DisposalCostTotal = $"₦({Utilities.FormatAmount(fixedAssetResponse.total.DisposalCostTotal)})",
+                OpeningDepreciationTotal = $"₦{Utilities.FormatAmount(fixedAssetResponse.total.OpeningDepreciationTotal)}",
+                AdditionDepreciationTotal = $"₦{Utilities.FormatAmount(fixedAssetResponse.total.AdditionDepreciationTotal)}",
+                DisposalDepreciationTotal = $"₦({Utilities.FormatAmount(fixedAssetResponse.total.DisposalDepreciationTotal)})",
+                ClosingDepreciationTotal = $"₦{Utilities.FormatAmount(fixedAssetResponse.total.ClosingDepreciationTotal)}",
+                TransferCostTotal = $"₦{Utilities.FormatAmount(transferValue)}",
+                TransferDepreciationTotal = $"₦{Utilities.FormatAmount(transferDepreciationValue)}",
 
             };
             TaxComputationAPI.Dtos.FixedAssetResponseDto fixedAsset = new TaxComputationAPI.Dtos.FixedAssetResponseDto();
