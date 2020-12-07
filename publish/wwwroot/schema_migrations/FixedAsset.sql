@@ -101,7 +101,7 @@ create procedure usp_Insert_Fixed_Asset(
 )
 AS
 
-if exists(select * from FixedAsset where CompanyId=@CompanyId and YearId=@YearId)
+if exists(select * from FixedAsset where CompanyId=@CompanyId and YearId=@YearId and  AssetId=@AssetId)
 BEGIN
  IF @type='Cost'
 begin

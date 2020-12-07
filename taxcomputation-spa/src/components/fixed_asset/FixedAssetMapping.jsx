@@ -41,13 +41,14 @@ const FixedAssetMapping = ({
   React.useEffect(() => {
     if (selectedAccounts) {
       const value = selectedAccounts.reduce(
-        (accumulator, current) => accumulator + current.debit,
+        (accumulator, current) =>
+          accumulator + (selectedAssetType === cost ? current.debit : current.credit),
         0
       );
       setClosingBalance(value);
       setClosingBalanceAmt(utils.currencyFormatter(value));
     }
-  }, [selectedAccounts]);
+  }, [selectedAccounts, selectedAssetType]);
 
   const onSubmit = async data => {
     if (loading) return;
@@ -127,6 +128,25 @@ const FixedAssetMapping = ({
         );
       }
     } catch (error) {
+      if (error.response.data === undefined) {
+        toast.show(
+          utils.toastCallback({
+            severity: "error",
+            detail: error.message
+          })
+        );
+        return;
+      }
+
+      if (error.response.data.errors) {
+        toast.show(
+          utils.toastCallback({
+            severity: "error",
+            detail: error.response.data.errors[0]
+          })
+        );
+        return;
+      }
       toast.show(
         utils.toastCallback({
           severity: "error",

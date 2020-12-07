@@ -118,6 +118,7 @@ namespace TaxComputationAPI.Services
                     await _capitalAllowanceService.SaveCapitalAllowanceFromFixedAsset(fixedAsset.CostAddition, fixedAsset.YearId.ToString(), fixedAsset.CompanyId, fixedAsset.AssetId);
 
                 }
+
                 var record = await _fixedAssetRepository.GetFixedAssetsByCompanyYearIdAssetId(fixedAsset.CompanyId, fixedAsset.YearId, fixedAsset.AssetId);
 
                 foreach (var value in fixedAsset.TriBalanceId)
@@ -178,6 +179,8 @@ namespace TaxComputationAPI.Services
             List<FixedAssetData> fixedAssetDatas = new List<FixedAssetData>();
             List<TaxComputationAPI.Dtos.NetBookValue> netBookValues = new List<TaxComputationAPI.Dtos.NetBookValue>();
             List<TaxComputationAPI.Dtos.Total> totals = new List<TaxComputationAPI.Dtos.Total>();
+            decimal transferValue = 0;
+            decimal transferDepreciationValue = 0;
             foreach (var asset in fixedAssetResponse.FixedAssetData)
             {
                 var fixedAssetData = new FixedAssetData();
@@ -196,19 +199,23 @@ namespace TaxComputationAPI.Services
                 if (asset.IsTransferDepreciationRemoved == true)
                 {
                     fixedAssetData.TransferDepreciation = $"({Utilities.FormatAmount(asset.TransferDepreciation)})";
+                    transferDepreciationValue += -asset.TransferDepreciation;
                 }
                 else
                 {
                     fixedAssetData.TransferDepreciation = $"{Utilities.FormatAmount(asset.TransferDepreciation)}";
+                    transferDepreciationValue += asset.TransferDepreciation;
                 }
 
                 if (asset.IsTransferCostRemoved == true)
                 {
                     fixedAssetData.TransferCost = $"({Utilities.FormatAmount(asset.TransferCost)})";
+                    transferValue += -asset.TransferCost;
                 }
                 else
                 {
                     fixedAssetData.TransferCost = $"{Utilities.FormatAmount(asset.TransferCost)}";
+                    transferValue += asset.TransferCost;
                 }
 
 
@@ -231,11 +238,14 @@ namespace TaxComputationAPI.Services
                 OpeningCostTotal = $"{Utilities.FormatAmount(fixedAssetResponse.total.OpeningCostTotal)}",
                 AdditionCostTotal = $"{Utilities.FormatAmount(fixedAssetResponse.total.AdditionCostTotal)}",
                 ClosingCostTotal = $"{Utilities.FormatAmount(fixedAssetResponse.total.ClosingCostTotal)}",
-                DisposalCostTotal = $"{Utilities.FormatAmount(fixedAssetResponse.total.DisposalCostTotal)}",
+                DisposalCostTotal = $"({Utilities.FormatAmount(fixedAssetResponse.total.DisposalCostTotal)})",
                 OpeningDepreciationTotal = $"{Utilities.FormatAmount(fixedAssetResponse.total.OpeningDepreciationTotal)}",
                 AdditionDepreciationTotal = $"{Utilities.FormatAmount(fixedAssetResponse.total.AdditionDepreciationTotal)}",
-                DisposalDepreciationTotal = $"{Utilities.FormatAmount(fixedAssetResponse.total.DisposalDepreciationTotal)}",
+                DisposalDepreciationTotal = $"({Utilities.FormatAmount(fixedAssetResponse.total.DisposalDepreciationTotal)})",
                 ClosingDepreciationTotal = $"{Utilities.FormatAmount(fixedAssetResponse.total.ClosingDepreciationTotal)}",
+                TransferCostTotal = $"{Utilities.FormatAmount(transferValue)}",
+                TransferDepreciationTotal = $"{Utilities.FormatAmount(transferDepreciationValue)}",
+
             };
             TaxComputationAPI.Dtos.FixedAssetResponseDto fixedAsset = new TaxComputationAPI.Dtos.FixedAssetResponseDto();
             fixedAsset.FixedAssetData = fixedAssetDatas;
@@ -258,8 +268,10 @@ namespace TaxComputationAPI.Services
                 }
 
                 return amount;
-            }else{
-                 foreach (var item in trialBalances)
+            }
+            else
+            {
+                foreach (var item in trialBalances)
                 {
                     var value = await _trialBalanceRepository.GetTrialBalanceById(item);
 
@@ -277,6 +289,9 @@ namespace TaxComputationAPI.Services
             await _trialBalanceRepository.UpdateTrialBalance(trialbalanceId, null, true);  //fice
             await _utilitiesRepository.DeleteTrialBalancingMapping(trialbalanceId);
         }
+
+
+      
     }
 }
 

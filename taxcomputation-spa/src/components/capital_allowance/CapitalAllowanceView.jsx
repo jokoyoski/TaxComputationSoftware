@@ -14,6 +14,8 @@ const CapitalAllowanceView = ({ assetId }) => {
   const [capitalAllowanceData, setCapitalAllowanceData] = React.useState([]);
 
   React.useEffect(() => {
+    if (!companyId) return;
+
     isMounted.current = true;
     const fetchCapitalAllowanceViewData = async () => {
       if (!assetId) return;

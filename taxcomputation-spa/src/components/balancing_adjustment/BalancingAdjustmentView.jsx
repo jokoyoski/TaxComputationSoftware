@@ -14,6 +14,8 @@ const BalancingAdjustmentView = ({ year }) => {
   const [balancingAdjustmentData, setBalancingAdjustmentData] = React.useState([]);
 
   React.useEffect(() => {
+    if (!companyId) return;
+
     isMounted.current = true;
     const fetchBalancingAdjustmentViewData = async () => {
       try {

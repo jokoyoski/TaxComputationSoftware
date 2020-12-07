@@ -29,11 +29,17 @@ namespace TaxComputationAPI.Services
         public async Task SaveProfitAndLoss(CreateProfitAndLoss createProfitAndLoss)
         {
 
-            decimal value = 0;
-
+            decimal debitValue = 0;
+            decimal creditValue=0;
+             decimal totalValue=0;
             foreach (var item in createProfitAndLoss.TrialBalanceList)
             {
-                value += await GetValue(item);
+                 var value = await GetValue(item);
+                if(value.IsDebit){
+                debitValue+=value.value;
+                }else{
+                 creditValue=value.value;
+                 }
             }
 
             foreach (var selection in createProfitAndLoss.TrialBalanceList)
@@ -42,8 +48,8 @@ namespace TaxComputationAPI.Services
                 await _trialBalanceRepository.UpdateTrialBalance(selection.TrialBalanceId, trialBalanceValue, false);
 
             }
-
-            var profitAndLoss = ComputeProfitAndLoss(value, createProfitAndLoss.CompanyId, createProfitAndLoss.YearId, createProfitAndLoss.ProfitAndLossId);
+             totalValue=creditValue-debitValue;
+            var profitAndLoss = ComputeProfitAndLoss(totalValue, createProfitAndLoss.CompanyId, createProfitAndLoss.YearId, createProfitAndLoss.ProfitAndLossId);
 
             await _profitAndLossRepository.UpdateProfitAndLoss(profitAndLoss);
         }
@@ -52,33 +58,32 @@ namespace TaxComputationAPI.Services
 
 
 
-        private async Task<decimal> GetValue(TrialBalanceValue trialBalanceValue)
+        private async Task<ProfitAndLossValue> GetValue(TrialBalanceValue trialBalanceValue)
         {
+            var profitValue=  new ProfitAndLossValue();
             var value = await _trialBalanceRepository.GetTrialBalanceById(trialBalanceValue.TrialBalanceId);
 
             if (!trialBalanceValue.IsDebit && !trialBalanceValue.IsBoth && trialBalanceValue.IsCredit)
             {
-                return value.Credit;
+                 profitValue.value=value.Credit;
+                 profitValue.IsDebit=false;
+                 return profitValue;
             }
 
             if (trialBalanceValue.IsDebit && !trialBalanceValue.IsBoth && !trialBalanceValue.IsCredit)
             {
-                return value.Debit;
+                  profitValue.value=value.Debit;
+                 profitValue.IsDebit=true;
+                 return profitValue;
             }
 
-            if (trialBalanceValue.IsDebit && trialBalanceValue.IsBoth && trialBalanceValue.IsCredit)
-            {
-
-                return value.Credit - value.Debit;
-            }
-            return 0;
+           
+            return null;
         }
 
 
         public async Task<List<ProfitAndLossViewDto>> GetProfitAndLossByCompanyIdAndYear(int companyId, int yearId)
         {
-
-
             decimal total = 0;
             ProfitAndLossViewDto revenue = new ProfitAndLossViewDto();
             ProfitAndLossViewDto costofsales = new ProfitAndLossViewDto();
@@ -114,7 +119,7 @@ namespace TaxComputationAPI.Services
 
                 gross.Category = "Gross Profit";
                 decimal profit = decimal.Parse(record.Revenue) - decimal.Parse(record.CostOfSales);
-                gross.Total = $"({Utilities.FormatAmount(profit)})";
+                gross.Total = $"{Utilities.FormatAmount(profit)}";
                 records.Add(gross);
 
             }
@@ -241,5 +246,10 @@ namespace TaxComputationAPI.Services
             return null;
         }
 
+      
+       
+    
+    
+    
     }
 }

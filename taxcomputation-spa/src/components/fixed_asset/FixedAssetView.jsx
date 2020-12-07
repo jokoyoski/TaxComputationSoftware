@@ -75,6 +75,8 @@ const FixedAssetView = ({ year }) => {
   ]);
 
   React.useEffect(() => {
+    if (!companyId) return;
+
     isMounted.current = true;
     const fetchFixedAssetViewData = async () => {
       try {
