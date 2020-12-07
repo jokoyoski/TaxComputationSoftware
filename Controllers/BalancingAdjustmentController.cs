@@ -1,6 +1,8 @@
 
 
+using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TaxComputationAPI.Dto;
 using TaxComputationAPI.Interfaces;
@@ -37,5 +39,31 @@ namespace TaxComputationAPI.Controllers
 
             return Ok(response);
         }
+
+        [HttpDelete("balancing-adjustment-year-bought/{Id}")]
+        // [Authorize]
+        public async Task<IActionResult> DeleteBalancingAdjustmentYearBought(int Id)
+        {
+            try
+            {
+
+                var balancingAdjusmentYearBought = await _balancingAdjustmentService.GetBalancingAdjustmentYearBoughtById(Id);
+                if (balancingAdjusmentYearBought == null)
+                {
+                    return StatusCode(404, new { errors = new[] { "Balancing adjustment year bought not found!" } });
+                }
+                balancingAdjusmentYearBought.Id = Id;
+
+                await _balancingAdjustmentService.DeleteBalancingAdjustmentYearBoughtAsync(balancingAdjusmentYearBought);
+
+                return Ok("Balancicng adjustment year bought deleted successfully !!");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { errors = new[] { "Error occured while trying to process your request please try again later !" } });
+
+            }
+        }
+
     }
 }

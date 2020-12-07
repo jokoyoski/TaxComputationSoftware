@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using TaxComputationAPI.Response;
 using TaxComputationAPI.Dto;
+using TaxComputationAPI.Models;
 
 namespace TaxComputationAPI.Interfaces
 {
@@ -8,5 +9,9 @@ namespace TaxComputationAPI.Interfaces
     {
         Task<AddBalancingAdjustmentResponse> AddBalanceAdjustment(AddBalanceAdjustmentDto addBalanceAdjustmentDto);
         Task<AddBalancingAdjustmentResponse> DisplayBalancingAdjustment(int companyId, string year);
+        Task DeleteBalancingAdjustmentYearBoughtAsync(BalancingAdjustmentYearBought balancingAdjustmentYearBought);
+        Task<BalancingAdjustmentYearBought> GetBalancingAdjustmentYearBoughtById(int Id);
+
+
     }
 }

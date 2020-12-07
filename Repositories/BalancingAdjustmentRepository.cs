@@ -237,5 +237,73 @@ namespace TaxComputationAPI.Repositories
                 throw new SystemException(e.Message);
             }
         }
+
+        public async Task DeleteBalancingAdjustmentYearBoughtAsync(BalancingAdjustmentYearBought balancingAdjustmentYearBought)
+        {
+
+            if (balancingAdjustmentYearBought == null) throw new ArgumentNullException(nameof(balancingAdjustmentYearBought));
+
+            try
+            {
+
+                using (IDbConnection conn = await _databaseManager.DatabaseConnection())
+                {
+                    if (conn.State == ConnectionState.Closed) conn.Open();
+
+
+                    DynamicParameters parameters = new DynamicParameters();
+
+
+                    parameters.Add("@Id", balancingAdjustmentYearBought.Id);
+
+                    try
+                    {
+                        var respone = conn.Execute("[dbo].[usp_Delete_BalancingAdjustmentYearBought]", parameters, commandType: CommandType.StoredProcedure);
+                        conn.Close();
+                    }
+                    catch (Exception e)
+                    {
+
+                        _logger.LogError($"{e.Message}");
+
+                        throw e;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                throw new SystemException(e.Message);
+            }
+        }
+        
+        public async Task<BalancingAdjustmentYearBought> GetBalancingAdjustmentYearBoughtById(int Id)
+        {
+            if (Id <= 0) throw new ArgumentNullException(nameof(Id));
+
+            var result = default(BalancingAdjustmentYearBought);
+
+            using (IDbConnection conn = await _databaseManager.DatabaseConnection())
+            {
+                if (conn.State == ConnectionState.Closed) conn.Open();
+
+                DynamicParameters parameters = new DynamicParameters();
+
+                parameters.Add("@Id", Id);
+
+                try
+                {
+                    result = conn.QueryFirstOrDefault<BalancingAdjustmentYearBought>("[dbo].[usp_Get_BalancingAdjustmentYearBought]", parameters, commandType: CommandType.StoredProcedure);
+                    conn.Close();
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError($"{e.Message}");
+
+                    throw e;
+                }
+
+                return result;
+            }
+        }
     }
 }

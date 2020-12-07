@@ -8,6 +8,7 @@ using TaxComputationAPI.Dto;
 using TaxComputationAPI.Interfaces;
 using TaxComputationAPI.Repositories;
 using System.Linq;
+using TaxComputationAPI.Models;
 
 namespace TaxComputationAPI.Services
 {
@@ -364,6 +365,21 @@ namespace TaxComputationAPI.Services
             BalancingAllowance = 0,
             BalancingCharge = 1
 
+        }
+
+        public async Task DeleteBalancingAdjustmentYearBoughtAsync(BalancingAdjustmentYearBought balancingAdjustmentYearBought)
+        {
+            if (balancingAdjustmentYearBought == null)
+            {
+                throw new ArgumentNullException(nameof(balancingAdjustmentYearBought));
+            }
+
+            await _balancingAdjustmentRepository.DeleteBalancingAdjustmentYearBoughtAsync(balancingAdjustmentYearBought);
+        }
+
+        public async Task<BalancingAdjustmentYearBought> GetBalancingAdjustmentYearBoughtById(int Id)
+        {
+            return await _balancingAdjustmentRepository.GetBalancingAdjustmentYearBoughtById(Id);
         }
     }
 }
