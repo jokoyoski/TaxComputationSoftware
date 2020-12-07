@@ -340,8 +340,6 @@ namespace TaxComputationAPI.Services
 
         private static decimal CalculateAnnualAllowance(decimal cost, decimal initialCost, int annualRatio, int assetLifeCycle, int assetLifeSpan)
         {
-            //var diff = (initialCost);
-            // var value=50/
             var value = initialCost / assetLifeSpan * assetLifeCycle;
             return value;
         }
@@ -377,19 +375,51 @@ namespace TaxComputationAPI.Services
 
         }
 
-        public async Task DeleteBalancingAdjustmentYearBoughtAsync(BalancingAdjustmentYearBought balancingAdjustmentYearBought)
+        public async Task<BalancingAdjustmentYearBoughtResponse> DeleteBalancingAdjustmentYearBoughtAsync(int balancingAdjustmentYearBoughtId)
         {
-            if (balancingAdjustmentYearBought == null)
+            if (balancingAdjustmentYearBoughtId <= 0)
             {
-                throw new ArgumentNullException(nameof(balancingAdjustmentYearBought));
+                return new BalancingAdjustmentYearBoughtResponse
+                {
+                    ResponseCode = HttpStatusCode.BadRequest,
+                    Code = "10",
+                    ResponseDescription = $"{balancingAdjustmentYearBoughtId} is invalid"
+                };
             }
 
-            await _balancingAdjustmentRepository.DeleteBalancingAdjustmentYearBoughtAsync(balancingAdjustmentYearBought);
-        }
+            try
+            {
+                var yearBought = await _balancingAdjustmentRepository.GetBalancingAdjustmentYearBoughtById(balancingAdjustmentYearBoughtId);
 
-        public async Task<BalancingAdjustmentYearBought> GetBalancingAdjustmentYearBoughtById(int Id)
-        {
-            return await _balancingAdjustmentRepository.GetBalancingAdjustmentYearBoughtById(Id);
+                if(yearBought == null)
+                {
+                    return new BalancingAdjustmentYearBoughtResponse
+                    {
+                        ResponseCode = HttpStatusCode.NotFound,
+                        Code = "12",
+                        ResponseDescription = $"Data not found"
+                    };
+                }
+
+                await _balancingAdjustmentRepository.DeleteBalancingAdjustmentYearBoughtAsync(yearBought);
+            }
+            catch(Exception e)
+            {
+                return new BalancingAdjustmentYearBoughtResponse
+                {
+                    ResponseCode = HttpStatusCode.ExpectationFailed,
+                    Code = "11",
+                    ResponseDescription = $"AN EXCEPTION OCCURRED: {e.Message}"
+                };
+            }
+
+            return new BalancingAdjustmentYearBoughtResponse
+            {
+                ResponseCode = HttpStatusCode.OK,
+                Code = "00",
+                ResponseDescription = "Balancing adjustment year bought deleted successfully"
+            };
+            
         }
     }
 }
