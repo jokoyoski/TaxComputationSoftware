@@ -299,7 +299,7 @@ CREATE PROCEDURE [dbo].[usp_Delete_Trial_Balance_Mapping](
 	@Id INT
 )
 AS
-DELETE FROM [dbo].[TrialBalanceMapping] WHERE Id = @Id
+DELETE FROM [dbo].[TrialBalanceMapping] WHERE TrialBalanceId = @Id
 GO
 
 

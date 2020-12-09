@@ -13,8 +13,8 @@ namespace TaxComputationAPI.Interfaces
 
         Task<IEnumerable<CapitalAllowance>> GetCapitalAllowance(int assetId, int companyId);
 
-        Task<int> UpdateCapitalAllowanceByFixedAsset(CapitalAllowance capitalAllowance);
+        Task<int> UpdateCapitalAllowanceByFixedAssetOrBalancingAdjustemnt(CapitalAllowance capitalAllowance);
 
-        Task<int> UpdateCapitalAllowanceBybalancingAdjustment(CapitalAllowance capitalAllowance);
+        //Task<int> UpdateCapitalAllowanceBybalancingAdjustment(CapitalAllowance capitalAllowance);
     }
 }

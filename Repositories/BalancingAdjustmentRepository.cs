@@ -66,6 +66,49 @@ namespace TaxComputationAPI.Repositories
 
         }
 
+          public async Task<BalancingAdjustment> GetBalancingAdjustmentById(int balancingAdjustmentId)
+         {
+
+            if (balancingAdjustmentId <= 0) throw new ArgumentNullException(nameof(balancingAdjustmentId));
+
+          
+            try
+            {
+                var result = default(BalancingAdjustment);
+
+                using (IDbConnection conn = await _databaseManager.DatabaseConnection())
+                {
+                    if (conn.State == ConnectionState.Closed) conn.Open();
+
+                    DynamicParameters parameters = new DynamicParameters();
+
+                    
+                    parameters.Add("@Id", balancingAdjustmentId);
+
+                    try
+                    {
+                        result = await conn.QueryFirstOrDefaultAsync<BalancingAdjustment>("[dbo].[usp_GetBalancingAdjustment_By_Id]", parameters, commandType: CommandType.StoredProcedure);
+                        conn.Close();
+                    }
+                    catch (Exception e)
+                    {
+                        _logger.LogError($"{e.Message}");
+
+                        throw e;
+                    }
+
+                   return result;
+                }
+             }
+            catch (Exception e)
+            {
+                throw new SystemException(e.Message);
+            }
+
+        }
+
+
+
         public async Task<List<BalancingAdjustmentYearBought>> GetBalancingAdjustmentYearBougthAssetId(int balancingAdjustmentId, int assetId)
         {
             if (balancingAdjustmentId <= 0) throw new ArgumentNullException(nameof(balancingAdjustmentId));
@@ -107,6 +150,7 @@ namespace TaxComputationAPI.Repositories
         }
 
         public async Task<List<BalancingAdjustmentYearBought>> GetBalancingAdjustmentYeatBought(int balancingAdjustmentId, int assetId)
+        
         {
 
             if (balancingAdjustmentId <= 0) throw new ArgumentNullException(nameof(balancingAdjustmentId));
