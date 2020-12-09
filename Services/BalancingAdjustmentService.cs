@@ -8,6 +8,7 @@ using TaxComputationAPI.Dto;
 using TaxComputationAPI.Interfaces;
 using TaxComputationAPI.Repositories;
 using System.Linq;
+using TaxComputationAPI.Models;
 
 namespace TaxComputationAPI.Services
 {
@@ -339,8 +340,6 @@ namespace TaxComputationAPI.Services
 
         private static decimal CalculateAnnualAllowance(decimal cost, decimal initialCost, int annualRatio, int assetLifeCycle, int assetLifeSpan)
         {
-            //var diff = (initialCost);
-            // var value=50/
             var value = initialCost / assetLifeSpan * assetLifeCycle;
             return value;
         }
@@ -374,6 +373,53 @@ namespace TaxComputationAPI.Services
             BalancingAllowance = 0,
             BalancingCharge = 1
 
+        }
+
+        public async Task<BalancingAdjustmentYearBoughtResponse> DeleteBalancingAdjustmentYearBoughtAsync(int balancingAdjustmentYearBoughtId)
+        {
+            if (balancingAdjustmentYearBoughtId <= 0)
+            {
+                return new BalancingAdjustmentYearBoughtResponse
+                {
+                    ResponseCode = HttpStatusCode.BadRequest,
+                    Code = "10",
+                    ResponseDescription = $"{balancingAdjustmentYearBoughtId} is invalid"
+                };
+            }
+
+            try
+            {
+                var yearBought = await _balancingAdjustmentRepository.GetBalancingAdjustmentYearBoughtById(balancingAdjustmentYearBoughtId);
+
+                if(yearBought == null)
+                {
+                    return new BalancingAdjustmentYearBoughtResponse
+                    {
+                        ResponseCode = HttpStatusCode.NotFound,
+                        Code = "12",
+                        ResponseDescription = $"Data not found"
+                    };
+                }
+
+                await _balancingAdjustmentRepository.DeleteBalancingAdjustmentYearBoughtAsync(yearBought);
+            }
+            catch(Exception e)
+            {
+                return new BalancingAdjustmentYearBoughtResponse
+                {
+                    ResponseCode = HttpStatusCode.ExpectationFailed,
+                    Code = "11",
+                    ResponseDescription = $"AN EXCEPTION OCCURRED: {e.Message}"
+                };
+            }
+
+            return new BalancingAdjustmentYearBoughtResponse
+            {
+                ResponseCode = HttpStatusCode.OK,
+                Code = "00",
+                ResponseDescription = "Balancing adjustment year bought deleted successfully"
+            };
+            
         }
     }
 }

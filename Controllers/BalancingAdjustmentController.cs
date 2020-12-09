@@ -1,6 +1,8 @@
 
 
+using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TaxComputationAPI.Dto;
 using TaxComputationAPI.Interfaces;
@@ -21,8 +23,6 @@ namespace TaxComputationAPI.Controllers
         [HttpGet]
         public async Task<IActionResult> GetBalancingAdjustment(int companyId, string year)
         {
-            if(companyId <= 0 || string.IsNullOrEmpty(year)) return BadRequest("ComapnyId and Year are invalid");
-
             var response = await _balancingAdjustmentService.DisplayBalancingAdjustment(companyId, year);
 
             return Ok(response);
@@ -31,11 +31,18 @@ namespace TaxComputationAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> AddBalancingAdjustment([FromForm] AddBalanceAdjustmentDto addBalanceAdjustmentDto)
         {
-            if(addBalanceAdjustmentDto == null) return BadRequest("Invalid input");
-
             var response = await _balancingAdjustmentService.AddBalanceAdjustment(addBalanceAdjustmentDto);
 
             return Ok(response);
         }
+
+        [HttpDelete("{Id}")]
+        public async Task<IActionResult> DeleteBalancingAdjustmentYearBought(int Id)
+        {
+            var response = await _balancingAdjustmentService.DeleteBalancingAdjustmentYearBoughtAsync(Id);
+
+            return Ok(response);
+        }
+
     }
 }
