@@ -7,7 +7,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using TaxComputationAPI.Dtos;
 using TaxComputationAPI.Interfaces;
+using TaxComputationAPI.Models;
 
 namespace TaxComputationAPI.Controllers
 {
@@ -25,21 +27,15 @@ namespace TaxComputationAPI.Controllers
             _investmentAllowanceService = investmentAllowanceService;
         }
 
-        [HttpGet("{assetId}/{yearId}")]
+        [HttpPost]
         [Authorize]
-        public async Task<IActionResult> GetInvestmentAllowance(int assetId, int yearId)
-        {
 
-            if (yearId == 0)
-            {
-                return StatusCode(400, new { errors = new[] { "Please select a Valid year" } });
-            }
+        public async Task<IActionResult> AddInvestmentAllowance(InvestmentAllowanceDto investmentAllowanceDto)
+        {
             try
             {
-                var investmentAllowance = await _investmentAllowanceService.GetInvestmentAllowanceByAssetIdAndYearId(assetId, yearId);
-
-                return Ok(investmentAllowance);
-
+                await _investmentAllowanceService.AddInvestmentAllowanceByAssetIdAndYearId(investmentAllowanceDto);
+                return Ok("Record saved succesfully!");
             }
             catch (Exception ex)
             {
@@ -49,5 +45,6 @@ namespace TaxComputationAPI.Controllers
 
             }
         }
+
     }
 }

@@ -8,6 +8,6 @@ namespace TaxComputationAPI.Interfaces
 {
     public interface IInvestmentAllowanceRepository
     {
-        Task<InvestmentAllowance> GetInvestmentAllowanceByAssetIdAndYearId(int assetId, int year);
+        Task AddInvestmentAllowanceByAssetIdAndYearId(InvestmentAllowance investmentAllowance);
     }
 }

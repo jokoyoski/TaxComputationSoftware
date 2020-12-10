@@ -20,10 +20,15 @@ namespace TaxComputationAPI.Services
 
         }
 
-        public async Task<InvestmentAllowance> GetInvestmentAllowanceByAssetIdAndYearId(int assetId, int year)
+        public async Task AddInvestmentAllowanceByAssetIdAndYearId(InvestmentAllowance investmentAllowance)
         {
-            var record = await _investmentAllowanceRepository.GetInvestmentAllowanceByAssetIdAndYearId(assetId, year);
-            return record;
+            if (investmentAllowance == null)
+            {
+                throw new ArgumentNullException(nameof(investmentAllowance));
+            }
+
+
+            await _investmentAllowanceRepository.AddInvestmentAllowanceByAssetIdAndYearId(investmentAllowance);
         }
     }
 }

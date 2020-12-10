@@ -28,6 +28,7 @@ namespace TaxComputationAPI.Helpers
             CreateMap<ITLevy, ITLevyViewDto>().ReverseMap();
             CreateMap<MinimumTax, MinimumTaxDto>().ReverseMap();
             CreateMap<MinimumTax, MinimumTaxViewDto>().ReverseMap();
+            CreateMap<InvestmentAllowance, InvestmentAllowanceDto>().ReverseMap();
         }
     }
 }
