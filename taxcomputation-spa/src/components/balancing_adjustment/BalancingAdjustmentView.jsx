@@ -32,17 +32,28 @@ const BalancingAdjustmentView = ({ year, toast }) => {
               const assetNameRow = {};
               const emptyRow = {};
 
-              assetNameRow.category = (
-                <div className="p-d-flex p-jc-between p-ai-center">
-                  <strong>{balancingAdjustment.assetName}</strong>
-                  {balancingAdjustment.assetYear.length > 0 && (
+              assetNameRow.category = <strong>{balancingAdjustment.assetName}</strong>;
+
+              tableData.push(assetNameRow);
+
+              balancingAdjustment.assetYear.forEach((assetYear, index) => {
+                const costRow = {};
+                const initialAllowanceRow = {};
+                const annualAllowanceRow = {};
+                const residueRow = {};
+                const salesProceedRow = {};
+                const balanceRow = {};
+
+                costRow.category = (
+                  <div className="p-d-flex p-jc-between p-ai-center">
+                    <p>{`Cost up to ${assetYear.yearBought} YOA`}</p>
                     <i
                       className="pi pi-times-circle delete"
                       style={{ fontSize: 14, marginTop: 2 }}
                       onClick={async () => {
                         try {
                           const data = await balancingAdjustmentDelete({
-                            id: balancingAdjustment.assetYear[0].id
+                            id: assetYear.id
                           });
                           if (data) {
                             toast.show(
@@ -57,21 +68,8 @@ const BalancingAdjustmentView = ({ year, toast }) => {
                           console.log(error);
                         }
                       }}></i>
-                  )}
-                </div>
-              );
-
-              tableData.push(assetNameRow);
-
-              balancingAdjustment.assetYear.forEach((assetYear, index) => {
-                const costRow = {};
-                const initialAllowanceRow = {};
-                const annualAllowanceRow = {};
-                const residueRow = {};
-                const salesProceedRow = {};
-                const balanceRow = {};
-
-                costRow.category = `Cost up to ${assetYear.yearBought} YOA`;
+                  </div>
+                );
                 costRow.credit = utils.currencyFormatter(assetYear.cost);
                 costRow.cost = utils.currencyFormatter(assetYear.cost);
 
