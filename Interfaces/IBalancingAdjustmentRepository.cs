@@ -12,6 +12,8 @@ namespace TaxComputationAPI.Interfaces
         Task<BalancingAdjustmentYearBought> SaveBalancingAdjustmentYeatBought(BalancingAdjustmentYearBought balancingAdjustmentYearBought);
         Task DeleteBalancingAdjustmentYearBoughtAsync(BalancingAdjustmentYearBought balancingAdjustmentYearBought);
         Task<BalancingAdjustmentYearBought> GetBalancingAdjustmentYearBoughtById(int Id);
+
+        Task<BalancingAdjustment> GetBalancingAdjustmentById(int balancingAdjustmentId);
     }
     
 }

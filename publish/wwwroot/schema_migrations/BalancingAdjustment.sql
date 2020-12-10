@@ -212,6 +212,20 @@ SELECT @Id
 GO
 
 
+
+--------------------------------------- STORED PROCEDURE TO  GET BALANCING ADJUSTMENT BY ID-----------------------------------------
+IF OBJECT_ID('[dbo].[usp_GetBalancingAdjustment_By_Id') IS NOT NULL
+BEGIN
+DROP PROCEDURE [dbo].usp_GetBalancingAdjustment_By_Id
+END
+GO
+CREATE PROCEDURE [dbo].usp_GetBalancingAdjustment_By_Id(
+    @Id int)
+   
+AS
+SELECT *
+FROM [dbo].[BalancingAdjustment]
+WHERE Id=@Id
 --------------------------------------- STORED PROCEDURE TO  DELETE BALANCINGADJUSTMENTYEARBOUGHT BY ID-----------------------------------------
 IF OBJECT_ID('[dbo].[usp_Delete_BalancingAdjustmentYearBought]') IS NOT NULL
 BEGIN

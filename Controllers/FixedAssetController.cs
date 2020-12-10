@@ -129,9 +129,7 @@ namespace TaxComputationAPI.Controllers
         [Authorize]
         public async Task<IActionResult> DeleteFixedAsset(int id)
         {
-
             await _fixedAssetService.DeleteFixedAsset(id);
-
             return Ok("Item Unmapped");
         }
 

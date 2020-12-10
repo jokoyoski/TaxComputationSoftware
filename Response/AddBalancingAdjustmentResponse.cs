@@ -30,6 +30,8 @@ namespace TaxComputationAPI.Response
     {
         public decimal Cost { get; set; }
         public decimal InitialAllowance { get; set;}
+
+        public int Id {get;set;}
         public decimal AnnualAllowance { get; set; }
         public decimal BalancingCharge { get; set; }
         public decimal BalancingAllowance { get; set; }

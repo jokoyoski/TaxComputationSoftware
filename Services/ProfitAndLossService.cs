@@ -169,6 +169,98 @@ namespace TaxComputationAPI.Services
             records.Add(profitorlossbeforetax);
             return records;
         }
+       
+
+
+        public async Task<string> GetITLevy(int companyId, int yearId)
+        {
+            decimal total = 0;
+            ProfitAndLossViewDto revenue = new ProfitAndLossViewDto();
+            ProfitAndLossViewDto costofsales = new ProfitAndLossViewDto();
+            ProfitAndLossViewDto gross = new ProfitAndLossViewDto();
+            ProfitAndLossViewDto otheroperatingincome = new ProfitAndLossViewDto();
+            ProfitAndLossViewDto otheroperatinggainorloss = new ProfitAndLossViewDto();
+            ProfitAndLossViewDto operatingexpenses = new ProfitAndLossViewDto();
+            ProfitAndLossViewDto profitorlossbeforetax = new ProfitAndLossViewDto();
+            List<ProfitAndLossViewDto> records = new List<ProfitAndLossViewDto>();
+            var record = await _profitAndLossRepository.GetProfitAndLossByCompanyIdAndYearId(companyId, yearId);
+            if (record == null)
+            {
+                return null;
+            }
+            revenue.Category = "Revenue";
+            revenue.Total = $"₦{Utilities.FormatAmount(record.Revenue)}";
+
+
+            records.Add(revenue);
+            costofsales.Category = "Cost Of Sales";
+            if (Utilities.GetDecimal(record.CostOfSales) < 0)
+            {
+                costofsales.Total = $"₦{Utilities.FormatAmount(record.CostOfSales)}";
+            }
+            else
+            {
+                costofsales.Total = $"₦({Utilities.FormatAmount(record.CostOfSales)})";
+            }
+            records.Add(costofsales);
+
+            if (Utilities.GetDecimal(record.Revenue) > Utilities.GetDecimal(record.CostOfSales))
+            {
+
+                gross.Category = "Gross Profit";
+                decimal profit = decimal.Parse(record.Revenue) - decimal.Parse(record.CostOfSales);
+                gross.Total = $"₦{Utilities.FormatAmount(profit)}";
+                records.Add(gross);
+
+            }
+            else
+            {
+                gross.Category = "Gross Loss";
+                decimal loss = Utilities.GetDecimal(record.Revenue) - Utilities.GetDecimal(record.CostOfSales);
+                gross.Total = $"₦{Utilities.FormatAmount(loss)}";
+                records.Add(gross);
+            }
+            total = Utilities.GetDecimal(record.Revenue) - Utilities.GetDecimal(record.CostOfSales);
+            otheroperatingincome.Category = "Other Operating Income";
+            otheroperatingincome.Total = $"₦{Utilities.FormatAmount(record.OtherOperatingIncome)}";
+            records.Add(otheroperatingincome);
+            total += Utilities.GetDecimal(record.OtherOperatingIncome);
+
+
+            if (Utilities.GetDecimal(record.OtherOperatingGainOrLoss) < 0)
+            {
+                otheroperatinggainorloss.Category = "Other Operating Loss";
+                otheroperatinggainorloss.Total = $"₦{Utilities.FormatAmount(record.OtherOperatingGainOrLoss)}";
+                total = total - Utilities.GetDecimal(record.OtherOperatingGainOrLoss);
+            }
+            else
+            {
+                otheroperatinggainorloss.Category = "Other Operating Gain";
+                otheroperatinggainorloss.Total = $"₦{Utilities.FormatAmount(record.OtherOperatingGainOrLoss)}";
+                total = total + Utilities.GetDecimal(record.OtherOperatingGainOrLoss);
+            }
+            records.Add(otheroperatinggainorloss);
+            operatingexpenses.Category = "Operating Expenses";
+            operatingexpenses.Total = $"₦{Utilities.FormatAmount(record.OperatingExpenses)}";
+            records.Add(operatingexpenses);
+            total = total - Utilities.GetDecimal(record.OperatingExpenses);
+            if (total < 0)
+            {
+                profitorlossbeforetax.Total = $"₦{Utilities.FormatAmount(total)}";
+                profitorlossbeforetax.Category = "Loss Before Taxation";
+
+            }
+            else
+            {
+
+               
+                profitorlossbeforetax.Total = $"₦{Utilities.FormatAmount(total)}";
+                profitorlossbeforetax.Category = "Profit Before Taxation";
+                 return total.ToString();
+
+            }
+           return null;
+        }
 
 
 

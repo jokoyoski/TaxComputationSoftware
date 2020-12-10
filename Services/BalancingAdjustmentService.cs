@@ -400,8 +400,10 @@ namespace TaxComputationAPI.Services
                         ResponseDescription = $"Data not found"
                     };
                 }
-
-                await _balancingAdjustmentRepository.DeleteBalancingAdjustmentYearBoughtAsync(yearBought);
+               
+                 await _balancingAdjustmentRepository.DeleteBalancingAdjustmentYearBoughtAsync(yearBought);
+                 var balancingAdjustemtDetails=await _balancingAdjustmentRepository.GetBalancingAdjustmentById(yearBought.BalancingAdjustmentId);
+                 _capitalAllowanceService.UpdateCapitalAllowanceFromDeleteBalancingAdjustment(yearBought.Residue,yearBought.YearBought,balancingAdjustemtDetails.CompanyId,balancingAdjustemtDetails.AssetId);
             }
             catch(Exception e)
             {

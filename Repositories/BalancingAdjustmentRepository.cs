@@ -289,7 +289,7 @@ namespace TaxComputationAPI.Repositories
 
             try
             {
-
+           
                 using (IDbConnection conn = await _databaseManager.DatabaseConnection())
                 {
                     if (conn.State == ConnectionState.Closed) conn.Open();

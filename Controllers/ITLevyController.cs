@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using TaxComputationAPI.Dtos;
+using TaxComputationAPI.Helpers;
 using TaxComputationAPI.Interfaces;
 
 namespace TaxComputationAPI.Controllers
@@ -38,9 +39,21 @@ namespace TaxComputationAPI.Controllers
             }
             try
             {
-                var itLevy = await _itLevyService.GetITLevyByCompanyIdAndYear(companyId, yearId);
                 
-                return Ok(itLevy);
+                var itLevy = await _profitAndLossService.GetITLevy(companyId, yearId);
+                if (!string.IsNullOrEmpty(itLevy))
+                {
+                    
+                        decimal percentage = (decimal)1/ 100;     //annual percentage rate
+                   
+                        string profitBeforeTaxation = $"₦{Utilities.FormatAmount(itLevy)}";
+                        decimal percent = percentage * decimal.Parse(itLevy);
+
+                        return Ok(new { ProfitBeforeTaxation = decimal.Parse(profitBeforeTaxation), ITLevyAt1PercentThereIn = percent, });
+                    
+
+       
+                return StatusCode(404, new { errors = new[] { "Record not found at this time please try again later" } });
 
             }
             catch (Exception ex)

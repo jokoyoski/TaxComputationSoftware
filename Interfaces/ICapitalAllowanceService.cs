@@ -14,6 +14,8 @@ namespace TaxComputationAPI.Interfaces
 
         Task<int> SaveCapitalAllowanceFromFixedAsset(decimal addition, string year, int companyId, int assetId);
 
+        Task UpdateCapitalAllowanceFromDeleteBalancingAdjustment(decimal residue, string year, int companyId, int assetId);
+
         Task<int> SaveCapitalAllowanceFromBalancingAdjustment(decimal residue, string year, int companyId, int assetId);
     }
 }
