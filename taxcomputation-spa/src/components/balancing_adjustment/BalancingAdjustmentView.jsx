@@ -2,11 +2,14 @@ import React from "react";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { useCompany } from "../../store/CompanyStore";
-import { balancingAdjustmentViewData } from "../../apis/BalancingAdjustment";
+import {
+  balancingAdjustmentDelete,
+  balancingAdjustmentViewData
+} from "../../apis/BalancingAdjustment";
 import utils from "../../utils";
 import Loader from "../common/Loader";
 
-const BalancingAdjustmentView = ({ year }) => {
+const BalancingAdjustmentView = ({ year, toast }) => {
   const isMounted = React.useRef(false);
   const [{ companyId }] = useCompany();
   const [loading, setLoading] = React.useState();
@@ -29,7 +32,34 @@ const BalancingAdjustmentView = ({ year }) => {
               const assetNameRow = {};
               const emptyRow = {};
 
-              assetNameRow.category = <strong>{balancingAdjustment.assetName}</strong>;
+              assetNameRow.category = (
+                <div className="p-d-flex p-jc-between p-ai-center">
+                  <strong>{balancingAdjustment.assetName}</strong>
+                  {balancingAdjustment.assetYear.length > 0 && (
+                    <i
+                      className="pi pi-times-circle delete"
+                      style={{ fontSize: 14, marginTop: 2 }}
+                      onClick={async () => {
+                        try {
+                          const data = await balancingAdjustmentDelete({
+                            id: balancingAdjustment.assetYear[0].id
+                          });
+                          if (data) {
+                            toast.show(
+                              utils.toastCallback({
+                                severity: "success",
+                                detail: data.responseDescription
+                              })
+                            );
+                            fetchBalancingAdjustmentViewData();
+                          }
+                        } catch (error) {
+                          console.log(error);
+                        }
+                      }}></i>
+                  )}
+                </div>
+              );
 
               tableData.push(assetNameRow);
 
@@ -97,7 +127,7 @@ const BalancingAdjustmentView = ({ year }) => {
     fetchBalancingAdjustmentViewData();
 
     return () => (isMounted.current = false);
-  }, [companyId, year]);
+  }, [companyId, toast, year]);
 
   if (error) return <p style={{ color: "#f00" }}>{error}</p>;
 
