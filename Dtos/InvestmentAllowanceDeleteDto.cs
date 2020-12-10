@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace TaxComputationAPI.Models
+namespace TaxComputationAPI.Dtos
 {
-    public class InvestmentAllowance
+    public class InvestmentAllowanceDeleteDto
     {
-        public int Id { get; set; }
         public int AssetId { get; set; }
         public int CompanyId { get; set; }
         public int YearId { get; set; }

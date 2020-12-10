@@ -21,7 +21,7 @@ namespace TaxComputationAPI.Repositories
             _databaseManager = databaseManager;
             _logger = logger;
         }
-        public async Task AddInvestmentAllowanceByAssetIdAndYearId(InvestmentAllowance investmentAllowance)
+        public async Task AddInvestmentAllowanceAsync(InvestmentAllowance investmentAllowance)
         {
             if (investmentAllowance == null) throw new ArgumentNullException(nameof(investmentAllowance));
 
@@ -37,6 +37,8 @@ namespace TaxComputationAPI.Repositories
                     parameters.Add("@AssetId", investmentAllowance.AssetId);
 
                     parameters.Add("@YearId", investmentAllowance.YearId);
+
+                    parameters.Add("@CompanyId", investmentAllowance.CompanyId);
 
 
                     try
@@ -58,5 +60,44 @@ namespace TaxComputationAPI.Repositories
                 throw new SystemException(e.Message);
             }
         }
+
+        public async Task DeleteInvestmentAllowanceAsync(InvestmentAllowance investmentAllowance)
+        {
+
+            if (investmentAllowance == null) throw new ArgumentNullException(nameof(investmentAllowance));
+
+            try
+            {
+
+                using (IDbConnection conn = await _databaseManager.DatabaseConnection())
+                {
+                    if (conn.State == ConnectionState.Closed) conn.Open();
+
+
+                    DynamicParameters parameters = new DynamicParameters();
+
+
+                    parameters.Add("@Id", investmentAllowance.Id);
+
+                    try
+                    {
+                        var respone = conn.Execute("[dbo].[usp_Delete_Investment_Allowance]", parameters, commandType: CommandType.StoredProcedure);
+                        conn.Close();
+                    }
+                    catch (Exception e)
+                    {
+
+                        _logger.LogError($"{e.Message}");
+
+                        throw e;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                throw new SystemException(e.Message);
+            }
+        }
+
     }
 }

@@ -20,7 +20,7 @@ namespace TaxComputationAPI.Services
 
         }
 
-        public async Task AddInvestmentAllowanceByAssetIdAndYearId(InvestmentAllowance investmentAllowance)
+        public async Task AddInvestmentAllowanceAsync(InvestmentAllowance investmentAllowance)
         {
             if (investmentAllowance == null)
             {
@@ -28,7 +28,17 @@ namespace TaxComputationAPI.Services
             }
 
 
-            await _investmentAllowanceRepository.AddInvestmentAllowanceByAssetIdAndYearId(investmentAllowance);
+            await _investmentAllowanceRepository.AddInvestmentAllowanceAsync(investmentAllowance);
+        }
+
+        public async Task DeleteInvestmentAllowanceAsync(InvestmentAllowance investmentAllowance)
+        {
+            if (investmentAllowance == null)
+            {
+                throw new ArgumentNullException(nameof(investmentAllowance));
+            }
+
+            await _investmentAllowanceRepository.DeleteInvestmentAllowanceAsync(investmentAllowance);
         }
     }
 }

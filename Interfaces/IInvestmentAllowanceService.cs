@@ -8,6 +8,7 @@ namespace TaxComputationAPI.Interfaces
 {
     public interface IInvestmentAllowanceService
     {
-        Task AddInvestmentAllowanceByAssetIdAndYearId(InvestmentAllowance investment);
+        Task AddInvestmentAllowanceAsync(InvestmentAllowance investment);
+        Task DeleteInvestmentAllowanceAsync(InvestmentAllowance investment);
     }
 }

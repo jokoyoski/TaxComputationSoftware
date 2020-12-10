@@ -2,6 +2,7 @@
 BEGIN
    create table InvestmentAllowance(
  Id   int identity(1,1) NOT NULL ,
+ Companyid int,
  YearId int,
  AssetId int
  )
@@ -15,6 +16,7 @@ BEGIN
 END
 GO
 CREATE procedure [dbo].[usp_Insert_Investment_Allowance](
+  @CompanyId INT,
   @YearId   INT,
   @AssetId  INT
 )
@@ -22,11 +24,13 @@ AS
 
 INSERT [dbo].[InvestmentAllowance]
 (
+    CompanyId,
     YearId,
     AssetId
 )
 VALUES
 (
+    @CompanyId,
     @YearId,
     @AssetId
 )

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -18,33 +19,61 @@ namespace TaxComputationAPI.Controllers
     public class InvestmentAllowanceController : ControllerBase
     {
         private readonly ILogger<InvestmentAllowanceController> _logger;
-        private readonly IFixedAssetService _fixedAssetService;
+        private readonly IMapper _mapper;
         private readonly IInvestmentAllowanceService _investmentAllowanceService;
-        public InvestmentAllowanceController(ILogger<InvestmentAllowanceController> logger, IFixedAssetService fixedAssetService, IInvestmentAllowanceService investmentAllowanceService)
+        public InvestmentAllowanceController(ILogger<InvestmentAllowanceController> logger, IMapper mapper, IInvestmentAllowanceService investmentAllowanceService)
         {
             _logger = logger;
-            _fixedAssetService = fixedAssetService;
+            _mapper = mapper;
             _investmentAllowanceService = investmentAllowanceService;
         }
 
-        [HttpPost]
-        [Authorize]
-
+        [HttpPost("investment-allowance")]
         public async Task<IActionResult> AddInvestmentAllowance(InvestmentAllowanceDto investmentAllowanceDto)
         {
             try
             {
-                await _investmentAllowanceService.AddInvestmentAllowanceByAssetIdAndYearId(investmentAllowanceDto);
-                return Ok("Record saved succesfully!");
+                //var investmentAllowanceRecord = await _investmentAllowanceService.GetInvestmentAllowanceAsync(investmentAllowanceDto.AssetId);
+                //if (investmentAllowanceRecord != null)
+                //{
+                //    var error = new[] { "Investment exist!" };
+                //    return StatusCode(400, new { errors = new { error } });
+                //}
+                var investmentAllowanceToAdd = _mapper.Map<InvestmentAllowance>(investmentAllowanceDto);
+                investmentAllowanceToAdd.AssetId = investmentAllowanceDto.AssetId;
+                investmentAllowanceToAdd.CompanyId = investmentAllowanceDto.CompanyId;
+                investmentAllowanceToAdd.YearId = investmentAllowanceDto.YearId;
+
+                await _investmentAllowanceService.AddInvestmentAllowanceAsync(investmentAllowanceToAdd);
+
+                return Ok("Investment Allowance added successfully !!");
+
             }
             catch (Exception ex)
             {
-                var email = User.FindFirst(ClaimTypes.Email).Value;
-                _logger.LogInformation("Exception for {email}, {ex}", email, ex.Message);
+                var error = new[] { "Error occured while trying to process your request please try again later !" };
+                return StatusCode(500, new { errors = new { error } });
+            }
+        }
+
+        [HttpDelete("investment-allowance/{Id}")]
+        //[Authorize]
+        public async Task<IActionResult> DeleteInvestmentAllowance(int Id, InvestmentAllowanceDeleteDto investmentAllowanceDeleteDto)
+        {
+            try
+            {
+                var investmentAllowanceToDelete = _mapper.Map<InvestmentAllowance>(investmentAllowanceDeleteDto);
+                investmentAllowanceToDelete.Id = Id;
+
+                await _investmentAllowanceService.DeleteInvestmentAllowanceAsync(investmentAllowanceToDelete);
+
+                return Ok("Investment Allowance deleted successfully !!");
+            }
+            catch (Exception ex)
+            {
                 return StatusCode(500, new { errors = new[] { "Error occured while trying to process your request please try again later !" } });
 
             }
         }
-
     }
 }
