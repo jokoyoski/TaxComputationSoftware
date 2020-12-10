@@ -38,22 +38,19 @@ namespace TaxComputationAPI.Controllers
             }
             try
             {
-
-
-                var minimumTax = await _profitAndLossService.GetMinimumTax(companyId, yearId);
-                if (!string.IsNullOrEmpty(minimumTax))
+                var value = await _profitAndLossService.GetMinimumTax(companyId, yearId);
+                 decimal percentage = (decimal)1/ 100;     //annual percentage rate
+                if (value.OtherIncome != null)
                 {
-                    
-                        decimal percentage = (decimal)5 / 100;     //annual percentage rate
-                   
-                        string turnover = $"₦{Utilities.FormatAmount(minimumTax)}";
-                        decimal percent = percentage * decimal.Parse(minimumTax);
+                    var turnOver = decimal.Parse(value.Revenue) + decimal.Parse(value.OtherIncome);
+                    var percent=percentage *turnOver;
+                    return Ok(new { turnOver = turnOver, fivePercentTurnOver=percent});
+                }
+                else{
+                     return StatusCode(404, new { errors = new[] { "Record not found at this time please try again later" } });
 
-                        return Ok(new { turnOver = percent, fivePercentTurnOver = decimal.Parse(minimumTax), });
-                    
                 }
 
-                return StatusCode(404, new { errors = new[] { "Record not found at this time please try again later" } });
 
             }
             catch (Exception ex)

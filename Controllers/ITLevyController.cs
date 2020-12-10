@@ -49,10 +49,10 @@ namespace TaxComputationAPI.Controllers
                         string profitBeforeTaxation = $"₦{Utilities.FormatAmount(itLevy)}";
                         decimal percent = percentage * decimal.Parse(itLevy);
 
-                        return Ok(new { ProfitBeforeTaxation = decimal.Parse(profitBeforeTaxation), ITLevyAt1PercentThereIn = percent, });
+                        return Ok(new { ProfitBeforeTaxation = decimal.Parse(itLevy), ITLevyAt1PercentThereIn = percent, });
                     
 
-       
+                }
                 return StatusCode(404, new { errors = new[] { "Record not found at this time please try again later" } });
 
             }

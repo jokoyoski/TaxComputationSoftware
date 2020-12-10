@@ -12,6 +12,7 @@ namespace TaxComputationAPI.Interfaces
 
        Task<List<ProfitAndLossViewDto>> GetProfitAndLossByCompanyIdAndYear(int companyId, int yearId);
         Task SaveProfitAndLoss(CreateProfitAndLoss createProfitAndLoss);
+        Task<MinimumTaxObject> GetMinimumTax(int companyId, int yearId);
 
         Task<string> GetITLevy(int companyId, int yearId);
     }
