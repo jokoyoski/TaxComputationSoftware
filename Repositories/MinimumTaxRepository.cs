@@ -12,16 +12,9 @@ namespace TaxComputationAPI.Repositories
     {
         public async Task<MinimumTaxViewDto> GetMinimumTaxByCompanyIdAndYearId(int companyId, int yearId)
         {
-            try
-            {
-                return new MinimumTaxViewDto { CompanyId = 1, YearId = 2020, turnOver = 10, fivePercentTurnOver = 10 };
-            }
-            catch (Exception ex)
-            {
-                
-            }
+          
 
-            return new MinimumTaxViewDto { CompanyId = 1, YearId = 2020, turnOver = 10, fivePercentTurnOver = 10 };
+            return new MinimumTaxViewDto { turnOver="220.23", fivePercentTurnOver ="3000.30"};
         }
     }
 }

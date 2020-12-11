@@ -14,9 +14,10 @@ namespace TaxComputationAPI.Helpers
             var numi=new NumberFormatInfo{CurrencySymbol=null+" ",CurrencyDecimalDigits=decimalDigits};
            var value= (amt).ToString("c",numi);
            value=String.Concat(value.Where(c => !Char.IsWhiteSpace(c)));
-           return $"₦{value}";
+           return $"{value}";
         }
 
+       
 
          public static decimal GetDecimal(object amount)
         {

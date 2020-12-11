@@ -2,11 +2,14 @@ import React from "react";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { useCompany } from "../../store/CompanyStore";
-import { balancingAdjustmentViewData } from "../../apis/BalancingAdjustment";
+import {
+  balancingAdjustmentDelete,
+  balancingAdjustmentViewData
+} from "../../apis/BalancingAdjustment";
 import utils from "../../utils";
 import Loader from "../common/Loader";
 
-const BalancingAdjustmentView = ({ year }) => {
+const BalancingAdjustmentView = ({ year, toast }) => {
   const isMounted = React.useRef(false);
   const [{ companyId }] = useCompany();
   const [loading, setLoading] = React.useState();
@@ -14,6 +17,8 @@ const BalancingAdjustmentView = ({ year }) => {
   const [balancingAdjustmentData, setBalancingAdjustmentData] = React.useState([]);
 
   React.useEffect(() => {
+    if (!companyId) return;
+
     isMounted.current = true;
     const fetchBalancingAdjustmentViewData = async () => {
       try {
@@ -39,7 +44,32 @@ const BalancingAdjustmentView = ({ year }) => {
                 const salesProceedRow = {};
                 const balanceRow = {};
 
-                costRow.category = `Cost up to ${assetYear.yearBought} YOA`;
+                costRow.category = (
+                  <div className="p-d-flex p-jc-between p-ai-center">
+                    <p>{`Cost up to ${assetYear.yearBought} YOA`}</p>
+                    <i
+                      className="pi pi-times-circle delete"
+                      style={{ fontSize: 14, marginTop: 2 }}
+                      onClick={async () => {
+                        try {
+                          const data = await balancingAdjustmentDelete({
+                            id: assetYear.id
+                          });
+                          if (data) {
+                            toast.show(
+                              utils.toastCallback({
+                                severity: "success",
+                                detail: data.responseDescription
+                              })
+                            );
+                            fetchBalancingAdjustmentViewData();
+                          }
+                        } catch (error) {
+                          console.log(error);
+                        }
+                      }}></i>
+                  </div>
+                );
                 costRow.credit = utils.currencyFormatter(assetYear.cost);
                 costRow.cost = utils.currencyFormatter(assetYear.cost);
 
@@ -95,7 +125,7 @@ const BalancingAdjustmentView = ({ year }) => {
     fetchBalancingAdjustmentViewData();
 
     return () => (isMounted.current = false);
-  }, [companyId, year]);
+  }, [companyId, toast, year]);
 
   if (error) return <p style={{ color: "#f00" }}>{error}</p>;
 

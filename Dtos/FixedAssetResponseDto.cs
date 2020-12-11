@@ -61,6 +61,10 @@ namespace TaxComputationAPI.Dtos
     public string DisposalDepreciationTotal {get;set;}
 
      public string ClosingDepreciationTotal {get;set;}
+
+     public string TransferCostTotal    {get;set;}
+
+     public string TransferDepreciationTotal {get;set;}
     }
 
    public class NetBookValue{

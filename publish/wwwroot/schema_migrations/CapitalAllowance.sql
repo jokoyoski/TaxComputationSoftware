@@ -116,40 +116,18 @@ GO
 
 
 
+--------------------------------------- STORED PROCEDURE TO  GET UPDATE CAPITAL ALLOWANCE BY FIXED ASSET OR BALANCING ADJUSTMENT-----------------------------------------
 
---------------------------------------- STORED PROCEDURE TO  UPDATE CAPITAL ALLOWANCE FROM BALACING ADJUSTEMNT-----------------------------------------
-
-IF OBJECT_ID('[dbo].[Update_Capital_Allowance_From_Balancing_Ajustment]') IS nOT NULL
+IF OBJECT_ID('[dbo].[Update_Capital_Allowance_From_Fixed_Asset_Or_Balancing_Adjustment]') IS nOT NULL
 BEGIN
-DROP procedure [dbo].[Update_Capital_Allowance_From_Balancing_Ajustment]
+DROP procedure [dbo].[Update_Capital_Allowance_From_Fixed_Asset_Or_Balancing_Adjustment]
 END
 GO
-CREATE procedure [dbo].[Update_Capital_Allowance_From_Balancing_Ajustment](
+CREATE procedure [dbo].[Update_Capital_Allowance_From_Fixed_Asset_Or_Balancing_Adjustment](
 @TaxYear int,
 @OpeningResidue varchar(20),
 @ClosingResidue varchar(20),
-@CompanyId int,
-@AssetId int
-
-)
-AS
-
-UPDATE [dbo].[CapitalAllowance]
-set OpeningResidue=@OpeningResidue, ClosingResidue=@ClosingResidue   WHERE CompanyId=@CompanyId and AssetId=@AssetId and TaxYear=@TaxYear
-GO
-
-
---------------------------------------- STORED PROCEDURE TO  GET UPDATE CAPITAL ALLOWANCE BY FIXEDASSET-----------------------------------------
-
-IF OBJECT_ID('[dbo].[Update_Capital_Allowance_From_Fixed_Asset]') IS nOT NULL
-BEGIN
-DROP procedure [dbo].[Update_Capital_Allowance_From_Fixed_Asset]
-END
-GO
-CREATE procedure [dbo].[Update_Capital_Allowance_From_Fixed_Asset](
-@TaxYear int,
-@OpeningResidue varchar(20),
-@ClosingResidue varchar(20),
+@Addition varchar(20),
 @Annual varchar(20),
 @Initial varchar(20),
 @Total  varchar(20),
@@ -161,6 +139,6 @@ CREATE procedure [dbo].[Update_Capital_Allowance_From_Fixed_Asset](
 AS
 
 UPDATE [dbo].[CapitalAllowance]
-set OpeningResidue=@OpeningResidue, ClosingResidue=@ClosingResidue ,Annual=@Annual, Initial=@Initial,Total=@Total,YearsToGo=@YearsToGo   WHERE CompanyId=@CompanyId and AssetId=@AssetId and TaxYear=@TaxYear
+set OpeningResidue=@OpeningResidue, ClosingResidue=@ClosingResidue ,Addition=@Addition,Annual=@Annual, Initial=@Initial,Total=@Total,YearsToGo=@YearsToGo   WHERE CompanyId=@CompanyId and AssetId=@AssetId and TaxYear=@TaxYear
 
 GO

@@ -68,7 +68,7 @@ const BalancingAdjustment = () => {
             ),
             view: (
               <ViewMode title={title} year={year}>
-                <BalancingAdjustmentView year={year} />
+                <BalancingAdjustmentView year={year} toast={toast.current} />
               </ViewMode>
             )
           }[mode]

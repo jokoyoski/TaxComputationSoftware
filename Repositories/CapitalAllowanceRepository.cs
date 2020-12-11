@@ -62,7 +62,7 @@ namespace TaxComputationAPI.Repositories
         }
 
 
-        public async Task<int> UpdateCapitalAllowanceByFixedAsset(CapitalAllowance capitalAllowance)
+        public async Task<int> UpdateCapitalAllowanceByFixedAssetOrBalancingAdjustemnt(CapitalAllowance capitalAllowance)
         {
             int rowAffected = 0;
             using (IDbConnection con = await _databaseManager.DatabaseConnection())
@@ -74,13 +74,14 @@ namespace TaxComputationAPI.Repositories
                 parameters.Add("@TaxYear", capitalAllowance.TaxYear);
                 parameters.Add("@OpeningResidue", capitalAllowance.OpeningResidue);
                 parameters.Add("@Initial", capitalAllowance.Initial);
+                parameters.Add("@Addition", capitalAllowance.Addition);
                 parameters.Add("@Annual", capitalAllowance.Annual);
                 parameters.Add("@Total", capitalAllowance.Total);
                 parameters.Add("@ClosingResidue", capitalAllowance.ClosingResidue);
                 parameters.Add("@YearsToGo", capitalAllowance.YearsToGo);
                 parameters.Add("@CompanyId", capitalAllowance.CompanyId);
                 parameters.Add("@AssetId", capitalAllowance.AssetId);
-                rowAffected = con.Execute("[dbo].[Update_Capital_Allowance_From_Fixed_Asset]", parameters, commandType: CommandType.StoredProcedure);
+                rowAffected = con.Execute("[dbo].[Update_Capital_Allowance_From_Fixed_Asset_Or_Balancing_Adjustment]", parameters, commandType: CommandType.StoredProcedure);
             }
 
             return rowAffected;
@@ -88,7 +89,8 @@ namespace TaxComputationAPI.Repositories
 
 
 
-        public async Task<int> UpdateCapitalAllowanceBybalancingAdjustment(CapitalAllowance capitalAllowance)
+       /* public async Task<int> UpdateCapitalAllowanceBybalancingAdjustment(CapitalAllowance capitalAllowance)
+
         {
             int rowAffected = 0;
             using (IDbConnection con = await _databaseManager.DatabaseConnection())
@@ -107,7 +109,7 @@ namespace TaxComputationAPI.Repositories
 
             return rowAffected;
         }
-
+       */
 
         public async Task<int> SaveCapitaLAllowance(CapitalAllowance capitalAllowance)
         {

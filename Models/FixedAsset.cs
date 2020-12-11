@@ -6,13 +6,13 @@ namespace TaxComputationAPI.Models
         public int CompanyId {get;set;} 
         public int YearId {get;set;}
         public int AssetId {get;set;}
-        public long OpeningCost {get;set;}
+        public decimal OpeningCost {get;set;}
 
-        public long TransferCost {get;set;}
+        public decimal TransferCost {get;set;}
 
-        public long CostAddition {get;set;}
+        public decimal CostAddition {get;set;}
 
-        public long CostDisposal {get;set;}
+        public decimal CostDisposal {get;set;}
 
 
       ///   public long CostClosing {get;set;}
@@ -20,13 +20,13 @@ namespace TaxComputationAPI.Models
         public bool IsTransferCostRemoved {get;set;}
         
        
-         public long OpeningDepreciation {get;set;}
+         public decimal OpeningDepreciation {get;set;}
 
-         public long TransferDepreciation {get;set;}
+         public decimal TransferDepreciation {get;set;}
         
-        public long DepreciationAddition {get;set;}
+        public decimal DepreciationAddition {get;set;}
 
-        public long DepreciationDisposal {get;set;}
+        public decimal DepreciationDisposal {get;set;}
 
      ///   public long DepreciationClosing {get;set;}
 

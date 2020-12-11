@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using TaxComputationAPI.Dtos;
+using TaxComputationAPI.Helpers;
 using TaxComputationAPI.Interfaces;
 
 namespace TaxComputationAPI.Controllers
@@ -36,9 +38,19 @@ namespace TaxComputationAPI.Controllers
             }
             try
             {
-                var itLevy = await _minimumTaxService.GetMinimumTaxByCompanyIdAndYear(companyId, yearId);
+                var value = await _profitAndLossService.GetMinimumTax(companyId, yearId);
+                 decimal percentage = (decimal)1/ 100;     //annual percentage rate
+                if (value.OtherIncome != null)
+                {
+                    var turnOver = decimal.Parse(value.Revenue) + decimal.Parse(value.OtherIncome);
+                    var percent=percentage *turnOver;
+                    return Ok(new { turnOver = turnOver, fivePercentTurnOver=percent});
+                }
+                else{
+                     return StatusCode(404, new { errors = new[] { "Record not found at this time please try again later" } });
 
-                return Ok(itLevy);
+                }
+
 
             }
             catch (Exception ex)

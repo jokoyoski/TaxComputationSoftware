@@ -112,3 +112,7 @@ body {
   height: 100vh;
   z-index: 1000;
 }
+
+.delete:hover {
+  color: #f00;
+}

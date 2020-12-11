@@ -7,11 +7,8 @@ namespace TaxComputationAPI.Dtos
 {
     public class MinimumTaxViewDto
     {
-        public int CompanyId { get; set; }
-        public int YearId { get; set; }
+        public string turnOver { get; set; }
 
-        public decimal turnOver { get; set; }
-
-        public decimal fivePercentTurnOver { get; set; }
+        public string fivePercentTurnOver { get; set; }
     }
 }

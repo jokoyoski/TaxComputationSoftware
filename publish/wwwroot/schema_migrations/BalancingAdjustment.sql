@@ -211,3 +211,49 @@ SET @Id = SCOPE_IDENTITY()
 SELECT @Id
 GO
 
+
+
+--------------------------------------- STORED PROCEDURE TO  GET BALANCING ADJUSTMENT BY ID-----------------------------------------
+IF OBJECT_ID('[dbo].[usp_GetBalancingAdjustment_By_Id') IS NOT NULL
+BEGIN
+DROP PROCEDURE [dbo].usp_GetBalancingAdjustment_By_Id
+END
+GO
+CREATE PROCEDURE [dbo].usp_GetBalancingAdjustment_By_Id(
+    @Id int)
+   
+AS
+SELECT *
+FROM [dbo].[BalancingAdjustment]
+WHERE Id=@Id
+--------------------------------------- STORED PROCEDURE TO  DELETE BALANCINGADJUSTMENTYEARBOUGHT BY ID-----------------------------------------
+IF OBJECT_ID('[dbo].[usp_Delete_BalancingAdjustmentYearBought]') IS NOT NULL
+BEGIN
+DROP PROCEDURE [dbo].[usp_Delete_BalancingAdjustmentYearBought]
+PRINT('OK')
+END
+GO
+CREATE PROCEDURE [dbo].[usp_Delete_BalancingAdjustmentYearBought](
+	@Id INT
+)
+AS
+DELETE FROM [dbo].[BalancingAdjustmentYearBought] 
+WHERE Id = @Id
+
+GO
+
+--------------------------------------- STORED PROCEDURE TO  GET BALANCINGADJUSTMENTYEARBOUGHT BY ID -----------------------------------------
+
+IF OBJECT_ID('[dbo].[usp_Get_BalancingAdjustmentYearBought]') IS NOT NULL
+BEGIN
+DROP procedure [dbo].[usp_Get_BalancingAdjustmentYearBought]
+END
+GO
+CREATE procedure [dbo].[usp_Get_BalancingAdjustmentYearBought](
+@Id INT
+)
+AS
+
+SELECT Id,AssestId,Cost,InitialAllowance,AnnualAllowance,SalesProceed,Residue,BalancingAllowance,BalancingCharge,DateCreated,YearBought,BalancingAdjustmentId from [dbo].[BalancingAdjustmentYearBought] WHERE Id = @Id
+GO
+

@@ -31,7 +31,6 @@ namespace TaxComputationAPI.Repositories
 
          public async Task<FixedAsset> GetFixedAssetsByCompanyYearIdAssetId(int companyId, int yearId,int assetId)
         {
-           
             using (IDbConnection conn = await _databaseManager.DatabaseConnection())
             {
                 if (conn.State == ConnectionState.Closed)
@@ -42,7 +41,7 @@ namespace TaxComputationAPI.Repositories
                 parameters.Add("@CompanyId", companyId);
                 parameters.Add("@YearId", yearId);
                 parameters.Add("@AssetId", assetId);
-                var record = await conn.QueryFirstAsync<FixedAsset>("[dbo].[usp_Get_Fixed_Asset_By_CompanyId_And_YearId_AssetId]", parameters, commandType: CommandType.StoredProcedure);
+                var record = await conn.QueryFirstOrDefaultAsync<FixedAsset>("[dbo].[usp_Get_Fixed_Asset_By_CompanyId_And_YearId_AssetId]", parameters, commandType: CommandType.StoredProcedure);
                 return record;
 
             }
@@ -53,7 +52,8 @@ namespace TaxComputationAPI.Repositories
 
         public async Task<FixedAssetResponse> GetFixedAssetsByCompany(int companyId, int yearId)
         {
-           
+
+            try{
             using (IDbConnection conn = await _databaseManager.DatabaseConnection())
             {
                 if (conn.State == ConnectionState.Closed)
@@ -74,6 +74,11 @@ namespace TaxComputationAPI.Repositories
             }
 
             
+
+            }catch(Exception ex){
+
+            }
+           return null;
 
         }
 
@@ -125,7 +130,7 @@ namespace TaxComputationAPI.Repositories
                 parameters.Add("@TransferDepreciation", fixedAssetDto.TransferDepreciation);
                 parameters.Add("@DepreciationAddition", fixedAssetDto.DepreciationAddition);
                 parameters.Add("@DepreciationDisposal", fixedAssetDto.DepreciationDisposal);
-                parameters.Add("@type", "Cost");
+                parameters.Add("@type", "Costfff");
                 parameters.Add("@IsTransferDepreciationRemoved", fixedAssetDto.IsTransferDepreciationRemoved);
                 int rowAffected = con.Execute("[dbo].[usp_Insert_Fixed_Asset]", parameters, commandType: CommandType.StoredProcedure);
                 return rowAffected;
