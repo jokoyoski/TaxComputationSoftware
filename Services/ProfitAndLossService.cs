@@ -38,7 +38,7 @@ namespace TaxComputationAPI.Services
                 if(value.IsDebit){
                 debitValue+=value.value;
                 }else{
-                 creditValue=value.value;
+                 creditValue+=value.value;
                  }
             }
 
