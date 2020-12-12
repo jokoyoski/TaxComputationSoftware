@@ -68,7 +68,7 @@ const InvestmentAllowance = () => {
             ),
             view: (
               <ViewMode title={title} year={year}>
-                <InvestmentAllowanceView />
+                <InvestmentAllowanceView year={year} toast={toast.current} />
               </ViewMode>
             )
           }[mode]
