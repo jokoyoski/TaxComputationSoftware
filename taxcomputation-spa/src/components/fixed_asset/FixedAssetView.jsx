@@ -133,9 +133,11 @@ const FixedAssetView = ({ year }) => {
                   case "netValue":
                     s[d.fixedAssetName] = (
                       <strong>
-                        {utils.currencyFormatter(
-                          data.netBookValue[index].value.replaceAll(/,/g, "")
-                        )}
+                        {isNaN(data.netBookValue[index].value[0])
+                          ? data.netBookValue[index].value
+                          : utils.currencyFormatter(
+                              data.netBookValue[index].value.replaceAll(/,/g, "")
+                            )}
                       </strong>
                     );
                     s.total = (
