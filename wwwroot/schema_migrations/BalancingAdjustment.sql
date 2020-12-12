@@ -1,4 +1,3 @@
-
 PRINT('================================================Balance Adjustment Script Started==============================================')
 
 
@@ -17,9 +16,9 @@ BEGIN
         [CompanyId] [int] NOT NULL,
         [Year] [nvarchar](max) NULL,
         [DateCreated] [datetime2](7) NOT NULL,
-        CONSTRAINT [PK_BalancingAdjustment] PRIMARY KEY CLUSTERED 
+        CONSTRAINT [PK_BalancingAdjustment] PRIMARY KEY CLUSTERED
 (
-	[Id] ASC
+    [Id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
     ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 END
@@ -47,9 +46,9 @@ BEGIN
         [DateCreated] [datetime2](7) NOT NULL,
         [YearBought] [nvarchar](max) NULL,
         [BalancingAdjustmentId] [int] NOT NULL,
-        CONSTRAINT [PK_BalancingAdjustmentYearBought] PRIMARY KEY CLUSTERED 
+        CONSTRAINT [PK_BalancingAdjustmentYearBought] PRIMARY KEY CLUSTERED
 (
-	[Id] ASC
+    [Id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
     ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 END
@@ -214,7 +213,7 @@ GO
 
 
 --------------------------------------- STORED PROCEDURE TO  GET BALANCING ADJUSTMENT BY ID-----------------------------------------
-IF OBJECT_ID('[dbo].[usp_GetBalancingAdjustment_By_Id') IS NOT NULL
+IF OBJECT_ID('[dbo].[usp_GetBalancingAdjustment_By_Id]') IS NOT NULL
 BEGIN
 DROP PROCEDURE [dbo].usp_GetBalancingAdjustment_By_Id
 END
@@ -226,18 +225,22 @@ AS
 SELECT *
 FROM [dbo].[BalancingAdjustment]
 WHERE Id=@Id
+GO
+
+
+
 --------------------------------------- STORED PROCEDURE TO  DELETE BALANCINGADJUSTMENTYEARBOUGHT BY ID-----------------------------------------
 IF OBJECT_ID('[dbo].[usp_Delete_BalancingAdjustmentYearBought]') IS NOT NULL
 BEGIN
-DROP PROCEDURE [dbo].[usp_Delete_BalancingAdjustmentYearBought]
+DROP PROCEDURE [dbo].usp_Delete_BalancingAdjustmentYearBought
 PRINT('OK')
 END
 GO
 CREATE PROCEDURE [dbo].[usp_Delete_BalancingAdjustmentYearBought](
-	@Id INT
+    @Id INT
 )
 AS
-DELETE FROM [dbo].[BalancingAdjustmentYearBought] 
+DELETE FROM [dbo].[BalancingAdjustmentYearBought]
 WHERE Id = @Id
 
 GO
@@ -246,7 +249,7 @@ GO
 
 IF OBJECT_ID('[dbo].[usp_Get_BalancingAdjustmentYearBought]') IS NOT NULL
 BEGIN
-DROP procedure [dbo].[usp_Get_BalancingAdjustmentYearBought]
+DROP procedure [dbo].usp_Get_BalancingAdjustmentYearBought
 END
 GO
 CREATE procedure [dbo].[usp_Get_BalancingAdjustmentYearBought](
@@ -256,4 +259,3 @@ AS
 
 SELECT Id,AssestId,Cost,InitialAllowance,AnnualAllowance,SalesProceed,Residue,BalancingAllowance,BalancingCharge,DateCreated,YearBought,BalancingAdjustmentId from [dbo].[BalancingAdjustmentYearBought] WHERE Id = @Id
 GO
-

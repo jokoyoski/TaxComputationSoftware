@@ -232,10 +232,7 @@ namespace TaxComputationAPI.Services
 
             }
 
-               netBookValues.Add(new TaxComputationAPI.Dtos.NetBookValue
-                {
-                    value = $"{Utilities.FormatAmount("29000")}"
-                });
+              
 
 
 
