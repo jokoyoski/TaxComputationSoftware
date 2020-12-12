@@ -131,12 +131,24 @@ const FixedAssetView = ({ year }) => {
                     s.total = <strong>{data.total.closingDepreciationTotal}</strong>;
                     break;
                   case "netValue":
-                    s[d.fixedAssetName] = <strong>{data.netBookValue[index].value}</strong>;
+                    s[d.fixedAssetName] = (
+                      <strong>
+                        {utils.currencyFormatter(
+                          data.netBookValue[index].value.replaceAll(/,/g, "")
+                        )}
+                      </strong>
+                    );
                     s.total = (
                       <strong>
                         {utils.currencyFormatter(
                           data.netBookValue.reduce(
-                            (acc, cur) => acc + Number(cur.value.slice(1).replace(/,/g, "")),
+                            (acc, cur) =>
+                              acc +
+                              Number(
+                                isNaN(cur.value[0])
+                                  ? cur.value.slice(1).replaceAll(/,/g, "")
+                                  : cur.value.replaceAll(/,/g, "")
+                              ),
                             0
                           )
                         )}
