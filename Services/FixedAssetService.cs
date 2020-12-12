@@ -232,6 +232,12 @@ namespace TaxComputationAPI.Services
 
             }
 
+               netBookValues.Add(new TaxComputationAPI.Dtos.NetBookValue
+                {
+                    value = $"{Utilities.FormatAmount("29000")}"
+                });
+
+
 
             var total = new TaxComputationAPI.Dtos.Total
             {
@@ -289,6 +295,11 @@ namespace TaxComputationAPI.Services
             await _trialBalanceRepository.UpdateTrialBalance(trialbalanceId, null, true);  //fice
             await _utilitiesRepository.DeleteTrialBalancingMapping(trialbalanceId);
         }
+
+
+
+
+      
 
 
       

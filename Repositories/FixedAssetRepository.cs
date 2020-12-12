@@ -49,6 +49,12 @@ namespace TaxComputationAPI.Repositories
             
 
         }
+         
+
+         
+
+
+
 
         public async Task<FixedAssetResponse> GetFixedAssetsByCompany(int companyId, int yearId)
         {

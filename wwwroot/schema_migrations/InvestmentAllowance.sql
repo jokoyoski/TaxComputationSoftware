@@ -46,5 +46,23 @@ CREATE procedure [dbo].[usp_Delete_Investment_Allowance](
   @Id INT
 )
 AS
-DELETE [dbo].[AssetMapping] WHERE  Id = @Id  
+DELETE from  [dbo].[InvestmentAllowance] WHERE  Id = @Id  
+GO
+
+
+
+
+
+--------------------------------------- STORED PROCEDURE TO  GET INVESTMENT ALLOWANCE  by companyid and yearid-----------------------------------------
+IF OBJECT_ID('[dbo].[usp_Get_Investment_Allowance_By_CompanyId_YearId]') IS nOT NULL
+BEGIN
+  DROP procedure [dbo].[usp_Get_Investment_Allowance_By_CompanyId_YearId]
+END
+GO
+CREATE procedure [dbo].[usp_Get_Investment_Allowance_By_CompanyId_YearId](
+  @CompanyId INT,
+  @YearId  int 
+)
+AS
+select * from  [dbo].[InvestmentAllowance] where CompanyId=@CompanyId and YearId=@YearId
 GO

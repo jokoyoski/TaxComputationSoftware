@@ -30,25 +30,38 @@ namespace TaxComputationAPI.Services
         {
 
             decimal debitValue = 0;
-            decimal creditValue=0;
-             decimal totalValue=0;
+            decimal creditValue = 0;
+            decimal totalValue = 0;
+            List<string> items = new List<string>();
+            int profitAndLossId=createProfitAndLoss.ProfitAndLossId;
             foreach (var item in createProfitAndLoss.TrialBalanceList)
             {
-                 var value = await GetValue(item);
-                if(value.IsDebit){
-                debitValue+=value.value;
-                }else{
-                 creditValue+=value.value;
-                 }
+                var value = await GetValue(item);
+                if (value.IsDebit)
+                {
+                    items.Add("Debit");
+                    debitValue += value.value;
+                }
+                else
+                {
+                    items.Add("Credit");
+                    creditValue += value.value;
+                }
             }
-
+             int i=0;
             foreach (var selection in createProfitAndLoss.TrialBalanceList)
             {
-                string trialBalanceValue = "Mapped to Profit and Loss";
+                
+                string trialBalanceValue = MappedTo(profitAndLossId ,items[i]);
                 await _trialBalanceRepository.UpdateTrialBalance(selection.TrialBalanceId, trialBalanceValue, false);
-
+                i++;
             }
-             totalValue=creditValue-debitValue;
+            if(creditValue!=0){
+                totalValue = creditValue - debitValue;         
+            }else{
+                totalValue=debitValue;
+            }
+            
             var profitAndLoss = ComputeProfitAndLoss(totalValue, createProfitAndLoss.CompanyId, createProfitAndLoss.YearId, createProfitAndLoss.ProfitAndLossId);
 
             await _profitAndLossRepository.UpdateProfitAndLoss(profitAndLoss);
@@ -60,24 +73,24 @@ namespace TaxComputationAPI.Services
 
         private async Task<ProfitAndLossValue> GetValue(TrialBalanceValue trialBalanceValue)
         {
-            var profitValue=  new ProfitAndLossValue();
+            var profitValue = new ProfitAndLossValue();
             var value = await _trialBalanceRepository.GetTrialBalanceById(trialBalanceValue.TrialBalanceId);
 
             if (!trialBalanceValue.IsDebit && !trialBalanceValue.IsBoth && trialBalanceValue.IsCredit)
             {
-                 profitValue.value=value.Credit;
-                 profitValue.IsDebit=false;
-                 return profitValue;
+                profitValue.value = value.Credit;
+                profitValue.IsDebit = false;
+                return profitValue;
             }
 
             if (trialBalanceValue.IsDebit && !trialBalanceValue.IsBoth && !trialBalanceValue.IsCredit)
             {
-                  profitValue.value=value.Debit;
-                 profitValue.IsDebit=true;
-                 return profitValue;
+                profitValue.value = value.Debit;
+                profitValue.IsDebit = true;
+                return profitValue;
             }
 
-           
+
             return null;
         }
 
@@ -169,12 +182,12 @@ namespace TaxComputationAPI.Services
             records.Add(profitorlossbeforetax);
             return records;
         }
-       
-         public async Task<MinimumTaxObject> GetMinimumTax(int companyId, int yearId)
+
+        public async Task<MinimumTaxObject> GetMinimumTax(int companyId, int yearId)
         {
             decimal total = 0;
-            string revenueValue="";
-            string otherIncomeValue="";
+            string revenueValue = "";
+            string otherIncomeValue = "";
 
             ProfitAndLossViewDto revenue = new ProfitAndLossViewDto();
             ProfitAndLossViewDto costofsales = new ProfitAndLossViewDto();
@@ -191,7 +204,7 @@ namespace TaxComputationAPI.Services
             }
             revenue.Category = "Revenue";
             revenue.Total = $"₦{Utilities.FormatAmount(record.Revenue)}";
-            revenueValue=record.Revenue;
+            revenueValue = record.Revenue;
 
             records.Add(revenue);
             costofsales.Category = "Cost Of Sales";
@@ -224,13 +237,14 @@ namespace TaxComputationAPI.Services
             total = Utilities.GetDecimal(record.Revenue) - Utilities.GetDecimal(record.CostOfSales);
             otheroperatingincome.Category = "Other Operating Income";
             otheroperatingincome.Total = $"₦{Utilities.FormatAmount(record.OtherOperatingIncome)}";
-            otherIncomeValue=record.OtherOperatingIncome;
+            otherIncomeValue = record.OtherOperatingIncome;
             records.Add(otheroperatingincome);
             total += Utilities.GetDecimal(record.OtherOperatingIncome);
-            
-            return new MinimumTaxObject{
-                Revenue=revenueValue,
-                OtherIncome=otherIncomeValue,
+
+            return new MinimumTaxObject
+            {
+                Revenue = revenueValue,
+                OtherIncome = otherIncomeValue,
             };
         }
 
@@ -316,13 +330,13 @@ namespace TaxComputationAPI.Services
             else
             {
 
-               
+
                 profitorlossbeforetax.Total = $"₦{Utilities.FormatAmount(total)}";
                 profitorlossbeforetax.Category = "Profit Before Taxation";
-                 return total.ToString();
+                return total.ToString();
 
             }
-           return null;
+            return null;
         }
 
 
@@ -401,10 +415,43 @@ namespace TaxComputationAPI.Services
             return null;
         }
 
-      
-       
-       
-    
-    
+
+        private string MappedTo(int profitAndLossId  ,string item)
+        {
+
+            if (profitAndLossId == 1)
+            {
+                return $"Mapped To Profit and Loss (Revenue) {item}";
+            }
+
+            if (profitAndLossId == 2)
+            {
+                return $"Mapped To Profit and Loss (Cost Of Sales) {item}";
+            }
+
+            if (profitAndLossId == 3)
+            {
+                return $"Mapped To Profit and Loss (Other Operating Income) {item}";
+            }
+
+
+            if (profitAndLossId == 4)
+            {
+                return $"Mapped To Profit and Loss (Operating Expenses) {item}";
+            }
+
+
+            if (profitAndLossId == 5)
+            {
+                return $"Mapped To Profit and Loss (Other Operating Type) {item}";
+            }
+
+
+            return null;
+
+    }
+
+
+
     }
 }

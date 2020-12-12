@@ -61,11 +61,10 @@ namespace TaxComputationAPI.Repositories
             }
         }
 
-        public async Task DeleteInvestmentAllowanceAsync(InvestmentAllowance investmentAllowance)
+        public async Task DeleteInvestmentAllowanceAsync(int Id)
         {
 
-            if (investmentAllowance == null) throw new ArgumentNullException(nameof(investmentAllowance));
-
+            
             try
             {
 
@@ -77,7 +76,7 @@ namespace TaxComputationAPI.Repositories
                     DynamicParameters parameters = new DynamicParameters();
 
 
-                    parameters.Add("@Id", investmentAllowance.Id);
+                    parameters.Add("@Id", Id);
 
                     try
                     {
@@ -96,6 +95,35 @@ namespace TaxComputationAPI.Repositories
             catch (Exception e)
             {
                 throw new SystemException(e.Message);
+            }
+        }
+
+         public async Task<List<InvestmentAllowance>> GetInvestmentAlowanceByCompanyIdYearId(int companyId, int yearId)
+         {
+            var result = default(IEnumerable<InvestmentAllowance>);
+
+            using (IDbConnection conn = await _databaseManager.DatabaseConnection())
+            {
+                if (conn.State == ConnectionState.Closed) conn.Open();
+
+                DynamicParameters parameters = new DynamicParameters();
+
+                parameters.Add("@CompanyId", companyId);
+                parameters.Add("@YearId", yearId);
+
+                try
+                {
+                    result = await conn.QueryAsync<InvestmentAllowance>("[dbo].[usp_Get_Investment_Allowance_By_CompanyId_YearId]", parameters, commandType: CommandType.StoredProcedure);
+                    conn.Close();
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError($"{e.Message}");
+
+                    throw e;
+                }
+
+                return result.ToList();
             }
         }
 
