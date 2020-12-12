@@ -13,32 +13,61 @@ const DropdownController = ({
   dropdownOptions,
   placeholder,
   onChangeCallback,
+  labelWidth,
   errorMessage = "",
-  defaultValue = ""
+  defaultValue = "",
+  className = "p-d-flex p-flex-column"
 }) => {
+  const ControllerError = () => (
+    <>
+      {errors[controllerName] && (
+        <span style={{ fontSize: 12, color: "red", marginLeft: labelWidth ? labelWidth : 0 }}>
+          {errorMessage}
+        </span>
+      )}
+    </>
+  );
+
   return (
-    <div className="p-d-flex p-flex-column">
-      {label && <p style={{ marginBottom: 5, marginTop: 0 }}>{label}</p>}
-      <Controller
-        name={controllerName}
-        control={control}
-        rules={{ required, ...otherRules }}
-        defaultValue={defaultValue}
-        render={props => (
-          <Dropdown
-            style={{ marginBottom: 5, width: width || 200 }}
-            value={props.value}
-            options={dropdownOptions}
-            placeholder={placeholder}
-            onChange={e => {
-              props.onChange(e.target.value);
-              if (onChangeCallback) onChangeCallback(e.target.value);
-            }}
-          />
+    <>
+      <div className={className}>
+        {label && (
+          <p
+            style={{
+              marginBottom:
+                !errors[controllerName] || className === "p-d-flex p-flex-column" ? 5 : 0,
+              marginTop: 0,
+              width: labelWidth ? labelWidth : "auto"
+            }}>
+            {label}
+          </p>
         )}
-      />
-      {errors[controllerName] && <span style={{ fontSize: 12, color: "red" }}>{errorMessage}</span>}
-    </div>
+        <Controller
+          name={controllerName}
+          control={control}
+          rules={{ required, ...otherRules }}
+          defaultValue={defaultValue}
+          render={props => (
+            <Dropdown
+              style={{
+                marginBottom:
+                  !errors[controllerName] || className === "p-d-flex p-flex-column" ? 5 : 0,
+                width: width || 200
+              }}
+              value={props.value}
+              options={dropdownOptions}
+              placeholder={placeholder}
+              onChange={e => {
+                props.onChange(e.target.value);
+                if (onChangeCallback) onChangeCallback(e.target.value);
+              }}
+            />
+          )}
+        />
+        {className === "p-d-flex p-flex-column" && <ControllerError />}
+      </div>
+      {className !== "p-d-flex p-flex-column" && <ControllerError />}
+    </>
   );
 };
 
