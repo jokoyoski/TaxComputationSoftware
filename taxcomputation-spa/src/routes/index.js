@@ -109,8 +109,8 @@ export const routes = [
     path: `${constants.routes.investment_allowance}${modePathParam}`,
     name: "INVESTMENT_ALLOWANCE",
     exact: true,
-    component: RouteGuard(InvestmentAllowance)
-    //resources: [aboutResource],
+    component: RouteGuard(InvestmentAllowance),
+    resources: [fixedAssetModuleClassResource]
   },
   {
     path: `${constants.routes.balancing_adjustment}${modePathParam}`,
