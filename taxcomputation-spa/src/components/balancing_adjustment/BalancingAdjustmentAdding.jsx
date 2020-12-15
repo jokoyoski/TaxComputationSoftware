@@ -4,7 +4,6 @@ import { Controller, useForm } from "react-hook-form";
 import { balancingAdjustmentAdding } from "../../apis/BalancingAdjustment";
 import { useCompany } from "../../store/CompanyStore";
 import utils from "../../utils";
-import constants from "../../constants";
 import DropdownController from "../controllers/DropdownController";
 import InputController from "../controllers/InputController";
 
@@ -37,24 +36,7 @@ const BalancingAdjustmentAdding = ({ yearSelectItems, assetClassSelectItems, toa
         );
       }
     } catch (error) {
-      if (error.response) {
-        toast.show(
-          utils.toastCallback({
-            severity: "error",
-            summary: "Error",
-            detail:
-              "An error occurred while calculating balancing adjustment, kindly contact your admin."
-          })
-        );
-        return;
-      }
-      toast.show(
-        utils.toastCallback({
-          severity: "error",
-          summary: "Network Error",
-          detail: constants.networkErrorMessage
-        })
-      );
+      utils.apiErrorHandling(error?.response?.data?.errors[0], toast);
     } finally {
       setLoading(false);
     }

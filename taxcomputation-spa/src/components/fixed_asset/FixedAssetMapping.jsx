@@ -4,7 +4,6 @@ import { Checkbox } from "primereact/checkbox";
 import utils from "../../utils";
 import { Controller, useForm } from "react-hook-form";
 import { useCompany } from "../../store/CompanyStore";
-import constants from "../../constants";
 import { fixedAssetMapping } from "../../apis/FixedAsset";
 import TrialBalanceMappingTable from "../common/TrialBalanceMappingTable";
 import DropdownController from "../controllers/DropdownController";
@@ -128,32 +127,7 @@ const FixedAssetMapping = ({
         );
       }
     } catch (error) {
-      if (error.response.data === undefined) {
-        toast.show(
-          utils.toastCallback({
-            severity: "error",
-            detail: error.message
-          })
-        );
-        return;
-      }
-
-      if (error.response.data.errors) {
-        toast.show(
-          utils.toastCallback({
-            severity: "error",
-            detail: error.response.data.errors[0]
-          })
-        );
-        return;
-      }
-      toast.show(
-        utils.toastCallback({
-          severity: "error",
-          summary: "Network Error",
-          detail: constants.networkErrorMessage
-        })
-      );
+      utils.apiErrorHandling(error?.response?.data?.errors[0], toast);
     } finally {
       setLoading(false);
     }

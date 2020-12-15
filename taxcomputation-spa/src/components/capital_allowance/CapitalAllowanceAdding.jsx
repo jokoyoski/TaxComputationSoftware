@@ -3,7 +3,6 @@ import { Button } from "primereact/button";
 import { Controller, useForm } from "react-hook-form";
 import { useCompany } from "../../store/CompanyStore";
 import utils from "../../utils";
-import constants from "../../constants";
 import { capitalAllowanceAdding } from "../../apis/CapitalAllowance";
 import DropdownController from "../controllers/DropdownController";
 import InputController from "../controllers/InputController";
@@ -53,24 +52,7 @@ const CapitalAllowanceAdding = ({ yearSelectItems, assetClassSelectItems, toast 
         );
       }
     } catch (error) {
-      if (error.response) {
-        toast.show(
-          utils.toastCallback({
-            severity: "error",
-            summary: "Error",
-            detail:
-              "An error occurred while calculating capital allowance, kindly contact your admin."
-          })
-        );
-        return;
-      }
-      toast.show(
-        utils.toastCallback({
-          severity: "error",
-          summary: "Network Error",
-          detail: constants.networkErrorMessage
-        })
-      );
+      utils.apiErrorHandling(error?.response?.data?.errors[0], toast);
     } finally {
       setLoading(false);
     }
