@@ -36,16 +36,11 @@ class ErrorBoundary extends Component {
   render() {
     if (this.state.hasError) {
       return (
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            width: "100vw",
-            height: "100vh"
-          }}>
-          <h3>An Error Occurred</h3>
-          <p>view log in console</p>
+        <div className="error-boundary">
+          <h2 style={{ marginBottom: 0 }}>An Error Occurred</h2>
+          <p style={{ margin: 0 }}>
+            contact your admin for <em>error logs</em>
+          </p>
         </div>
       );
     }

@@ -40,3 +40,14 @@ export const capitalAllowanceViewData = async ({ companyId, assetId }) => {
     throw error;
   }
 };
+
+export const capitalAllowanceSummaryData = async ({ companyId }) => {
+  try {
+    const { data } = await axios.get(
+      `/api/CapitalAllowanceSummary/companyId?companyId=${companyId}`
+    );
+    return data;
+  } catch (error) {
+    throw error;
+  }
+};
