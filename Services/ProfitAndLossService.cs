@@ -56,10 +56,19 @@ namespace TaxComputationAPI.Services
                 await _trialBalanceRepository.UpdateTrialBalance(selection.TrialBalanceId, trialBalanceValue, false);
                 i++;
             }
-            if(creditValue!=0){
+            if(createProfitAndLoss.ProfitAndLossId==1){
                 totalValue = creditValue - debitValue;         
-            }else{
-                totalValue=debitValue;
+            }else if(createProfitAndLoss.ProfitAndLossId==2){
+                 totalValue = debitValue - creditValue;     
+            }
+            else if(createProfitAndLoss.ProfitAndLossId==3){
+                 totalValue = creditValue - debitValue;     
+            }
+            else if(createProfitAndLoss.ProfitAndLossId==4){
+                 totalValue = debitValue - creditValue;  
+            }
+            else if(createProfitAndLoss.ProfitAndLossId==5){
+                 totalValue = creditValue - debitValue;     
             }
             
             var profitAndLoss = ComputeProfitAndLoss(totalValue, createProfitAndLoss.CompanyId, createProfitAndLoss.YearId, createProfitAndLoss.ProfitAndLossId);

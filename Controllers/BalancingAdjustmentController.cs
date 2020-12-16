@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TaxComputationAPI.Dto;
+using TaxComputationAPI.Helpers;
 using TaxComputationAPI.Interfaces;
 
 namespace TaxComputationAPI.Controllers
@@ -14,10 +15,13 @@ namespace TaxComputationAPI.Controllers
     public class BalancingAdjustmentController : ControllerBase
     {
         private readonly IBalancingAdjustmentService _balancingAdjustmentService;
+        private readonly ICapitalAllowanceService _capitalAllowanceService;
 
-        public BalancingAdjustmentController(IBalancingAdjustmentService balancingAdjustmentService)
+
+        public BalancingAdjustmentController(IBalancingAdjustmentService balancingAdjustmentService, ICapitalAllowanceService capitalAllowanceService)
         {
             _balancingAdjustmentService = balancingAdjustmentService;
+            _capitalAllowanceService = capitalAllowanceService;
         }
 
         [HttpGet]
@@ -31,6 +35,43 @@ namespace TaxComputationAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> AddBalancingAdjustment([FromForm] AddBalanceAdjustmentDto addBalanceAdjustmentDto)
         {
+
+            var previousRecord = await _capitalAllowanceService.GetCapitalAllowanceByAssetIdYear(addBalanceAdjustmentDto.AssetId, addBalanceAdjustmentDto.CompanyId, addBalanceAdjustmentDto.YearBought);
+            if (int.Parse(addBalanceAdjustmentDto.Year) < DateTime.Now.Year)
+            {
+                return StatusCode(400, new { errors = new[] { "Balancing Adjustment for previous year is not allowed !!!" } });
+            }
+            if (previousRecord == null)
+            {
+                return BadRequest(new { errors = new[] { "The asset you are trying to calulate its balancing adjustment does not exist" } });
+
+            }
+
+            if (previousRecord != null)
+            {
+                if (previousRecord.Channel == Constants.FixedAsset)
+                {
+                    return BadRequest(new { errors = new[] { "The annual for this item has already been calculated from fixed asset" } });
+
+
+                }
+
+                if (previousRecord.Channel == Constants.OldBalancingAdjustmentSet)
+                {
+                    return BadRequest(new { errors = new[] { "The annual for this item has already been calculated from balancing adjustment" } });
+
+
+                }
+
+
+
+                if (previousRecord.NumberOfYearsAvailable == 0)
+                {
+                    return BadRequest(new { errors = new[] { "The asset has exceeded its lifespan" } });
+
+
+                }
+            }
             var response = await _balancingAdjustmentService.AddBalanceAdjustment(addBalanceAdjustmentDto);
 
             return Ok(response);

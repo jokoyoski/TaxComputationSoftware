@@ -30,31 +30,72 @@ namespace TaxComputationAPI.Services
             return GetCapitalAllowance(capitalAllowance.ToList());
         }
 
+
         public Task<int> SaveCapitalAllowance(CapitalAllowance capitalAllowance)
         {
-
-            return _capitalAllowanceRepository.SaveCapitaLAllowance(capitalAllowance);
+             _capitalAllowanceRepository.SaveArchivedCapitaLAllowance(capitalAllowance,capitalAllowance.Channel);
+            return _capitalAllowanceRepository.SaveCapitaLAllowance(capitalAllowance, Constants.OldBalancingAdjustment);
 
         }
 
 
 
-        public async Task<int> SaveCapitalAllowanceFromFixedAsset(decimal addition, string year, int companyId, int assetId)
+        public async Task<int> SaveCapitalAllowanceFromFixedAsset(decimal addition, string year, int companyId, int assetId, decimal disposal)
 
         {
+            string channel = "";
+            string code = "";
+            int totalNoOfYears = 0;
+            decimal annualPercentage = 0;
+            decimal additionValue = 0;
+            decimal Initial = 0;
+            decimal value = 0;
+            decimal annual = 0;
+            decimal total = 0;
+            decimal closingResidue = 0;
+            int remianingYears = 0;
+            int numOfYearsAvailable = 0;
 
-           
+            var companyCode = await _utilitiesRepository.GetCompanyCodeByCodeId(companyId);
             var assetDetails = await _utilitiesRepository.GetAssetMappingById(assetId);
-            int totalNoOfYears = (int)100 / assetDetails.Annual;  //no of years
-            decimal annualPercentage=(decimal)assetDetails.Annual/100;     //annual percentage rate
-            var additionValue = addition;   //addittion
-            decimal initial = addition * assetDetails.Initial / 100;     //initial=addition*%rateinitial
-            var value = addition - initial;         //  
-            var annual = value * annualPercentage;   //addition-initial* %annualpercenatgerate
-            var total = initial + annual;         //total=addition-initial+total;
-            var closingResidue = addition - total;      //closingresidue=addition-total
-            var remianingYears = totalNoOfYears - 1;    //remainingyears-1
             var previousRecord = await _capitalAllowanceRepository.GetCapitalAllowanceByAssetIdYear(assetId, companyId, year);
+
+
+            if (disposal>0)  //greater than zero specifies that the account needs balancing aadjustmnet
+            {
+
+
+                closingResidue = 0;
+                annual = 0;
+                Initial = 0;
+                total = 0;
+                remianingYears = (int)100 / assetDetails.Annual;  //no of years
+                code = null;
+                channel = Constants.BalancingAdjustment;
+                numOfYearsAvailable = remianingYears;
+                disposal=0;
+
+            }
+            else
+            {
+
+
+                totalNoOfYears = (int)100 / assetDetails.Annual;  //no of years
+                annualPercentage = (decimal)assetDetails.Annual / 100;     //annual percentage rate
+                additionValue = addition;   //addittion
+                Initial = addition * assetDetails.Initial / 100;     //initial=addition*%rateinitial
+                value = addition - Initial;         //  
+                annual = value * annualPercentage;   //addition-initial* %annualpercenatgerate
+                total = Initial + annual;         //total=addition-initial+total;
+                closingResidue = addition - total;      //closingresidue=addition-total
+                remianingYears = totalNoOfYears - 1;    //remainingyears-1
+                code = companyCode.Code;
+                channel = Constants.FixedAsset;
+                numOfYearsAvailable = totalNoOfYears;
+            }
+
+
+
 
             var capitalAllowance = new CapitalAllowance
             {
@@ -62,93 +103,114 @@ namespace TaxComputationAPI.Services
                 OpeningResidue = 0,
                 ClosingResidue = closingResidue,
                 Addition = addition,
-                Disposal=0,
+                Disposal = 0,
                 Annual = annual,
-                Initial = initial,
+                Initial = Initial,
                 Total = total,
-                YearsToGo = remianingYears.ToString(),
+                YearsToGo = remianingYears,
                 CompanyId = companyId,
                 AssetId = assetId,
-
+                CompanyCode = code,
+                Channel = channel,
+                NumberOfYearsAvailable = numOfYearsAvailable
 
             };
+
             if (previousRecord != null)
             {
-
+                 await  _capitalAllowanceRepository.SaveArchivedCapitaLAllowance(capitalAllowance,capitalAllowance.Channel);
                 return await _capitalAllowanceRepository.UpdateCapitalAllowanceByFixedAssetOrBalancingAdjustemnt(capitalAllowance);
 
             }
             else
             {
-                return await _capitalAllowanceRepository.SaveCapitaLAllowance(capitalAllowance);
+                await  _capitalAllowanceRepository.SaveArchivedCapitaLAllowance(capitalAllowance,capitalAllowance.Channel);
+                return await _capitalAllowanceRepository.SaveCapitaLAllowance(capitalAllowance, channel);
+                
             }
-
+          
         }
 
 
         public async Task<int> SaveCapitalAllowanceFromBalancingAdjustment(decimal residue, string year, int companyId, int assetId)
         {
-            decimal openingResidue = 0;
+            //  decimal openingResidue = 0;
             var residueValue = residue;
+
+            int yearsToGo = 0;
             var previousRecord = await _capitalAllowanceRepository.GetCapitalAllowanceByAssetIdYear(assetId, companyId, year);
+            var companyCode = await _utilitiesRepository.GetCompanyCodeByCodeId(companyId);
+
             if (previousRecord != null)
             {
-                if (previousRecord.Initial<=0)
+                if (previousRecord.Initial <= 0 && previousRecord.Channel == Constants.OldBalancingAdjustment)
                 {
-                    decimal openingResidueValue = openingResidue - residue;   //openingresidue- residue 
-                    decimal annualValue = openingResidueValue / int.Parse(previousRecord.YearsToGo);  //opening residual/total no of years
-                    decimal total=annualValue;   //total
-                    decimal closingResidue=openingResidueValue-total; //openingresidual-total
+                    decimal openingResidueValue = previousRecord.OpeningResidue - residue;   //openingresidue- residue 
+                    decimal annualValue = openingResidueValue / previousRecord.YearsToGo;  //opening residual/total no of years
+                    annualValue = Math.Round(annualValue, 2);
+                    decimal total = annualValue;   //total
+                    decimal closingResidue = openingResidueValue - total; //openingresidual-total
+
+
                     var capitalAllowance = new CapitalAllowance
-                   {
-                    TaxYear = year,
-                    OpeningResidue = openingResidueValue,
-                    ClosingResidue = closingResidue,
-                    Addition = previousRecord.Addition,
-                    Annual = annualValue,
-                    Initial = previousRecord.Initial,
-                    Disposal=residue,
-                    Total = total,
-                    YearsToGo = previousRecord.YearsToGo,
-                    CompanyId = companyId,
-                    AssetId = assetId,
+                    {
+                        TaxYear = year,
+                        OpeningResidue = previousRecord.OpeningResidue,
+                        ClosingResidue = closingResidue,
+                        Addition = previousRecord.Addition,
+                        Annual = annualValue,
+                        Initial = previousRecord.Initial,
+                        Disposal = residue,
+                        Total = total,
+                        YearsToGo = previousRecord.NumberOfYearsAvailable - 1,
+                        CompanyId = companyId,
+                        AssetId = assetId,
+                        CompanyCode = companyCode.Code,
+                        Channel = Constants.OldBalancingAdjustmentSet,
+                        NumberOfYearsAvailable = previousRecord.NumberOfYearsAvailable
 
 
-                };
-                return await _capitalAllowanceRepository.UpdateCapitalAllowanceByFixedAssetOrBalancingAdjustemnt(capitalAllowance);
+                    };
+
+                      _capitalAllowanceRepository.SaveArchivedCapitaLAllowance(previousRecord,previousRecord.Channel);
+                    return await _capitalAllowanceRepository.UpdateCapitalAllowanceByFixedAssetOrBalancingAdjustemnt(capitalAllowance);
 
                 }
-                else{
-         
+                else
+                {
+
                     decimal newadditionValue = previousRecord.Addition - residue;      // new addition  =  addition-residue
                     var assetDetails = await _utilitiesRepository.GetAssetMappingById(assetId);
                     int newtotalNoOfYears = (int)100 / assetDetails.Annual;      //total no years
-                    decimal annualPercentage=(decimal)assetDetails.Annual/100;   //annual percentage value
-                    decimal newInitialValue = newadditionValue * assetDetails.Initial / 100; 
-                    
-                    decimal newAnnualValue = newadditionValue - newInitialValue ; // addition-initial * annual percentage
-                    newAnnualValue=newAnnualValue *annualPercentage;
+                    decimal annualPercentage = (decimal)assetDetails.Annual / 100;   //annual percentage value
+                    decimal newInitialValue = newadditionValue * assetDetails.Initial / 100;
+                    decimal newAnnualValue = newadditionValue - newInitialValue; // addition-initial * annual percentage
+                    newAnnualValue = newAnnualValue * annualPercentage;
                     var newTotalValue = newAnnualValue + newInitialValue;   // initial+total
                     var newClosingResidue = newadditionValue - newTotalValue;  // addition-total
                     var newRemainingyears = newtotalNoOfYears - 1;   //years to go
 
                     var capitalAllowance = new CapitalAllowance
-                   {
-                    TaxYear = year,
-                    OpeningResidue = 0,
-                    ClosingResidue = newClosingResidue,
-                    Addition = newadditionValue,
-                    Annual = newAnnualValue,
-                    Initial = newInitialValue,
-                    Total = newTotalValue,
-                    Disposal=residue,
-                    YearsToGo = newRemainingyears.ToString(),
-                    CompanyId = companyId,
-                    AssetId = assetId,
+                    {
+                        TaxYear = year,
+                        OpeningResidue = 0,
+                        ClosingResidue = newClosingResidue,
+                        Addition = previousRecord.Addition,
+                        Annual = newAnnualValue,
+                        Initial = newInitialValue,
+                        Total = newTotalValue,
+                        Disposal = residue,
+                        YearsToGo = newRemainingyears,
+                        CompanyId = companyId,
+                        AssetId = assetId,
+                        CompanyCode = companyCode.Code,
+                        Channel = Constants.BalancingAdjustmentSet,
+                        NumberOfYearsAvailable = newtotalNoOfYears,
 
 
-                };
-                return await _capitalAllowanceRepository.UpdateCapitalAllowanceByFixedAssetOrBalancingAdjustemnt(capitalAllowance);
+                    };
+                      _capitalAllowanceRepository.SaveArchivedCapitaLAllowance(previousRecord, previousRecord.Channel);
+                    return await _capitalAllowanceRepository.UpdateCapitalAllowanceByFixedAssetOrBalancingAdjustemnt(capitalAllowance);
 
 
                 }
@@ -160,78 +222,85 @@ namespace TaxComputationAPI.Services
 
         }
 
-          public async Task UpdateCapitalAllowanceFromDeleteBalancingAdjustment(decimal residue, string year, int companyId, int assetId)
-          {
+        public async Task UpdateCapitalAllowanceFromDeleteBalancingAdjustment(decimal residue, string year, int companyId, int assetId)
+        {
             decimal openingResidue = 0;
             var residueValue = residue;
-            var previousRecord = await _capitalAllowanceRepository.GetCapitalAllowanceByAssetIdYear(assetId, companyId, year);
-          
-          if (previousRecord != null)
-            {
-                if (previousRecord.Initial<=0)
-                {
-                    decimal openingResidueValue = openingResidue + residue;   //add residue deducted back to opening residual
-                    decimal annualValue = openingResidue / int.Parse(previousRecord.YearsToGo);   //openingresidue/no of years to get annual
-                    decimal total=annualValue;       //total= annualValue
-                    decimal closingResidue=openingResidueValue-total;   // openng residualvalue - total
-                    var capitalAllowance = new CapitalAllowance
-                   {
-                    TaxYear = year,
-                    OpeningResidue = openingResidueValue,
-                    Disposal=0,
-                    ClosingResidue = closingResidue,
-                    Addition = previousRecord.Addition,
-                    Annual = annualValue,
-                    Initial = previousRecord.Initial,
-                    Total = total,
-                    YearsToGo = previousRecord.YearsToGo,
-                    CompanyId = companyId,
-                    AssetId = assetId,
+            var previousRecord = await _capitalAllowanceRepository.GetArchivedCapitalAllowanceByAssetIdYear(assetId, companyId, year);
+            await _capitalAllowanceRepository.UpdateCapitalAllowanceByFixedAssetOrBalancingAdjustemnt(previousRecord);
+            /* if (previousRecord != null)
+             {
+                 if (previousRecord.Initial <= 0 && previousRecord.Channel == Constants.OldBalancingAdjustment)
+                 {
+                     decimal openingResidueValue = previousRecord.OpeningResidue + residue;   //add residue deducted back to opening residual
+                     decimal annualValue = openingResidue / previousRecord.YearsToGo;   //openingresidue/no of years to get annual
+                     annualValue = Math.Round(annualValue, 2);
+                     decimal total = annualValue;       //total= annualValue
+                     decimal closingResidue = openingResidueValue - total;   // openng residualvalue - total
+                     var capitalAllowance = new CapitalAllowance
+                     {
+                         TaxYear = year,
+                         OpeningResidue = openingResidueValue,
+                         Disposal = 0,
+                         ClosingResidue = closingResidue,
+                         Addition = previousRecord.Addition,
+                         Annual = annualValue,
+                         Initial = previousRecord.Initial,
+                         Total = total,
+                         YearsToGo = previousRecord.YearsToGo + 1,
+                         CompanyId = companyId,
+                         AssetId = assetId,
+                         CompanyCode = null,
+                         Channel = Constants.OldBalancingAdjustment,
+                         NumberOfYearsAvailable = previousRecord.NumberOfYearsAvailable,
 
 
-                };
-                 await _capitalAllowanceRepository.UpdateCapitalAllowanceByFixedAssetOrBalancingAdjustemnt(capitalAllowance);
+                     };
+                     await _capitalAllowanceRepository.UpdateCapitalAllowanceByFixedAssetOrBalancingAdjustemnt(capitalAllowance);
 
-                }
-                else{
+                 }
+                 else
+                 {
 
-                    decimal newadditionValue = previousRecord.Addition + residue;      // addition+ residue
-                    var assetDetails = await _utilitiesRepository.GetAssetMappingById(assetId);
-                    int newtotalNoOfYears = (int)100 / assetDetails.Annual;   //  get total no of years
-                    decimal newInitialValue = newadditionValue * assetDetails.Initial / 100;    //initial=addition* initialrate%
-                    decimal annualPercentage=(decimal)assetDetails.Annual/100;   //annual percentage value
-                    decimal newAnnualValue = newadditionValue - newInitialValue ; //  addition-initial * annural%rate
-                    newAnnualValue=newAnnualValue * annualPercentage;
-                    var newTotalValue = newAnnualValue + newInitialValue;  //total=annual+initial
-                    var newClosingResidue = newadditionValue - newTotalValue;    //closing addition-total
-                    var newRemainingyears = newtotalNoOfYears - 1;     //deduct one
+                     decimal newadditionValue = previousRecord.Addition;      // addition+ residue
+                     var assetDetails = await _utilitiesRepository.GetAssetMappingById(assetId);
+                     int newtotalNoOfYears = (int)100 / assetDetails.Annual;   //  get total no of years
+                     decimal newInitialValue = newadditionValue * assetDetails.Initial / 100;    //initial=addition* initialrate%
+                     decimal annualPercentage = (decimal)assetDetails.Annual / 100;   //annual percentage value
+                     decimal newAnnualValue = newadditionValue - newInitialValue; //  addition-initial * annural%rate
+                     newAnnualValue = newAnnualValue * annualPercentage;
+                     var newTotalValue = newAnnualValue + newInitialValue;  //total=annual+initial
+                     var newClosingResidue = newadditionValue - newTotalValue;    //closing addition-total
+                     var newRemainingyears = newtotalNoOfYears - 1;     //deduct one
 
-                    var capitalAllowance = new CapitalAllowance
-                   {
-                    TaxYear = year,
-                    OpeningResidue = 0,
-                    ClosingResidue = newClosingResidue,
-                    Disposal=0,
-                    Addition = newadditionValue,
-                    Annual = newAnnualValue,
-                    Initial = newInitialValue,
-                    Total = newTotalValue,
-                    YearsToGo = newRemainingyears.ToString(),
-                    CompanyId = companyId,
-                    AssetId = assetId,
+                     var capitalAllowance = new CapitalAllowance
+                     {
+                         TaxYear = year,
+                         OpeningResidue = 0,
+                         ClosingResidue = newClosingResidue,
+                         Disposal = 0,
+                         Addition = previousRecord.Addition,
+                         Annual = newAnnualValue,
+                         Initial = newInitialValue,
+                         Total = newTotalValue,
+                         YearsToGo = previousRecord.YearsToGo + 1,
+                         CompanyId = companyId,
+                         AssetId = assetId,
+                         Channel = Constants.BalancingAdjustment,
+                         CompanyCode = null,
+                         NumberOfYearsAvailable = previousRecord.NumberOfYearsAvailable
+
+                     };
+                     await _capitalAllowanceRepository.UpdateCapitalAllowanceByFixedAssetOrBalancingAdjustemnt(capitalAllowance);
 
 
-                };
-                 await _capitalAllowanceRepository.UpdateCapitalAllowanceByFixedAssetOrBalancingAdjustemnt(capitalAllowance);
+                 }
 
 
-                }
+             }*/
 
-              
-            }
 
-           
-         
+
 
         }
 
@@ -288,6 +357,7 @@ namespace TaxComputationAPI.Services
                 {
                     var m = new CapitalAllowanceViewDto
                     {
+                        Id=x.Id,
                         TaxYear = x.TaxYear,
                         OpeningResidue = $"₦{Utilities.FormatAmount(x.OpeningResidue)}",
                         Addition = $"₦{Utilities.FormatAmount(x.Addition)}",
@@ -296,6 +366,7 @@ namespace TaxComputationAPI.Services
                         Annual = $"₦{Utilities.FormatAmount(x.Annual)}",
                         Total = $"₦{Utilities.FormatAmount(x.Total)}",
                         YearsToGo = x.YearsToGo,
+                        NumberOfYearsAvailable=x.NumberOfYearsAvailable,
                         ClosingResidue = $"₦{Utilities.FormatAmount(x.ClosingResidue)}",
                     };
                     capitalAllowanceList.Add(m);
@@ -325,6 +396,11 @@ namespace TaxComputationAPI.Services
 
 
 
+        }
+
+        public Task<CapitalAllowance> GetCapitalAllowanceByAssetIdYear(int assetId, int companyId, string year)
+        {
+            return _capitalAllowanceRepository.GetCapitalAllowanceByAssetIdYear(assetId, companyId, year);
         }
     }
 }

@@ -5,15 +5,18 @@ using System.Threading.Tasks;
 using TaxComputationAPI.Helpers;
 using TaxComputationAPI.Interfaces;
 using TaxComputationAPI.Models;
+using TaxComputationSoftware.Models;
 
 namespace TaxComputationAPI.Services
 {
     public class CompaniesService : ICompaniesService
     {
         private readonly ICompaniesRepository _companiesRepository;
-        public CompaniesService(ICompaniesRepository companiesRepository)
+        private readonly IUtilitiesRepository _utilitiesRepository;
+        public CompaniesService(ICompaniesRepository companiesRepository, IUtilitiesRepository utilitiesRepository)
         {
             _companiesRepository = companiesRepository;
+            _utilitiesRepository = utilitiesRepository;
 
         }
         public async Task<PagedList<Company>> GetCompaniesAsync(PaginationParams pagination)
@@ -21,7 +24,7 @@ namespace TaxComputationAPI.Services
             return await _companiesRepository.GetCompaniesAsync(pagination);
         }
 
-      
+
 
 
         public async Task<Company> GetCompanyAsync(int id)
@@ -31,18 +34,28 @@ namespace TaxComputationAPI.Services
 
         public async Task AddCompanyAsync(Company company)
         {
-            if (company==null)
+            if (company == null)
             {
                 throw new ArgumentNullException(nameof(company));
             }
-            
-            
+
+
             await _companiesRepository.AddCompanyAsync(company);
+
+            var companyDetails = await GetCompanyByTinAsync(company.TinNumber);
+
+            _utilitiesRepository.AddCompanyCode(new CompanyCode
+            {
+                Code = Utilities.RandomString(),
+                NextExecution = company.ClosingYear,
+                CompanyId = companyDetails.Id
+
+            });
         }
 
         public async Task<Company> GetCompanyByTinAsync(string tinNumber)
         {
-            return await  _companiesRepository.GetCompanyByTinAsync(tinNumber);
+            return await _companiesRepository.GetCompanyByTinAsync(tinNumber);
         }
 
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TaxComputationAPI.Models;
+using TaxComputationSoftware.Models;
 
 namespace TaxComputationAPI.Interfaces
 {
@@ -32,5 +33,9 @@ namespace TaxComputationAPI.Interfaces
         Task  AddTrialBalanceMapping (int trialBalanceId, int moduleId,string moduleCode,string additionalInfo);
 
         Task  DeleteTrialBalancingMapping(int trialBalanceId);
+
+         Task AddCompanyCode(CompanyCode companyCode);
+
+         Task<CompanyCode> GetCompanyCodeByCodeId(int companyId);
     }
 }

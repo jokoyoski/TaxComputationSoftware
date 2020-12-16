@@ -34,6 +34,11 @@ namespace TaxComputationAPI.Controllers
         {
             try
             {
+
+                
+                if(createFixed.YearId<DateTime.Now.Year){
+                    return  StatusCode (400, new { errors = new []{"Fixed Asset fro Previous Year is not Alllowed!"} });
+                }
                 bool status = createFixed.IsCost ? true : false;
                 var value = await _fixedAssetService.GetAmount(createFixed.TriBalanceId, status);
 
@@ -108,7 +113,6 @@ namespace TaxComputationAPI.Controllers
                     return StatusCode(400, new { errors = new[] { "Please select a valid company" } });
 
                 }
-
 
 
                 await _fixedAssetService.SaveFixedAsset(createFixed);

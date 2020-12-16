@@ -7,7 +7,7 @@ namespace TaxComputationAPI.Interfaces
 {
     public interface ICapitalAllowanceRepository
     {
-        Task<int> SaveCapitaLAllowance(CapitalAllowance capitalAllowance);
+        Task<int> SaveCapitaLAllowance(CapitalAllowance capitalAllowance,string channel);
 
         Task<CapitalAllowance> GetCapitalAllowanceByAssetIdYear(int assetId, int companyId, string year);
 
@@ -15,6 +15,10 @@ namespace TaxComputationAPI.Interfaces
 
         Task<int> UpdateCapitalAllowanceByFixedAssetOrBalancingAdjustemnt(CapitalAllowance capitalAllowance);
 
-        //Task<int> UpdateCapitalAllowanceBybalancingAdjustment(CapitalAllowance capitalAllowance);
+        Task<int> SaveArchivedCapitaLAllowance(CapitalAllowance capitalAllowance,string channel);
+
+        Task<CapitalAllowance> GetArchivedCapitalAllowanceByAssetIdYear(int assetId, int companyId,string year);
+
+        
     }
 }
