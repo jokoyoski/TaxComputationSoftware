@@ -55,13 +55,7 @@ const ProfitAndLossMapping = ({
         );
       }
     } catch (error) {
-      toast.show(
-        utils.toastCallback({
-          severity: "error",
-          summary: "Network Error",
-          detail: constants.networkErrorMessage
-        })
-      );
+      utils.apiErrorHandling(error, toast);
     } finally {
       setLoading(false);
     }

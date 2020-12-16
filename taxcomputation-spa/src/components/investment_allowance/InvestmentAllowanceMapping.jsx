@@ -3,7 +3,6 @@ import { Button } from "primereact/button";
 import { Controller, useForm } from "react-hook-form";
 import { useCompany } from "../../store/CompanyStore";
 import utils from "../../utils";
-import constants from "../../constants";
 import DropdownController from "../controllers/DropdownController";
 import { investmentAllowanceMapping } from "../../apis/InvestmentAllowance";
 
@@ -33,24 +32,7 @@ const InvestmentAllowanceMapping = ({ yearSelectItems, assetClassSelectItems, to
         );
       }
     } catch (error) {
-      if (error.response) {
-        toast.show(
-          utils.toastCallback({
-            severity: "error",
-            summary: "Error",
-            detail:
-              "An error occurred while calculating investment allowance, kindly contact your admin."
-          })
-        );
-        return;
-      }
-      toast.show(
-        utils.toastCallback({
-          severity: "error",
-          summary: "Network Error",
-          detail: constants.networkErrorMessage
-        })
-      );
+      utils.apiErrorHandling(error, toast);
     } finally {
       setLoading(false);
     }
