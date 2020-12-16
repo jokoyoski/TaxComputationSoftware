@@ -74,7 +74,7 @@ const CapitalAllowance = () => {
             ),
             view: (
               <ViewMode title={title} year={year}>
-                <CapitalAllowanceView assetId={assetId} />
+                <CapitalAllowanceView assetId={assetId} toast={toast.current} />
               </ViewMode>
             ),
             summary: (

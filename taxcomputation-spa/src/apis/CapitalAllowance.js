@@ -51,3 +51,12 @@ export const capitalAllowanceSummaryData = async ({ companyId }) => {
     throw error;
   }
 };
+
+export const capitalAllowanceDelete = async ({ id }) => {
+  try {
+    const { data } = await axios.delete(`/api/CapitalAllowance/${id}`);
+    return data;
+  } catch (error) {
+    throw error;
+  }
+};

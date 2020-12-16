@@ -3,10 +3,10 @@ import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { useCompany } from "../../store/CompanyStore";
 import Loader from "../common/Loader";
-import { capitalAllowanceViewData } from "../../apis/CapitalAllowance";
+import { capitalAllowanceDelete, capitalAllowanceViewData } from "../../apis/CapitalAllowance";
 import utils from "../../utils";
 
-const CapitalAllowanceView = ({ assetId }) => {
+const CapitalAllowanceView = ({ assetId, toast }) => {
   const isMounted = React.useRef(false);
   const [{ companyId }] = useCompany();
   const [loading, setLoading] = React.useState();
@@ -36,9 +36,34 @@ const CapitalAllowanceView = ({ assetId }) => {
         if (isMounted.current)
           setCapitalAllowanceData(() => {
             const newState = capitalAllowances
-              .map(capitalAllowance => ({
+              ?.map(capitalAllowance => ({
                 ...capitalAllowance,
-                taxYear: <strong>{capitalAllowance.taxYear}</strong>,
+                taxYear: (
+                  <div className="p-d-flex p-jc-between p-ai-center">
+                    <strong>{capitalAllowance.taxYear}</strong>
+                    <i
+                      className="pi pi-times-circle delete"
+                      style={{ fontSize: 14, marginTop: 2 }}
+                      onClick={async () => {
+                        try {
+                          const data = await capitalAllowanceDelete({
+                            id: capitalAllowance.id
+                          });
+                          if (data) {
+                            toast.show(
+                              utils.toastCallback({
+                                severity: "success",
+                                detail: data
+                              })
+                            );
+                            fetchCapitalAllowanceViewData();
+                          }
+                        } catch (error) {
+                          console.log(error);
+                        }
+                      }}></i>
+                  </div>
+                ),
                 openingResidue: capitalAllowance.openingResidue,
                 addition: capitalAllowance.addition,
                 disposal: capitalAllowance.disposal,
@@ -83,13 +108,13 @@ const CapitalAllowanceView = ({ assetId }) => {
     fetchCapitalAllowanceViewData();
 
     return () => (isMounted.current = false);
-  }, [companyId, assetId]);
+  }, [companyId, assetId, toast]);
 
   if (error) return <p style={{ color: "#f00" }}>{error}</p>;
 
   if (loading) return <Loader />;
 
-  if (capitalAllowanceData.length === 0)
+  if (capitalAllowanceData?.length === 0 || capitalAllowanceData === undefined)
     return (
       <p style={{ color: "#f00" }}>Currently, no data for the selected year for this company</p>
     );

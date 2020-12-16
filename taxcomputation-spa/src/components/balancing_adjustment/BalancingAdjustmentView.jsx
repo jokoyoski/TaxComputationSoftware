@@ -131,7 +131,7 @@ const BalancingAdjustmentView = ({ year, toast }) => {
 
   if (loading) return <Loader />;
 
-  if (balancingAdjustmentData.length === 0)
+  if (balancingAdjustmentData?.length === 0 || balancingAdjustmentData === undefined)
     return (
       <p style={{ color: "#f00" }}>Currently, no data for the selected year for this company</p>
     );
