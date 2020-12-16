@@ -63,26 +63,10 @@ const CapitalAllowanceView = ({ assetId, toast }) => {
                         }
                       }}></i>
                   </div>
-                ),
-                openingResidue: capitalAllowance.openingResidue,
-                addition: capitalAllowance.addition,
-                disposal: capitalAllowance.disposal,
-                initial: capitalAllowance.initial,
-                annual: capitalAllowance.annual,
-                total: capitalAllowance.total,
-                closingResidue: capitalAllowance.closingResidue
+                )
               }))
               .concat([
-                {
-                  taxYear: "",
-                  openingResidue: "",
-                  addition: "",
-                  disposal: "",
-                  initial: "",
-                  annual: "",
-                  total: "",
-                  closingResidue: ""
-                },
+                {},
                 {
                   openingResidue: <strong>{utils.currencyFormatter(openingResidualTotal)}</strong>,
                   addition: <strong>{utils.currencyFormatter(additionTotal)}</strong>,
@@ -140,6 +124,10 @@ const CapitalAllowanceView = ({ assetId, toast }) => {
         header="Closing Residue"
         headerStyle={{ width: "10em" }}></Column>
       <Column field="yearsToGo" header="Yr to go" headerStyle={{ width: "6em" }}></Column>
+      <Column
+        field="numberOfYearsAvailable"
+        header="Year(s) Available"
+        headerStyle={{ width: "6em" }}></Column>
     </DataTable>
   );
 };

@@ -55,7 +55,7 @@ const ProfitAndLossMapping = ({
         );
       }
     } catch (error) {
-      utils.apiErrorHandling(error?.response?.data?.errors[0], toast);
+      utils.apiErrorHandling(error, toast);
     } finally {
       setLoading(false);
     }

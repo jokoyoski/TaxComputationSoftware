@@ -11,7 +11,8 @@ export const capitalAllowanceAdding = async ({
   annual,
   total,
   closingResidue,
-  yearsToGo
+  yearsToGo,
+  numberOfYearsAvailable
 }) => {
   try {
     return await axios.post("/api/CapitalAllowance", {
@@ -25,7 +26,8 @@ export const capitalAllowanceAdding = async ({
       annual,
       total,
       closingResidue,
-      yearsToGo
+      yearsToGo,
+      numberOfYearsAvailable
     });
   } catch (error) {
     throw error;
