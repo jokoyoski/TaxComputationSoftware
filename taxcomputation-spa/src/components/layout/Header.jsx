@@ -7,6 +7,7 @@ import ChangePassword from "../common/ChangePassword";
 import CreateUser from "../common/CreateUser";
 import { useResources } from "../../store/ResourcesStore";
 import CreateAsset from "../common/CreateAsset";
+import AssetList from "../common/AssetList";
 
 const Header = ({ title, loading }) => {
   const { replace } = useRouterActions();
@@ -14,6 +15,7 @@ const Header = ({ title, loading }) => {
   const [showChangePassword, setShowChangePassword] = React.useState();
   const [showCreateUser, setShowCreateUser] = React.useState();
   const [showCreateAsset, setShowCreateAsset] = React.useState();
+  const [showAssetList, setShowAssetList] = React.useState();
   const [{ companyName }, { resetCompany }] = useCompany();
   const [, { resetResources }] = useResources();
 
@@ -60,18 +62,18 @@ const Header = ({ title, loading }) => {
                   <p
                     className="settings-item"
                     onClick={() => {
-                      setShowCreateUser(!showCreateUser);
+                      setShowAssetList(!showAssetList);
                       setShowSettings(false);
                     }}>
-                    Create User
+                    Asset List
                   </p>
                   <p
                     className="settings-item"
                     onClick={() => {
-                      setShowCreateAsset(!showCreateAsset);
+                      setShowCreateUser(!showCreateUser);
                       setShowSettings(false);
                     }}>
-                    Create Asset
+                    Create User
                   </p>
                   <p className="settings-item" onClick={onSwitchCompany}>
                     Switch Company
@@ -92,7 +94,16 @@ const Header = ({ title, loading }) => {
       </div>
       {showChangePassword && <ChangePassword setShowChangePassword={setShowChangePassword} />}
       {showCreateUser && <CreateUser setShowCreateUser={setShowCreateUser} />}
-      {showCreateAsset && <CreateAsset setShowCreateAsset={setShowCreateAsset} />}
+      {showCreateAsset && (
+        <CreateAsset setShowCreateAsset={setShowCreateAsset} setShowAssetList={setShowAssetList} />
+      )}
+      {showAssetList && (
+        <AssetList
+          showAssetList={showAssetList}
+          setShowAssetList={setShowAssetList}
+          setShowCreateAsset={setShowCreateAsset}
+        />
+      )}
     </>
   );
 };
