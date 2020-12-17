@@ -113,6 +113,10 @@ body {
   z-index: 1000;
 }
 
+.edit:hover {
+  color: #ff8c00;
+}
+
 .delete:hover {
   color: #f00;
 }
