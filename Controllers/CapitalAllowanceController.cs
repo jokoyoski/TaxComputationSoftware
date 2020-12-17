@@ -13,12 +13,12 @@ namespace TaxComputationAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CapitalAllowanceController:ControllerBase
+    public class CapitalAllowanceController : ControllerBase
     {
         private readonly ICapitalAllowanceService _capitalAllowanceService;
         private readonly ILogger<CapitalAllowanceController> _logger;
         public CapitalAllowanceController(ICapitalAllowanceService capitalAllowanceService, ILogger<CapitalAllowanceController> logger)
-        { 
+        {
             _capitalAllowanceService = capitalAllowanceService;
             _logger = logger;
         }
@@ -31,8 +31,22 @@ namespace TaxComputationAPI.Controllers
         {
             try
             {
+                capitalAllowance.NumberOfYearsAvailable=8;
+                if (capitalAllowance.Initial > 0)
+                {
+                    return BadRequest(new { errors = new[] { "Asset cannot have Initial Item" } });
+                }
+                if (capitalAllowance.Addition > 0)
+                {
+                    return BadRequest(new { errors = new[] { "Asset cannot have Addition" } });
+                }
+                if (capitalAllowance.Disposal > 0)
+                {
+                    return BadRequest(new { errors = new[] { "Calculate disposal from Balancing Adjustment" } });
+                }
+
                 var record = await _capitalAllowanceService.SaveCapitalAllowance(capitalAllowance);
-                if (record>0)
+                if (record > 0)
                 {
                     return Ok("Record saved succesfully!");
                 }
@@ -59,8 +73,9 @@ namespace TaxComputationAPI.Controllers
                     return StatusCode(400, new { errors = new[] { "Please select an asset" } });
                 }
                 var record = await _capitalAllowanceService.GetCapitalAllowance(assetId, companyId);
-               
-                if (record.capitalAllowances==null) {
+
+                if (record.capitalAllowances == null)
+                {
                     return NotFound(new { errors = new[] { "Record not found!!!" } });
                 }
                 return Ok(record);
@@ -74,6 +89,16 @@ namespace TaxComputationAPI.Controllers
 
             }
         }
+
+
+        [HttpDelete("{id}")]
+        [Authorize]
+        public async Task<IActionResult> DeleteCapitalAllowance(int id)
+        {
+           return Ok("deleted successfully!!!!");
+        }
+
+
 
     }
 }

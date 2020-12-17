@@ -85,6 +85,26 @@ const onTbData = (resources, setTbData) => {
   }
 };
 
+/** api error handling */
+const apiErrorHandling = (error, toast) => {
+  if (error.response.data.errors) {
+    toast.show(
+      toastCallback({
+        severity: "error",
+        detail: error.response.data.errors[0]
+      })
+    );
+  } else {
+    toast.show(
+      toastCallback({
+        severity: "error",
+        summary: "Network Error",
+        detail: constants.networkErrorMessage
+      })
+    );
+  }
+};
+
 export default {
   currentYear,
   getYears,
@@ -93,5 +113,6 @@ export default {
   loadState,
   currencyFormatter,
   toastCallback,
-  onTbData
+  onTbData,
+  apiErrorHandling
 };

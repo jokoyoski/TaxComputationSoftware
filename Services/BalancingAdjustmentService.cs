@@ -340,8 +340,10 @@ namespace TaxComputationAPI.Services
 
         private static decimal CalculateAnnualAllowance(decimal cost, decimal initialCost, int annualRatio, int assetLifeCycle, int assetLifeSpan)
         {
-            var value = initialCost / assetLifeSpan * assetLifeCycle;
-            return value;
+            var costValue = cost-initialCost;
+            var lifeSpanValue=costValue/assetLifeSpan;
+            var totalValue=lifeSpanValue*assetLifeCycle;
+            return totalValue;
         }
 
         private static Tuple<BalancingAdjustment, decimal> CalculateBalancingAdjustment(decimal salesProceed, decimal residue)

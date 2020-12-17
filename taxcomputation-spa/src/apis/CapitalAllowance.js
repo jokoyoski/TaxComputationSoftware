@@ -11,7 +11,8 @@ export const capitalAllowanceAdding = async ({
   annual,
   total,
   closingResidue,
-  yearsToGo
+  yearsToGo,
+  numberOfYearsAvailable
 }) => {
   try {
     return await axios.post("/api/CapitalAllowance", {
@@ -25,7 +26,8 @@ export const capitalAllowanceAdding = async ({
       annual,
       total,
       closingResidue,
-      yearsToGo
+      yearsToGo,
+      numberOfYearsAvailable
     });
   } catch (error) {
     throw error;
@@ -35,6 +37,26 @@ export const capitalAllowanceAdding = async ({
 export const capitalAllowanceViewData = async ({ companyId, assetId }) => {
   try {
     const { data } = await axios.get(`/api/CapitalAllowance/${companyId}/${assetId}`);
+    return data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const capitalAllowanceSummaryData = async ({ companyId }) => {
+  try {
+    const { data } = await axios.get(
+      `/api/CapitalAllowanceSummary/companyId?companyId=${companyId}`
+    );
+    return data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const capitalAllowanceDelete = async ({ id }) => {
+  try {
+    const { data } = await axios.delete(`/api/CapitalAllowance/${id}`);
     return data;
   } catch (error) {
     throw error;

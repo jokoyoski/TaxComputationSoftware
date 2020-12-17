@@ -1,7 +1,7 @@
 export default {
   startYear: 1980,
   toastLifeTime: 6000,
-  modes: ["adding", "mapping", "view"],
+  modes: ["adding", "mapping", "view", "summary"],
   modules: {
     dashboard: "Dashboard",
     fixedAsset: "Fixed Asset",
@@ -30,7 +30,7 @@ export default {
     investment_allowance: "/investment_allowance",
     balancing_adjustment: "/balancing_adjustment"
   },
-  nonMappedModules: ["Minimum Tax", "Investment Allowance", "I.T Levy"],
+  nonMappedModules: ["Minimum Tax", "I.T Levy"],
   mappingCode: {
     fixedasset: "fixedasset",
     profitandloss: "profitandloss",

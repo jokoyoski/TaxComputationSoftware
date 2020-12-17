@@ -14,6 +14,8 @@ namespace TaxComputationAPI.Interfaces
         Task SaveProfitAndLoss(CreateProfitAndLoss createProfitAndLoss);
         Task<MinimumTaxObject> GetMinimumTax(int companyId, int yearId);
 
+        Task SaveProfitsAndLoss(CreateProfitAndLoss profits);
+
         Task<string> GetITLevy(int companyId, int yearId);
     }
 }

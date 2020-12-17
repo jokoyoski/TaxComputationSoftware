@@ -1,12 +1,11 @@
 import React from "react";
-import { Dropdown } from "primereact/dropdown";
 import { Button } from "primereact/button";
-import { InputText } from "primereact/inputtext";
 import { Controller, useForm } from "react-hook-form";
 import { useCompany } from "../../store/CompanyStore";
 import utils from "../../utils";
-import constants from "../../constants";
 import { capitalAllowanceAdding } from "../../apis/CapitalAllowance";
+import DropdownController from "../controllers/DropdownController";
+import InputController from "../controllers/InputController";
 
 const CapitalAllowanceAdding = ({ yearSelectItems, assetClassSelectItems, toast }) => {
   const { errors, handleSubmit, control } = useForm();
@@ -26,7 +25,8 @@ const CapitalAllowanceAdding = ({ yearSelectItems, assetClassSelectItems, toast 
       annual,
       total,
       closingResidue,
-      yearsToGo
+      yearsToGo,
+      numberOfYearsAvailable
     } = data;
 
     setLoading(true);
@@ -42,7 +42,8 @@ const CapitalAllowanceAdding = ({ yearSelectItems, assetClassSelectItems, toast 
         annual,
         total,
         closingResidue,
-        yearsToGo
+        yearsToGo,
+        numberOfYearsAvailable
       });
       if (response.status === 200) {
         toast.show(
@@ -53,24 +54,7 @@ const CapitalAllowanceAdding = ({ yearSelectItems, assetClassSelectItems, toast 
         );
       }
     } catch (error) {
-      if (error.response) {
-        toast.show(
-          utils.toastCallback({
-            severity: "error",
-            summary: "Error",
-            detail:
-              "An error occurred while calculating capital allowance, kindly contact your admin."
-          })
-        );
-        return;
-      }
-      toast.show(
-        utils.toastCallback({
-          severity: "error",
-          summary: "Network Error",
-          detail: constants.networkErrorMessage
-        })
-      );
+      utils.apiErrorHandling(error, toast);
     } finally {
       setLoading(false);
     }
@@ -78,229 +62,142 @@ const CapitalAllowanceAdding = ({ yearSelectItems, assetClassSelectItems, toast 
 
   return (
     <form className="p-d-flex p-flex-column p-jc-between" onSubmit={handleSubmit(onSubmit)}>
-      <div style={{ marginBottom: 10 }}>
-        <div className="p-d-flex p-ai-center">
-          <p style={{ marginBottom: 5, marginTop: 0, width: 150 }}>Tax Year</p>
-          <Controller
-            name="taxYear"
+      <div className="p-d-flex p-jc-between">
+        <div style={{ marginBottom: 10 }}>
+          <DropdownController
+            Controller={Controller}
             control={control}
-            rules={{ required: true }}
-            defaultValue=""
-            render={props => (
-              <Dropdown
-                style={{ marginBottom: 5, width: 200 }}
-                value={props.value}
-                options={yearSelectItems}
-                onChange={e => props.onChange(e.target.value)}
-              />
-            )}
+            errors={errors}
+            controllerName="taxYear"
+            label="Tax Year"
+            required
+            dropdownOptions={yearSelectItems}
+            errorMessage="Tax Year is required"
           />
         </div>
-        {errors.taxYear && (
-          <div style={{ fontSize: 12, color: "red", marginLeft: 150 }}>Tax Year is required</div>
-        )}
-      </div>
-      <div style={{ marginBottom: 10 }}>
-        <div className="p-d-flex p-ai-center">
-          <p style={{ marginBottom: 5, marginTop: 0, width: 150 }}>Asset</p>
-          <Controller
-            name="assetId"
+        <div style={{ marginBottom: 10 }}>
+          <DropdownController
+            Controller={Controller}
             control={control}
-            rules={{ required: true }}
-            defaultValue=""
-            render={props => (
-              <Dropdown
-                style={{ marginBottom: 5, width: 200 }}
-                value={props.value}
-                options={assetClassSelectItems}
-                onChange={e => props.onChange(e.target.value)}
-              />
-            )}
+            errors={errors}
+            controllerName="assetId"
+            label="Asset"
+            required
+            dropdownOptions={assetClassSelectItems}
+            errorMessage="Asset is required"
           />
         </div>
-        {errors.assetId && (
-          <div style={{ fontSize: 12, color: "red", marginLeft: 150 }}>Asset is required</div>
-        )}
-      </div>
-      <div style={{ marginBottom: 10 }}>
-        <div className="p-d-flex p-ai-center">
-          <p style={{ marginBottom: 5, marginTop: 0, width: 150 }}>Opening Residue</p>
-          <Controller
-            name="openingResidue"
+        <div style={{ marginBottom: 10 }}>
+          <InputController
+            Controller={Controller}
             control={control}
-            rules={{ required: true }}
-            defaultValue=""
-            render={props => (
-              <InputText
-                style={{ width: 200 }}
-                value={props.value}
-                onChange={e => props.onChange(e.target.value)}
-              />
-            )}
+            errors={errors}
+            controllerName="openingResidue"
+            label="Opening Residue"
+            required
+            errorMessage="Opening Residue is required"
           />
         </div>
-        {errors.openingResidue && (
-          <div style={{ fontSize: 12, color: "red", marginLeft: 150 }}>
-            Opening Residue is required
-          </div>
-        )}
-      </div>
-      <div style={{ marginBottom: 10 }}>
-        <div className="p-d-flex p-ai-center">
-          <p style={{ marginBottom: 5, marginTop: 0, width: 150 }}>Addition</p>
-          <Controller
-            name="addition"
+        <div style={{ marginBottom: 10 }}>
+          <InputController
+            Controller={Controller}
             control={control}
-            rules={{ required: true }}
-            defaultValue=""
-            render={props => (
-              <InputText
-                style={{ width: 200 }}
-                value={props.value}
-                onChange={e => props.onChange(e.target.value)}
-              />
-            )}
+            errors={errors}
+            controllerName="addition"
+            label="Addition"
+            required
+            errorMessage="Addition is required"
           />
         </div>
-        {errors.addition && (
-          <div style={{ fontSize: 12, color: "red", marginLeft: 150 }}>Addition is required</div>
-        )}
       </div>
-      <div style={{ marginBottom: 10 }}>
-        <div className="p-d-flex p-ai-center">
-          <p style={{ marginBottom: 5, marginTop: 0, width: 150 }}>Disposal</p>
-          <Controller
-            name="disposal"
+      <div className="p-d-flex p-jc-between">
+        <div style={{ marginBottom: 10 }}>
+          <InputController
+            Controller={Controller}
             control={control}
-            rules={{ required: true }}
-            defaultValue=""
-            render={props => (
-              <InputText
-                style={{ width: 200 }}
-                value={props.value}
-                onChange={e => props.onChange(e.target.value)}
-              />
-            )}
+            errors={errors}
+            controllerName="disposal"
+            label="Disposal"
+            required
+            errorMessage="Disposal is required"
           />
         </div>
-        {errors.disposal && (
-          <div style={{ fontSize: 12, color: "red", marginLeft: 150 }}>Disposal is required</div>
-        )}
-      </div>
-      <div style={{ marginBottom: 10 }}>
-        <div className="p-d-flex p-ai-center">
-          <p style={{ marginBottom: 5, marginTop: 0, width: 150 }}>Initial</p>
-          <Controller
-            name="initial"
+        <div style={{ marginBottom: 10 }}>
+          <InputController
+            Controller={Controller}
             control={control}
-            rules={{ required: true }}
-            defaultValue=""
-            render={props => (
-              <InputText
-                style={{ width: 200 }}
-                value={props.value}
-                onChange={e => props.onChange(e.target.value)}
-              />
-            )}
+            errors={errors}
+            controllerName="initial"
+            label="Initial"
+            required
+            errorMessage="Initial is required"
           />
         </div>
-        {errors.initial && (
-          <div style={{ fontSize: 12, color: "red", marginLeft: 150 }}>Initial is required</div>
-        )}
-      </div>
-      <div style={{ marginBottom: 10 }}>
-        <div className="p-d-flex p-ai-center">
-          <p style={{ marginBottom: 5, marginTop: 0, width: 150 }}>Annual</p>
-          <Controller
-            name="annual"
+        <div style={{ marginBottom: 10 }}>
+          <InputController
+            Controller={Controller}
             control={control}
-            rules={{ required: true }}
-            defaultValue=""
-            render={props => (
-              <InputText
-                style={{ width: 200 }}
-                value={props.value}
-                onChange={e => props.onChange(e.target.value)}
-              />
-            )}
+            errors={errors}
+            controllerName="annual"
+            label="Annual"
+            required
+            errorMessage="Annual is required"
           />
         </div>
-        {errors.annual && (
-          <div style={{ fontSize: 12, color: "red", marginLeft: 150 }}>Annual is required</div>
-        )}
-      </div>
-      <div style={{ marginBottom: 10 }}>
-        <div className="p-d-flex p-ai-center">
-          <p style={{ marginBottom: 5, marginTop: 0, width: 150 }}>Total</p>
-          <Controller
-            name="total"
+        <div style={{ marginBottom: 10 }}>
+          <InputController
+            Controller={Controller}
             control={control}
-            rules={{ required: true }}
-            defaultValue=""
-            render={props => (
-              <InputText
-                style={{ width: 200 }}
-                value={props.value}
-                onChange={e => props.onChange(e.target.value)}
-              />
-            )}
+            errors={errors}
+            controllerName="total"
+            label="Total"
+            required
+            errorMessage="Total is required"
           />
         </div>
-        {errors.total && (
-          <div style={{ fontSize: 12, color: "red", marginLeft: 150 }}>Total is required</div>
-        )}
       </div>
-      <div style={{ marginBottom: 10 }}>
-        <div className="p-d-flex p-ai-center">
-          <p style={{ marginBottom: 5, marginTop: 0, width: 150 }}>Closing Residue</p>
-          <Controller
-            name="closingResidue"
+      <div className="p-d-flex p-jc-between">
+        <div style={{ marginBottom: 10 }}>
+          <InputController
+            Controller={Controller}
             control={control}
-            rules={{ required: true }}
-            defaultValue=""
-            render={props => (
-              <InputText
-                style={{ width: 200 }}
-                value={props.value}
-                onChange={e => props.onChange(e.target.value)}
-              />
-            )}
+            errors={errors}
+            controllerName="closingResidue"
+            label="Closing Residue"
+            required
+            errorMessage="Closing Residue is required"
           />
         </div>
-        {errors.closingResidue && (
-          <div style={{ fontSize: 12, color: "red", marginLeft: 150 }}>
-            Closing Residue is required
-          </div>
-        )}
-      </div>
-      <div style={{ marginBottom: 10 }}>
-        <div className="p-d-flex p-ai-center">
-          <p style={{ marginBottom: 5, marginTop: 0, width: 150 }}>Years To Go</p>
-          <Controller
-            name="yearsToGo"
+        <div style={{ marginBottom: 10 }}>
+          <InputController
+            Controller={Controller}
             control={control}
-            rules={{ required: true }}
-            defaultValue=""
-            render={props => (
-              <InputText
-                style={{ width: 200 }}
-                value={props.value}
-                onChange={e => props.onChange(e.target.value)}
-              />
-            )}
+            errors={errors}
+            controllerName="yearsToGo"
+            label="Years To Go"
+            required
+            errorMessage="Years To Go is required"
           />
         </div>
-        {errors.yearsToGo && (
-          <div style={{ fontSize: 12, color: "red", marginLeft: 150 }}>Years To Go is required</div>
-        )}
-      </div>
-      <div className="p-d-flex p-flex-column" style={{ marginTop: 10 }}>
-        <Button
-          type="submit"
-          label={!loading ? "Submit" : null}
-          icon={loading ? "pi pi-spin pi-spinner" : null}
-          style={{ width: 350 }}
-        />
+        <div style={{ marginBottom: 10 }}>
+          <InputController
+            Controller={Controller}
+            control={control}
+            errors={errors}
+            controllerName="numberOfYearsAvailable"
+            label="Year(s) available"
+            required
+            errorMessage="Year(s) available is required"
+          />
+        </div>
+        <div className="p-d-flex p-flex-column" style={{ marginTop: 25 }}>
+          <Button
+            type="submit"
+            label={!loading ? "Submit" : null}
+            icon={loading ? "pi pi-spin pi-spinner" : null}
+            style={{ width: 200 }}
+          />
+        </div>
       </div>
     </form>
   );

@@ -18,13 +18,15 @@ namespace TaxComputationAPI.Controllers
     {
         private readonly IMapper _mapper;
         private readonly IFixedAssetService _fixedAssetService;
+        private readonly IUtilitiesService _utilitiesService;
         private readonly ILogger<FixedAssetController> _logger;
 
-        public FixedAssetController(IMapper mapper, IFixedAssetService fixedAssetService, ILogger<FixedAssetController> logger)
+        public FixedAssetController(IMapper mapper, IFixedAssetService fixedAssetService, IUtilitiesService utilitiesService, ILogger<FixedAssetController> logger)
         {
             _logger = logger;
             _mapper = mapper;
             _fixedAssetService = fixedAssetService;
+            _utilitiesService = utilitiesService;
         }
 
         [HttpPost]
@@ -34,6 +36,12 @@ namespace TaxComputationAPI.Controllers
         {
             try
             {
+
+
+                if (createFixed.YearId < DateTime.Now.Year)
+                {
+                    return StatusCode(400, new { errors = new[] { "Fixed Asset fro Previous Year is not Alllowed!" } });
+                }
                 bool status = createFixed.IsCost ? true : false;
                 var value = await _fixedAssetService.GetAmount(createFixed.TriBalanceId, status);
 
@@ -41,11 +49,11 @@ namespace TaxComputationAPI.Controllers
                 {
                     if (createFixed.IsTransferCostRemoved)
                     {
-                        var totalCost = createFixed.OpeningCost + createFixed.CostAddition - createFixed.CostDisposal -createFixed.TransferCost;
+                        var totalCost = createFixed.OpeningCost + createFixed.CostAddition - createFixed.CostDisposal - createFixed.TransferCost;
                         if (totalCost != value)
                         {
-                              return StatusCode (400, new { errors = new []{"Closing balance selected is not equal to your computataion"} });
-                          
+                            return StatusCode(400, new { errors = new[] { "Closing balance selected is not equal to your computataion" } });
+
                         }
                     }
                     else
@@ -53,8 +61,8 @@ namespace TaxComputationAPI.Controllers
                         var totalCost = createFixed.OpeningCost + createFixed.CostAddition - createFixed.CostDisposal + createFixed.TransferCost;
                         if (totalCost != value)
                         {
-                                     return StatusCode (400, new { errors = new []{"Closing balance selected is not equal to your computataion"} });
-                   
+                            return StatusCode(400, new { errors = new[] { "Closing balance selected is not equal to your computataion" } });
+
                         }
                     }
 
@@ -64,10 +72,10 @@ namespace TaxComputationAPI.Controllers
                     if (createFixed.IsTransferDepreciationRemoved)
                     {
                         var totalDepreciation = createFixed.OpeningDepreciation + createFixed.DepreciationAddition - createFixed.DepreciationDisposal - createFixed.TransferDepreciation;
-                        if (totalDepreciation !=value)
+                        if (totalDepreciation != value)
                         {
-                                     return StatusCode (400, new { errors = new []{"Closing balance selected is not equal to your computataion"} });
-                   
+                            return StatusCode(400, new { errors = new[] { "Closing balance selected is not equal to your computataion" } });
+
                         }
                     }
                     else
@@ -75,8 +83,8 @@ namespace TaxComputationAPI.Controllers
                         var totalDepreciation = createFixed.OpeningDepreciation + createFixed.DepreciationAddition - createFixed.DepreciationDisposal + createFixed.TransferDepreciation;
                         if (totalDepreciation != value)
                         {
-                                    return StatusCode (400, new { errors = new []{"Closing balance selected is not equal to your computataion"} });
-                   
+                            return StatusCode(400, new { errors = new[] { "Closing balance selected is not equal to your computataion" } });
+
                         }
                     }
                 }
@@ -110,7 +118,6 @@ namespace TaxComputationAPI.Controllers
                 }
 
 
-
                 await _fixedAssetService.SaveFixedAsset(createFixed);
 
                 return Ok("saved successfully");
@@ -129,7 +136,8 @@ namespace TaxComputationAPI.Controllers
         [Authorize]
         public async Task<IActionResult> DeleteFixedAsset(int id)
         {
-            await _fixedAssetService.DeleteFixedAsset(id);
+            // await _fixedAssetService.DeleteFixedAsset(id);
+            await _utilitiesService.UnmapValue(id);
             return Ok("Item Unmapped");
         }
 

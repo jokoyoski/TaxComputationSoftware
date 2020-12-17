@@ -1,12 +1,11 @@
 import React from "react";
-import { Dropdown } from "primereact/dropdown";
 import { Button } from "primereact/button";
-import { InputText } from "primereact/inputtext";
 import { Controller, useForm } from "react-hook-form";
 import { balancingAdjustmentAdding } from "../../apis/BalancingAdjustment";
 import { useCompany } from "../../store/CompanyStore";
 import utils from "../../utils";
-import constants from "../../constants";
+import DropdownController from "../controllers/DropdownController";
+import InputController from "../controllers/InputController";
 
 const BalancingAdjustmentAdding = ({ yearSelectItems, assetClassSelectItems, toast }) => {
   const { errors, handleSubmit, control } = useForm();
@@ -37,24 +36,7 @@ const BalancingAdjustmentAdding = ({ yearSelectItems, assetClassSelectItems, toa
         );
       }
     } catch (error) {
-      if (error.response) {
-        toast.show(
-          utils.toastCallback({
-            severity: "error",
-            summary: "Error",
-            detail:
-              "An error occurred while calculating balancing adjustment, kindly contact your admin."
-          })
-        );
-        return;
-      }
-      toast.show(
-        utils.toastCallback({
-          severity: "error",
-          summary: "Network Error",
-          detail: constants.networkErrorMessage
-        })
-      );
+      utils.apiErrorHandling(error, toast);
     } finally {
       setLoading(false);
     }
@@ -63,114 +45,72 @@ const BalancingAdjustmentAdding = ({ yearSelectItems, assetClassSelectItems, toa
   return (
     <form className="p-d-flex p-flex-column p-jc-between" onSubmit={handleSubmit(onSubmit)}>
       <div style={{ marginBottom: 10 }}>
-        <div className="p-d-flex p-ai-center">
-          <p style={{ marginBottom: 5, marginTop: 0, width: 120 }}>Year</p>
-          <Controller
-            name="year"
-            control={control}
-            rules={{ required: true }}
-            defaultValue=""
-            render={props => (
-              <Dropdown
-                style={{ marginBottom: 5, width: 200 }}
-                value={props.value}
-                options={yearSelectItems}
-                onChange={e => props.onChange(e.target.value)}
-              />
-            )}
-          />
-        </div>
-        {errors.year && (
-          <div style={{ fontSize: 12, color: "red", marginLeft: 120 }}>Year is required</div>
-        )}
+        <DropdownController
+          Controller={Controller}
+          control={control}
+          errors={errors}
+          controllerName="year"
+          label="Year"
+          required
+          dropdownOptions={yearSelectItems}
+          errorMessage="Year is required"
+          labelWidth={120}
+          className="p-d-flex p-ai-center"
+        />
       </div>
       <div style={{ marginBottom: 10 }}>
-        <div className="p-d-flex p-ai-center">
-          <p style={{ marginBottom: 5, marginTop: 0, width: 120 }}>Asset</p>
-          <Controller
-            name="assetId"
-            control={control}
-            rules={{ required: true }}
-            defaultValue=""
-            render={props => (
-              <Dropdown
-                style={{ marginBottom: 5, width: 200 }}
-                value={props.value}
-                options={assetClassSelectItems}
-                onChange={e => props.onChange(e.target.value)}
-              />
-            )}
-          />
-        </div>
-        {errors.assetId && (
-          <div style={{ fontSize: 12, color: "red", marginLeft: 120 }}>Asset is required</div>
-        )}
+        <DropdownController
+          Controller={Controller}
+          control={control}
+          errors={errors}
+          controllerName="assetId"
+          label="Asset"
+          required
+          dropdownOptions={assetClassSelectItems}
+          errorMessage="Asset is required"
+          labelWidth={120}
+          className="p-d-flex p-ai-center"
+        />
       </div>
       <div style={{ marginBottom: 10 }}>
-        <div className="p-d-flex p-ai-center">
-          <p style={{ marginBottom: 5, marginTop: 0, width: 120 }}>Cost</p>
-          <Controller
-            name="cost"
-            control={control}
-            rules={{ required: true }}
-            defaultValue=""
-            render={props => (
-              <InputText
-                style={{ width: 200 }}
-                value={props.value}
-                onChange={e => props.onChange(e.target.value)}
-              />
-            )}
-          />
-        </div>
-        {errors.cost && (
-          <div style={{ fontSize: 12, color: "red", marginLeft: 120 }}>Cost is required</div>
-        )}
+        <InputController
+          Controller={Controller}
+          control={control}
+          errors={errors}
+          controllerName="cost"
+          label="Cost"
+          required
+          errorMessage="Cost is required"
+          labelWidth={120}
+          className="p-d-flex p-ai-center"
+        />
       </div>
       <div style={{ marginBottom: 10 }}>
-        <div className="p-d-flex p-ai-center">
-          <p style={{ marginBottom: 5, marginTop: 0, width: 120 }}>Sales Proceed</p>
-          <Controller
-            name="salesProceed"
-            control={control}
-            rules={{ required: true }}
-            defaultValue=""
-            render={props => (
-              <InputText
-                style={{ width: 200 }}
-                value={props.value}
-                onChange={e => props.onChange(e.target.value)}
-              />
-            )}
-          />
-        </div>
-        {errors.salesProceed && (
-          <div style={{ fontSize: 12, color: "red", marginLeft: 120 }}>
-            Sales Proceed is required
-          </div>
-        )}
+        <InputController
+          Controller={Controller}
+          control={control}
+          errors={errors}
+          controllerName="salesProceed"
+          label="Sales Proceed"
+          required
+          errorMessage="Sales Proceed is required"
+          labelWidth={120}
+          className="p-d-flex p-ai-center"
+        />
       </div>
       <div style={{ marginBottom: 10 }}>
-        <div className="p-d-flex p-ai-center">
-          <p style={{ marginBottom: 5, marginTop: 0, width: 120 }}>Year Bought</p>
-          <Controller
-            name="yearBought"
-            control={control}
-            rules={{ required: true }}
-            defaultValue=""
-            render={props => (
-              <Dropdown
-                style={{ marginBottom: 5, width: 200 }}
-                value={props.value}
-                options={yearSelectItems}
-                onChange={e => props.onChange(e.target.value)}
-              />
-            )}
-          />
-        </div>
-        {errors.yearBought && (
-          <div style={{ fontSize: 12, color: "red", marginLeft: 120 }}>Year Bought is required</div>
-        )}
+        <DropdownController
+          Controller={Controller}
+          control={control}
+          errors={errors}
+          controllerName="yearBought"
+          label="Year Bought"
+          required
+          dropdownOptions={yearSelectItems}
+          errorMessage="Year Bought is required"
+          labelWidth={120}
+          className="p-d-flex p-ai-center"
+        />
       </div>
       <div className="p-d-flex p-flex-column" style={{ marginTop: 10 }}>
         <Button

@@ -11,6 +11,7 @@ using TaxComputationAPI.Helpers.Response;
 using TaxComputationAPI.Interfaces;
 using TaxComputationAPI.Manager;
 using TaxComputationAPI.Models;
+using TaxComputationSoftware.Models;
 
 namespace TaxComputationAPI.Repositories
 {
@@ -159,6 +160,77 @@ namespace TaxComputationAPI.Repositories
                 try
                 {
                     result = conn.QueryFirstOrDefault<AssetMapping>("[dbo].[usp_Get_AssetMapping_By_AssetName]", parameters, commandType: CommandType.StoredProcedure);
+                    conn.Close();
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError($"{e.Message}");
+
+                    throw e;
+                }
+
+                return result;
+            }
+        }
+
+         public async Task AddCompanyCode(CompanyCode companyCode)
+        {
+            if (companyCode == null) throw new ArgumentNullException(nameof(companyCode));
+
+            try
+            {
+
+                using (IDbConnection conn = await _databaseManager.DatabaseConnection())
+                {
+                    if (conn.State == ConnectionState.Closed) conn.Open();
+
+                    DynamicParameters parameters = new DynamicParameters();
+
+                    parameters.Add("@NextExecution", companyCode.NextExecution);
+
+                    parameters.Add("@CompanyId", companyCode.CompanyId);
+
+                    parameters.Add("@Code", companyCode.Code);
+
+                    try
+                    {
+                        var respone = conn.Execute("[dbo].[usp_Insert_Into_Company_Code_Table]", parameters, commandType: CommandType.StoredProcedure);
+                        conn.Close();
+                    }
+                    catch (Exception e)
+                    {
+
+                        _logger.LogError($"{e.Message}");
+
+                        throw e;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                throw new SystemException(e.Message);
+            }
+        }
+
+
+
+         public async Task<CompanyCode> GetCompanyCodeByCodeId(int companyId)
+        {
+            if (companyId==0) throw new ArgumentNullException(nameof(companyId));
+
+            var result = default(CompanyCode);
+
+            using (IDbConnection conn = await _databaseManager.DatabaseConnection())
+            {
+                if (conn.State == ConnectionState.Closed) conn.Open();
+
+                DynamicParameters parameters = new DynamicParameters();
+
+                parameters.Add("@CompanyId", companyId);
+
+                try
+                {
+                    result = conn.QueryFirstOrDefault<CompanyCode>("[dbo].[usp_Get_CompanyCode_By_Id]", parameters, commandType: CommandType.StoredProcedure);
                     conn.Close();
                 }
                 catch (Exception e)

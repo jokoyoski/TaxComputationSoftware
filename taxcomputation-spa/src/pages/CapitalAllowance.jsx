@@ -12,6 +12,7 @@ import { useResources } from "../store/ResourcesStore";
 import { usePathParam, useResource } from "react-resource-router";
 import PageLoader from "../components/common/PageLoader";
 import Error from "../components/common/Error";
+import CapitalAllowanceSummary from "../components/capital_allowance/CapitalAllowanceSummary";
 
 const CapitalAllowance = () => {
   const title = constants.modules.capitalAllowance;
@@ -73,7 +74,12 @@ const CapitalAllowance = () => {
             ),
             view: (
               <ViewMode title={title} year={year}>
-                <CapitalAllowanceView assetId={assetId} />
+                <CapitalAllowanceView assetId={assetId} toast={toast.current} />
+              </ViewMode>
+            ),
+            summary: (
+              <ViewMode title={title} year={year}>
+                <CapitalAllowanceSummary />
               </ViewMode>
             )
           }[mode]

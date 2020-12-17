@@ -13,14 +13,28 @@ const ModuleHeader = ({
   yearSelectItems,
   assetClassSelectItems
 }) => {
-  const addingModules = [constants.modules.balancingAdjustment, constants.modules.capitalAllowance];
-  const modeSelectItems = [
-    {
-      label: addingModules.includes(title) ? "Adding - Mode" : "Mapping - Mode",
-      value: addingModules.includes(title) ? "adding" : "mapping"
-    },
+  const [addingModules] = React.useState([
+    constants.modules.balancingAdjustment,
+    constants.modules.capitalAllowance
+  ]);
+  const [summaryModules] = React.useState([constants.modules.capitalAllowance]);
+  const [modeSelectItems, setModeSelectItems] = React.useState([
+    addingModules.includes(title)
+      ? {
+          label: "Adding - Mode",
+          value: "adding"
+        }
+      : { label: "Mapping - Mode", value: "mapping" },
     { label: "View - Mode", value: "view" }
-  ];
+  ]);
+
+  React.useEffect(() => {
+    setModeSelectItems(state =>
+      summaryModules.includes(title)
+        ? state.concat([{ label: "Summary - Mode", value: "summary" }])
+        : state
+    );
+  }, [summaryModules, title]);
 
   return (
     <div className="p-d-flex p-jc-center p-flex-column" style={{ width: "100%" }}>
@@ -31,7 +45,8 @@ const ModuleHeader = ({
             {
               adding: " - Adding",
               mapping: " - Mapping",
-              view: " - View"
+              view: " - View",
+              summary: " - Summary"
             }[mode]
           }
         </p>

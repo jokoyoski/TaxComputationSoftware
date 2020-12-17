@@ -39,7 +39,20 @@ select * from   [dbo].[FixedAsset] where CompanyId=@CompanyId and AssetId=@Asset
 GO
 
 
+--------------------------------------- STORED PROCEDURE TO  DELETE FIXED ASSET BY COMPANYID-----------------------------------------
 
+
+IF OBJECT_ID('[dbo].[usp_Delete_Fixed_Asset_By_Id]') IS nOT NULL
+BEGIN
+DROP procedure [dbo].[usp_Delete_Fixed_Asset_By_Id]
+END
+GO
+CREATE procedure usp_Delete_Fixed_Asset_By_Id(
+@Id int
+)
+AS
+select * from   [dbo].[FixedAsset] where Id=@Id
+GO
 
 
 
