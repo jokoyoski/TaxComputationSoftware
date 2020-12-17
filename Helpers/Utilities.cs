@@ -19,6 +19,34 @@ namespace TaxComputationAPI.Helpers
         }
 
 
+        public static string AreaMapped(string mappedTo)
+        {
+            string areaMapped = "";
+            bool isReady = false;
+
+            for(int i = 0; i < mappedTo.Length; i++)
+            {
+                if (mappedTo[i] == ']')
+                {
+                    isReady = false;
+                }
+                if (isReady)
+                {
+                    areaMapped += mappedTo[i];
+                }
+                if (mappedTo[i] == '[')
+                {
+                    isReady = true;
+                }
+
+            }
+
+            return areaMapped;
+         
+
+        }
+
+      
         private static Random random = new Random();
         public static string RandomString()
         {

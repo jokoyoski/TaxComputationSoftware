@@ -27,13 +27,13 @@ namespace TaxComputationAPI.Controllers
 
 
         [HttpPost()]
-        //[Authorize]
+        [Authorize]
         public async Task<IActionResult> CreateProfitandLoss(CreateProfitAndLoss profitAndLoss)
         {
             try
             {
 
-                await _profitAndLossService.SaveProfitAndLoss(profitAndLoss);
+                await _profitAndLossService.SaveProfitsAndLoss(profitAndLoss);
                 return Ok("saved successfully");
 
             }

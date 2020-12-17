@@ -24,6 +24,8 @@ namespace TaxComputationAPI.Interfaces
 
         Task UpdateAssetMappingAsync(AssetMapping assetMapping);
         Task DeleteAssetMappingAsync(AssetMapping assetMapping);
+
+        Task UnmapValue(int trialBalanceId);
  
        
 

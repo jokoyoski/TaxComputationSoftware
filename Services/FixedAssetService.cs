@@ -107,7 +107,7 @@ namespace TaxComputationAPI.Services
 
                 foreach (var value in fixedAsset.TriBalanceId)
                 {
-                    string trialBalanceValue = getMappedDetails.MappedTo("fixedasset");
+                    string trialBalanceValue = "MAPPED TO [FIXED ASSET]";
                     await _trialBalanceRepository.UpdateTrialBalance(value, trialBalanceValue, false);
 
                 }
@@ -162,17 +162,7 @@ namespace TaxComputationAPI.Services
 
         }
 
-        /* public bool GetAmount(string type, List<int> trialBalance)
-         {
-             decimal totalNumber = 0;
-
-             foreach(var j in trialBalance) {
-                 totalNumber= _utilitiesRepository.GetAmount(j,"cost");
-             }
-
-
-         }*/
-
+   
 
         public async Task<TaxComputationAPI.Dtos.FixedAssetResponseDto> FormatAmount(FixedAssetResponse fixedAssetResponse)
         {
@@ -321,6 +311,7 @@ namespace TaxComputationAPI.Services
 
         public async Task DeleteFixedAsset(int trialbalanceId)
         {
+
             await _trialBalanceRepository.UpdateTrialBalance(trialbalanceId, null, true);  //fice
             await _utilitiesRepository.DeleteTrialBalancingMapping(trialbalanceId);
         }

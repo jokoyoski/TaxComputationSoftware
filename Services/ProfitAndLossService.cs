@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using TaxComputationAPI.Dtos;
 using TaxComputationAPI.Helpers;
 using TaxComputationAPI.Interfaces;
+using TaxComputationAPI.Models;
 using TaxComputationSoftware.Dtos;
 using TaxComputationSoftware.Models;
 
@@ -23,6 +24,205 @@ namespace TaxComputationAPI.Services
             _trialBalanceRepository = trialBalanceRepository;
             _profitAndLossRepository = profitAndLossRepository;
         }
+        ///////
+
+        private async Task<ProfitAndLoss> GetProfitAndLoss(int yearId)
+        {
+            decimal revenueCreditTotal = 0;
+            decimal revenueDebitTotal = 0;
+            decimal costofSalesCreditTotal = 0;
+            decimal costOfSalesDebitTotal = 0;
+            decimal otherOperatingIncomeCreditTotal = 0;
+            decimal otherOperatingIncomeDebitTotal = 0;
+            decimal operatingExpensesCreditTotal = 0;
+            decimal operatingExpensesDebitTotal = 0;
+            decimal otherOperatingTypeCreditTotal = 0;
+            decimal otherOperatingTypeDebitTotal = 0;
+
+
+
+            var items = await _profitAndLossRepository.GetProfitsAndLossByType("Revenue");
+            if (items.Count > 0)
+            {
+                foreach (var item in items)
+                {
+
+                    var value = await _profitAndLossRepository.GetProfitsAndlossByTrialBalanceId(item.TrialBalanceId, yearId);
+                    if (item.Pick == "C")
+                    {
+                        revenueCreditTotal += value.Value;
+                    }
+                    else
+                    {
+                        revenueDebitTotal += value.Value;
+                    }
+
+
+                }
+            }
+
+
+            items = await _profitAndLossRepository.GetProfitsAndLossByType("CostOfSales");
+            if (items.Count > 0)
+            {
+                foreach (var item in items)
+                {
+
+                    var value = await _profitAndLossRepository.GetProfitsAndlossByTrialBalanceId(item.TrialBalanceId, yearId);
+                    if (item.Pick == "C")
+                    {
+                        costofSalesCreditTotal += value.Value;
+                    }
+                    else
+                    {
+                        costOfSalesDebitTotal += value.Value;
+                    }
+
+
+                }
+            }
+
+
+
+            items = await _profitAndLossRepository.GetProfitsAndLossByType("OtherOperatingIncome");
+            if (items.Count > 0)
+            {
+                foreach (var item in items)
+                {
+
+                    var value = await _profitAndLossRepository.GetProfitsAndlossByTrialBalanceId(item.TrialBalanceId, yearId);
+                    if (item.Pick == "C")
+                    {
+                        otherOperatingIncomeCreditTotal += value.Value;
+                    }
+                    else
+                    {
+                        otherOperatingIncomeDebitTotal += value.Value;
+                    }
+
+
+                }
+
+            }
+
+            items = await _profitAndLossRepository.GetProfitsAndLossByType("OperatingExpenses");
+            if (items.Count > 0)
+            {
+                foreach (var item in items)
+                {
+
+                    var value = await _profitAndLossRepository.GetProfitsAndlossByTrialBalanceId(item.TrialBalanceId, yearId);
+                    if (item.Pick == "C")
+                    {
+                        operatingExpensesCreditTotal += value.Value;
+                    }
+                    else
+                    {
+                        operatingExpensesDebitTotal += value.Value;
+                    }
+
+
+                }
+            }
+
+
+            items = await _profitAndLossRepository.GetProfitsAndLossByType("OtherOperatingType");
+            if (items.Count > 0)
+            {
+                foreach (var item in items)
+                {
+
+                    var value = await _profitAndLossRepository.GetProfitsAndlossByTrialBalanceId(item.TrialBalanceId, yearId);
+                    if (item.Pick == "C")
+                    {
+                        otherOperatingTypeCreditTotal += value.Value;
+                    }
+                    else
+                    {
+                        otherOperatingTypeDebitTotal += value.Value;
+                    }
+
+
+                }
+            }
+
+
+            var revenueTotal = revenueCreditTotal - revenueDebitTotal;
+            var costOfSalesTotal = costOfSalesDebitTotal - costofSalesCreditTotal;
+            var otherOperatingIncomeTotal = otherOperatingIncomeCreditTotal - otherOperatingIncomeDebitTotal;
+            var operatingexpensesTotal = operatingExpensesDebitTotal - otherOperatingIncomeCreditTotal;
+            var otherOperatingTypeTotal = otherOperatingIncomeCreditTotal - otherOperatingIncomeDebitTotal;
+
+            return new ProfitAndLoss
+            {
+                Revenue = revenueTotal.ToString(),
+                CostOfSales = costOfSalesTotal.ToString(),
+                OtherOperatingIncome = otherOperatingIncomeTotal.ToString(),
+                OperatingExpenses = operatingexpensesTotal.ToString(),
+                OtherOperatingGainOrLoss = otherOperatingTypeTotal.ToString(),
+
+
+            };
+
+
+
+
+
+        }
+
+        public async Task SaveProfitsAndLoss(CreateProfitAndLoss profits)
+        {
+            int i = 0;
+            int profitAndLossId = profits.ProfitAndLossId;
+
+            foreach (var selection in profits.TrialBalanceList)
+            {
+
+                string trialBalanceValue = MappedTo(profitAndLossId, GetSelectedType(selection));
+                await _trialBalanceRepository.UpdateTrialBalance(selection.TrialBalanceId, trialBalanceValue, false);
+                i++;
+            }
+
+            foreach (var selection in profits.TrialBalanceList)
+            {
+
+                var value = ConstructProfitAndLoss(selection, profits.ProfitAndLossId, profits.YearId);
+                await _profitAndLossRepository.CreateProfitsAndLoss(value);
+            }
+
+
+
+        }
+
+
+
+
+        private TaxComputationSoftware.Dtos.ProfitsAndLoss ConstructProfitAndLoss(TrialBalanceValue trial, int profitAndLossId, int yearId)
+        {
+            var value = new TaxComputationSoftware.Dtos.ProfitsAndLoss();
+            value.TypeValue = GetType(profitAndLossId);
+            value.Year = yearId;
+            value.Pick = (GetSelectedType(trial));
+            value.TrialBalanceId = trial.TrialBalanceId;
+            return value;
+        }
+
+        private string GetSelectedType(TrialBalanceValue trial)
+        {
+
+            if (trial.IsDebit && !trial.IsCredit && !trial.IsBoth)
+            {
+                return "D";
+            }
+            if (!trial.IsDebit && trial.IsCredit && !trial.IsBoth)
+            {
+                return "C";
+            }
+            return null;
+
+        }
+
+        ////
 
 
 
@@ -33,7 +233,7 @@ namespace TaxComputationAPI.Services
             decimal creditValue = 0;
             decimal totalValue = 0;
             List<string> items = new List<string>();
-            int profitAndLossId=createProfitAndLoss.ProfitAndLossId;
+            int profitAndLossId = createProfitAndLoss.ProfitAndLossId;
             foreach (var item in createProfitAndLoss.TrialBalanceList)
             {
                 var value = await GetValue(item);
@@ -48,29 +248,35 @@ namespace TaxComputationAPI.Services
                     creditValue += value.value;
                 }
             }
-             int i=0;
+            int i = 0;
             foreach (var selection in createProfitAndLoss.TrialBalanceList)
             {
-                
-                string trialBalanceValue = MappedTo(profitAndLossId ,items[i]);
+
+                string trialBalanceValue = MappedTo(profitAndLossId, items[i]);
                 await _trialBalanceRepository.UpdateTrialBalance(selection.TrialBalanceId, trialBalanceValue, false);
                 i++;
             }
-            if(createProfitAndLoss.ProfitAndLossId==1){
-                totalValue = creditValue - debitValue;         
-            }else if(createProfitAndLoss.ProfitAndLossId==2){
-                 totalValue = debitValue - creditValue;     
+            if (createProfitAndLoss.ProfitAndLossId == 1)
+            {
+                totalValue = creditValue - debitValue;
             }
-            else if(createProfitAndLoss.ProfitAndLossId==3){
-                 totalValue = creditValue - debitValue;     
+            else if (createProfitAndLoss.ProfitAndLossId == 2)
+            {
+                totalValue = debitValue - creditValue;
             }
-            else if(createProfitAndLoss.ProfitAndLossId==4){
-                 totalValue = debitValue - creditValue;  
+            else if (createProfitAndLoss.ProfitAndLossId == 3)
+            {
+                totalValue = creditValue - debitValue;
             }
-            else if(createProfitAndLoss.ProfitAndLossId==5){
-                 totalValue = creditValue - debitValue;     
+            else if (createProfitAndLoss.ProfitAndLossId == 4)
+            {
+                totalValue = debitValue - creditValue;
             }
-            
+            else if (createProfitAndLoss.ProfitAndLossId == 5)
+            {
+                totalValue = creditValue - debitValue;
+            }
+
             var profitAndLoss = ComputeProfitAndLoss(totalValue, createProfitAndLoss.CompanyId, createProfitAndLoss.YearId, createProfitAndLoss.ProfitAndLossId);
 
             await _profitAndLossRepository.UpdateProfitAndLoss(profitAndLoss);
@@ -115,7 +321,8 @@ namespace TaxComputationAPI.Services
             ProfitAndLossViewDto operatingexpenses = new ProfitAndLossViewDto();
             ProfitAndLossViewDto profitorlossbeforetax = new ProfitAndLossViewDto();
             List<ProfitAndLossViewDto> records = new List<ProfitAndLossViewDto>();
-            var record = await _profitAndLossRepository.GetProfitAndLossByCompanyIdAndYearId(companyId, yearId);
+            //  var record = await _profitAndLossRepository.GetProfitAndLossByCompanyIdAndYearId(companyId, yearId);
+            var record = await GetProfitAndLoss(yearId);
             if (record == null)
             {
                 return records;
@@ -425,40 +632,73 @@ namespace TaxComputationAPI.Services
         }
 
 
-        private string MappedTo(int profitAndLossId  ,string item)
+        private string MappedTo(int profitAndLossId, string item)
         {
 
             if (profitAndLossId == 1)
             {
-                return $"Mapped To Profit and Loss (Revenue) {item}";
+                return $"Mapped To [Profit and Loss] (Revenue) {item}";
             }
 
             if (profitAndLossId == 2)
             {
-                return $"Mapped To Profit and Loss (Cost Of Sales) {item}";
+                return $"Mapped To [Profit and Loss] (Cost Of Sales) {item}";
             }
 
             if (profitAndLossId == 3)
             {
-                return $"Mapped To Profit and Loss (Other Operating Income) {item}";
+                return $"Mapped To [Profit and Loss] (Other Operating Income) {item}";
             }
 
 
             if (profitAndLossId == 4)
             {
-                return $"Mapped To Profit and Loss (Operating Expenses) {item}";
+                return $"Mapped To [Profit and Loss] (Operating Expenses) {item}";
             }
 
 
             if (profitAndLossId == 5)
             {
-                return $"Mapped To Profit and Loss (Other Operating Type) {item}";
+                return $"Mapped To [Profit and Loss] (Other Operating Type) {item}";
             }
 
 
             return null;
 
-    }
+        }
+
+
+
+        private string GetType(int profitAndLossId)
+        {
+
+            if (profitAndLossId == 1)
+            {
+                return "Revenue";
+            }
+
+            if (profitAndLossId == 2)
+            {
+                return "CostOfSales";
+            }
+
+            if (profitAndLossId == 3)
+            {
+                return "OtherOperatingIncome";
+            }
+
+            if (profitAndLossId == 4)
+            {
+                return "OperatingExpenses";
+            }
+
+            if (profitAndLossId == 4)
+            {
+                return "OtherOperatingType";
+            }
+
+            return null;
+        }
 
 
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TaxComputationAPI.Dtos;
+using TaxComputationAPI.Helpers;
 using TaxComputationAPI.Interfaces;
 using TaxComputationAPI.Models;
 
@@ -11,13 +12,21 @@ namespace TaxComputationAPI.Services
     public class UtilitiesService : IUtilitiesService
     {
         private readonly IUtilitiesRepository _utilitiesRepository;
-        public UtilitiesService(IUtilitiesRepository utilitiesRepository)
+        private readonly ITrialBalanceRepository _trialBalanceRepository;
+
+        private readonly IFixedAssetService _fixedAssetService;
+
+        private readonly IProfitAndLossRepository _profitAndLossRepository;
+        public UtilitiesService(IUtilitiesRepository utilitiesRepository, ITrialBalanceRepository trialBalanceRepository, IFixedAssetService fixedAssetService, IProfitAndLossRepository profitAndLossRepository)
         {
             _utilitiesRepository = utilitiesRepository;
+            _trialBalanceRepository = trialBalanceRepository;
+            _fixedAssetService = fixedAssetService;
+            _profitAndLossRepository = profitAndLossRepository;
 
         }
 
-       
+
         public async Task<List<FinancialYear>> GetFinancialYearAsync()
         {
             return await _utilitiesRepository.GetFinancialYearAsync();
@@ -34,11 +43,11 @@ namespace TaxComputationAPI.Services
             await _utilitiesRepository.AddFinancialYearAsync(financialYear);
         }
 
-       
+
 
         public async Task<FinancialYear> GetFinancialYearAsync(int Name)
         {
-            return  await _utilitiesRepository.GetFinancialYearAsync(Name);
+            return await _utilitiesRepository.GetFinancialYearAsync(Name);
         }
         public Task<List<AssetMapping>> GetAssetMappingAsync()
         {
@@ -82,26 +91,48 @@ namespace TaxComputationAPI.Services
             await _utilitiesRepository.DeleteAssetMappingAsync(assetMapping);
         }
 
-       
-       
-      
-       
 
-        
-       
+
+        public async Task UnmapValue(int trialBalanceId)
+        {
+            var value = await _trialBalanceRepository.GetTrialBalanceById(trialBalanceId);
+
+            var module = Utilities.AreaMapped(value.MappedTo);
+
+            if (module == "FIXED ASSET")
+            {
+                await _trialBalanceRepository.UpdateTrialBalance(trialBalanceId, null, true);  //fice
+                await _utilitiesRepository.DeleteTrialBalancingMapping(trialBalanceId);
+            }
+            else if(module=="Profit and Loss")
+            {
+                _profitAndLossRepository.DeleteProfitsAndLossById(trialBalanceId);
+                await _trialBalanceRepository.UpdateTrialBalance(trialBalanceId, null, true);  //fice
+            }
+
+
+        }
+
+
+
+
 
         public async Task<List<ModuleTypeDto>> GetModuleMappingbyCode(string code)
         {
-            List<ModuleTypeDto> moduleTypes= new List<ModuleTypeDto>();
-            if(code=="fixedasset"){
-               var values =await _utilitiesRepository.GetAssetMappingAsync();
-               foreach(var item in values){
-                moduleTypes.Add(new ModuleTypeDto{
-                    Id=item.Id,
-                    Name=item.AssetName
-                });
-               }
-            }else if (code == "profitandloss")
+            List<ModuleTypeDto> moduleTypes = new List<ModuleTypeDto>();
+            if (code == "fixedasset")
+            {
+                var values = await _utilitiesRepository.GetAssetMappingAsync();
+                foreach (var item in values)
+                {
+                    moduleTypes.Add(new ModuleTypeDto
+                    {
+                        Id = item.Id,
+                        Name = item.AssetName
+                    });
+                }
+            }
+            else if (code == "profitandloss")
             {
                 moduleTypes.Add(new ModuleTypeDto
                 {

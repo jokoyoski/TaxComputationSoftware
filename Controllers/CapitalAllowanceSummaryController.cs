@@ -29,7 +29,7 @@ namespace TaxComputationSoftware.Controllers
             });
             value.Add(new CapitalAllowanceSummaryDto
             {
-                Description = "Furniture and Fittings",
+                Description = "Plant and Machinery",
                 OpeningResidue = "₦300,0",
                 Addition = "₦23000",
                 DisposalOrTransfer = "₦23000",
@@ -41,7 +41,7 @@ namespace TaxComputationSoftware.Controllers
 
             value.Add(new CapitalAllowanceSummaryDto
             {
-                Description = "Furniture and Fittings",
+                Description = "Office Equipments",
                 OpeningResidue = "₦300,0",
                 Addition = "₦23000",
                 DisposalOrTransfer = "₦23000",
@@ -53,7 +53,7 @@ namespace TaxComputationSoftware.Controllers
 
             value.Add(new CapitalAllowanceSummaryDto
             {
-                Description = "Furniture and Fittings",
+                Description = "LeaseHold",
                 OpeningResidue = "₦300,0",
                 Addition = "₦23000",
                 DisposalOrTransfer = "₦23000",
@@ -65,7 +65,7 @@ namespace TaxComputationSoftware.Controllers
 
             value.Add(new CapitalAllowanceSummaryDto
             {
-                Description = "Furniture and Fittings",
+                Description = "Total",
                 OpeningResidue = "₦300,0",
                 Addition = "₦23000",
                 DisposalOrTransfer = "₦23000",
