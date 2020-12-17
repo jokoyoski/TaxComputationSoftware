@@ -111,6 +111,10 @@ const CapitalAllowanceView = ({ assetId, toast }) => {
       scrollable>
       <Column field="taxYear" header="Tax Year" headerStyle={{ width: "6em" }}></Column>
       <Column
+        field="numberOfYearsAvailable"
+        header="Year(s) Available"
+        headerStyle={{ width: "6em" }}></Column>
+      <Column
         field="openingResidue"
         header="Opening Residue"
         headerStyle={{ width: "10em" }}></Column>
@@ -124,10 +128,6 @@ const CapitalAllowanceView = ({ assetId, toast }) => {
         header="Closing Residue"
         headerStyle={{ width: "10em" }}></Column>
       <Column field="yearsToGo" header="Yr to go" headerStyle={{ width: "6em" }}></Column>
-      <Column
-        field="numberOfYearsAvailable"
-        header="Year(s) Available"
-        headerStyle={{ width: "6em" }}></Column>
     </DataTable>
   );
 };
