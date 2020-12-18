@@ -25,34 +25,6 @@ namespace TaxComputationAPI.Repositories
 
 
 
-        public async Task<ProfitAndLoss> GetProfitAndLossByCompanyIdAndYearId(int companyId, int yearId)
-        {
-            try
-            {
-                using (IDbConnection conn = await _databaseManager.DatabaseConnection())
-                {
-                    if (conn.State == ConnectionState.Closed)
-                        conn.Open();
-
-                    DynamicParameters parameters = new DynamicParameters();
-
-                    parameters.Add("@YearId", yearId);
-                    parameters.Add("@CompanyId", companyId);
-
-
-                    var record = conn.QueryFirstOrDefault<ProfitAndLoss>("[dbo].[usp_Get_Profit_And_Loss_By_YearId_CompanyId]", parameters, commandType: CommandType.StoredProcedure);
-                    return record;
-                }
-            }
-            catch (Exception ex)
-            {
-
-
-            }
-
-            return null;
-        }
-
 
         public async Task UpdateProfitAndLoss(AddProfitAndLoss addProfitAndLoss)
         {
@@ -83,7 +55,7 @@ namespace TaxComputationAPI.Repositories
         }
 
 
-        public async Task<List<TaxComputationSoftware.Models.ProfitsAndLoss>> GetProfitsAndLossByType(string Type)
+        public async Task<List<TaxComputationSoftware.Models.ProfitsAndLossValue>> GetProfitsAndLossByType(string Type,int companyId, int yearId)
         {
 
 
@@ -95,9 +67,11 @@ namespace TaxComputationAPI.Repositories
                 DynamicParameters parameters = new DynamicParameters();
 
                 parameters.Add("@TypeValue", Type);
+                parameters.Add("@CompanyId ", companyId); 
+                 parameters.Add("@YearId", yearId);
 
                 var record = await conn.QueryMultipleAsync("[dbo].[usp_Get_Profits_And_Loss_By_Type]", parameters, commandType: CommandType.StoredProcedure);
-                var result = await record.ReadAsync<TaxComputationSoftware.Models.ProfitsAndLoss>();
+                var result = await record.ReadAsync<TaxComputationSoftware.Models.ProfitsAndLossValue>();
                 return result.ToList();
 
             }
@@ -137,11 +111,12 @@ namespace TaxComputationAPI.Repositories
             using (IDbConnection conn = await _databaseManager.DatabaseConnection())
             {
                 if (conn.State == ConnectionState.Closed) conn.Open();
-
+          
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@Pick", profits.Pick);
                 parameters.Add("@TrialBalanceId", profits.TrialBalanceId);
-                parameters.Add("@YearId", profits.Year);
+                parameters.Add("@YearId", profits.Year);  
+                parameters.Add("@CompanyId", profits.CompanyId);
                 parameters.Add("@TypeValue", profits.TypeValue);
                 parameters.Add("@Id", 0);
                 try
