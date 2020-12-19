@@ -4,12 +4,14 @@ import { Button } from "primereact/button";
 import { Toast } from "primereact/toast";
 import { useForm, Controller } from "react-hook-form";
 import constants from "../../constants";
-import { InputText } from "primereact/inputtext";
 import utils from "../../utils";
-import { createAssetClass } from "../../apis/Utilities";
+import { createAssetClass, updateAssetClass } from "../../apis/Utilities";
+import { useResources } from "../../store/ResourcesStore";
+import InputController from "../controllers/InputController";
 
-const CreateAsset = ({ setShowCreateAsset }) => {
+const CreateAsset = ({ setShowCreateAsset, setShowAssetList }) => {
   const { errors, handleSubmit, control } = useForm();
+  const [{ selectedAsset }, { onAssetList }] = useResources();
   const [loading, setLoading] = React.useState(false);
   const toast = React.useRef();
 
@@ -20,19 +22,25 @@ const CreateAsset = ({ setShowCreateAsset }) => {
 
     setLoading(true);
     try {
-      const response = await createAssetClass({
-        assetName,
-        initial: initial ? initial : 0,
-        annual: annual ? annual : 0
-      });
+      const response = selectedAsset
+        ? await updateAssetClass({ id: selectedAsset.id, assetName, initial, annual })
+        : await createAssetClass({
+            assetName,
+            initial: initial ? initial : 0,
+            annual: annual ? annual : 0
+          });
       if (response.status === 200) {
         toast.current.show(
           utils.toastCallback({
             severity: "success",
-            detail: "Asset created successfully"
+            detail: selectedAsset ? "Asset updated successfully" : "Asset created successfully"
           })
         );
-        setTimeout(() => setShowCreateAsset(false), 2000);
+        setTimeout(() => {
+          onAssetList(null);
+          setShowCreateAsset(false);
+          setShowAssetList(true);
+        }, 2000);
       }
     } catch (error) {
       setLoading(false);
@@ -64,72 +72,59 @@ const CreateAsset = ({ setShowCreateAsset }) => {
       <Card style={{ width: 320 }}>
         <form className="p-d-flex p-flex-column" onSubmit={handleSubmit(onSubmit)}>
           <div style={{ marginBottom: 15 }}>
-            <Controller
-              name="assetName"
+            <InputController
+              Controller={Controller}
               control={control}
-              rules={{ required: true }}
-              defaultValue=""
-              render={props => (
-                <InputText
-                  style={{ marginBottom: 5, width: "100%", paddingRight: 33 }}
-                  placeholder="Asset Name"
-                  value={props.value}
-                  onChange={e => props.onChange(e.target.value)}
-                />
-              )}
+              errors={errors}
+              controllerName="assetName"
+              label="Asset Name"
+              defaultValue={selectedAsset ? selectedAsset.assetName : ""}
+              required
+              width="100%"
+              errorMessage="Asset Name is required"
             />
-            {errors.assetName && (
-              <span style={{ fontSize: 12, color: "red" }}>Asset Name is required</span>
-            )}
           </div>
           <div style={{ marginBottom: 15 }}>
-            <Controller
-              name="initial"
+            <InputController
+              Controller={Controller}
               control={control}
-              rules={{ pattern: /^\d*(\.\d+)?$/ }}
-              defaultValue=""
-              render={props => (
-                <InputText
-                  style={{ marginBottom: 5, width: "100%", paddingRight: 33 }}
-                  placeholder="Initial"
-                  value={props.value}
-                  onChange={e => props.onChange(e.target.value)}
-                />
-              )}
+              errors={errors}
+              controllerName="initial"
+              label="Initial"
+              defaultValue={selectedAsset ? selectedAsset.initial : ""}
+              otherRules={{ pattern: /^\d*(\.\d+)?$/ }}
+              width="100%"
+              errorMessage="Initial must contain only numbers"
             />
-            {errors.initial && (
-              <span style={{ fontSize: 12, color: "red" }}>Initial must contain only numbers</span>
-            )}
           </div>
           <div style={{ marginBottom: 15 }}>
-            <Controller
-              name="annual"
+            <InputController
+              Controller={Controller}
               control={control}
-              rules={{ pattern: /^\d*(\.\d+)?$/ }}
-              defaultValue=""
-              render={props => (
-                <InputText
-                  style={{ marginBottom: 5, width: "100%", paddingRight: 33 }}
-                  placeholder="Annual"
-                  value={props.value}
-                  onChange={e => props.onChange(e.target.value)}
-                />
-              )}
+              errors={errors}
+              controllerName="annual"
+              label="Annual"
+              defaultValue={selectedAsset ? selectedAsset.annual : ""}
+              otherRules={{ pattern: /^\d*(\.\d+)?$/ }}
+              width="100%"
+              errorMessage="Annual must contain only numbers"
             />
-            {errors.annual && (
-              <span style={{ fontSize: 12, color: "red" }}>Annual must contain only numbers</span>
-            )}
           </div>
           <Button
             type="submit"
-            label={!loading ? "Create Asset" : null}
+            label={!loading ? (!selectedAsset ? "Create Asset" : "Update Asset") : null}
             icon={loading ? "pi pi-spin pi-spinner" : null}
             style={{ width: "100%" }}
           />
         </form>
         {!loading && (
-          <p className="back-to-app-link" onClick={() => setShowCreateAsset(state => !state)}>
-            Back to app
+          <p
+            className="back-to-app-link"
+            onClick={() => {
+              setShowCreateAsset(false);
+              setShowAssetList(true);
+            }}>
+            Back to Asset List
           </p>
         )}
       </Card>

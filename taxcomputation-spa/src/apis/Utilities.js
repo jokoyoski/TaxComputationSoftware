@@ -9,9 +9,43 @@ export const getModuleItems = async ({ moduleCode }) => {
   }
 };
 
+export const getAssetClass = async () => {
+  try {
+    return await axios.get(`/api/Utilities/asset-class/`);
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const createAssetClass = async ({ assetName, initial, annual }) => {
   try {
     return await axios.post("/api/Utilities/asset-class", { assetName, initial, annual });
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const updateAssetClass = async ({ id, assetName, initial, annual }) => {
+  try {
+    return await axios.put(`/api/Utilities/asset-class/${id}`, {
+      assetName,
+      initial,
+      annual
+    });
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const deleteAssetClass = async ({ id, assetName, initial, annual }) => {
+  try {
+    return await axios.delete(`/api/Utilities/asset-class/${id}`, {
+      data: {
+        assetName,
+        initial,
+        annual
+      }
+    });
   } catch (error) {
     throw error;
   }

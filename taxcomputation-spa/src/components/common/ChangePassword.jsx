@@ -120,7 +120,7 @@ const ChangePassword = ({ setShowChangePassword }) => {
         </form>
         {!loading && (
           <p className="back-to-app-link" onClick={() => setShowChangePassword(state => !state)}>
-            Back to app
+            Back to App
           </p>
         )}
       </Card>

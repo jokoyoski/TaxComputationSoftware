@@ -170,7 +170,7 @@ const CreateUser = ({ setShowCreateUser }) => {
         </form>
         {!loading && (
           <p className="back-to-app-link" onClick={() => setShowCreateUser(state => !state)}>
-            Back to app
+            Back to App
           </p>
         )}
       </Card>

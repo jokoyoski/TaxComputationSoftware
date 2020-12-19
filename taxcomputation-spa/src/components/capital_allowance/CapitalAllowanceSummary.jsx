@@ -21,7 +21,6 @@ const CapitalAllowanceSummary = () => {
         setError(null);
         setLoading(true);
         const data = await capitalAllowanceSummaryData({ companyId });
-        console.log(11, data);
         if (isMounted.current)
           setCapitalAllowanceSummary(() => {
             let newState = data.map((item, index) => {

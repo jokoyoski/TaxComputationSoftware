@@ -91,6 +91,7 @@ namespace TaxComputationAPI.Services
 
         public async Task SaveFixedAsset(CreateFixedAssetDto fixedAsset)
         {
+            string type = fixedAsset.IsCost ? "Cost" : "Depreciation";
             GetMappedDetails getMappedDetails = new GetMappedDetails();
 
             var yearRecord = await _utilitiesRepository.GetFinancialYearAsync(fixedAsset.YearId);
@@ -102,12 +103,15 @@ namespace TaxComputationAPI.Services
                 };
                 await _utilitiesRepository.AddFinancialYearAsync(createYear);
             }
+            var assetName = await _utilitiesRepository.GetAssetMappingById(fixedAsset.AssetId);
             if (fixedAsset.TriBalanceId.Count > 0)
             {
 
                 foreach (var value in fixedAsset.TriBalanceId)
                 {
-                    string trialBalanceValue = "MAPPED TO [FIXED ASSET]";
+
+                    
+                    string trialBalanceValue = $"MAPPED TO [FIXED ASSET] {type} {assetName.AssetName}";
                     await _trialBalanceRepository.UpdateTrialBalance(value, trialBalanceValue, false);
 
                 }
@@ -162,7 +166,7 @@ namespace TaxComputationAPI.Services
 
         }
 
-   
+
 
         public async Task<TaxComputationAPI.Dtos.FixedAssetResponseDto> FormatAmount(FixedAssetResponse fixedAssetResponse)
         {

@@ -26,7 +26,7 @@ namespace TaxComputationAPI.Services
         }
         ///////
 
-        private async Task<ProfitAndLoss> GetProfitAndLoss(int yearId)
+        private async Task<ProfitAndLoss> GetProfitAndLoss(int yearId, int companyId)
         {
             decimal revenueCreditTotal = 0;
             decimal revenueDebitTotal = 0;
@@ -41,20 +41,20 @@ namespace TaxComputationAPI.Services
 
 
 
-            var items = await _profitAndLossRepository.GetProfitsAndLossByType("Revenue");
+            var items = await _profitAndLossRepository.GetProfitsAndLossByType("Revenue", companyId, yearId);
             if (items.Count > 0)
             {
                 foreach (var item in items)
                 {
 
-                    var value = await _profitAndLossRepository.GetProfitsAndlossByTrialBalanceId(item.TrialBalanceId, yearId);
+
                     if (item.Pick == "C")
                     {
-                        revenueCreditTotal += value.Value;
+                        revenueCreditTotal += item.Credit;
                     }
                     else
                     {
-                        revenueDebitTotal += value.Value;
+                        revenueDebitTotal += item.Debit;
                     }
 
 
@@ -62,20 +62,20 @@ namespace TaxComputationAPI.Services
             }
 
 
-            items = await _profitAndLossRepository.GetProfitsAndLossByType("CostOfSales");
+            items = await _profitAndLossRepository.GetProfitsAndLossByType("CostOfSales", companyId, yearId);
             if (items.Count > 0)
             {
                 foreach (var item in items)
                 {
 
-                    var value = await _profitAndLossRepository.GetProfitsAndlossByTrialBalanceId(item.TrialBalanceId, yearId);
+
                     if (item.Pick == "C")
                     {
-                        costofSalesCreditTotal += value.Value;
+                        costofSalesCreditTotal += item.Credit;
                     }
                     else
                     {
-                        costOfSalesDebitTotal += value.Value;
+                        costOfSalesDebitTotal += item.Debit;
                     }
 
 
@@ -84,20 +84,20 @@ namespace TaxComputationAPI.Services
 
 
 
-            items = await _profitAndLossRepository.GetProfitsAndLossByType("OtherOperatingIncome");
+            items = await _profitAndLossRepository.GetProfitsAndLossByType("OtherOperatingIncome", companyId, yearId);
             if (items.Count > 0)
             {
                 foreach (var item in items)
                 {
 
-                    var value = await _profitAndLossRepository.GetProfitsAndlossByTrialBalanceId(item.TrialBalanceId, yearId);
+
                     if (item.Pick == "C")
                     {
-                        otherOperatingIncomeCreditTotal += value.Value;
+                        otherOperatingIncomeCreditTotal += item.Credit;
                     }
                     else
                     {
-                        otherOperatingIncomeDebitTotal += value.Value;
+                        otherOperatingIncomeDebitTotal += item.Debit;
                     }
 
 
@@ -105,20 +105,20 @@ namespace TaxComputationAPI.Services
 
             }
 
-            items = await _profitAndLossRepository.GetProfitsAndLossByType("OperatingExpenses");
+            items = await _profitAndLossRepository.GetProfitsAndLossByType("OperatingExpenses", companyId, yearId);
             if (items.Count > 0)
             {
                 foreach (var item in items)
                 {
 
-                    var value = await _profitAndLossRepository.GetProfitsAndlossByTrialBalanceId(item.TrialBalanceId, yearId);
+
                     if (item.Pick == "C")
                     {
-                        operatingExpensesCreditTotal += value.Value;
+                        operatingExpensesCreditTotal += item.Credit;
                     }
                     else
                     {
-                        operatingExpensesDebitTotal += value.Value;
+                        operatingExpensesDebitTotal += item.Debit;
                     }
 
 
@@ -126,20 +126,20 @@ namespace TaxComputationAPI.Services
             }
 
 
-            items = await _profitAndLossRepository.GetProfitsAndLossByType("OtherOperatingType");
+            items = await _profitAndLossRepository.GetProfitsAndLossByType("OtherOperatingType", companyId, yearId);
             if (items.Count > 0)
             {
                 foreach (var item in items)
                 {
 
-                    var value = await _profitAndLossRepository.GetProfitsAndlossByTrialBalanceId(item.TrialBalanceId, yearId);
+
                     if (item.Pick == "C")
                     {
-                        otherOperatingTypeCreditTotal += value.Value;
+                        otherOperatingTypeCreditTotal += item.Credit;
                     }
                     else
                     {
-                        otherOperatingTypeDebitTotal += value.Value;
+                        otherOperatingTypeDebitTotal += item.Debit;
                     }
 
 
@@ -186,7 +186,7 @@ namespace TaxComputationAPI.Services
             foreach (var selection in profits.TrialBalanceList)
             {
 
-                var value = ConstructProfitAndLoss(selection, profits.ProfitAndLossId, profits.YearId);
+                var value = ConstructProfitAndLoss(selection, profits.ProfitAndLossId, profits.YearId,profits.CompanyId);
                 await _profitAndLossRepository.CreateProfitsAndLoss(value);
             }
 
@@ -197,13 +197,14 @@ namespace TaxComputationAPI.Services
 
 
 
-        private TaxComputationSoftware.Dtos.ProfitsAndLoss ConstructProfitAndLoss(TrialBalanceValue trial, int profitAndLossId, int yearId)
+        private TaxComputationSoftware.Dtos.ProfitsAndLoss ConstructProfitAndLoss(TrialBalanceValue trial, int profitAndLossId, int yearId,int companyId)
         {
             var value = new TaxComputationSoftware.Dtos.ProfitsAndLoss();
             value.TypeValue = GetType(profitAndLossId);
             value.Year = yearId;
             value.Pick = (GetSelectedType(trial));
             value.TrialBalanceId = trial.TrialBalanceId;
+            value.CompanyId=companyId;
             return value;
         }
 
@@ -322,7 +323,7 @@ namespace TaxComputationAPI.Services
             ProfitAndLossViewDto profitorlossbeforetax = new ProfitAndLossViewDto();
             List<ProfitAndLossViewDto> records = new List<ProfitAndLossViewDto>();
             //  var record = await _profitAndLossRepository.GetProfitAndLossByCompanyIdAndYearId(companyId, yearId);
-            var record = await GetProfitAndLoss(yearId);
+            var record = await GetProfitAndLoss(yearId,companyId);
             if (record == null)
             {
                 return records;
@@ -413,7 +414,7 @@ namespace TaxComputationAPI.Services
             ProfitAndLossViewDto operatingexpenses = new ProfitAndLossViewDto();
             ProfitAndLossViewDto profitorlossbeforetax = new ProfitAndLossViewDto();
             List<ProfitAndLossViewDto> records = new List<ProfitAndLossViewDto>();
-            var record = await _profitAndLossRepository.GetProfitAndLossByCompanyIdAndYearId(companyId, yearId);
+            var record = await GetProfitAndLoss(yearId,companyId);
             if (record == null)
             {
                 return null;
@@ -476,7 +477,7 @@ namespace TaxComputationAPI.Services
             ProfitAndLossViewDto operatingexpenses = new ProfitAndLossViewDto();
             ProfitAndLossViewDto profitorlossbeforetax = new ProfitAndLossViewDto();
             List<ProfitAndLossViewDto> records = new List<ProfitAndLossViewDto>();
-            var record = await _profitAndLossRepository.GetProfitAndLossByCompanyIdAndYearId(companyId, yearId);
+            var record = await GetProfitAndLoss(yearId,companyId);
             if (record == null)
             {
                 return null;

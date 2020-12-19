@@ -4,7 +4,7 @@ BEGIN
 
  Id   int identity(1,1) NOT NULL ,
  TaxYear   varchar(10),
- NumberOfYearsAvailable varchar(20),
+ NumberOfYearsAvailable int,
  OpeningResidue  varchar(20),
  Addition   varchar(20),
  Disposal   varchar(30),
@@ -38,7 +38,7 @@ CREATE procedure [usp_Insert_Capital_Allowance](
 @AssetId int,
 @CompanyId int,
 @TaxYear   varchar(10),
-@NumberOfYearsAvailable varchar(10),
+@NumberOfYearsAvailable int,
 @OpeningResidue  varchar(20),
 @Channel      varchar(10),
 @Addition   varchar(20),
@@ -152,7 +152,7 @@ CREATE procedure [dbo].[Update_Capital_Allowance_From_Fixed_Asset_Or_Balancing_A
 @Addition varchar(20),
 @Disposal varchar(30),
 @Annual varchar(20),
-@NumberOfYearsAvailable varchar(20),
+@NumberOfYearsAvailable int,
 @Initial varchar(20),
 @Total  varchar(20),
 @YearsToGo varchar(20),
@@ -183,7 +183,7 @@ BEGIN
 
  Id   int identity(1,1) NOT NULL ,
  TaxYear   varchar(10),
- NumberOfYearsAvailable varchar(20),
+ NumberOfYearsAvailable int,
  OpeningResidue  varchar(20),
  Addition   varchar(20),
  Disposal   varchar(30),
@@ -220,7 +220,7 @@ CREATE procedure [usp_Insert_Archived_Capital_Allowance](
 @AssetId int,
 @CompanyId int,
 @TaxYear   varchar(10),
-@NumberOfYearsAvailable varchar(10),
+@NumberOfYearsAvailable int,
 @OpeningResidue  varchar(20),
 @Channel      varchar(10),
 @Addition   varchar(20),
@@ -296,6 +296,8 @@ AS
 
 select  TaxYear,OpeningResidue,Addition,Disposal,Initial,Annual,Total,ClosingResidue,YearsToGo,NumberOfYearsAvailable,CompanyCode,Channel,CompanyId,AssetId from [dbo].[ArchivedCapitalAllowance] where CompanyId=@CompanyId AND AssetId=@AssetId AND TaxYear=@Year
 GO
+
+
 
 
 
