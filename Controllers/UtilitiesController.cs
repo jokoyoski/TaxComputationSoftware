@@ -169,6 +169,20 @@ namespace TaxComputationAPI.Controllers {
             }
         }
 
-        
+        [HttpPost("email-reminder")]
+        public async Task<IActionResult> SendReminderMail(int companyId, string message)
+        {
+            try
+            {
+                await _utilitiesService.SendCompanyReminder(companyId, message);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+
     }
 }

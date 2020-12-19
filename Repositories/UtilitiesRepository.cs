@@ -568,5 +568,10 @@ namespace TaxComputationAPI.Repositories
                 throw new SystemException(e.Message);
             }
         }
+
+        public async Task<string> SendCompanyReminder(int companyId, string message)
+        {
+            return message;
+        }
     }
 }

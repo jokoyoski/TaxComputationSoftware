@@ -167,5 +167,10 @@ namespace TaxComputationAPI.Services
 
             return moduleTypes;
         }
+
+        public async Task SendCompanyReminder(int companyId, string message)
+        {
+            await _utilitiesRepository.SendCompanyReminder(companyId, message);
+        }
     }
 }
