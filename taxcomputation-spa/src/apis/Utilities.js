@@ -37,15 +37,9 @@ export const updateAssetClass = async ({ id, assetName, initial, annual }) => {
   }
 };
 
-export const deleteAssetClass = async ({ id, assetName, initial, annual }) => {
+export const deleteAssetClass = async id => {
   try {
-    return await axios.delete(`/api/Utilities/asset-class/${id}`, {
-      data: {
-        assetName,
-        initial,
-        annual
-      }
-    });
+    return await axios.delete(`/api/Utilities/asset-class/${id}`);
   } catch (error) {
     throw error;
   }

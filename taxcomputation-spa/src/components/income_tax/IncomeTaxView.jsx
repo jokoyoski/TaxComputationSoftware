@@ -5,37 +5,42 @@ import { Column } from "primereact/column";
 const IncomeTaxView = () => {
   const [incomeTaxData] = React.useState([
     {
-      category: "Profit Before Tax",
-      debit: "",
-      credit: "₦448,255,000.00"
+      description: "Profit/Loss per accounts",
+      col1: "",
+      col2: "₦(48,765,894)"
     },
     {
-      category: <strong>Add:Disallowable Expenses</strong>,
-      debit: "",
-      credit: ""
+      description: "",
+      col1: "",
+      col2: ""
     },
     {
-      category: "Depreciation",
-      debit: "₦4,565,000.00",
-      credit: ""
+      description: <strong>Add:Disallowable Expenses</strong>,
+      col1: "",
+      col2: ""
     },
     {
-      category: "Foreign exchange loss",
-      debit: "₦923,000.00",
-      credit: ""
+      description: "Depreciation",
+      col1: "₦4,565,000.00",
+      col2: ""
     },
     {
-      category: "Loss allowance on trade receivable",
-      debit: "₦44,723,000.00",
-      credit: "₦67,928,000.00"
+      description: "Foreign exchange loss",
+      col1: "₦923,000.00",
+      col2: ""
+    },
+    {
+      description: "Loss allowance on trade receivable",
+      col1: "₦44,723,000.00",
+      col2: "₦67,928,000.00"
     }
   ]);
 
   return (
     <DataTable className="p-datatable-gridlines" value={incomeTaxData} style={{ marginTop: 40 }}>
-      <Column field="category" header=""></Column>
-      <Column field="debit" header="₦"></Column>
-      <Column field="credit" header="₦"></Column>
+      <Column field="description" header=""></Column>
+      <Column field="col1" header="₦"></Column>
+      <Column field="col2" header="₦"></Column>
     </DataTable>
   );
 };

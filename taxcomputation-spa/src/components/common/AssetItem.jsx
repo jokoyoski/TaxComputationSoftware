@@ -27,12 +27,7 @@ const AssetItem = ({
           onClick={async () => {
             try {
               setIsDeleting(true);
-              const response = await deleteAssetClass({
-                id: assetData.id,
-                assetName: assetData.assetName,
-                initial: assetData.initial,
-                annual: assetData.annual
-              });
+              const response = await deleteAssetClass(assetData.id);
               if (response.status === 200) onAssetList(null);
             } catch (error) {
               console.log("Failed to delete asset");
