@@ -54,7 +54,7 @@ export const capitalAllowanceSummaryData = async ({ companyId }) => {
   }
 };
 
-export const capitalAllowanceDelete = async ({ id }) => {
+export const capitalAllowanceDelete = async id => {
   try {
     const { data } = await axios.delete(`/api/CapitalAllowance/${id}`);
     return data;
