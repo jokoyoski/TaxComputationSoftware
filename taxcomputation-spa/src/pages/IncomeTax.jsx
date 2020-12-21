@@ -7,9 +7,11 @@ import utils from "../utils";
 import Main from "../components/layout/Main";
 import { usePathParam } from "react-resource-router";
 import constants from "../constants";
+import { Toast } from "primereact/toast";
 
 const IncomeTax = () => {
   const title = constants.modules.incomeTax;
+  const toast = React.useRef();
   const [mode, setMode] = usePathParam("mode");
   const [year, setYear] = React.useState(utils.currentYear());
   const yearSelectItems = utils.getYears(year => ({
@@ -33,12 +35,13 @@ const IncomeTax = () => {
             ),
             view: (
               <ViewMode title={title} year={year}>
-                <IncomeTaxView />
+                <IncomeTaxView year={year} toast={toast.current} />
               </ViewMode>
             )
           }[mode]
         }
       </Main>
+      <Toast baseZIndex={1000} ref={el => (toast.current = el)} />
     </Layout>
   );
 };

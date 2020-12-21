@@ -1,46 +1,83 @@
 import React from "react";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
+import { useCompany } from "../../store/CompanyStore";
+import Loader from "../common/Loader";
+import utils from "../../utils";
+import { incomeTaxDelete, incomeTaxViewData } from "../../apis/IncomeTax";
 
-const IncomeTaxView = () => {
-  const [incomeTaxData] = React.useState([
-    {
-      description: "Profit/Loss per accounts",
-      col1: "",
-      col2: "₦(48,765,894)"
-    },
-    {
-      description: "",
-      col1: "",
-      col2: ""
-    },
-    {
-      description: <strong>Add:Disallowable Expenses</strong>,
-      col1: "",
-      col2: ""
-    },
-    {
-      description: "Depreciation",
-      col1: "₦4,565,000.00",
-      col2: ""
-    },
-    {
-      description: "Foreign exchange loss",
-      col1: "₦923,000.00",
-      col2: ""
-    },
-    {
-      description: "Loss allowance on trade receivable",
-      col1: "₦44,723,000.00",
-      col2: "₦67,928,000.00"
-    }
-  ]);
+const IncomeTaxView = ({ year, toast }) => {
+  const isMounted = React.useRef(false);
+  const [{ companyId }] = useCompany();
+  const [loading, setLoading] = React.useState();
+  const [error, setError] = React.useState();
+  const [incomeTaxData, setIncomeTaxData] = React.useState([]);
+
+  React.useEffect(() => {
+    if (!companyId) return;
+
+    isMounted.current = true;
+    const fetchIncomeTaxViewData = async () => {
+      try {
+        setError(null);
+        setLoading(true);
+        const data = await incomeTaxViewData({ companyId, year });
+        if (isMounted.current) {
+          setIncomeTaxData(
+            data.map(item => ({
+              ...item,
+              description: (
+                <div className="p-d-flex p-jc-between p-ai-center">
+                  <p>{item.description}</p>
+                  {item.canDelete && (
+                    <i
+                      className="pi pi-times-circle delete"
+                      style={{ fontSize: 14, marginTop: 2 }}
+                      onClick={async () => {
+                        try {
+                          const data = await incomeTaxDelete(item.id);
+                          if (data) {
+                            toast.show(
+                              utils.toastCallback({
+                                severity: "success",
+                                detail: data
+                              })
+                            );
+                            fetchIncomeTaxViewData();
+                          }
+                        } catch (error) {
+                          console.log(error);
+                        }
+                      }}></i>
+                  )}
+                </div>
+              )
+            }))
+          );
+        }
+      } catch (error) {
+        if (isMounted.current) {
+          if (error.response) setError(error.response.data.errors[0]);
+          else setError(error.message);
+        }
+      } finally {
+        if (isMounted.current) setLoading(false);
+      }
+    };
+    fetchIncomeTaxViewData();
+
+    return () => (isMounted.current = false);
+  }, [companyId, toast, year]);
+
+  if (error) return <p style={{ color: "#f00" }}>{error}</p>;
+
+  if (loading) return <Loader />;
 
   return (
     <DataTable className="p-datatable-gridlines" value={incomeTaxData} style={{ marginTop: 40 }}>
       <Column field="description" header=""></Column>
-      <Column field="col1" header="₦"></Column>
-      <Column field="col2" header="₦"></Column>
+      <Column field="columnOne" header="₦"></Column>
+      <Column field="columnTwo" header="₦"></Column>
     </DataTable>
   );
 };
