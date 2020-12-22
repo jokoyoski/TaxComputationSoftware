@@ -1,0 +1,16 @@
+namespace TaxComputationSoftware.Dtos
+{
+    public class IncomeTaxDto
+    {
+
+
+        public string Description { get; set; }
+
+        public string ColumnOne { get; set; }
+
+        public string ColumnTwo { get; set; }
+
+        public bool CanDelete   {get;set;}
+
+    }
+}

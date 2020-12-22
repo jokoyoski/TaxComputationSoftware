@@ -356,10 +356,10 @@ namespace TaxComputationAPI.Repositories
             }
         }
 
-        public async Task DeleteAssetMappingAsync(AssetMapping assetMapping)
+        public async Task DeleteAssetMappingAsync(int id)
         {
 
-            if (assetMapping == null) throw new ArgumentNullException(nameof(assetMapping));
+            if (id <0) throw new ArgumentNullException(nameof(id));
 
             try
             {
@@ -372,7 +372,7 @@ namespace TaxComputationAPI.Repositories
                     DynamicParameters parameters = new DynamicParameters();
 
 
-                    parameters.Add("@Id", assetMapping.Id);
+                    parameters.Add("@Id", id);
 
                     try
                     {

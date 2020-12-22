@@ -31,7 +31,7 @@ namespace TaxComputationAPI.Controllers
         {
             try
             {
-                capitalAllowance.NumberOfYearsAvailable=8;
+                capitalAllowance.NumberOfYearsAvailable = 8;
                 if (capitalAllowance.Initial > 0)
                 {
                     return BadRequest(new { errors = new[] { "Asset cannot have Initial Item" } });
@@ -44,12 +44,10 @@ namespace TaxComputationAPI.Controllers
                 {
                     return BadRequest(new { errors = new[] { "Calculate disposal from Balancing Adjustment" } });
                 }
+                await _capitalAllowanceService.SaveCapitalAllowance(capitalAllowance);
 
-                var record = await _capitalAllowanceService.SaveCapitalAllowance(capitalAllowance);
-                if (record > 0)
-                {
-                    return Ok("Record saved succesfully!");
-                }
+                return Ok("Record saved succesfully!");
+
                 return BadRequest(new { errors = new[] { "Could not save the record, please try again later !!" } });
             }
             catch (Exception ex)
@@ -95,7 +93,8 @@ namespace TaxComputationAPI.Controllers
         [Authorize]
         public async Task<IActionResult> DeleteCapitalAllowance(int id)
         {
-           return Ok("deleted successfully!!!!");
+            var value = _capitalAllowanceService.DeleteCapitalAllowanceById(id);
+            return Ok("deleted successfully!!!!");
         }
 
 

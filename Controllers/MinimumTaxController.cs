@@ -29,7 +29,7 @@ namespace TaxComputationAPI.Controllers
 
         [HttpGet("{companyId}/{yearId}")]
         [Authorize]
-        public async Task<IActionResult> GetITLevy(int companyId, int yearId)
+        public async Task<IActionResult> GetMinimumTax(int companyId, int yearId)
         {
 
             if (yearId == 0)

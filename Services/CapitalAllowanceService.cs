@@ -7,6 +7,7 @@ using TaxComputationAPI.Helpers;
 using TaxComputationAPI.Interfaces;
 using TaxComputationAPI.Models;
 using TaxComputationSoftware.Dtos;
+using TaxComputationSoftware.Models;
 
 namespace TaxComputationAPI.Services
 {
@@ -31,10 +32,12 @@ namespace TaxComputationAPI.Services
         }
 
 
-        public Task<int> SaveCapitalAllowance(CapitalAllowance capitalAllowance)
+        public Task SaveCapitalAllowance(CapitalAllowance capitalAllowance)
         {
-             _capitalAllowanceRepository.SaveArchivedCapitaLAllowance(capitalAllowance,capitalAllowance.Channel);
-            return _capitalAllowanceRepository.SaveCapitaLAllowance(capitalAllowance, Constants.OldBalancingAdjustment);
+            _capitalAllowanceRepository.SaveArchivedCapitaLAllowance(capitalAllowance, capitalAllowance.Channel);
+            _capitalAllowanceRepository.SaveCapitaLAllowance(capitalAllowance, Constants.OldBalancingAdjustment);
+            SaveCapitalAllowanceSummary(capitalAllowance.AssetId, capitalAllowance.CompanyId);
+            return Task.CompletedTask;
 
         }
 
@@ -61,7 +64,7 @@ namespace TaxComputationAPI.Services
             var previousRecord = await _capitalAllowanceRepository.GetCapitalAllowanceByAssetIdYear(assetId, companyId, year);
 
 
-            if (disposal>0)  //greater than zero specifies that the account needs balancing aadjustmnet
+            if (disposal > 0)  //greater than zero specifies that the account needs balancing aadjustmnet
             {
 
 
@@ -73,7 +76,7 @@ namespace TaxComputationAPI.Services
                 code = null;
                 channel = Constants.BalancingAdjustment;
                 numOfYearsAvailable = remianingYears;
-                disposal=0;
+                disposal = 0;
 
             }
             else
@@ -84,6 +87,7 @@ namespace TaxComputationAPI.Services
                 annualPercentage = (decimal)assetDetails.Annual / 100;     //annual percentage rate
                 additionValue = addition;   //addittion
                 Initial = addition * assetDetails.Initial / 100;     //initial=addition*%rateinitial
+                Initial = Math.Round(Initial, 2);
                 value = addition - Initial;         //  
                 annual = value * annualPercentage;   //addition-initial* %annualpercenatgerate
                 total = Initial + annual;         //total=addition-initial+total;
@@ -118,17 +122,22 @@ namespace TaxComputationAPI.Services
 
             if (previousRecord != null)
             {
-                 await  _capitalAllowanceRepository.SaveArchivedCapitaLAllowance(capitalAllowance,capitalAllowance.Channel);
-                return await _capitalAllowanceRepository.UpdateCapitalAllowanceByFixedAssetOrBalancingAdjustemnt(capitalAllowance);
+                await _capitalAllowanceRepository.SaveArchivedCapitaLAllowance(capitalAllowance, capitalAllowance.Channel);
+                await _capitalAllowanceRepository.UpdateCapitalAllowanceByFixedAssetOrBalancingAdjustemnt(capitalAllowance);
+                SaveCapitalAllowanceSummary(assetId, companyId);
+                return 1;
+
 
             }
             else
             {
-                await  _capitalAllowanceRepository.SaveArchivedCapitaLAllowance(capitalAllowance,capitalAllowance.Channel);
-                return await _capitalAllowanceRepository.SaveCapitaLAllowance(capitalAllowance, channel);
-                
+                await _capitalAllowanceRepository.SaveArchivedCapitaLAllowance(capitalAllowance, capitalAllowance.Channel);
+                await _capitalAllowanceRepository.SaveCapitaLAllowance(capitalAllowance, channel);
+                SaveCapitalAllowanceSummary(assetId, companyId);
+                return 1;
+
             }
-          
+
         }
 
 
@@ -172,9 +181,10 @@ namespace TaxComputationAPI.Services
 
                     };
 
-                      _capitalAllowanceRepository.SaveArchivedCapitaLAllowance(previousRecord,previousRecord.Channel);
-                    return await _capitalAllowanceRepository.UpdateCapitalAllowanceByFixedAssetOrBalancingAdjustemnt(capitalAllowance);
-
+                    _capitalAllowanceRepository.SaveArchivedCapitaLAllowance(previousRecord, previousRecord.Channel);
+                    await _capitalAllowanceRepository.UpdateCapitalAllowanceByFixedAssetOrBalancingAdjustemnt(capitalAllowance);
+                    SaveCapitalAllowanceSummary(assetId, companyId);
+                    return 1;
                 }
                 else
                 {
@@ -184,6 +194,7 @@ namespace TaxComputationAPI.Services
                     int newtotalNoOfYears = (int)100 / assetDetails.Annual;      //total no years
                     decimal annualPercentage = (decimal)assetDetails.Annual / 100;   //annual percentage value
                     decimal newInitialValue = newadditionValue * assetDetails.Initial / 100;
+                    newInitialValue = Math.Round(newInitialValue, 2);
                     decimal newAnnualValue = newadditionValue - newInitialValue; // addition-initial * annual percentage
                     newAnnualValue = newAnnualValue * annualPercentage;
                     var newTotalValue = newAnnualValue + newInitialValue;   // initial+total
@@ -209,13 +220,15 @@ namespace TaxComputationAPI.Services
 
 
                     };
-                      _capitalAllowanceRepository.SaveArchivedCapitaLAllowance(previousRecord, previousRecord.Channel);
-                    return await _capitalAllowanceRepository.UpdateCapitalAllowanceByFixedAssetOrBalancingAdjustemnt(capitalAllowance);
+                    _capitalAllowanceRepository.SaveArchivedCapitaLAllowance(previousRecord, previousRecord.Channel);
+                    await _capitalAllowanceRepository.UpdateCapitalAllowanceByFixedAssetOrBalancingAdjustemnt(capitalAllowance);
+                    SaveCapitalAllowanceSummary(assetId, companyId);
+                    return 1;
 
 
                 }
 
-              
+
             }
 
             return 0;
@@ -228,6 +241,7 @@ namespace TaxComputationAPI.Services
             var residueValue = residue;
             var previousRecord = await _capitalAllowanceRepository.GetArchivedCapitalAllowanceByAssetIdYear(assetId, companyId, year);
             await _capitalAllowanceRepository.UpdateCapitalAllowanceByFixedAssetOrBalancingAdjustemnt(previousRecord);
+            SaveCapitalAllowanceSummary(assetId, companyId);
             /* if (previousRecord != null)
              {
                  if (previousRecord.Initial <= 0 && previousRecord.Channel == Constants.OldBalancingAdjustment)
@@ -357,7 +371,7 @@ namespace TaxComputationAPI.Services
                 {
                     var m = new CapitalAllowanceViewDto
                     {
-                        Id=x.Id,
+                        Id = x.Id,
                         TaxYear = x.TaxYear,
                         OpeningResidue = $"₦{Utilities.FormatAmount(x.OpeningResidue)}",
                         Addition = $"₦{Utilities.FormatAmount(x.Addition)}",
@@ -366,7 +380,7 @@ namespace TaxComputationAPI.Services
                         Annual = $"₦{Utilities.FormatAmount(x.Annual)}",
                         Total = $"₦{Utilities.FormatAmount(x.Total)}",
                         YearsToGo = x.YearsToGo,
-                        NumberOfYearsAvailable=x.NumberOfYearsAvailable,
+                        NumberOfYearsAvailable = x.NumberOfYearsAvailable,
                         ClosingResidue = $"₦{Utilities.FormatAmount(x.ClosingResidue)}",
                     };
                     capitalAllowanceList.Add(m);
@@ -401,6 +415,53 @@ namespace TaxComputationAPI.Services
         public Task<CapitalAllowance> GetCapitalAllowanceByAssetIdYear(int assetId, int companyId, string year)
         {
             return _capitalAllowanceRepository.GetCapitalAllowanceByAssetIdYear(assetId, companyId, year);
+        }
+
+
+        private async Task SaveCapitalAllowanceSummary(int assetId, int companyId)
+        {
+            decimal openingResidue = 0;
+            decimal addition = 0;
+            decimal initial = 0;
+            decimal annual = 0;
+            decimal total = 0;
+            decimal closingResidue = 0;
+            decimal disposal = 0;
+            var value = await _capitalAllowanceRepository.GetCapitalAllowance(assetId, companyId);
+
+            foreach (var v in value)
+            {
+                openingResidue += v.OpeningResidue;
+                addition += v.Addition;
+                initial += v.Initial;
+                annual += v.Annual;
+                total += v.Total;
+                closingResidue += v.ClosingResidue;
+                disposal += v.Disposal;
+            }
+
+            _capitalAllowanceRepository.SaveCapitaLAllowanceSummary(new CapitalAllowanceSummary
+            {
+
+                OpeningResidue = openingResidue,
+                Addition = addition,
+                Initial = initial,
+                Annual = annual,
+                Total = total,
+                ClosingResidue = closingResidue,
+                Disposal = disposal,
+                AssetId = assetId,
+                CompanyId = companyId
+
+
+            });
+        }
+
+        public async Task DeleteCapitalAllowanceById(int capitalAllowanceId)
+        {
+            var itemToDelete = await _capitalAllowanceRepository.GetCapitalAllowanceById(capitalAllowanceId);
+            var value = _capitalAllowanceRepository.DeleteCapitalAllowanceById(capitalAllowanceId);
+            SaveCapitalAllowanceSummary(itemToDelete.AssetId, itemToDelete.CompanyId);
         }
     }
 }

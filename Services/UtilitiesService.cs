@@ -81,14 +81,14 @@ namespace TaxComputationAPI.Services
             await _utilitiesRepository.UpdateAssetMappingAsync(assetMapping);
         }
 
-        public async Task DeleteAssetMappingAsync(AssetMapping assetMapping)
+        public async Task DeleteAssetMappingAsync(int id)
         {
-            if (assetMapping == null)
+            if (id <0)
             {
-                throw new ArgumentNullException(nameof(assetMapping));
+                throw new ArgumentNullException(nameof(id));
             }
 
-            await _utilitiesRepository.DeleteAssetMappingAsync(assetMapping);
+            await _utilitiesRepository.DeleteAssetMappingAsync(id);
         }
 
 

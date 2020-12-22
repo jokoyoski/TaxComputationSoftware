@@ -19,6 +19,10 @@ namespace TaxComputationSoftware.Dtos
        public string Total {get;set;}
 
        public string ClosingResidue {get;set;}
+
+       public int AssetId {get;set;}
+
+       public int CompanyId {get;set;}
     }
 
 
