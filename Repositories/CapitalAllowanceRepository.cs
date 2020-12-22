@@ -265,9 +265,9 @@ namespace TaxComputationAPI.Repositories
                 }
             }
         }
-         
 
-          public async Task DeleteCapitalAllowanceSummaryById(int assetId,int companyId)
+
+        public async Task DeleteCapitalAllowanceSummaryById(int assetId, int companyId)
         {
             using (IDbConnection conn = await _databaseManager.DatabaseConnection())
             {
@@ -275,7 +275,7 @@ namespace TaxComputationAPI.Repositories
 
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@AssetId", assetId);
-                 parameters.Add("@CompanyId", companyId);
+                parameters.Add("@CompanyId", companyId);
                 try
                 {
                     conn.Execute("[dbo].[usp_Delete_Capital_Allowance_Summary_By_AssetId_Commpany_Id]", parameters, commandType: CommandType.StoredProcedure);
@@ -289,7 +289,7 @@ namespace TaxComputationAPI.Repositories
             }
         }
 
-        
+
 
 
 
