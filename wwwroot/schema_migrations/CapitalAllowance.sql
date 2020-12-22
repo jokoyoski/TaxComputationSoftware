@@ -411,7 +411,7 @@ select * from [dbo].[CapitalAllowance] where Id=@CapitalAllowanceId
 GO
 
 
---------------------------------------- STORED PROCEDURE TO  GET CAPITAL ALLOWANCE SUMMARY BY COMPANYID-----------------------------------------
+-------------------------------------- STORED PROCEDURE TO  GET CAPITAL ALLOWANCE SUMMARY BY COMPANYID-----------------------------------------
 
 IF OBJECT_ID('[dbo].[usp_Get_Capital_Allowance_Summary_By_CompanyId]') IS nOT NULL
 BEGIN
@@ -422,5 +422,21 @@ CREATE procedure [dbo].[usp_Get_Capital_Allowance_Summary_By_CompanyId](
 @CompanyId int
 )
 AS
-select * from [dbo].[CapitalAllowanceSummary] where CompanyId=@CompanyId
+select [dbo].[AssetMapping].AssetName as AssetName,OpeningResidue,Addition,Disposal,[dbo].[CapitalAllowanceSummary].Initial,[dbo].[CapitalAllowanceSummary].Annual,Total,ClosingResidue from [dbo].[CapitalAllowanceSummary]  inner join [dbo].[AssetMapping] on [dbo].[CapitalAllowanceSummary].AssetId=[dbo].[AssetMapping].Id where CompanyId=@CompanyId
 GO
+
+-------------------------------------- STORED PROCEDURE TO  DELETE CAPITALALLOWANCE BY ID-----------------------------------------
+IF OBJECT_ID('[dbo].[usp_Delete_Capital_Allowance_Summary_By_AssetId_Commpany_Id]') IS nOT NULL
+BEGIN
+DROP procedure [dbo].[usp_Delete_Capital_Allowance_Summary_By_AssetId_Commpany_Id]
+END
+GO
+CREATE procedure [dbo].[usp_Delete_Capital_Allowance_Summary_By_AssetId_Commpany_Id](
+@CompanyId int,
+@AssetId int
+)
+AS
+
+Delete from [dbo].[CapitalAllowanceSummary] where AssetId=@AssetId and CompanyId=@CompanyId
+GO
+

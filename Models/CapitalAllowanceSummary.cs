@@ -3,6 +3,7 @@ namespace TaxComputationSoftware.Models
     public class CapitalAllowanceSummary
     {
         public int Id { get; set; }
+        public string AssetName {get;set;}
         public decimal OpeningResidue { get; set; }
         public decimal Addition { get; set; }
         public decimal Disposal { get; set; }

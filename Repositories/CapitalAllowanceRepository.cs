@@ -129,7 +129,7 @@ namespace TaxComputationAPI.Repositories
                 parameters.Add("@CompanyId", id);
 
 
-                var record = await conn.QueryMultipleAsync("[dbo].[usp_Get_Capital_Allowance_By_CompanyId_And_AssetId]", parameters, commandType: CommandType.StoredProcedure);
+                var record = await conn.QueryMultipleAsync("[dbo].[usp_Get_Capital_Allowance_Summary_By_CompanyId]", parameters, commandType: CommandType.StoredProcedure);
                 var result = await record.ReadAsync<CapitalAllowanceSummary>();
                 return result;
             }
@@ -265,6 +265,31 @@ namespace TaxComputationAPI.Repositories
                 }
             }
         }
+         
+
+          public async Task DeleteCapitalAllowanceSummaryById(int assetId,int companyId)
+        {
+            using (IDbConnection conn = await _databaseManager.DatabaseConnection())
+            {
+                if (conn.State == ConnectionState.Closed) conn.Open();
+
+                DynamicParameters parameters = new DynamicParameters();
+                parameters.Add("@AssetId", assetId);
+                 parameters.Add("@CompanyId", companyId);
+                try
+                {
+                    conn.Execute("[dbo].[usp_Delete_Capital_Allowance_Summary_By_AssetId_Commpany_Id]", parameters, commandType: CommandType.StoredProcedure);
+                    conn.Close();
+                }
+                catch (Exception e)
+                {
+
+                    throw e;
+                }
+            }
+        }
+
+        
 
 
 

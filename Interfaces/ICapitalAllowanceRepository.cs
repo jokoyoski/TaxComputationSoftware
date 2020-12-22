@@ -19,6 +19,8 @@ namespace TaxComputationAPI.Interfaces
 
         Task<int> SaveArchivedCapitaLAllowance(CapitalAllowance capitalAllowance, string channel);
 
+        Task DeleteCapitalAllowanceSummaryById(int assetId,int companyId);
+
         Task<CapitalAllowance> GetArchivedCapitalAllowanceByAssetIdYear(int assetId, int companyId, string year);
 
         Task<CapitalAllowance> GetCapitalAllowanceById(int id);

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using TaxComputationAPI.Dtos;
 using TaxComputationAPI.Models;
+using TaxComputationSoftware.Dtos;
 
 namespace TaxComputationAPI.Interfaces
 {
@@ -21,6 +22,8 @@ namespace TaxComputationAPI.Interfaces
         Task<int> SaveCapitalAllowanceFromBalancingAdjustment(decimal residue, string year, int companyId, int assetId);
 
         Task<CapitalAllowance> GetCapitalAllowanceByAssetIdYear(int assetId, int companyId, string year);
+
+        Task<List<CapitalAllowanceSummaryDto>> GetCapitalAllowanceSummaryByCompanyId(int companyId);
 
     }
 }

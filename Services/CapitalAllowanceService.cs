@@ -461,7 +461,63 @@ namespace TaxComputationAPI.Services
         {
             var itemToDelete = await _capitalAllowanceRepository.GetCapitalAllowanceById(capitalAllowanceId);
             var value = _capitalAllowanceRepository.DeleteCapitalAllowanceById(capitalAllowanceId);
-            SaveCapitalAllowanceSummary(itemToDelete.AssetId, itemToDelete.CompanyId);
+            _capitalAllowanceRepository.DeleteCapitalAllowanceSummaryById(itemToDelete.AssetId,itemToDelete.CompanyId);
+        }
+
+        public async Task<List<CapitalAllowanceSummaryDto>> GetCapitalAllowanceSummaryByCompanyId(int companyId)
+        {
+
+
+            List<CapitalAllowanceSummaryDto> values = new List<CapitalAllowanceSummaryDto>();
+            var item = await _capitalAllowanceRepository.GetCapitalAllowanceSummaryByCompanyId(companyId);
+            if (item.Count() == 0)
+            {
+                return null;
+            }
+            decimal openingResidue = 0;
+            decimal addition = 0;
+            decimal disposal = 0;
+            decimal initial = 0;
+            decimal annual = 0;
+            decimal total = 0;
+            decimal closingResidue = 0;
+            foreach (var value in item)
+            {
+                openingResidue += value.OpeningResidue;
+                addition += value.Addition;
+                disposal += value.Disposal;
+                initial += value.Initial;
+                annual += value.Annual;
+                total += value.Total;
+                closingResidue += closingResidue;
+
+                values.Add(new CapitalAllowanceSummaryDto
+                {
+                    Description = value.AssetName,
+                    OpeningResidue = $"₦{Utilities.FormatAmount(value.OpeningResidue)}",
+                    Addition = $"₦{Utilities.FormatAmount(value.Addition)}",
+                    DisposalOrTransfer = $"₦{Utilities.FormatAmount(value.Disposal)}",
+                    Initial = $"₦{Utilities.FormatAmount(value.Initial)}",
+                    Annual = $"₦{Utilities.FormatAmount(value.Annual)}",
+                    Total = $"₦{Utilities.FormatAmount(value.Total)}",
+                    ClosingResidue = $"₦{Utilities.FormatAmount(value.ClosingResidue)}",
+                });
+
+            }
+
+            values.Add(new CapitalAllowanceSummaryDto
+            {
+                Description = "Total",
+                OpeningResidue = $"₦{Utilities.FormatAmount(openingResidue)}",
+                Addition = $"₦{Utilities.FormatAmount(addition)}",
+                DisposalOrTransfer = $"₦{Utilities.FormatAmount(disposal)}",
+                Initial = $"₦{Utilities.FormatAmount(initial)}",
+                Annual = $"₦{Utilities.FormatAmount(annual)}",
+                Total = $"₦{Utilities.FormatAmount(total)}",
+                ClosingResidue = $"₦{Utilities.FormatAmount(closingResidue)}",
+            });
+
+            return values;
         }
     }
 }
