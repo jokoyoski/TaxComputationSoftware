@@ -21,7 +21,7 @@ export const investmentAllowanceViewData = async ({ companyId, year }) => {
   }
 };
 
-export const investmentAllowanceDelete = async ({ id }) => {
+export const investmentAllowanceDelete = async id => {
   try {
     const { data } = await axios.delete(`/api/InvestmentAllowance/investment-allowance/${id}`);
     return data;

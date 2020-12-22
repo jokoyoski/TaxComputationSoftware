@@ -38,9 +38,7 @@ const InvestmentAllowanceView = ({ year, toast }) => {
                       style={{ fontSize: 14, marginTop: 2 }}
                       onClick={async () => {
                         try {
-                          const data = await investmentAllowanceDelete({
-                            id: item.id
-                          });
+                          const data = await investmentAllowanceDelete(item.id);
                           if (data) {
                             toast.show(
                               utils.toastCallback({

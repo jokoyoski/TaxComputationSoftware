@@ -37,7 +37,7 @@ export const balancingAdjustmentViewData = async ({ companyId, year }) => {
   }
 };
 
-export const balancingAdjustmentDelete = async ({ id }) => {
+export const balancingAdjustmentDelete = async id => {
   try {
     const { data } = await axios.delete(`/api/BalancingAdjustment/${id}`);
     return data;

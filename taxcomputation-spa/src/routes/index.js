@@ -74,8 +74,8 @@ export const routes = [
     path: `${constants.routes.income_tax}${modePathParam}`,
     name: "INCOME_TAX",
     exact: true,
-    component: RouteGuard(IncomeTax)
-    //resources: [aboutResource],
+    component: RouteGuard(IncomeTax),
+    resources: [trialBalanceResource]
   },
   {
     path: `${constants.routes.deferred_tax}${modePathParam}`,
