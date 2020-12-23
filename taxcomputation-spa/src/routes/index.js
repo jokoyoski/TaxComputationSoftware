@@ -81,8 +81,8 @@ export const routes = [
     path: `${constants.routes.deferred_tax}${modePathParam}`,
     name: "DEFERRED_TAX",
     exact: true,
-    component: RouteGuard(DeferredTax)
-    //resources: [aboutResource],
+    component: RouteGuard(DeferredTax),
+    resources: [trialBalanceResource]
   },
   {
     path: `${constants.routes.minimum_tax}${modePathParam}`,

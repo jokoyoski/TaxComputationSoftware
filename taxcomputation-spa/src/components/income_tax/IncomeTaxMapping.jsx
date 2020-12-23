@@ -2,7 +2,6 @@ import React from "react";
 import { Button } from "primereact/button";
 import { Controller, useForm } from "react-hook-form";
 import TrialBalanceMappingTable from "../common/TrialBalanceMappingTable";
-// import { useCompany } from "../../store/CompanyStore";
 import utils from "../../utils";
 import InputController from "../controllers/InputController";
 import DropdownController from "../controllers/DropdownController";
@@ -11,7 +10,6 @@ import constants from "../../constants";
 
 const IncomeTaxMapping = ({ tbData, yearSelectItems, trialBalanceRefresh, toast }) => {
   const { errors, handleSubmit, control } = useForm();
-  // const [{ companyId }] = useCompany();
   const [loading, setLoading] = React.useState(false);
   const [selectedAccounts, setSelectedAccounts] = React.useState([]);
   const typeItems = [

@@ -1,19 +1,17 @@
 import axios from "axios";
 
 export const deferredTaxMapping = async ({
-  typeId,
-  yearId,
-  lossBroughtFoward,
-  unrelievedCapitalAllowanceBroughtFoward,
-  incomeList
+  fairValueGainId,
+  trialBalanceList,
+  companyId,
+  yearId
 }) => {
   try {
-    return await axios.post("/api/IncomeTax/add-income-tax", {
-      typeId,
-      yearId,
-      lossBroughtFoward,
-      unrelievedCapitalAllowanceBroughtFoward,
-      incomeList
+    return await axios.post("/api/DeferredTax", {
+      fairValueGainId,
+      trialBalanceList,
+      companyId,
+      yearId
     });
   } catch (error) {
     throw error;
