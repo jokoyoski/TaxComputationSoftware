@@ -5,17 +5,29 @@ import TrialBalanceMappingTable from "../common/TrialBalanceMappingTable";
 // import { useCompany } from "../../store/CompanyStore";
 import utils from "../../utils";
 import InputController from "../controllers/InputController";
+import DropdownController from "../controllers/DropdownController";
 import { incomeTaxMapping } from "../../apis/IncomeTax";
+import constants from "../../constants";
 
-const IncomeTaxMapping = ({ tbData, trialBalanceRefresh, toast }) => {
+const IncomeTaxMapping = ({ tbData, yearSelectItems, trialBalanceRefresh, toast }) => {
   const { errors, handleSubmit, control } = useForm();
   // const [{ companyId }] = useCompany();
   const [loading, setLoading] = React.useState(false);
   const [selectedAccounts, setSelectedAccounts] = React.useState([]);
+  const typeItems = [
+    {
+      label: "Disallowable Expenses",
+      value: 0
+    },
+    {
+      label: "Allowable Expenses",
+      value: 1
+    }
+  ];
 
   const onSubmit = async data => {
     if (loading) return;
-    const { lossBroughtFoward, unrelievedCapitalAllowanceBroughtFoward } = data;
+    const { typeId, yearId, lossBroughtFoward, unrelievedCapitalAllowanceBroughtFoward } = data;
 
     if (selectedAccounts.length === 0) {
       toast.show(
@@ -31,12 +43,14 @@ const IncomeTaxMapping = ({ tbData, trialBalanceRefresh, toast }) => {
 
     try {
       const response = await incomeTaxMapping({
+        typeId,
+        yearId,
         lossBroughtFoward: lossBroughtFoward === "" ? 0 : lossBroughtFoward,
         unrelievedCapitalAllowanceBroughtFoward:
           unrelievedCapitalAllowanceBroughtFoward === ""
             ? 0
             : unrelievedCapitalAllowanceBroughtFoward,
-        trialBalanceId: selectedAccounts.map(item => item.id)
+        incomeList: selectedAccounts
       });
       if (response.status === 200) {
         toast.show(
@@ -55,36 +69,61 @@ const IncomeTaxMapping = ({ tbData, trialBalanceRefresh, toast }) => {
 
   return (
     <>
-      <form className="p-d-flex p-jc-between" onSubmit={handleSubmit(onSubmit)}>
-        <InputController
-          Controller={Controller}
-          control={control}
-          errors={errors}
-          controllerName="lossBroughtFoward"
-          label="Loss B/F"
-          required={false}
-          width={250}
-        />
-        <InputController
-          Controller={Controller}
-          control={control}
-          errors={errors}
-          controllerName="unrelievedCapitalAllowanceBroughtFoward"
-          label="Unrelieved Capital Allowance B/F"
-          required={false}
-          width={250}
-        />
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <div className="p-d-flex p-jc-between">
+          <DropdownController
+            Controller={Controller}
+            control={control}
+            errors={errors}
+            controllerName="typeId"
+            label="Type"
+            required
+            dropdownOptions={typeItems}
+            errorMessage="Type is required"
+            width={200}
+          />
+          <DropdownController
+            Controller={Controller}
+            control={control}
+            errors={errors}
+            controllerName="yearId"
+            label="Year"
+            required
+            dropdownOptions={yearSelectItems}
+            errorMessage="Year is required"
+            width={200}
+          />
+          <InputController
+            Controller={Controller}
+            control={control}
+            errors={errors}
+            controllerName="lossBroughtFoward"
+            label="Loss B/F"
+            required={false}
+            width={200}
+          />
+          <InputController
+            Controller={Controller}
+            control={control}
+            errors={errors}
+            controllerName="unrelievedCapitalAllowanceBroughtFoward"
+            label="Unrelieved Cap Alw B/F"
+            required={false}
+            width={200}
+          />
+        </div>
         <div>
           <p style={{ color: "transparent", marginTop: 0, marginBottom: 5 }}>Submit</p>
           <Button
             type="submit"
             label={!loading ? "Submit" : null}
             icon={loading ? "pi pi-spin pi-spinner" : null}
-            style={{ width: 250 }}
+            style={{ width: 200 }}
           />
         </div>
       </form>
       <TrialBalanceMappingTable
+        title={constants.modules.incomeTax}
         tbData={tbData}
         trialBalanceRefresh={trialBalanceRefresh}
         toast={toast}

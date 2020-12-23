@@ -1,15 +1,19 @@
 import axios from "axios";
 
 export const incomeTaxMapping = async ({
+  typeId,
+  yearId,
   lossBroughtFoward,
   unrelievedCapitalAllowanceBroughtFoward,
-  trialBalanceId
+  incomeList
 }) => {
   try {
     return await axios.post("/api/IncomeTax/add-income-tax", {
+      typeId,
+      yearId,
       lossBroughtFoward,
       unrelievedCapitalAllowanceBroughtFoward,
-      trialBalanceId
+      incomeList
     });
   } catch (error) {
     throw error;
