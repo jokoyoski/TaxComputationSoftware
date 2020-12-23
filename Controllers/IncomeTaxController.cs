@@ -39,7 +39,8 @@ namespace TaxComputationSoftware.Controllers
                 {
                     Description = "Profits/Loss per accounts",
                     ColumnOne = "",
-                    ColumnTwo = "₦(48,765,894)"
+                    ColumnTwo = "₦(48,765,894)",
+                    Id=70
                 });
 
                 incomeListDto.Add(new IncomeTaxDto
@@ -62,14 +63,16 @@ namespace TaxComputationSoftware.Controllers
                     Description = "Depreciation",
                     ColumnOne = "₦3,256,182",
                     ColumnTwo = "",
-                    CanDelete = true
+                    CanDelete = true,
+                    Id=8,
                 });
                 incomeListDto.Add(new IncomeTaxDto
                 {
                     Description = "Fines and Penalties",
                     ColumnOne = "₦3,256,182",
                     ColumnTwo = "",
-                    CanDelete = true
+                    CanDelete = true,
+                    Id=7,
                 });
 
                 incomeListDto.Add(new IncomeTaxDto
@@ -77,7 +80,8 @@ namespace TaxComputationSoftware.Controllers
                     Description = "Promotion",
                     ColumnOne = "₦3,256,182",
                     ColumnTwo = "₦490,003",
-                    CanDelete = true
+                    CanDelete = true,
+                    Id=6
                 });
 
                 incomeListDto.Add(new IncomeTaxDto
@@ -93,7 +97,8 @@ namespace TaxComputationSoftware.Controllers
                     Description = "Gain on disposal assets",
                     ColumnOne = "₦3,256,182",
                     ColumnTwo = "₦490,003",
-                    CanDelete = true
+                    CanDelete = true,
+                    Id=4,
                 });
 
                 incomeListDto.Add(new IncomeTaxDto
@@ -178,6 +183,7 @@ namespace TaxComputationSoftware.Controllers
                     Description = "Less Capital Allowances",
                     ColumnOne = "",
                     ColumnTwo = ""
+
                 });
 
                 incomeListDto.Add(new IncomeTaxDto
@@ -304,8 +310,6 @@ namespace TaxComputationSoftware.Controllers
             }
         }
 
-
-
         [HttpPost("add-income-tax")]
         [Authorize]
         public async Task<IActionResult> AddIncomeTax(CreateIncomeTaxDto createIncomeTaxDto)
@@ -347,3 +351,4 @@ namespace TaxComputationSoftware.Controllers
 
     }
 }
+

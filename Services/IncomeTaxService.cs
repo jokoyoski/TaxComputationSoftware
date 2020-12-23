@@ -26,7 +26,7 @@ namespace TaxComputationSoftware.Services
 
 
 
-     /*   public async Task<List<IncomeTaxDto>> GetIncomeTax(int companyId, int yearId)
+        public async Task<List<IncomeTaxDto>> GetIncomeTax(int companyId, int yearId)
         {
             decimal totalAllowable = 0;
             decimal totalDisallowable = 0;
@@ -64,26 +64,30 @@ namespace TaxComputationSoftware.Services
             {
                 i++;
 
-                if (i == allowableDisAllowable.ToList().Count())
+                if (i == allowableDisAllowable.ToList().Count())    //if it is the last item in the row enter here 
                 {
-                    if (item.SelectionId == 0)
+                    if (item.SelectionId == 0)  //0 debit 1 credit 
                     {
-                        totalDisallowable += item.Debit;
+                        totalDisallowable += item.Debit;          //add debit to disallowable 
                         incomeListDto.Add(new IncomeTaxDto
                         {
                             Description = item.Item,
                             ColumnOne = $"₦{Utilities.FormatAmount(item.Debit)}",
                             ColumnTwo = $"₦{Utilities.FormatAmount(totalDisallowable)}",
+                            CanDelete = true,
+                            Id = item.Id,
                         });
                     }
                     else if (item.SelectionId == 1)
                     {
-                        totalDisallowable += item.Credit;
+                        totalDisallowable += item.Credit;             //add credit to disallowable 
                         incomeListDto.Add(new IncomeTaxDto
                         {
                             Description = item.Item,
                             ColumnOne = $"₦{Utilities.FormatAmount(item.Credit)}",
                             ColumnTwo = $"₦{Utilities.FormatAmount(totalDisallowable)}",
+                            CanDelete = true,
+                            Id = item.Id,
                         });
                     }
                 }
@@ -96,7 +100,9 @@ namespace TaxComputationSoftware.Services
                         {
                             Description = item.Item,
                             ColumnOne = "",
-                            ColumnTwo = $"₦{Utilities.FormatAmount(item.Debit)}"
+                            ColumnTwo = $"₦{Utilities.FormatAmount(item.Debit)}",
+                            CanDelete = true,
+                            Id = item.Id,
                         });
                     }
                     else if (item.SelectionId == 1)
@@ -106,7 +112,9 @@ namespace TaxComputationSoftware.Services
                         {
                             Description = item.Item,
                             ColumnOne = "",
-                            ColumnTwo = $"₦{Utilities.FormatAmount(item.Debit)}"
+                            ColumnTwo = $"₦{Utilities.FormatAmount(item.Credit)}",
+                            CanDelete = true,
+                            Id = item.Id,
                         });
                     }
                 }
@@ -119,107 +127,193 @@ namespace TaxComputationSoftware.Services
                     ColumnTwo = ""
                 });
 
-
+                i = 0;
+                allowableDisAllowable = await _incomeTaxRepository.GetAllowableDisAllowableByCompanyIdYearIdAllowable(companyId, yearId, 1);  // get allowable
                 foreach (var allowable in allowableDisAllowable)
                 {
-                    i++;
-
+                    i++;   //0 disallowable 1//allowable
                     if (i == allowableDisAllowable.ToList().Count())
                     {
-                        if (item.SelectionId == 1)
-                        {
-                            if (item.Debit >= 0)
+
+                        if (allowable.SelectionId == 0)
+                        {  //if it is debit
+
+                            if (allowable.Debit < 0)
+                            {     //cal
+                                totalAllowable += allowable.Debit;
+                            }
+                            else
                             {
-                                totalAllowable += -item.Debit;
-                            }else{
-                                totalAllowable += item.Debit;
+                                totalAllowable += -allowable.Debit;
                             }
 
-                            if (item.Debit >= 0)
+                            if (item.Debit < 0)
                             {
                                 incomeListDto.Add(new IncomeTaxDto
                                 {
                                     Description = item.Item,
                                     ColumnOne = $"₦({Utilities.FormatAmount(item.Debit)})",
                                     ColumnTwo = $"₦({Utilities.FormatAmount(totalAllowable)})",
+                                    CanDelete = true,
+                                    Id = item.Id,
                                 });
 
                             }
                             else
                             {
+
                                 incomeListDto.Add(new IncomeTaxDto
                                 {
                                     Description = item.Item,
                                     ColumnOne = $"₦{Utilities.FormatAmount(item.Debit)}",
                                     ColumnTwo = $"₦{Utilities.FormatAmount(totalAllowable)}",
+                                    CanDelete = true,
+                                    Id = item.Id,
                                 });
+
+
                             }
 
 
+
+
+
+
                         }
-                        else if (item.SelectionId == 1)
+                        else if (allowable.SelectionId == 1)
                         {
 
-                            if (item.Credit >= 0)
+                            //if it is debit
+
+                            if (allowable.Credit < 0)
+                            {     //cal
+                                totalAllowable += allowable.Credit;
+                            }
+                            else
                             {
-                                totalAllowable += item.Credit;
+                                totalAllowable += -allowable.Credit;
+                            }
+
+                            if (item.Credit < 0)
+                            {
                                 incomeListDto.Add(new IncomeTaxDto
                                 {
                                     Description = item.Item,
                                     ColumnOne = $"₦({Utilities.FormatAmount(item.Credit)})",
                                     ColumnTwo = $"₦({Utilities.FormatAmount(totalAllowable)})",
                                 });
+
                             }
                             else
                             {
-                                totalAllowable += item.Credit;
+
                                 incomeListDto.Add(new IncomeTaxDto
                                 {
                                     Description = item.Item,
                                     ColumnOne = $"₦{Utilities.FormatAmount(item.Credit)}",
                                     ColumnTwo = $"₦{Utilities.FormatAmount(totalAllowable)}",
                                 });
+
+
                             }
 
+
                         }
-                    }
+
+
+
+
+
+                    }      //regular
                     else
                     {
-                        if (item.SelectionId == 0)
-                        {
-                            if (item.Debit >= 0)
+
+                        if (allowable.SelectionId == 0)
+                        {  //if it is debit
+
+                            if (allowable.Debit < 0)
+                            {     //cal
+                                totalAllowable += allowable.Debit;
+                            }
+                            else
                             {
-                                totalAllowable += -item.Debit;
-                            }else{
-                                totalAllowable += item.Debit;
+                                totalAllowable += -allowable.Debit;
                             }
 
-                            incomeListDto.Add(new IncomeTaxDto
+                            if (item.Debit < 0)
                             {
-                                Description = item.Item,
-                                ColumnOne = "",
-                                ColumnTwo = $"₦{Utilities.FormatAmount(item.Debit)}"
-                            });
-                        }
-                        else if (item.SelectionId == 1)
-                        {
+                                incomeListDto.Add(new IncomeTaxDto
+                                {
+                                    Description = item.Item,
+                                    ColumnOne = $"₦({Utilities.FormatAmount(item.Debit)})",
+                                    ColumnTwo = ""
+                                });
 
-                             if (item.Debit >= 0)
+                            }
+                            else
                             {
-                                totalAllowable += -item.Debit;
-                            }else{
-                                totalAllowable += item.Debit;
+
+                                incomeListDto.Add(new IncomeTaxDto
+                                {
+                                    Description = item.Item,
+                                    ColumnOne = $"₦{Utilities.FormatAmount(item.Debit)}",
+                                    ColumnTwo = ""
+                                });
+
+
                             }
 
-                            totalAllowable += item.Credit;
-                            incomeListDto.Add(new IncomeTaxDto
-                            {
-                                Description = item.Item,
-                                ColumnOne = "",
-                                ColumnTwo = $"₦{Utilities.FormatAmount(item.Debit)}"
-                            });
+
+
+
+
+
                         }
+                        else if (allowable.SelectionId == 1)
+                        {
+
+                            //if it is debit
+
+                            if (allowable.Credit < 0)
+                            {     //cal
+                                totalAllowable += allowable.Credit;
+                            }
+                            else
+                            {
+                                totalAllowable += -allowable.Credit;
+                            }
+
+                            if (item.Credit < 0)
+                            {
+                                incomeListDto.Add(new IncomeTaxDto
+                                {
+                                    Description = item.Item,
+                                    ColumnOne = $"₦({Utilities.FormatAmount(item.Credit)})",
+                                    ColumnTwo = ""
+                                });
+
+                            }
+                            else
+                            {
+
+                                incomeListDto.Add(new IncomeTaxDto
+                                {
+                                    Description = item.Item,
+                                    ColumnOne = $"₦{Utilities.FormatAmount(item.Credit)}",
+                                    ColumnTwo = ""
+                                });
+
+
+                            }
+
+
+                        }
+
+
+
+
                     }
+
 
 
 
@@ -236,8 +330,8 @@ namespace TaxComputationSoftware.Services
 
             }
 
-
-        }*/
+            return incomeListDto;
+        }
 
         public async Task SaveAllowableDisAllowable(CreateIncomeTaxDto incomeTax)
         {
@@ -271,12 +365,13 @@ namespace TaxComputationSoftware.Services
 
             }
 
-         /*   _incomeTaxRepository.CreateBalanceBroughtFoward(new BroughtFoward
+            _incomeTaxRepository.CreateBalanceBroughtFoward(new BroughtFoward
             {
+                CompanyId = incomeTax.CompanyId,
                 IsStarted = false,
                 LossBf = incomeTax.LossBroughtFoward,
                 UnRelievedBf = incomeTax.UnrelievedCapitalAllowanceBroughtFoward
-            });*/
+            });
 
 
         }

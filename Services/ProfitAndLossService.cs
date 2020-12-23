@@ -771,7 +771,7 @@ namespace TaxComputationAPI.Services
                 return "OperatingExpenses";
             }
 
-            if (profitAndLossId == 4)
+            if (profitAndLossId == 5)
             {
                 return "OtherOperatingType";
             }

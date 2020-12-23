@@ -12,6 +12,8 @@ namespace TaxComputationSoftware.Dtos
 
         public string ColumnTwo { get; set; }
 
+        public int Id {get;set;}
+
         public bool CanDelete   {get;set;}
 
     }
