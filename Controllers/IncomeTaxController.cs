@@ -21,9 +21,9 @@ namespace TaxComputationSoftware.Controllers
             _logger = logger;
         }
 
-        [HttpGet("{companyId}/{yearId}")]
+        [HttpGet("{companyId}/{yearId}/{IsItLevyView}")]
         [Authorize]
-        public async Task<IActionResult> GetIncometax(int companyId, int yearId)
+        public async Task<IActionResult> GetIncometax(int companyId, int yearId, bool IsItLevyView)
         {
 
             if (yearId == 0)
