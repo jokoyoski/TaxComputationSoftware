@@ -22,6 +22,10 @@ using TaxComputationAPI.Models;
 using TaxComputationAPI.Models.CustomHandler;
 using TaxComputationAPI.Repositories;
 using TaxComputationAPI.Services;
+using TaxComputationSoftware.Interfaces;
+using TaxComputationSoftware.Repositories;
+using TaxComputationSoftware.Services;
+
 namespace TaxComputationAPI
 {
     public class Startup
@@ -101,6 +105,8 @@ namespace TaxComputationAPI
             services.AddScoped<IITLevyService, ITLevyService>();
             services.AddScoped<IInvestmentAllowanceRepository, InvestmentAllowanceRepository>();
             services.AddScoped<IInvestmentAllowanceService, InvestmentAllowanceService>();
+             services.AddScoped<IIncomeTaxRepository, IncomeTaxRepository>();
+              services.AddScoped<IIncomeTaxService, IncomeTaxService>();
             services.AddSingleton<DatabaseManager>();
             services.Configure<ConnectionString>(_configuration.GetSection("ConnectionString"));
             services.AddDbContext<DataContext>(options => options.UseSqlServer(_configuration.GetConnectionString("DefaultConnection")));
