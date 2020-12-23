@@ -75,7 +75,7 @@ const IncomeTaxView = ({ year, toast, showITLevy }) => {
 
   return (
     <DataTable className="p-datatable-gridlines" value={incomeTaxData} style={{ marginTop: 40 }}>
-      <Column field="description" header=""></Column>
+      <Column field="description" header="Description"></Column>
       <Column field="columnOne" header="₦"></Column>
       <Column field="columnTwo" header="₦"></Column>
     </DataTable>
