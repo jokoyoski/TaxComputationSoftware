@@ -1,5 +1,6 @@
 import React from "react";
 import { Dropdown } from "primereact/dropdown";
+import { InputSwitch } from "primereact/inputswitch";
 import constants from "../../constants";
 
 const ModuleHeader = ({
@@ -8,6 +9,8 @@ const ModuleHeader = ({
   setMode,
   year,
   setYear,
+  showITLevy,
+  setShowITLevy,
   assetId,
   setAssetId,
   yearSelectItems,
@@ -50,11 +53,21 @@ const ModuleHeader = ({
             }[mode]
           }
         </p>
-        <div>
+        <div className="p-d-flex p-ai-center">
+          {mode === "view" && title === constants.modules.incomeTax && (
+            <div className="p-d-flex p-ai-center">
+              <span>Show IT Levy</span>
+              <InputSwitch
+                style={{ marginLeft: 10 }}
+                checked={showITLevy}
+                onChange={e => setShowITLevy(e.value)}
+              />
+            </div>
+          )}
           {mode === "view" ? (
             title !== constants.modules.capitalAllowance ? (
               <Dropdown
-                style={{ width: 180, marginRight: 20 }}
+                style={{ width: 180, marginLeft: 20 }}
                 placeholder="Select year"
                 value={year}
                 options={yearSelectItems}
@@ -66,7 +79,7 @@ const ModuleHeader = ({
               <>
                 {assetId && (
                   <Dropdown
-                    style={{ width: 180, marginRight: 20 }}
+                    style={{ width: 180, marginLeft: 20 }}
                     placeholder="Select asset"
                     value={assetId}
                     options={assetClassSelectItems}
@@ -79,7 +92,7 @@ const ModuleHeader = ({
             )
           ) : null}
           <Dropdown
-            style={{ width: 180 }}
+            style={{ width: 180, marginLeft: 20 }}
             value={mode}
             disabled={constants.nonMappedModules.includes(title)}
             options={modeSelectItems}

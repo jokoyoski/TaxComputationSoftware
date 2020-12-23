@@ -6,7 +6,7 @@ import Loader from "../common/Loader";
 import utils from "../../utils";
 import { incomeTaxDelete, incomeTaxViewData } from "../../apis/IncomeTax";
 
-const IncomeTaxView = ({ year, toast }) => {
+const IncomeTaxView = ({ year, toast, showITLevy }) => {
   const isMounted = React.useRef(false);
   const [{ companyId }] = useCompany();
   const [loading, setLoading] = React.useState();
@@ -21,7 +21,7 @@ const IncomeTaxView = ({ year, toast }) => {
       try {
         setError(null);
         setLoading(true);
-        const data = await incomeTaxViewData({ companyId, year });
+        const data = await incomeTaxViewData({ companyId, year, isItLevyView: showITLevy });
         if (isMounted.current) {
           setIncomeTaxData(
             data.map(item => ({
@@ -67,7 +67,7 @@ const IncomeTaxView = ({ year, toast }) => {
     fetchIncomeTaxViewData();
 
     return () => (isMounted.current = false);
-  }, [companyId, toast, year]);
+  }, [companyId, showITLevy, toast, year]);
 
   if (error) return <p style={{ color: "#f00" }}>{error}</p>;
 

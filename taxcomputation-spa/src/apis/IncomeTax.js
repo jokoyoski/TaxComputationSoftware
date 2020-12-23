@@ -20,9 +20,9 @@ export const incomeTaxMapping = async ({
   }
 };
 
-export const incomeTaxViewData = async ({ companyId, year }) => {
+export const incomeTaxViewData = async ({ companyId, year, isItLevyView }) => {
   try {
-    const { data } = await axios.get(`/api/incomeTax/${companyId}/${year}`);
+    const { data } = await axios.get(`/api/incomeTax/${companyId}/${year}/${isItLevyView}`);
     return data;
   } catch (error) {
     throw error;
