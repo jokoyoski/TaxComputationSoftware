@@ -2,6 +2,7 @@ import React from "react";
 import { useCompany } from "../../store/CompanyStore";
 import ViewModeHeaders from "./ViewModeHeaders";
 import { Button } from "primereact/button";
+import printStyles from "../../styles/printStyles";
 
 const ViewMode = ({ title, year, children }) => {
   const [{ companyName }] = useCompany();
@@ -9,7 +10,7 @@ const ViewMode = ({ title, year, children }) => {
   const printElement = (el, title) => {
     let mywindow = window.open("", "PRINT", "height=650,width=900,top=100,left=150");
 
-    mywindow.document.write(`<html><head><title>${title}</title>`);
+    mywindow.document.write(`<html><head><title>${title}</title>${printStyles}`);
     mywindow.document.write("</head><body >");
     mywindow.document.write(document.querySelector(el).innerHTML);
     mywindow.document.write("</body></html>");
