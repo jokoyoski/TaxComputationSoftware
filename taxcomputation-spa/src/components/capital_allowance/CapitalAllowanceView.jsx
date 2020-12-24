@@ -1,10 +1,10 @@
 import React from "react";
-import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { useCompany } from "../../store/CompanyStore";
 import Loader from "../common/Loader";
 import { capitalAllowanceDelete, capitalAllowanceViewData } from "../../apis/CapitalAllowance";
 import utils from "../../utils";
+import ViewModeDataTable from "../common/ViewModeDataTable";
 
 const CapitalAllowanceView = ({ assetId, toast }) => {
   const isMounted = React.useRef(false);
@@ -102,11 +102,7 @@ const CapitalAllowanceView = ({ assetId, toast }) => {
     );
 
   return (
-    <DataTable
-      className="p-datatable-gridlines"
-      value={capitalAllowanceData}
-      style={{ marginTop: 40, width: 1200 }}
-      scrollable>
+    <ViewModeDataTable value={capitalAllowanceData} width={1200} scrollable>
       <Column field="taxYear" header="Tax Year" headerStyle={{ width: "6em" }}></Column>
       <Column
         field="numberOfYearsAvailable"
@@ -126,7 +122,7 @@ const CapitalAllowanceView = ({ assetId, toast }) => {
         header="Closing Residue"
         headerStyle={{ width: "10em" }}></Column>
       <Column field="yearsToGo" header="Yr to go" headerStyle={{ width: "6em" }}></Column>
-    </DataTable>
+    </ViewModeDataTable>
   );
 };
 

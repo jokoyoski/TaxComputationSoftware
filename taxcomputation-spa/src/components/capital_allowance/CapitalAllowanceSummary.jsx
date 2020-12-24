@@ -1,9 +1,9 @@
 import React from "react";
-import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { useCompany } from "../../store/CompanyStore";
 import Loader from "../common/Loader";
 import { capitalAllowanceSummaryData } from "../../apis/CapitalAllowance";
+import ViewModeDataTable from "../common/ViewModeDataTable";
 
 const CapitalAllowanceSummary = () => {
   const isMounted = React.useRef(false);
@@ -66,11 +66,7 @@ const CapitalAllowanceSummary = () => {
     );
 
   return (
-    <DataTable
-      className="p-datatable-gridlines"
-      value={capitalAllowanceSummary}
-      style={{ marginTop: 40, width: 1200 }}
-      scrollable>
+    <ViewModeDataTable value={capitalAllowanceSummary} width={1200} scrollable>
       <Column field="description" header="Description" headerStyle={{ width: "10em" }}></Column>
       <Column
         field="openingResidue"
@@ -88,7 +84,7 @@ const CapitalAllowanceSummary = () => {
         field="closingResidue"
         header="Closing Residue"
         headerStyle={{ width: "10em" }}></Column>
-    </DataTable>
+    </ViewModeDataTable>
   );
 };
 

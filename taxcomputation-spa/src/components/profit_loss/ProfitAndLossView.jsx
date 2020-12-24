@@ -1,9 +1,9 @@
 import React from "react";
-import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { useCompany } from "../../store/CompanyStore";
 import Loader from "../common/Loader";
 import { profitAndLossViewData } from "../../apis/ProfitAndLoss";
+import ViewModeDataTable from "../common/ViewModeDataTable";
 
 const ProfitAndLossView = ({ year }) => {
   const isMounted = React.useRef(false);
@@ -43,13 +43,10 @@ const ProfitAndLossView = ({ year }) => {
   if (loading) return <Loader />;
 
   return (
-    <DataTable
-      className="p-datatable-gridlines"
-      value={profitAndLossApiData}
-      style={{ marginTop: 40 }}>
+    <ViewModeDataTable value={profitAndLossApiData}>
       <Column field="category" header=""></Column>
       <Column field="total" header="Total"></Column>
-    </DataTable>
+    </ViewModeDataTable>
   );
 };
 
