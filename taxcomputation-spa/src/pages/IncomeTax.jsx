@@ -22,6 +22,7 @@ const IncomeTax = () => {
     refresh: trialBalanceRefresh
   } = useResource(trialBalanceResource);
   const [tbData, setTbData] = React.useState([]);
+  const [showITLevy, setShowITLevy] = React.useState(false);
   const [mode, setMode] = usePathParam("mode");
   const [year, setYear] = React.useState(utils.currentYear());
   const [resources, { onTrialBalance }] = useResources();
@@ -51,19 +52,22 @@ const IncomeTax = () => {
         setMode={setMode}
         year={year}
         setYear={setYear}
+        showITLevy={showITLevy}
+        setShowITLevy={setShowITLevy}
         yearSelectItems={yearSelectItems}>
         {
           {
             mapping: (
               <IncomeTaxMapping
                 tbData={tbData}
+                yearSelectItems={yearSelectItems}
                 trialBalanceRefresh={trialBalanceRefresh}
                 toast={toast.current}
               />
             ),
             view: (
               <ViewMode title={title} year={year}>
-                <IncomeTaxView year={year} toast={toast.current} />
+                <IncomeTaxView year={year} toast={toast.current} showITLevy={showITLevy} />
               </ViewMode>
             )
           }[mode]

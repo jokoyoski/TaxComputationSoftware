@@ -13,6 +13,8 @@ namespace TaxComputationAPI.Interfaces
 
         Task DeleteCapitalAllowanceById(int TrialBalanceId);
 
+        Task<decimal> GetCapitalAllowanceSummaryForIncomeTax(int companyId);
+
         Task<CapitalAllowanceDto> GetCapitalAllowance(int assetId, int companyId);
 
         Task<int> SaveCapitalAllowanceFromFixedAsset(decimal addition, string year, int companyId, int assetId, decimal disposal);

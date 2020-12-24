@@ -10,6 +10,8 @@ const Main = ({
   setMode,
   year,
   setYear,
+  showITLevy,
+  setShowITLevy,
   yearSelectItems,
   assetId,
   setAssetId,
@@ -27,6 +29,8 @@ const Main = ({
           setMode={setMode}
           year={year}
           setYear={setYear}
+          showITLevy={showITLevy}
+          setShowITLevy={setShowITLevy}
           assetId={assetId}
           setAssetId={setAssetId}
           yearSelectItems={yearSelectItems}

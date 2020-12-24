@@ -7,6 +7,7 @@
     "classnames": "^2.2.6",
     "fontsource-poppins": "^3.0.9",
     "husky": "^4.3.0",
+    "jspdf": "^2.2.0",
     "lint-staged": "^10.4.0",
     "prettier": "^2.1.2",
     "primeflex": "^2.0.0",

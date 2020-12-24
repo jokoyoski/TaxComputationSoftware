@@ -58,7 +58,7 @@ namespace TaxComputationSoftware.Repositories
 
                 parameters.Add("@Id", Id);
 
-                var record = await conn.QueryFirstOrDefault("[dbo].[usp_Get_Allowable_DisAllowable_By_Id]", parameters, commandType: CommandType.StoredProcedure);
+                var record =  conn.QueryFirstOrDefault<AllowableDisAllowable>("[dbo].[usp_Get_Allowable_DisAllowable_By_Id]", parameters, commandType: CommandType.StoredProcedure);
                 return record;
             }
 
@@ -137,7 +137,7 @@ namespace TaxComputationSoftware.Repositories
 
                 parameters.Add("@CompanyId", companyId);
 
-                var record = await conn.QueryFirstOrDefault("[dbo].[usp_Get_Brought_Foward_By_CompanyId]", parameters, commandType: CommandType.StoredProcedure);
+                var record = await conn.QueryFirstOrDefaultAsync<BroughtFoward>("[dbo].[usp_Get_Brought_Foward_By_CompanyId]", parameters, commandType: CommandType.StoredProcedure);
                 return record;
             }
 

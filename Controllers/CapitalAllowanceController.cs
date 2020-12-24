@@ -31,7 +31,7 @@ namespace TaxComputationAPI.Controllers
         {
             try
             {
-                capitalAllowance.NumberOfYearsAvailable = 8;
+
                 if (capitalAllowance.Initial > 0)
                 {
                     return BadRequest(new { errors = new[] { "Asset cannot have Initial Item" } });

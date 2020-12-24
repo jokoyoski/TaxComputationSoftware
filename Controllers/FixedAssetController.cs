@@ -36,8 +36,14 @@ namespace TaxComputationAPI.Controllers
         {
             try
             {
-
-
+                bool isDisposalNegative = false;
+                decimal costDisposal = 0;
+                if (createFixed.CostDisposal == -1)
+                {
+                    costDisposal = createFixed.CostDisposal;
+                    createFixed.CostDisposal = 0;
+                    isDisposalNegative=true;
+                }
                 if (createFixed.YearId < DateTime.Now.Year)
                 {
                     return StatusCode(400, new { errors = new[] { "Fixed Asset fro Previous Year is not Alllowed!" } });
@@ -116,7 +122,10 @@ namespace TaxComputationAPI.Controllers
                     return StatusCode(400, new { errors = new[] { "Please select a valid company" } });
 
                 }
-
+                if (isDisposalNegative)
+                {
+                    createFixed.CostDisposal = costDisposal;
+                }
 
                 await _fixedAssetService.SaveFixedAsset(createFixed);
 

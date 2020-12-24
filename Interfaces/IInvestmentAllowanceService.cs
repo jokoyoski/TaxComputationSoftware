@@ -11,6 +11,7 @@ namespace TaxComputationAPI.Interfaces
     {
         Task AddInvestmentAllowanceAsync(InvestmentAllowance investment);
         Task DeleteInvestmentAllowanceAsync(int Id);
+        Task<decimal> GetInvestmentAllowanceForIncomeTax(int companyId, int yearId);
         Task<InvestmentAllowanceListDto> GetInvestmentAllowances(int companyId, int yearId);
     }
 }

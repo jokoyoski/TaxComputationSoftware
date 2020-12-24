@@ -64,7 +64,7 @@ namespace TaxComputationAPI.Services
             var previousRecord = await _capitalAllowanceRepository.GetCapitalAllowanceByAssetIdYear(assetId, companyId, year);
 
 
-            if (disposal > 0)  //greater than zero specifies that the account needs balancing aadjustmnet
+            if (disposal < 0)  //less than zero specifies that the account needs balancing aadjustmnet
             {
 
 
@@ -461,7 +461,7 @@ namespace TaxComputationAPI.Services
         {
             var itemToDelete = await _capitalAllowanceRepository.GetCapitalAllowanceById(capitalAllowanceId);
             var value = _capitalAllowanceRepository.DeleteCapitalAllowanceById(capitalAllowanceId);
-            _capitalAllowanceRepository.DeleteCapitalAllowanceSummaryById(itemToDelete.AssetId,itemToDelete.CompanyId);
+            _capitalAllowanceRepository.DeleteCapitalAllowanceSummaryById(itemToDelete.AssetId, itemToDelete.CompanyId);
         }
 
         public async Task<List<CapitalAllowanceSummaryDto>> GetCapitalAllowanceSummaryByCompanyId(int companyId)
@@ -489,7 +489,7 @@ namespace TaxComputationAPI.Services
                 initial += value.Initial;
                 annual += value.Annual;
                 total += value.Total;
-                closingResidue += closingResidue;
+                closingResidue += value.ClosingResidue;
 
                 values.Add(new CapitalAllowanceSummaryDto
                 {
@@ -518,6 +518,35 @@ namespace TaxComputationAPI.Services
             });
 
             return values;
+        }
+
+
+
+        public async Task<decimal> GetCapitalAllowanceSummaryForIncomeTax(int companyId)
+        {
+
+
+            List<CapitalAllowanceSummaryDto> values = new List<CapitalAllowanceSummaryDto>();
+            var item = await _capitalAllowanceRepository.GetCapitalAllowanceSummaryByCompanyId(companyId);
+            if (item.Count() == 0)
+            {
+                return 0;
+            }
+            decimal openingResidue = 0;
+            decimal addition = 0;
+            decimal disposal = 0;
+            decimal initial = 0;
+            decimal annual = 0;
+            decimal total = 0;
+            decimal closingResidue = 0;
+            foreach (var value in item)
+            {
+
+                total += value.Total;
+            }
+
+            return total;
+
         }
     }
 }
