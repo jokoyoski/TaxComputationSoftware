@@ -15,22 +15,14 @@ const AddCompanyForm = ({ showAddCompany, setShowAddCompany, toast, refresh }) =
     if (loading) return;
 
     setLoading(true);
-    const {
-      companyName,
-      cacNumber,
-      tinNumber,
-      companyDescription,
-      openingYear,
-      closingYear
-    } = data;
+    const { companyName, cacNumber, tinNumber, companyDescription, openingYear } = data;
     try {
       const response = await addCompany({
         companyName,
         cacNumber,
         tinNumber,
         companyDescription,
-        openingYear,
-        closingYear
+        openingYear
       });
       if (response.status === 201) {
         toast.show(
@@ -152,30 +144,30 @@ const AddCompanyForm = ({ showAddCompany, setShowAddCompany, toast, refresh }) =
             )}
           </div>
         </div>
-        <div className="p-d-flex">
-          <div className="p-d-flex p-flex-column" style={{ marginBottom: 15, marginRight: 10 }}>
-            <label htmlFor="openingYearInput" style={{ marginBottom: 10 }}>
-              Opening Year
-            </label>
-            <Controller
-              name="openingYear"
-              control={control}
-              rules={{ required: true }}
-              defaultValue=""
-              render={props => (
-                <InputText
-                  style={{ marginBottom: 5, width: "100%" }}
-                  id="openingYearInput"
-                  value={props.value}
-                  onChange={e => props.onChange(e.target.value)}
-                />
-              )}
-            />
-            {errors.openingYear && (
-              <span style={{ fontSize: 12, color: "red" }}>Opening Year is required</span>
+        {/* <div className="p-d-flex"> */}
+        <div className="p-d-flex p-flex-column" style={{ marginBottom: 15 }}>
+          <label htmlFor="openingYearInput" style={{ marginBottom: 10 }}>
+            Next Financial Year
+          </label>
+          <Controller
+            name="openingYear"
+            control={control}
+            rules={{ required: true }}
+            defaultValue=""
+            render={props => (
+              <InputText
+                style={{ marginBottom: 5, width: "100%" }}
+                id="openingYearInput"
+                value={props.value}
+                onChange={e => props.onChange(e.target.value)}
+              />
             )}
-          </div>
-          <div className="p-d-flex p-flex-column" style={{ marginBottom: 15, marginLeft: 10 }}>
+          />
+          {errors.openingYear && (
+            <span style={{ fontSize: 12, color: "red" }}>Next Financial Year is required</span>
+          )}
+        </div>
+        {/* <div className="p-d-flex p-flex-column" style={{ marginBottom: 15, marginLeft: 10 }}>
             <label htmlFor="closingYearInput" style={{ marginBottom: 10 }}>
               Closing Year
             </label>
@@ -196,8 +188,8 @@ const AddCompanyForm = ({ showAddCompany, setShowAddCompany, toast, refresh }) =
             {errors.closingYear && (
               <span style={{ fontSize: 12, color: "red" }}>Closing Year is required</span>
             )}
-          </div>
-        </div>
+          </div> */}
+        {/* </div> */}
         <div className="p-d-flex p-flex-column" style={{ marginBottom: 15 }}>
           <label htmlFor="companyDescriptionInput" style={{ marginBottom: 10 }}>
             Address
