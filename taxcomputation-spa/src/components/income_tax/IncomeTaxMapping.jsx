@@ -7,9 +7,11 @@ import InputController from "../controllers/InputController";
 import DropdownController from "../controllers/DropdownController";
 import { incomeTaxMapping } from "../../apis/IncomeTax";
 import constants from "../../constants";
+import { useCompany } from "../../store/CompanyStore";
 
 const IncomeTaxMapping = ({ tbData, yearSelectItems, trialBalanceRefresh, toast }) => {
   const { errors, handleSubmit, control } = useForm();
+  const [{ companyId }] = useCompany();
   const [loading, setLoading] = React.useState(false);
   const [selectedAccounts, setSelectedAccounts] = React.useState([]);
   const typeItems = [
@@ -48,7 +50,8 @@ const IncomeTaxMapping = ({ tbData, yearSelectItems, trialBalanceRefresh, toast 
           unrelievedCapitalAllowanceBroughtFoward === ""
             ? 0
             : unrelievedCapitalAllowanceBroughtFoward,
-        incomeList: selectedAccounts
+        incomeList: selectedAccounts,
+        companyId
       });
       if (response.status === 200) {
         toast.show(

@@ -5,7 +5,8 @@ export const incomeTaxMapping = async ({
   yearId,
   lossBroughtFoward,
   unrelievedCapitalAllowanceBroughtFoward,
-  incomeList
+  incomeList,
+  companyId
 }) => {
   try {
     return await axios.post("/api/IncomeTax/add-income-tax", {
@@ -13,7 +14,8 @@ export const incomeTaxMapping = async ({
       yearId,
       lossBroughtFoward,
       unrelievedCapitalAllowanceBroughtFoward,
-      incomeList
+      incomeList,
+      companyId
     });
   } catch (error) {
     throw error;
