@@ -1,10 +1,10 @@
 import React from "react";
-import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { useCompany } from "../../store/CompanyStore";
 import Loader from "../common/Loader";
 import utils from "../../utils";
 import { minimumTaxViewData } from "../../apis/MinimumTax";
+import ViewModeDataTable from "../common/ViewModeDataTable";
 
 const MinimumTaxView = ({ year }) => {
   const isMounted = React.useRef(false);
@@ -60,10 +60,10 @@ const MinimumTaxView = ({ year }) => {
   if (loading) return <Loader />;
 
   return (
-    <DataTable className="p-datatable-gridlines" value={minimumTaxData} style={{ marginTop: 40 }}>
+    <ViewModeDataTable value={minimumTaxData}>
       <Column field="category" header=""></Column>
       <Column field="credit" header="₦"></Column>
-    </DataTable>
+    </ViewModeDataTable>
   );
 };
 

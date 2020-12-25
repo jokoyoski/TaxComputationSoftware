@@ -1,10 +1,10 @@
 import React from "react";
-import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { useCompany } from "../../store/CompanyStore";
 import Loader from "../common/Loader";
 import utils from "../../utils";
 import { incomeTaxDelete, incomeTaxViewData } from "../../apis/IncomeTax";
+import ViewModeDataTable from "../common/ViewModeDataTable";
 
 const IncomeTaxView = ({ year, toast, showITLevy }) => {
   const isMounted = React.useRef(false);
@@ -74,11 +74,11 @@ const IncomeTaxView = ({ year, toast, showITLevy }) => {
   if (loading) return <Loader />;
 
   return (
-    <DataTable className="p-datatable-gridlines" value={incomeTaxData} style={{ marginTop: 40 }}>
+    <ViewModeDataTable value={incomeTaxData}>
       <Column field="description" header="Description"></Column>
       <Column field="columnOne" header="₦"></Column>
       <Column field="columnTwo" header="₦"></Column>
-    </DataTable>
+    </ViewModeDataTable>
   );
 };
 

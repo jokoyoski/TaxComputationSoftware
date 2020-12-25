@@ -1,5 +1,4 @@
 import React from "react";
-import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import Loader from "../common/Loader";
 import { useCompany } from "../../store/CompanyStore";
@@ -8,6 +7,7 @@ import {
   investmentAllowanceViewData
 } from "../../apis/InvestmentAllowance";
 import utils from "../../utils";
+import ViewModeDataTable from "../common/ViewModeDataTable";
 
 const InvestmentAllowanceView = ({ year, toast }) => {
   const isMounted = React.useRef(false);
@@ -82,13 +82,10 @@ const InvestmentAllowanceView = ({ year, toast }) => {
   if (loading) return <Loader />;
 
   return (
-    <DataTable
-      className="p-datatable-gridlines"
-      value={investmentAllowanceData}
-      style={{ marginTop: 40 }}>
+    <ViewModeDataTable value={investmentAllowanceData}>
       <Column field="name" header="Additions to:"></Column>
       <Column field="amount" header="Amount"></Column>
-    </DataTable>
+    </ViewModeDataTable>
   );
 };
 

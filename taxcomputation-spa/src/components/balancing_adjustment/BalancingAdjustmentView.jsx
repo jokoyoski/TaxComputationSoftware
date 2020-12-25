@@ -1,5 +1,4 @@
 import React from "react";
-import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { useCompany } from "../../store/CompanyStore";
 import {
@@ -8,6 +7,7 @@ import {
 } from "../../apis/BalancingAdjustment";
 import utils from "../../utils";
 import Loader from "../common/Loader";
+import ViewModeDataTable from "../common/ViewModeDataTable";
 
 const BalancingAdjustmentView = ({ year, toast }) => {
   const isMounted = React.useRef(false);
@@ -135,10 +135,7 @@ const BalancingAdjustmentView = ({ year, toast }) => {
     );
 
   return (
-    <DataTable
-      className="p-datatable-gridlines"
-      value={balancingAdjustmentData}
-      style={{ marginTop: 40 }}>
+    <ViewModeDataTable value={balancingAdjustmentData}>
       <Column field="category" header=""></Column>
       <Column field="credit" header=""></Column>
       <Column field="balancingAllowance" header="Balancing Allowance"></Column>
@@ -146,7 +143,7 @@ const BalancingAdjustmentView = ({ year, toast }) => {
       <Column field="cost" header="Cost"></Column>
       <Column field="salesProceed" header="Sales Proceed"></Column>
       <Column field="twdv" header="TWDV"></Column>
-    </DataTable>
+    </ViewModeDataTable>
   );
 };
 

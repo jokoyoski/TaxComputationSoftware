@@ -1,10 +1,10 @@
 import React from "react";
-import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { fixedAssetViewData } from "../../apis/FixedAsset";
 import { useCompany } from "../../store/CompanyStore";
 import utils from "../../utils";
 import Loader from "../common/Loader";
+import ViewModeDataTable from "../common/ViewModeDataTable";
 
 const FixedAssetView = ({ year }) => {
   const isMounted = React.useRef(false);
@@ -184,14 +184,14 @@ const FixedAssetView = ({ year }) => {
   if (loading) return <Loader />;
 
   return (
-    <DataTable className="p-datatable-gridlines" value={fixedAssetData} style={{ marginTop: 40 }}>
+    <ViewModeDataTable value={fixedAssetData}>
       <Column field="category" header=""></Column>
       {fixedAssetApiData &&
         fixedAssetApiData.map(d => (
           <Column key={d.fixedAssetName} field={d.fixedAssetName} header={`${d.fixedAssetName}`} />
         ))}
       <Column field="total" header="Total"></Column>
-    </DataTable>
+    </ViewModeDataTable>
   );
 };
 
