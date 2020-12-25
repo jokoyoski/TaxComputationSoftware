@@ -33,7 +33,7 @@ export const incomeTaxViewData = async ({ companyId, year, isItLevyView }) => {
 
 export const incomeTaxDelete = async id => {
   try {
-    const { data } = await axios.delete(`/api/InvestmentAllowance/investment-allowance/${id}`);
+    const { data } = await axios.delete(`/api/IncomeTax/remove-allowable/disallowable/${id}`);
     return data;
   } catch (error) {
     throw error;
