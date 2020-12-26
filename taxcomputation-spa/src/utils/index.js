@@ -105,6 +105,25 @@ const apiErrorHandling = (error, toast) => {
   }
 };
 
+/** mapping successful callback */
+const onMappingSuccess = (
+  toast,
+  detail,
+  onTrialBalance,
+  trialBalanceRefresh,
+  setSelectedAccounts
+) => {
+  toast.show(
+    toastCallback({
+      severity: "success",
+      detail
+    })
+  );
+  onTrialBalance(null);
+  trialBalanceRefresh();
+  setSelectedAccounts([]);
+};
+
 export default {
   currentYear,
   getYears,
@@ -114,5 +133,6 @@ export default {
   currencyFormatter,
   toastCallback,
   onTbData,
-  apiErrorHandling
+  apiErrorHandling,
+  onMappingSuccess
 };

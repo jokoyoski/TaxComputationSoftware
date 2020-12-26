@@ -9,10 +9,17 @@ import { incomeTaxMapping } from "../../apis/IncomeTax";
 import constants from "../../constants";
 import { useCompany } from "../../store/CompanyStore";
 
-const IncomeTaxMapping = ({ tbData, yearSelectItems, trialBalanceRefresh, toast }) => {
+const IncomeTaxMapping = ({
+  tbData,
+  yearSelectItems,
+  onTrialBalance,
+  trialBalanceRefresh,
+  toast
+}) => {
   const { errors, handleSubmit, control } = useForm();
   const [{ companyId }] = useCompany();
   const [loading, setLoading] = React.useState(false);
+  const [init, setInit] = React.useState(true);
   const [selectedAccounts, setSelectedAccounts] = React.useState([]);
   const typeItems = [
     {
@@ -24,6 +31,13 @@ const IncomeTaxMapping = ({ tbData, yearSelectItems, trialBalanceRefresh, toast 
       value: 1
     }
   ];
+
+  React.useEffect(() => {
+    if (tbData.length > 0 && init) {
+      trialBalanceRefresh();
+      setInit(false);
+    }
+  }, [init, tbData, trialBalanceRefresh]);
 
   const onSubmit = async data => {
     if (loading) return;
@@ -54,11 +68,12 @@ const IncomeTaxMapping = ({ tbData, yearSelectItems, trialBalanceRefresh, toast 
         companyId
       });
       if (response.status === 200) {
-        toast.show(
-          utils.toastCallback({
-            severity: "success",
-            detail: "Income tax mapped successfully"
-          })
+        utils.onMappingSuccess(
+          toast,
+          "Income tax mapped successfully",
+          onTrialBalance,
+          trialBalanceRefresh,
+          setSelectedAccounts
         );
       }
     } catch (error) {

@@ -28,7 +28,7 @@ const IncomeTaxView = ({ year, toast, showITLevy }) => {
               ...item,
               description: (
                 <div className="p-d-flex p-jc-between p-ai-center">
-                  <p>{item.description}</p>
+                  <p>{item.canBolden ? <strong>{item.description}</strong> : item.description}</p>
                   {item.canDelete && (
                     <i
                       className="pi pi-times-circle delete"
@@ -51,7 +51,9 @@ const IncomeTaxView = ({ year, toast, showITLevy }) => {
                       }}></i>
                   )}
                 </div>
-              )
+              ),
+              columnOne: item.canBolden ? <strong>{item.columnOne}</strong> : item.columnOne,
+              columnTwo: item.canBolden ? <strong>{item.columnTwo}</strong> : item.columnTwo
             }))
           );
         }
