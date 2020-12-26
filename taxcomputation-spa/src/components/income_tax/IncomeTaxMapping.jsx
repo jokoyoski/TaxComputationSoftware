@@ -33,15 +33,36 @@ const IncomeTaxMapping = ({
   ];
 
   React.useEffect(() => {
-    if (tbData.length > 0 && init) {
-      trialBalanceRefresh();
-      setInit(false);
-    }
+    if (tbData.length > 0 && init) trialBalanceRefresh();
+    setInit(false);
   }, [init, tbData, trialBalanceRefresh]);
 
   const onSubmit = async data => {
     if (loading) return;
     const { typeId, yearId, lossBroughtFoward, unrelievedCapitalAllowanceBroughtFoward } = data;
+
+    if (lossBroughtFoward !== "" && isNaN(lossBroughtFoward)) {
+      toast.show(
+        utils.toastCallback({
+          severity: "error",
+          detail: "Loss B/F is not a numeric value"
+        })
+      );
+      return;
+    }
+
+    if (
+      unrelievedCapitalAllowanceBroughtFoward !== "" &&
+      isNaN(unrelievedCapitalAllowanceBroughtFoward)
+    ) {
+      toast.show(
+        utils.toastCallback({
+          severity: "error",
+          detail: "Unrelieved Cap Alw B/F is not a numeric value"
+        })
+      );
+      return;
+    }
 
     if (selectedAccounts.length === 0) {
       toast.show(

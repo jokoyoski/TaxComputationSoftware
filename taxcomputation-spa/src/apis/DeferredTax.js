@@ -2,6 +2,7 @@ import axios from "axios";
 
 export const deferredTaxMapping = async ({
   fairValueGainId,
+  deferredTaxBroughtFoward,
   trialBalanceList,
   companyId,
   yearId
@@ -9,6 +10,7 @@ export const deferredTaxMapping = async ({
   try {
     return await axios.post("/api/DeferredTax", {
       fairValueGainId,
+      deferredTaxBroughtFoward,
       trialBalanceList,
       companyId,
       yearId

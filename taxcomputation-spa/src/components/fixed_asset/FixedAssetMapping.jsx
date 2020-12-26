@@ -52,10 +52,8 @@ const FixedAssetMapping = ({
   }, [selectedAccounts, selectedAssetType]);
 
   React.useEffect(() => {
-    if (tbData.length > 0 && init) {
-      trialBalanceRefresh();
-      setInit(false);
-    }
+    if (tbData.length > 0 && init) trialBalanceRefresh();
+    setInit(false);
   }, [init, tbData, trialBalanceRefresh]);
 
   const onSubmit = async data => {
