@@ -5,7 +5,8 @@ export const incomeTaxMapping = async ({
   yearId,
   lossBroughtFoward,
   unrelievedCapitalAllowanceBroughtFoward,
-  incomeList
+  incomeList,
+  companyId
 }) => {
   try {
     return await axios.post("/api/IncomeTax/add-income-tax", {
@@ -13,7 +14,8 @@ export const incomeTaxMapping = async ({
       yearId,
       lossBroughtFoward,
       unrelievedCapitalAllowanceBroughtFoward,
-      incomeList
+      incomeList,
+      companyId
     });
   } catch (error) {
     throw error;
@@ -31,7 +33,7 @@ export const incomeTaxViewData = async ({ companyId, year, isItLevyView }) => {
 
 export const incomeTaxDelete = async id => {
   try {
-    const { data } = await axios.delete(`/api/InvestmentAllowance/investment-allowance/${id}`);
+    const { data } = await axios.delete(`/api/IncomeTax/remove-allowable/disallowable/${id}`);
     return data;
   } catch (error) {
     throw error;
