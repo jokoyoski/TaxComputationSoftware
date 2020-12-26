@@ -14,13 +14,22 @@ const ProfitAndLossMapping = ({
   yearSelectItems,
   assetClassSelectItems,
   tbData,
+  onTrialBalance,
   trialBalanceRefresh,
   toast
 }) => {
   const { errors, handleSubmit, control } = useForm();
   const [{ companyId }] = useCompany();
   const [loading, setLoading] = React.useState(false);
+  const [init, setInit] = React.useState(true);
   const [selectedAccounts, setSelectedAccounts] = React.useState([]);
+
+  React.useEffect(() => {
+    if (tbData.length > 0 && init) {
+      trialBalanceRefresh();
+      setInit(false);
+    }
+  }, [init, tbData, trialBalanceRefresh]);
 
   const onSubmit = async data => {
     if (loading) return;
@@ -47,11 +56,12 @@ const ProfitAndLossMapping = ({
         mappedCode: "profitandloss"
       });
       if (response.status === 200) {
-        toast.show(
-          utils.toastCallback({
-            severity: "success",
-            detail: "Profit and Loss mapped successfully"
-          })
+        utils.onMappingSuccess(
+          toast,
+          "Profit and Loss mapped successfully",
+          onTrialBalance,
+          trialBalanceRefresh,
+          setSelectedAccounts
         );
       }
     } catch (error) {

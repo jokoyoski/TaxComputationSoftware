@@ -6,16 +6,14 @@ import BalancingAdjustmentView from "../components/balancing_adjustment/Balancin
 import Main from "../components/layout/Main";
 import utils from "../utils";
 import { usePathParam, useResource } from "react-resource-router";
-import { Toast } from "primereact/toast";
 import BalancingAdjustmentAdding from "../components/balancing_adjustment/BalancingAdjustmentAdding";
 import { fixedAssetModuleClassResource } from "../routes/resources";
 import { useResources } from "../store/ResourcesStore";
 import PageLoader from "../components/common/PageLoader";
 import Error from "../components/common/Error";
 
-const BalancingAdjustment = () => {
+const BalancingAdjustment = ({ toast }) => {
   const title = constants.modules.balancingAdjustment;
-  const toast = React.useRef();
   const { data: assetClass, error: assetClassError, refresh: assetClassRefresh } = useResource(
     fixedAssetModuleClassResource
   );
@@ -63,18 +61,17 @@ const BalancingAdjustment = () => {
               <BalancingAdjustmentAdding
                 yearSelectItems={yearSelectItems}
                 assetClassSelectItems={assetClassSelectItems}
-                toast={toast.current}
+                toast={toast}
               />
             ),
             view: (
               <ViewMode title={title} year={year}>
-                <BalancingAdjustmentView year={year} toast={toast.current} />
+                <BalancingAdjustmentView year={year} toast={toast} />
               </ViewMode>
             )
           }[mode]
         }
       </Main>
-      <Toast baseZIndex={1000} ref={el => (toast.current = el)} />
     </Layout>
   );
 };

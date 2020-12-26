@@ -8,10 +8,17 @@ import DropdownController from "../controllers/DropdownController";
 import { deferredTaxMapping } from "../../apis/DeferredTax";
 import constants from "../../constants";
 
-const DeferredTaxMapping = ({ tbData, yearSelectItems, trialBalanceRefresh, toast }) => {
+const DeferredTaxMapping = ({
+  tbData,
+  yearSelectItems,
+  onTrialBalance,
+  trialBalanceRefresh,
+  toast
+}) => {
   const { errors, handleSubmit, control } = useForm();
   const [{ companyId }] = useCompany();
   const [loading, setLoading] = React.useState(false);
+  const [init, setInit] = React.useState(true);
   const [selectedAccounts, setSelectedAccounts] = React.useState([]);
   const fairValueGainItems = [
     {
@@ -19,6 +26,13 @@ const DeferredTaxMapping = ({ tbData, yearSelectItems, trialBalanceRefresh, toas
       value: 1
     }
   ];
+
+  React.useEffect(() => {
+    if (tbData.length > 0 && init) {
+      trialBalanceRefresh();
+      setInit(false);
+    }
+  }, [init, tbData, trialBalanceRefresh]);
 
   const onSubmit = async data => {
     if (loading) return;
@@ -44,11 +58,12 @@ const DeferredTaxMapping = ({ tbData, yearSelectItems, trialBalanceRefresh, toas
         yearId
       });
       if (response.status === 200) {
-        toast.show(
-          utils.toastCallback({
-            severity: "success",
-            detail: "Deferred tax mapped successfully"
-          })
+        utils.onMappingSuccess(
+          toast,
+          "Deferred tax mapped successfully",
+          onTrialBalance,
+          trialBalanceRefresh,
+          setSelectedAccounts
         );
       }
     } catch (error) {

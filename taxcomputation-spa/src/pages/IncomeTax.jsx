@@ -6,16 +6,14 @@ import utils from "../utils";
 import Main from "../components/layout/Main";
 import { usePathParam, useResource } from "react-resource-router";
 import constants from "../constants";
-import { Toast } from "primereact/toast";
 import IncomeTaxMapping from "../components/income_tax/IncomeTaxMapping";
 import { trialBalanceResource } from "../routes/resources";
 import { useResources } from "../store/ResourcesStore";
 import PageLoader from "../components/common/PageLoader";
 import Error from "../components/common/Error";
 
-const IncomeTax = () => {
+const IncomeTax = ({ toast }) => {
   const title = constants.modules.incomeTax;
-  const toast = React.useRef();
   const {
     data: trialBalance,
     error: trialBalanceError,
@@ -61,19 +59,19 @@ const IncomeTax = () => {
               <IncomeTaxMapping
                 tbData={tbData}
                 yearSelectItems={yearSelectItems}
+                onTrialBalance={onTrialBalance}
                 trialBalanceRefresh={trialBalanceRefresh}
-                toast={toast.current}
+                toast={toast}
               />
             ),
             view: (
               <ViewMode title={title} year={year}>
-                <IncomeTaxView year={year} toast={toast.current} showITLevy={showITLevy} />
+                <IncomeTaxView year={year} toast={toast} showITLevy={showITLevy} />
               </ViewMode>
             )
           }[mode]
         }
       </Main>
-      <Toast baseZIndex={1000} ref={el => (toast.current = el)} />
     </Layout>
   );
 };
