@@ -52,24 +52,6 @@ GO
 
 
 
-
---------------------------------------- STORED PROCEDURE TO  GET ALLOWABLE AND DISALLOWABLE BY TRIALBALANCEID-----------------------------------------
-IF OBJECT_ID('[dbo].[usp_Get_Allowable_DisAllowable_By_TrialBalanceId]') IS nOT NULL
-BEGIN
-DROP procedure [dbo].[usp_Get_Allowable_DisAllowable_By_TrialBalanceId]
-END
-GO
-CREATE procedure [dbo].[usp_Get_Allowable_DisAllowable_By_TrialBalanceId](
-@TrialBalanceId int
-
-
-)
-AS
- select * from [dbo].[AllowableDisAllowable] where TrialBalanceId=@TrialBalanceId
-GO
-
-
-
 --------------------------------------- STORED PROCEDURE TO  GET ALLOWABLE AND DISALLOWABLE BY COMPANYID AND YEARID-----------------------------------------
 IF OBJECT_ID('[dbo].[usp_Get_Allowable_DisAllowable_By_CompanyId_YearId]') IS nOT NULL
 BEGIN
@@ -98,7 +80,7 @@ CREATE procedure [dbo].[Delete_Allowable_DisAllowable_By_Id](
 @Id int
 )
 AS
-delete from [dbo].[AllowableDisAllowable] where Id=@Id
+select  [dbo].[AllowableDisAllowable].Id, [dbo].[TrialBalance].Item ,[dbo].[TrialBalance].Debit,[dbo].[TrialBalance].Credit,SelectionId,IsAllowable from [dbo].[AllowableDisAllowable] inner join [dbo].[TrialBalance] on [dbo].[AllowableDisAllowable].TrialBalanceId=[dbo].[TrialBalance].Id where Id=@Id
 GO
 
 
@@ -138,9 +120,8 @@ BEGIN
  IsStarted bit,
  LossBf decimal,
  LossCf decimal,
+ UnRelievedBf decimal,
  UnRelievedCf decimal,
- Accessible decimal,
- UnRelievedBf decimal
  )
 END
 GO
@@ -185,19 +166,24 @@ CREATE procedure [usp_Insert_Into_Brought_Foward](
 @LossBf decimal,
 @LossCf decimal,
 @UnRelievedCf decimal,
-@Accessible decimal,
 @UnRelievedBf decimal
 )
 AS
 
-
+IF   exists (select * from [dbo].[BroughtFoward] where CompanyId=@CompanyId)
+BEGIN
+update [dbo].[BroughtFoward] set LossBf=@LossBf,LossCf=@LossCf,UnRelievedBf=@UnRelievedBf,UnRelievedCf=@UnRelievedCf,
+IsStarted=@IsStarted
+where CompanyId=@CompanyId
+END
+ELSE
+BEGIN
 INSERT [dbo].[BroughtFoward](
 CompanyId,
 IsStarted,
 LossBf,
 LossCf,
 UnRelievedCf,
-Accessible,
 UnRelievedBf
 )
 VALUES(
@@ -206,58 +192,7 @@ VALUES(
 @LossBf,
 @LossCf,
 @UnRelievedCf,
-@Accessible,
 @UnRelievedBf
 )
-GO
-
-
-
---------------------------------------- STORED PROCEDURE TO  UPDATE ACCESSIBLE AND UNRELIEVED CF FROM INCOME TAX-----------------------------------------
-
-
-IF OBJECT_ID('[dbo].[usp_Accessible_Cf_By_Income_Tax]') IS NOT NULL
-BEGIN
-DROP procedure [dbo].[usp_Update_Cf_By_Income_Tax]
-PRINT('OK')
 END
-GO
-
-CREATE procedure [usp_Update_Accessible_By_Income_Tax](
-@CompanyId int,
-@Accessible decimal,
-@UnRelievedCf decimal
-)
-AS
-Update [dbo].[BroughtFoward] set Accessible=@Accessible, UnRelievedCf=@UnRelievedCf where CompanyId=@CompanyId
-GO
-
-
-
-
-
-
-
-
-
---------------------------------------- STORED PROCEDURE TO  UPDATE BR and UNRELEIEVD BF FROM BACKGROUND JOB-----------------------------------------
-
-
-IF OBJECT_ID('[dbo].[usp_Update_lossBf_Background]') IS NOT NULL
-BEGIN
-DROP procedure [dbo].[usp_Update_lossBf_Background]
-PRINT('OK')
-END
-GO
-
-CREATE procedure [usp_Update_lossBf_Background](
-
-@CompanyId int
-
-)
-AS
-declare @lossCfValue decimal
-declare @UnRelievedCf decimal
-select @lossCfValue=LossCf, @UnRelievedCf=UnRelievedCf from [dbo].[BroughtFoward] where CompanyId=@CompanyId
-Update [dbo].[BroughtFoward] set LossBf=@lossCfValue ,LossCf=null, UnRelievedBf=@UnRelievedCf,UnRelievedCf=null where CompanyId=@CompanyId
 GO
