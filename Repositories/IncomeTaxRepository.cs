@@ -22,52 +22,6 @@ namespace TaxComputationSoftware.Repositories
             _databaseManager = databaseManager;
 
         }
-        public async Task DeleteAllowableDisAllowableById(int Id)
-        {
-            using (IDbConnection conn = await _databaseManager.DatabaseConnection())
-            {
-                if (conn.State == ConnectionState.Closed) conn.Open();
-
-                DynamicParameters parameters = new DynamicParameters();
-                parameters.Add("@Id", Id);
-                try
-                {
-                    conn.Execute("[dbo].[Delete_Allowable_DisAllowable_By_Id]", parameters, commandType: CommandType.StoredProcedure);
-                    conn.Close();
-                }
-                catch (Exception e)
-                {
-
-                    throw e;
-                }
-            }
-        }
-
-
-        public async Task<AllowableDisAllowable> GetAllowableDisAllowableById(int Id)
-        {
-
-
-            using (IDbConnection conn = await _databaseManager.DatabaseConnection())
-            {
-
-                if (conn.State == ConnectionState.Closed)
-                    conn.Open();
-
-                DynamicParameters parameters = new DynamicParameters();
-
-                parameters.Add("@Id", Id);
-
-                var record =  conn.QueryFirstOrDefault<AllowableDisAllowable>("[dbo].[usp_Get_Allowable_DisAllowable_By_Id]", parameters, commandType: CommandType.StoredProcedure);
-                return record;
-            }
-
-
-            return null;
-        }
-
-
-
 
 
 
@@ -95,6 +49,28 @@ namespace TaxComputationSoftware.Repositories
             return null;
         }
 
+        public async Task DeleteAllowableDisAllowableById(int Id)
+        {
+            using (IDbConnection conn = await _databaseManager.DatabaseConnection())
+            {
+                if (conn.State == ConnectionState.Closed) conn.Open();
+
+                DynamicParameters parameters = new DynamicParameters();
+                parameters.Add("@Id", Id);
+                try
+                {
+                    conn.Execute("[dbo].[Delete_Allowable_DisAllowable_By_Id]", parameters, commandType: CommandType.StoredProcedure);
+                    conn.Close();
+                }
+                catch (Exception e)
+                {
+
+                    throw e;
+                }
+            }
+        }
+
+
 
         public async Task<IEnumerable<AllowableDisAllowable>> GetAllowableDisAllowableByCompanyIdYearIdAllowable(int companyId, int year, int allowable)
         {
@@ -121,9 +97,7 @@ namespace TaxComputationSoftware.Repositories
 
             return null;
         }
-
-
-        public async Task<BroughtFoward> GetBroughtFowardByCompanyId(int companyId)
+        public async Task<AllowableDisAllowable> GetAllowableDisAllowableById(int Id)
         {
 
 
@@ -135,9 +109,55 @@ namespace TaxComputationSoftware.Repositories
 
                 DynamicParameters parameters = new DynamicParameters();
 
+                parameters.Add("@Id", Id);
+
+                var record = conn.QueryFirstOrDefault<AllowableDisAllowable>("[dbo].[usp_Get_Allowable_DisAllowable_By_Id]", parameters, commandType: CommandType.StoredProcedure);
+                return record;
+            }
+
+
+            return null;
+        }
+
+
+         public async Task<AllowableDisAllowable> GetAllowableDisAllowableByTrialBalanceId(int Id)
+        {
+
+
+            using (IDbConnection conn = await _databaseManager.DatabaseConnection())
+            {
+
+                if (conn.State == ConnectionState.Closed)
+                    conn.Open();
+
+                DynamicParameters parameters = new DynamicParameters();
+
+                parameters.Add("@Id", Id);
+
+                var record = conn.QueryFirstOrDefault<AllowableDisAllowable>("[dbo].[usp_Get_Allowable_DisAllowable_By_TrialBalanceId]", parameters, commandType: CommandType.StoredProcedure);
+                return record;
+            }
+
+
+            return null;
+        }
+
+
+        public async Task<BroughtFoward> GetBroughtFowardByCompanyId(int companyId)
+        {
+         
+
+            using (IDbConnection conn = await _databaseManager.DatabaseConnection())
+            {
+
+                if (conn.State == ConnectionState.Closed)
+                    conn.Open();
+
+                DynamicParameters parameters = new DynamicParameters();
+
                 parameters.Add("@CompanyId", companyId);
 
-                var record = await conn.QueryFirstOrDefaultAsync<BroughtFoward>("[dbo].[usp_Get_Brought_Foward_By_CompanyId]", parameters, commandType: CommandType.StoredProcedure);
+                var record =  conn.QueryFirstOrDefault<BroughtFoward>("[dbo].[usp_Get_Brought_Foward_By_CompanyId]", parameters, commandType: CommandType.StoredProcedure);
                 return record;
             }
 
@@ -182,14 +202,53 @@ namespace TaxComputationSoftware.Repositories
                 parameters.Add("@IsStarted", broughtFoward.IsStarted);
                 parameters.Add("@LossBf", broughtFoward.LossBf);
                 parameters.Add("@LossCf", broughtFoward.LossCf);
+                parameters.Add("@Accessible", broughtFoward.Accessible);
                 parameters.Add("@UnRelievedCf", broughtFoward.UnRelievedCf);
                 parameters.Add("@UnRelievedBf", broughtFoward.UnRelievedBf);
-
                 rowAffected = con.Execute("[dbo].[usp_Insert_Into_Brought_Foward]", parameters, commandType: CommandType.StoredProcedure);
             }
 
             return rowAffected;
         }
+
+
+
+        public async Task<int> UpdateAcessibleByIncomeTax(BroughtFoward broughtFoward)
+        {
+            int rowAffected = 0;
+            using (IDbConnection con = await _databaseManager.DatabaseConnection())
+            {
+                if (con.State == ConnectionState.Closed)
+                    con.Open();
+
+                DynamicParameters parameters = new DynamicParameters();
+                parameters.Add("@CompanyId", broughtFoward.CompanyId);
+                parameters.Add("@LossCf", broughtFoward.LossCf);
+                parameters.Add("@UnRelievedCf", broughtFoward.UnRelievedCf);
+                rowAffected = con.Execute("[dbo].[usp_Update_Accessible_By_Income_Tax]", parameters, commandType: CommandType.StoredProcedure);
+            }
+
+            return rowAffected;
+        }
+
+
+
+        public async Task<int> UpdateLossBfById(int companyId)
+        {
+            int rowAffected = 0;
+            using (IDbConnection con = await _databaseManager.DatabaseConnection())
+            {
+                if (con.State == ConnectionState.Closed)
+                    con.Open();
+
+                DynamicParameters parameters = new DynamicParameters();
+                parameters.Add("@CompanyId", companyId);
+                rowAffected = con.Execute("[dbo].[usp_Update_lossBf_Background]", parameters, commandType: CommandType.StoredProcedure);
+            }
+
+            return rowAffected;
+        }
+
 
 
 

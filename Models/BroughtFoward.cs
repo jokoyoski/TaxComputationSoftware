@@ -10,6 +10,8 @@ namespace TaxComputationSoftware.Models
 
         public decimal LossCf { get; set; }
 
+        public decimal Accessible {get;set;}
+
         public decimal UnRelievedBf { get; set; }
 
         public decimal UnRelievedCf { get; set; }

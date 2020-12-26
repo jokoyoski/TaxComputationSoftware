@@ -46,8 +46,13 @@ namespace TaxComputationAPI.Controllers {
         //[Authorize]
         public async Task<IActionResult> UploadTrialBalance ([FromForm] UploadTrackTrialBalanceDto excel) {
             try {
-
                 
+
+                if (excel.YearId < DateTime.Now.Year)
+                {
+                    return StatusCode(400, new { errors = new[] { "Uploading of Trial Balance for Previous Year is not Alllowed!" } });
+                }
+
                 await _trialBalanceService.UploadTrialBalance (excel);
 
                 return Ok ($"{excel.File.FileName} successfully upload");

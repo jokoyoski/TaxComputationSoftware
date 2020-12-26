@@ -20,15 +20,15 @@ namespace TaxComputationAPI.Services
         private readonly ILogger<TrialBalanceService> _logger;
         private readonly IUtilitiesRepository _utilitiesRepository;
 
-        public TrialBalanceService(ITrialBalanceRepository trialBalanceRepository,IUtilitiesRepository utilitiesRepository ,ILogger<TrialBalanceService> logger)
+        public TrialBalanceService(ITrialBalanceRepository trialBalanceRepository, IUtilitiesRepository utilitiesRepository, ILogger<TrialBalanceService> logger)
         {
             _trialBalancerepository = trialBalanceRepository;
             _logger = logger;
-            _utilitiesRepository=utilitiesRepository;
+            _utilitiesRepository = utilitiesRepository;
         }
-        public async Task UpdateTrialBalance(int trialBalanceId, string mappedTo,bool isDelete)
+        public async Task UpdateTrialBalance(int trialBalanceId, string mappedTo, bool isDelete)
         {
-            _trialBalancerepository.UpdateTrialBalance(trialBalanceId, mappedTo,isDelete);
+            _trialBalancerepository.UpdateTrialBalance(trialBalanceId, mappedTo, isDelete);
         }
 
         public async Task<List<TrialBalance>> GetTrialBalance(int companyId, int yearId)
@@ -59,6 +59,13 @@ namespace TaxComputationAPI.Services
 
         }
 
+        public async Task<TrialBalance> GetTrialBalanceById(int trialBalanceId)
+        {
+
+
+            return await _trialBalancerepository.GetTrialBalanceById(trialBalanceId);
+        }
+
         public async Task UploadTrialBalance(UploadTrackTrialBalanceDto upload)
         {
             if (upload == null) return;
@@ -68,7 +75,7 @@ namespace TaxComputationAPI.Services
             if (data == null) return;
 
             int trackId = 0;
-           
+
             var exist = await _trialBalancerepository.GetTrackTrialBalance(upload.CompanyId, upload.YearId);
 
             if (exist != null)
@@ -86,25 +93,27 @@ namespace TaxComputationAPI.Services
             else
             {
 
-               var yearRecord=await _utilitiesRepository.GetFinancialYearAsync(upload.YearId);
-               if(yearRecord==null){
-                var createYear = new FinancialYear{
-                    Name=upload.YearId
-                };
-                await  _utilitiesRepository.AddFinancialYearAsync(createYear);
-              }
+                var yearRecord = await _utilitiesRepository.GetFinancialYearAsync(upload.YearId);
+                if (yearRecord == null)
+                {
+                    var createYear = new FinancialYear
+                    {
+                        Name = upload.YearId
+                    };
+                    await _utilitiesRepository.AddFinancialYearAsync(createYear);
+                }
                 TrackTrialBalance track = new TrackTrialBalance
                 {
                     CompanyId = upload.CompanyId,
                     YearId = upload.YearId,
                     DateCreated = DateTime.UtcNow,
-                
+
                 };
 
 
                 var saveTrack = await _trialBalancerepository.AddTrackTrialBalance(track);
-                
-                var saved =  await _trialBalancerepository.GetTrackTrialBalance(upload.CompanyId, upload.YearId);
+
+                var saved = await _trialBalancerepository.GetTrackTrialBalance(upload.CompanyId, upload.YearId);
 
                 trackId = saved.Id;
 
@@ -131,8 +140,8 @@ namespace TaxComputationAPI.Services
                 trialBalance.IsCheck = false;
                 trialBalance.MappedTo = string.Empty;
                 trialBalance.TrackId = trackId;
-                trialBalance.IsCheck=false;
-                trialBalance.IsRemoved=false;
+                trialBalance.IsCheck = false;
+                trialBalance.IsRemoved = false;
 
                 try
                 {

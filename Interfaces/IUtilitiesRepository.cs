@@ -9,9 +9,11 @@ namespace TaxComputationAPI.Interfaces
 {
     public interface IUtilitiesRepository
     {
-       
+        Task DeleteAllowableDisAllowableById(int Id);
+        Task<AllowableDisAllowable> GetAllowableDisAllowableById(int Id);
         Task<FinancialYear> GetFinancialYearAsync(int yearId);
-        
+        Task<AllowableDisAllowable> GetAllowableDisAllowableByTrialBalanceId(int Id);
+
         Task<decimal> GetAmount(int moduleId, string additionalInfo);
 
         Task<List<FinancialYear>> GetFinancialYearAsync();
@@ -30,12 +32,12 @@ namespace TaxComputationAPI.Interfaces
 
         Task DeleteAssetMappingAsync(int id);
 
-        Task  AddTrialBalanceMapping (int trialBalanceId, int moduleId,string moduleCode,string additionalInfo);
+        Task AddTrialBalanceMapping(int trialBalanceId, int moduleId, string moduleCode, string additionalInfo);
 
-        Task  DeleteTrialBalancingMapping(int trialBalanceId);
+        Task DeleteTrialBalancingMapping(int trialBalanceId);
 
-         Task AddCompanyCode(CompanyCode companyCode);
+        Task AddCompanyCode(CompanyCode companyCode);
 
-         Task<CompanyCode> GetCompanyCodeByCodeId(int companyId);
+        Task<CompanyCode> GetCompanyCodeByCodeId(int companyId);
     }
 }

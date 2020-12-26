@@ -76,6 +76,7 @@ namespace TaxComputationAPI.Controllers
                 {
                     return NotFound(new { errors = new[] { "Record not found!!!" } });
                 }
+                 record.capitalAllowances=record.capitalAllowances.OrderByDescending(x=>x.TaxYear).ToList();
                 return Ok(record);
 
             }

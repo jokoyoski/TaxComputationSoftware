@@ -103,18 +103,18 @@ namespace TaxComputationAPI.Controllers {
         {
             try
             {
-
-                var assetMappingRecord = await _utilitiesService.GetAssetMappingById(Id);
-                if (assetMappingRecord == null)
+               
+               // var assetMappingRecord = await _utilitiesService.GetAssetMappingById(Id);
+              /*  if (assetMappingRecord == null)
                 {
                     // var error = new[] { "Asset mapping does not exist!" };
                     return StatusCode(400, new { errors = new[] { "Asset mapping does not exist!" } });
 
                 }
 
-                await _utilitiesService.DeleteAssetMappingAsync(Id);
+                await _utilitiesService.DeleteAssetMappingAsync(Id); */
 
-                return Ok("Asset mapping deleted successfully !!");
+                return Ok("Feature disabled !!!");
             }
             catch (Exception ex)
             {

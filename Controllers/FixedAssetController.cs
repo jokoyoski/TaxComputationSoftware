@@ -18,15 +18,18 @@ namespace TaxComputationAPI.Controllers
     {
         private readonly IMapper _mapper;
         private readonly IFixedAssetService _fixedAssetService;
+
+        private readonly ITrialBalanceService _trialBalanceService;
         private readonly IUtilitiesService _utilitiesService;
         private readonly ILogger<FixedAssetController> _logger;
 
-        public FixedAssetController(IMapper mapper, IFixedAssetService fixedAssetService, IUtilitiesService utilitiesService, ILogger<FixedAssetController> logger)
+        public FixedAssetController(IMapper mapper, IFixedAssetService fixedAssetService, ITrialBalanceService trialBalanceService, IUtilitiesService utilitiesService, ILogger<FixedAssetController> logger)
         {
             _logger = logger;
             _mapper = mapper;
             _fixedAssetService = fixedAssetService;
             _utilitiesService = utilitiesService;
+            _trialBalanceService = trialBalanceService;
         }
 
         [HttpPost]
@@ -36,13 +39,22 @@ namespace TaxComputationAPI.Controllers
         {
             try
             {
+                foreach (var j in createFixed.TriBalanceId)
+                {
+                    var trialBalanceRecord = await _trialBalanceService.GetTrialBalanceById(j);
+                    if (trialBalanceRecord.IsCheck)
+                    {
+                        return StatusCode(400, new { errors = new[] { "One of the item selected has already been mapped, please reload" } });
+                    }
+                }
+
                 bool isDisposalNegative = false;
                 decimal costDisposal = 0;
                 if (createFixed.CostDisposal == -1)
                 {
                     costDisposal = createFixed.CostDisposal;
                     createFixed.CostDisposal = 0;
-                    isDisposalNegative=true;
+                    isDisposalNegative = true;
                 }
                 if (createFixed.YearId < DateTime.Now.Year)
                 {

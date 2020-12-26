@@ -18,9 +18,11 @@ namespace TaxComputationAPI.Controllers
     {
         private readonly ILogger<ProfitAndLossController> _logger;
         private readonly IProfitAndLossService _profitAndLossService;
-        public ProfitAndLossController(IProfitAndLossService profitAndLossService, ILogger<ProfitAndLossController> logger)
+        private readonly ITrialBalanceService _trialBalanceService;
+        public ProfitAndLossController(IProfitAndLossService profitAndLossService,ITrialBalanceService trialBalanceService ,ILogger<ProfitAndLossController> logger)
         {
             _profitAndLossService = profitAndLossService;
+            _trialBalanceService=trialBalanceService;
             _logger = logger;
         }
 
@@ -32,6 +34,19 @@ namespace TaxComputationAPI.Controllers
         {
             try
             {
+
+                foreach (var j in profitAndLoss.TrialBalanceList)
+                {
+                    var trialBalanceRecord = await _trialBalanceService.GetTrialBalanceById(j.TrialBalanceId);
+                    if (trialBalanceRecord.IsCheck)
+                    {
+                        return StatusCode(400, new { errors = new[] { "One of the item selected has already been mapped, please reload" } });
+                    }
+                }
+                if (profitAndLoss.YearId < DateTime.Now.Year)
+                {
+                    return StatusCode(400, new { errors = new[] { "Profit And Loss for Previous Year is not Alllowed!" } });
+                }
 
                 await _profitAndLossService.SaveProfitsAndLoss(profitAndLoss);
                 return Ok("saved successfully");
@@ -61,9 +76,9 @@ namespace TaxComputationAPI.Controllers
             try
             {
                 var profitAndLoss = await _profitAndLossService.GetProfitAndLossByCompanyIdAndYear(companyId, yearId);
-                if (profitAndLoss.Count <=0)
+                if (profitAndLoss.Count <= 0)
                 {
-                    return StatusCode (404, new { errors = new []{"Record not found at this time please try again later"} });
+                    return StatusCode(404, new { errors = new[] { "Record not found at this time please try again later" } });
                 }
                 return Ok(profitAndLoss);
 

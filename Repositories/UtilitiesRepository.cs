@@ -173,7 +173,55 @@ namespace TaxComputationAPI.Repositories
             }
         }
 
-         public async Task AddCompanyCode(CompanyCode companyCode)
+          public async Task<AllowableDisAllowable> GetAllowableDisAllowableByTrialBalanceId(int Id)
+        {
+
+
+            using (IDbConnection conn = await _databaseManager.DatabaseConnection())
+            {
+
+                if (conn.State == ConnectionState.Closed)
+                    conn.Open();
+
+                DynamicParameters parameters = new DynamicParameters();
+
+                parameters.Add("@TrialBalanceId", Id);
+
+                var record = conn.QueryFirstOrDefault<AllowableDisAllowable>("[dbo].[usp_Get_Allowable_DisAllowable_By_TrialBalanceId]", parameters, commandType: CommandType.StoredProcedure);
+                return record;
+            }
+
+
+            return null;
+        }
+
+
+
+        public async Task<AllowableDisAllowable> GetAllowableDisAllowableById(int Id)
+        {
+
+
+            using (IDbConnection conn = await _databaseManager.DatabaseConnection())
+            {
+
+                if (conn.State == ConnectionState.Closed)
+                    conn.Open();
+
+                DynamicParameters parameters = new DynamicParameters();
+
+                parameters.Add("@Id", Id);
+
+                var record = conn.QueryFirstOrDefault<AllowableDisAllowable>("[dbo].[usp_Get_Allowable_DisAllowable_By_Id]", parameters, commandType: CommandType.StoredProcedure);
+                return record;
+            }
+
+
+            return null;
+        }
+
+
+
+        public async Task AddCompanyCode(CompanyCode companyCode)
         {
             if (companyCode == null) throw new ArgumentNullException(nameof(companyCode));
 
@@ -214,9 +262,9 @@ namespace TaxComputationAPI.Repositories
 
 
 
-         public async Task<CompanyCode> GetCompanyCodeByCodeId(int companyId)
+        public async Task<CompanyCode> GetCompanyCodeByCodeId(int companyId)
         {
-            if (companyId==0) throw new ArgumentNullException(nameof(companyId));
+            if (companyId == 0) throw new ArgumentNullException(nameof(companyId));
 
             var result = default(CompanyCode);
 
@@ -359,7 +407,7 @@ namespace TaxComputationAPI.Repositories
         public async Task DeleteAssetMappingAsync(int id)
         {
 
-            if (id <0) throw new ArgumentNullException(nameof(id));
+            if (id < 0) throw new ArgumentNullException(nameof(id));
 
             try
             {
@@ -491,7 +539,7 @@ namespace TaxComputationAPI.Repositories
 
         public async Task AddTrialBalanceMapping(int trialBalanceId, int moduleId, string moduleCode, string additionalInfo)
         {
-            
+
             if (trialBalanceId <= 0) throw new ArgumentNullException(nameof(trialBalanceId));
 
             try
@@ -531,6 +579,31 @@ namespace TaxComputationAPI.Repositories
             }
 
         }
+
+        public async Task DeleteAllowableDisAllowableById(int Id)
+        {
+            using (IDbConnection conn = await _databaseManager.DatabaseConnection())
+            {
+                if (conn.State == ConnectionState.Closed) conn.Open();
+
+                DynamicParameters parameters = new DynamicParameters();
+                parameters.Add("@Id", Id);
+                try
+                {
+                    conn.Execute("[dbo].[Delete_Allowable_DisAllowable_By_Id]", parameters, commandType: CommandType.StoredProcedure);
+                    conn.Close();
+                }
+                catch (Exception e)
+                {
+
+                    throw e;
+                }
+            }
+        }
+
+
+
+
 
         public async Task DeleteTrialBalancingMapping(int trialBalanceId)
         {

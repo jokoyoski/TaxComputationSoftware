@@ -6,6 +6,8 @@ using TaxComputationAPI.Dtos;
 using TaxComputationAPI.Helpers;
 using TaxComputationAPI.Interfaces;
 using TaxComputationAPI.Models;
+using TaxComputationSoftware.Interfaces;
+using TaxComputationSoftware.Repositories;
 
 namespace TaxComputationAPI.Services
 {
@@ -15,15 +17,14 @@ namespace TaxComputationAPI.Services
         private readonly ITrialBalanceRepository _trialBalanceRepository;
 
         private readonly IFixedAssetService _fixedAssetService;
-
         private readonly IProfitAndLossRepository _profitAndLossRepository;
-        public UtilitiesService(IUtilitiesRepository utilitiesRepository, ITrialBalanceRepository trialBalanceRepository, IFixedAssetService fixedAssetService, IProfitAndLossRepository profitAndLossRepository)
+        public UtilitiesService( ITrialBalanceRepository trialBalanceRepository,IUtilitiesRepository utilitiesRepository ,IFixedAssetService fixedAssetService, IProfitAndLossRepository profitAndLossRepository)
         {
             _utilitiesRepository = utilitiesRepository;
             _trialBalanceRepository = trialBalanceRepository;
             _fixedAssetService = fixedAssetService;
             _profitAndLossRepository = profitAndLossRepository;
-
+           
         }
 
 
@@ -83,7 +84,7 @@ namespace TaxComputationAPI.Services
 
         public async Task DeleteAssetMappingAsync(int id)
         {
-            if (id <0)
+            if (id < 0)
             {
                 throw new ArgumentNullException(nameof(id));
             }
@@ -104,10 +105,18 @@ namespace TaxComputationAPI.Services
                 await _trialBalanceRepository.UpdateTrialBalance(trialBalanceId, null, true);  //fice
                 await _utilitiesRepository.DeleteTrialBalancingMapping(trialBalanceId);
             }
-            else if(module=="Profit and Loss")
+            else if (module == "Profit and Loss")
             {
                 _profitAndLossRepository.DeleteProfitsAndLossById(trialBalanceId);
                 await _trialBalanceRepository.UpdateTrialBalance(trialBalanceId, null, true);  //fice
+            }
+            else if (module == "INCOME TAX")
+            {
+                var itemToDelete = await _utilitiesRepository.GetAllowableDisAllowableByTrialBalanceId(trialBalanceId);
+
+                _utilitiesRepository.DeleteAllowableDisAllowableById(itemToDelete.Id);
+
+                await _trialBalanceRepository.UpdateTrialBalance(itemToDelete.TrialBalanceId, null, true);  //fice
             }
 
 

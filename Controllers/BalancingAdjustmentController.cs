@@ -36,6 +36,13 @@ namespace TaxComputationAPI.Controllers
         public async Task<IActionResult> AddBalancingAdjustment([FromForm] AddBalanceAdjustmentDto addBalanceAdjustmentDto)
         {
 
+
+            if (int.Parse(addBalanceAdjustmentDto.Year) < int.Parse(addBalanceAdjustmentDto.YearBought))
+            {
+                return BadRequest(new { errors = new[] { "Year asset was bought cannot be greater than the year of balancing adjustment!!" } });
+
+            }
+
             var previousRecord = await _capitalAllowanceService.GetCapitalAllowanceByAssetIdYear(addBalanceAdjustmentDto.AssetId, addBalanceAdjustmentDto.CompanyId, addBalanceAdjustmentDto.YearBought);
             if (int.Parse(addBalanceAdjustmentDto.Year) < DateTime.Now.Year)
             {
@@ -56,9 +63,9 @@ namespace TaxComputationAPI.Controllers
 
                 }
 
-                if (previousRecord.Channel == Constants.OldBalancingAdjustmentSet)
+                if (previousRecord.Channel == Constants.OldBalancingAdjustment)
                 {
-                    return BadRequest(new { errors = new[] { "The annual for this item has already been calculated from balancing adjustment" } });
+                    return BadRequest(new { errors = new[] { "You are required to have created the balancing adjustment before you added it" } });
 
 
                 }

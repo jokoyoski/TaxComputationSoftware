@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using TaxComputationAPI.Interfaces;
 using TaxComputationSoftware.Dtos;
 using TaxComputationSoftware.Interfaces;
 
@@ -17,17 +18,23 @@ namespace TaxComputationSoftware.Controllers
     public class IncomeTaxController : ControllerBase
     {
         private readonly ILogger<IncomeTaxController> _logger;
+
+        private readonly ITrialBalanceService _trialBalanceService;
         private readonly IIncomeTaxService _incomeTaxService;
-        public IncomeTaxController(ILogger<IncomeTaxController> logger,IIncomeTaxService incomeTaxService)
+
+        public IncomeTaxController(ILogger<IncomeTaxController> logger, ITrialBalanceService trialBalanceService,IIncomeTaxService incomeTaxService)
         {
             _logger = logger;
-            _incomeTaxService=incomeTaxService;
+            _incomeTaxService = incomeTaxService;
+            _trialBalanceService=trialBalanceService;
         }
 
-       [HttpGet("{companyId}/{yearId}/{IsItLevyView}")]
+        [HttpGet("{companyId}/{yearId}/{IsItLevyView}")]
         [Authorize]
         public async Task<IActionResult> GetIncometax(int companyId, int yearId, bool IsItLevyView)
         {
+
+
 
             if (yearId == 0)
             {
@@ -36,9 +43,9 @@ namespace TaxComputationSoftware.Controllers
             try
             {
 
-                 var value= await _incomeTaxService.GetIncomeTax(companyId,yearId,IsItLevyView);
+                var value = await _incomeTaxService.GetIncomeTax(companyId, yearId, IsItLevyView);
 
-                 return Ok(value);
+                return Ok(value);
 
             }
             catch (Exception ex)
@@ -58,7 +65,28 @@ namespace TaxComputationSoftware.Controllers
         {
             try
             {
+                  foreach (var j in createIncomeTaxDto.IncomeList)
+                {
+                    var trialBalanceRecord = await _trialBalanceService.GetTrialBalanceById(j.TrialBalanceId);
+                    if (trialBalanceRecord.IsCheck)
+                    {
+                        return StatusCode(400, new { errors = new[] { "One of the item selected has already been mapped, please reload" } });
+                    }
+                }
 
+                if (createIncomeTaxDto.YearId < DateTime.Now.Year)
+                {
+                    return StatusCode(400, new { errors = new[] { "Income Tax for Previous Year is not Alllowed!" } });
+                }
+                
+                var broughtFowardInfo = await _incomeTaxService.GetBroughtFoward(createIncomeTaxDto.CompanyId);
+                if (broughtFowardInfo != null)
+                {
+                    if (broughtFowardInfo.IsStarted && createIncomeTaxDto.LossBroughtFoward > 0 || createIncomeTaxDto.UnrelievedCapitalAllowanceBroughtFoward > 0)
+                    {
+                        return StatusCode(400, new { errors = new[] { "The LossBf/UnRelievedBf is required once" } });
+                    }
+                }
                 _incomeTaxService.SaveAllowableDisAllowable(createIncomeTaxDto);
                 return Ok("Income tax created successfully");
 

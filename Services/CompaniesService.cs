@@ -47,7 +47,7 @@ namespace TaxComputationAPI.Services
             _utilitiesRepository.AddCompanyCode(new CompanyCode
             {
                 Code = Utilities.RandomString(),
-                NextExecution = company.ClosingYear,
+                NextExecution = company.OpeningYear,
                 CompanyId = companyDetails.Id
 
             });

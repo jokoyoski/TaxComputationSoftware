@@ -33,12 +33,15 @@ namespace TaxComputationAPI.Controllers
         {
             try
             {
-                
+
+                if (investmentAllowanceDto.YearId < DateTime.Now.Year)
+                {
+                    return StatusCode(400, new { errors = new[] { "Investment Allowance Tax for Previous Year is not Alllowed!" } });
+                }
                 var investmentAllowanceToAdd = _mapper.Map<InvestmentAllowance>(investmentAllowanceDto);
                 investmentAllowanceToAdd.AssetId = investmentAllowanceDto.AssetId;
                 investmentAllowanceToAdd.CompanyId = investmentAllowanceDto.CompanyId;
                 investmentAllowanceToAdd.YearId = investmentAllowanceDto.YearId;
-
                 await _investmentAllowanceService.AddInvestmentAllowanceAsync(investmentAllowanceToAdd);
 
                 return Ok("Investment Allowance added successfully !!");
@@ -52,12 +55,11 @@ namespace TaxComputationAPI.Controllers
         }
 
         [HttpDelete("investment-allowance/{Id}")]
-        //[Authorize]
+        [Authorize]
         public async Task<IActionResult> DeleteInvestmentAllowance(int Id)
         {
             try
             {
-               
 
                 await _investmentAllowanceService.DeleteInvestmentAllowanceAsync(Id);
 
@@ -81,13 +83,13 @@ namespace TaxComputationAPI.Controllers
             }
             try
             {
-                
+
                 var investment = await _investmentAllowanceService.GetInvestmentAllowances(companyId, yearId);
-                if (investment!=null)
+                if (investment != null)
                 {
-                    
-                        return Ok(new { investment });
-                    
+
+                    return Ok(new { investment });
+
                 }
                 return StatusCode(404, new { errors = new[] { "Record not found at this time please try again later" } });
 
