@@ -6,6 +6,7 @@ import CapitalAllowanceView from "../components/capital_allowance/CapitalAllowan
 import Main from "../components/layout/Main";
 import utils from "../utils";
 import CapitalAllowanceAdding from "../components/capital_allowance/CapitalAllowanceAdding";
+import { Toast } from "primereact/toast";
 import { fixedAssetModuleClassResource } from "../routes/resources";
 import { useResources } from "../store/ResourcesStore";
 import { usePathParam, useResource } from "react-resource-router";
@@ -13,8 +14,9 @@ import PageLoader from "../components/common/PageLoader";
 import Error from "../components/common/Error";
 import CapitalAllowanceSummary from "../components/capital_allowance/CapitalAllowanceSummary";
 
-const CapitalAllowance = ({ toast }) => {
+const CapitalAllowance = () => {
   const title = constants.modules.capitalAllowance;
+  const toast = React.useRef();
   const { data: assetClass, error: assetClassError, refresh: assetClassRefresh } = useResource(
     fixedAssetModuleClassResource
   );
@@ -67,12 +69,12 @@ const CapitalAllowance = ({ toast }) => {
               <CapitalAllowanceAdding
                 yearSelectItems={yearSelectItems}
                 assetClassSelectItems={assetClassSelectItems}
-                toast={toast}
+                toast={toast.current}
               />
             ),
             view: (
               <ViewMode title={title} year={year}>
-                <CapitalAllowanceView assetId={assetId} toast={toast} />
+                <CapitalAllowanceView assetId={assetId} toast={toast.current} />
               </ViewMode>
             ),
             summary: (
@@ -83,6 +85,7 @@ const CapitalAllowance = ({ toast }) => {
           }[mode]
         }
       </Main>
+      <Toast baseZIndex={1000} ref={el => (toast.current = el)} />
     </Layout>
   );
 };

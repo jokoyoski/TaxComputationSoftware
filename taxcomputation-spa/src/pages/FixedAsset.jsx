@@ -9,11 +9,13 @@ import FixedAssetMapping from "../components/fixed_asset/FixedAssetMapping";
 import { fixedAssetModuleClassResource, trialBalanceResource } from "../routes/resources";
 import PageLoader from "../components/common/PageLoader";
 import Error from "../components/common/Error";
+import { Toast } from "primereact/toast";
 import { useResources } from "../store/ResourcesStore";
 import FixedAssetView from "../components/fixed_asset/FixedAssetView";
 
-const FixedAsset = ({ toast }) => {
+const FixedAsset = () => {
   const title = constants.modules.fixedAsset;
+  const toast = React.useRef();
   const { data: assetClass, error: assetClassError, refresh: assetClassRefresh } = useResource(
     fixedAssetModuleClassResource
   );
@@ -84,7 +86,7 @@ const FixedAsset = ({ toast }) => {
                 tbData={tbData}
                 onTrialBalance={onTrialBalance}
                 trialBalanceRefresh={trialBalanceRefresh}
-                toast={toast}
+                toast={toast.current}
               />
             ),
             view: (
@@ -95,6 +97,7 @@ const FixedAsset = ({ toast }) => {
           }[mode]
         }
       </Main>
+      <Toast baseZIndex={1000} ref={el => (toast.current = el)} />
     </Layout>
   );
 };

@@ -119,9 +119,11 @@ const onMappingSuccess = (
       detail
     })
   );
-  onTrialBalance(null);
-  trialBalanceRefresh();
-  setSelectedAccounts([]);
+  setTimeout(() => {
+    onTrialBalance(null);
+    trialBalanceRefresh();
+    setSelectedAccounts([]);
+  }, 2000);
 };
 
 export default {
