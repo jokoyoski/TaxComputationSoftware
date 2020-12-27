@@ -10,10 +10,12 @@ import PageLoader from "../components/common/PageLoader";
 import constants from "../constants";
 import Error from "../components/common/Error";
 import { useCompany } from "../store/CompanyStore";
+import { Toast } from "primereact/toast";
 import { useResources } from "../store/ResourcesStore";
 
-const Dashboard = ({ toast }) => {
+const Dashboard = () => {
   const title = constants.modules.dashboard;
+  const toast = React.useRef();
   const { data: companies, error, refresh } = useResource(companiesResource);
   const [showCompanyPicker, setShowCompanyPicker] = React.useState(true);
   const [showAddCompany, setShowAddCompany] = React.useState(false);
@@ -54,7 +56,7 @@ const Dashboard = ({ toast }) => {
     <Layout title={title}>
       <FileUploader
         company={company}
-        toast={toast}
+        toast={toast.current}
         setRefreshTrialBalanceTable={setRefreshTrialBalanceTable}
       />
       {company.companyId && (
@@ -67,7 +69,7 @@ const Dashboard = ({ toast }) => {
       <AddCompanyForm
         showAddCompany={showAddCompany}
         setShowAddCompany={setShowAddCompany}
-        toast={toast}
+        toast={toast.current}
         refresh={refresh}
       />
       {company.companyId === null && (
@@ -81,6 +83,7 @@ const Dashboard = ({ toast }) => {
           setRefreshTrialBalanceTable={setRefreshTrialBalanceTable}
         />
       )}
+      <Toast baseZIndex={1000} ref={el => (toast.current = el)} />
     </Layout>
   );
 };

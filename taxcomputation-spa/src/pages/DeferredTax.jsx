@@ -11,9 +11,11 @@ import { trialBalanceResource } from "../routes/resources";
 import { useResources } from "../store/ResourcesStore";
 import PageLoader from "../components/common/PageLoader";
 import Error from "../components/common/Error";
+import { Toast } from "primereact/toast";
 
-const DeferredTax = ({ toast }) => {
+const DeferredTax = () => {
   const title = constants.modules.deferredTax;
+  const toast = React.useRef();
   const {
     data: trialBalance,
     error: trialBalanceError,
@@ -56,9 +58,8 @@ const DeferredTax = ({ toast }) => {
               <DeferredTaxMapping
                 tbData={tbData}
                 yearSelectItems={yearSelectItems}
-                onTrialBalance={onTrialBalance}
                 trialBalanceRefresh={trialBalanceRefresh}
-                toast={toast}
+                toast={toast.current}
               />
             ),
             view: (
@@ -69,6 +70,7 @@ const DeferredTax = ({ toast }) => {
           }[mode]
         }
       </Main>
+      <Toast baseZIndex={1000} ref={el => (toast.current = el)} />
     </Layout>
   );
 };

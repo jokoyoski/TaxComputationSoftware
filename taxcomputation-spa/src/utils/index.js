@@ -87,7 +87,7 @@ const onTbData = (resources, setTbData) => {
 
 /** api error handling */
 const apiErrorHandling = (error, toast) => {
-  if (error.response.data.errors) {
+  if (error?.response?.data?.errors) {
     toast.show(
       toastCallback({
         severity: "error",

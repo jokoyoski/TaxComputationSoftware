@@ -10,10 +10,12 @@ import { profitandlossModuleClassResource, trialBalanceResource } from "../route
 import { useResources } from "../store/ResourcesStore";
 import PageLoader from "../components/common/PageLoader";
 import Error from "../components/common/Error";
+import { Toast } from "primereact/toast";
 import ProfitAndLossMapping from "../components/profit_loss/ProfitAndLossMapping";
 
-const ProfitAndLoss = ({ toast }) => {
+const ProfitAndLoss = () => {
   const title = constants.modules.profit_loss;
+  const toast = React.useRef();
   const { data: assetClass, error: assetClassError, refresh: assetClassRefresh } = useResource(
     profitandlossModuleClassResource
   );
@@ -82,9 +84,8 @@ const ProfitAndLoss = ({ toast }) => {
                 yearSelectItems={yearSelectItems}
                 assetClassSelectItems={assetClassSelectItems}
                 tbData={tbData}
-                onTrialBalance={onTrialBalance}
                 trialBalanceRefresh={trialBalanceRefresh}
-                toast={toast}
+                toast={toast.current}
               />
             ),
             view: (
@@ -95,6 +96,7 @@ const ProfitAndLoss = ({ toast }) => {
           }[mode]
         }
       </Main>
+      <Toast baseZIndex={1000} ref={el => (toast.current = el)} />
     </Layout>
   );
 };
