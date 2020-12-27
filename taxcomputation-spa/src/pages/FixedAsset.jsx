@@ -84,6 +84,7 @@ const FixedAsset = () => {
                 yearSelectItems={yearSelectItems}
                 assetClassSelectItems={assetClassSelectItems}
                 tbData={tbData}
+                onTrialBalance={onTrialBalance}
                 trialBalanceRefresh={trialBalanceRefresh}
                 toast={toast.current}
               />

@@ -61,6 +61,7 @@ const IncomeTax = () => {
               <IncomeTaxMapping
                 tbData={tbData}
                 yearSelectItems={yearSelectItems}
+                onTrialBalance={onTrialBalance}
                 trialBalanceRefresh={trialBalanceRefresh}
                 toast={toast.current}
               />

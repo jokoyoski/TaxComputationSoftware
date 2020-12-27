@@ -58,13 +58,14 @@ const DeferredTax = () => {
               <DeferredTaxMapping
                 tbData={tbData}
                 yearSelectItems={yearSelectItems}
+                onTrialBalance={onTrialBalance}
                 trialBalanceRefresh={trialBalanceRefresh}
                 toast={toast.current}
               />
             ),
             view: (
               <ViewMode title={title} year={year}>
-                <DeferredTaxView />
+                <DeferredTaxView year={year} toast={toast.current} />
               </ViewMode>
             )
           }[mode]
