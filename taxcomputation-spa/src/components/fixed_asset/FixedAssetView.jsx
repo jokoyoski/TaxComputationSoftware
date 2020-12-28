@@ -2,9 +2,9 @@ import React from "react";
 import { Column } from "primereact/column";
 import { fixedAssetViewData } from "../../apis/FixedAsset";
 import { useCompany } from "../../store/CompanyStore";
-import utils from "../../utils";
 import Loader from "../common/Loader";
 import ViewModeDataTable from "../common/ViewModeDataTable";
+import utils from "../../utils";
 
 const FixedAssetView = ({ year }) => {
   const isMounted = React.useRef(false);
@@ -131,31 +131,26 @@ const FixedAssetView = ({ year }) => {
                     s.total = <strong>{data.total.closingDepreciationTotal}</strong>;
                     break;
                   case "netValue":
-                    s[d.fixedAssetName] = (
-                      <strong>
-                        {isNaN(data.netBookValue[index].value[0])
-                          ? data.netBookValue[index].value
-                          : utils.currencyFormatter(
-                              data.netBookValue[index].value.replaceAll(/,/g, "")
-                            )}
-                      </strong>
+                    let totalNetValue = data.netBookValue.reduce(
+                      (acc, cur) =>
+                        acc +
+                        Number(
+                          cur.value.includes("(")
+                            ? `-${cur.value.replaceAll(/[(,)]/g, "")}`
+                            : isNaN(cur.value)
+                            ? cur.value.slice(1).replaceAll(/,/g, "")
+                            : cur.value.replaceAll(/,/g, "")
+                        ),
+                      0
                     );
-                    s.total = (
-                      <strong>
-                        {utils.currencyFormatter(
-                          data.netBookValue.reduce(
-                            (acc, cur) =>
-                              acc +
-                              Number(
-                                isNaN(cur.value[0])
-                                  ? cur.value.slice(1).replaceAll(/,/g, "")
-                                  : cur.value.replaceAll(/,/g, "")
-                              ),
-                            0
-                          )
-                        )}
-                      </strong>
-                    );
+                    if (totalNetValue.toString().includes("-"))
+                      totalNetValue = `₦(${utils
+                        .currencyFormatter(totalNetValue)
+                        .replaceAll(/[₦-]/g, "")})`;
+                    else totalNetValue = utils.currencyFormatter(totalNetValue);
+
+                    s[d.fixedAssetName] = <strong>{`₦${data.netBookValue[index].value}`}</strong>;
+                    s.total = <strong>{totalNetValue}</strong>;
                     break;
                   default:
                     break;
