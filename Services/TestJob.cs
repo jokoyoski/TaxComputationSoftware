@@ -49,10 +49,9 @@ namespace TaxComputationSoftware.Services
 
                 PreNotification email = default(PreNotification);
 
-                var companyDate = item.OpeningDate.Date;//.Ticks/(10000*60000);
-                //companyDate = companyDate/(60*24);
-                var emailDate = DateTime.Now.AddDays(5).Date;//.Ticks/(10000*60000))/(60*24);
-
+                var companyDate = item.OpeningDate.Date;
+                var emailDate = DateTime.Now.AddDays(5).Date;
+                
                 if (companyDate == emailDate) 
                 {
                     email = new PreNotification { Id = item.Id, CompanyId = item.CompanyId, OpeningDate = item.OpeningDate };
@@ -70,9 +69,9 @@ namespace TaxComputationSoftware.Services
                     {
                         var company = await _companyRepository.GetCompanyAsync(mail.CompanyId);
 
-                        var mg = new StringBuilder();
+                        var date = mail.OpeningDate.ToString("dddd, dd MMMM yyyy"); 
 
-                        mg.Append("Hello, start preping");
+                        string mg = $"Hello as you all know that {company.CompanyName} financial year has started , you are required to have done the necessary balancing adjustment on or before {date}.";
 
                         var message = mg.ToString();
 
