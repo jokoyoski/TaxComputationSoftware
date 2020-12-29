@@ -51,7 +51,7 @@ namespace TaxComputationSoftware.Services
 
                 var companyDate = item.OpeningDate.Date;
                 var emailDate = DateTime.Now.AddDays(5).Date;
-                
+
                 if (companyDate == emailDate) 
                 {
                     email = new PreNotification { Id = item.Id, CompanyId = item.CompanyId, OpeningDate = item.OpeningDate };
@@ -71,7 +71,7 @@ namespace TaxComputationSoftware.Services
 
                         var date = mail.OpeningDate.ToString("dddd, dd MMMM yyyy"); 
 
-                        string mg = $"Hello as you all know that {company.CompanyName} financial year has started , you are required to have done the necessary balancing adjustment on or before {date}.";
+                        string mg = $"Hello as you all know that {company.CompanyName} financial year has started , you are required to have done the necessary adjustment on or before {date}.";
 
                         var message = mg.ToString();
 
@@ -79,7 +79,7 @@ namespace TaxComputationSoftware.Services
 
                         string fromEmail = "bomana.ogoni@gmail.com";
 
-                        string subject = "Prep for Annual";
+                        string subject = "Annual Preparation";
 
                         await _emailService.Send(toEmail, fromEmail, subject, message, null);
 
