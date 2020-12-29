@@ -14,7 +14,11 @@ using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
+using Quartz;
+using Quartz.Impl;
+using Quartz.Spi;
 using Serilog;
+using TaxComputation.Service;
 using TaxComputationAPI.Data;
 using TaxComputationAPI.Interfaces;
 using TaxComputationAPI.Manager;
@@ -22,6 +26,7 @@ using TaxComputationAPI.Models;
 using TaxComputationAPI.Models.CustomHandler;
 using TaxComputationAPI.Repositories;
 using TaxComputationAPI.Services;
+using TaxComputationSoftware.Helpers;
 using TaxComputationSoftware.Interfaces;
 using TaxComputationSoftware.Repositories;
 using TaxComputationSoftware.Services;
@@ -79,11 +84,29 @@ namespace TaxComputationAPI
                 opt.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
             });
 
+
+            services.AddSingleton<IJobFactory, SingletonJobFactory>();
+            services.AddSingleton<ISchedulerFactory, StdSchedulerFactory>();
+            services.AddSingleton<INotificationRepository, NotificationRepository>();
+            services.AddSingleton<IEmailService, EmailService>();
+
+
+            services.AddSingleton<TestJob>();
+
+            services.AddSingleton(new JobSchedule
+            (
+                jobType: typeof(TestJob),
+                cronExpression: "0 */5 * * * ?"
+            ));
+
+            services.AddHostedService<QuartzHostedService>();
+
             services.AddScoped<IUsersRepository, UsersRepository>();
+
             services.AddScoped<IBalancingAdjustmentRepository, BalancingAdjustmentRepository>();
             services.AddScoped<IUsersService, UsersService>();
             services.AddScoped<IBalancingAdjustmentService, BalancingAdjustmentService>();
-            services.AddScoped<ICompaniesRepository, CompaniesRepository>();
+            services.AddSingleton<ICompaniesRepository, CompaniesRepository>();
             services.AddScoped<IFixedAssetService, FixedAssetService>();
             services.AddScoped<IFixedAssetRepository, FixedAssetRepository>();
             services.AddScoped<ITrialBalanceRepository, TrialBalanceRepository>();
