@@ -1,27 +1,39 @@
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using TaxComputationAPI.Dtos;
-using TaxComputationAPI.Interfaces;
+using TaxComputationAPI.Helpers;
 using TaxComputationAPI.Models;
+using TaxComputationAPI.Dtos;
+using TaxComputationAPI.Helpers;
+using TaxComputationAPI.Interfaces;
 
 namespace TaxComputationAPI.Controllers {
     [Route ("api/[controller]")]
     [ApiController]
     public class UtilitiesController : ControllerBase {
+        private readonly IConfiguration _config;
         private readonly IUtilitiesService _utilitiesService;
         private readonly IMapper _mapper;
         private readonly ILogger<UtilitiesController> _logger;
+        private readonly IMailManagerService _mailManagerService;
 
-        public UtilitiesController (IUtilitiesService utilitiesService, IMapper mapper, ILogger<UtilitiesController> logger) {
+        public UtilitiesController (IConfiguration config, IUtilitiesService utilitiesService, IMapper mapper, ILogger<UtilitiesController> logger, IMailManagerService mailManagerService) {
+            _config = config;
             _logger = logger;
             _mapper = mapper;
             _utilitiesService = utilitiesService;
+            _mailManagerService = mailManagerService;
         }
 
       
@@ -169,13 +181,13 @@ namespace TaxComputationAPI.Controllers {
             }
         }
 
-        [HttpPost("email-reminder")]
-        public async Task<IActionResult> SendReminderMail(int companyId, string message)
+        [HttpPost("email-company-reminder")]
+        public async Task<IActionResult> SendCompanyEMail(int companyId, string message)
         {
             try
             {
-                await _utilitiesService.SendCompanyReminder(companyId, message);
-                return Ok();
+                await _mailManagerService.SendEmail(companyId, message, _config.GetValue<string>("SendGridApiKey:Key"));
+                return Ok("A reminder email has been sent to your mail.");
             }
             catch (Exception ex)
             {
@@ -183,6 +195,18 @@ namespace TaxComputationAPI.Controllers {
             }
         }
 
-
+        [HttpPost("email-reminder")]
+        public async Task<IActionResult> SendEMail(string message)
+        {
+            try
+            {
+                await _mailManagerService.SendEmail(message, _config.GetValue<string>("SendGridApiKey:Key"));
+                return Ok("A notification email has been sent to your mail.");
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
     }
 }

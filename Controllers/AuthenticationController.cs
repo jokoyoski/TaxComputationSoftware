@@ -30,7 +30,8 @@ namespace TaxComputationAPI.Controllers
         private readonly IMapper _mapper;
         private readonly ILogger<AuthenticationController> _logger;
         private readonly IAuthenticationService _authService;
-        public AuthenticationController(IConfiguration config, UserManager<User> userManager, SignInManager<User> signInManager, IMapper mapper, ILogger<AuthenticationController> logger, IAuthenticationService authService)
+        private readonly IMailManagerService _mailManagerService;
+        public AuthenticationController(IMailManagerService mailManagerService, IConfiguration config, UserManager<User> userManager, SignInManager<User> signInManager, IMapper mapper, ILogger<AuthenticationController> logger, IAuthenticationService authService)
         {
             _authService = authService;
             _logger = logger;
@@ -38,7 +39,7 @@ namespace TaxComputationAPI.Controllers
             _signInManager = signInManager;
             _userManager = userManager;
             _config = config;
-
+            _mailManagerService = mailManagerService;
         }
 
         [HttpPost("login")]
@@ -122,9 +123,8 @@ namespace TaxComputationAPI.Controllers
 
                 var token = StaticDetails.GenerateToken();
 
-                SendMail sendMail = new SendMail();
                 string body = $"Kindly use the code {token} to complete your account password reset.";
-                var sendToken = await sendMail.SendEmail("Password Reset", email, body, _config.GetValue<string>("SendGridApiKey:Key"));
+                var sendToken = await _mailManagerService.SendEmail("Password Reset", email, body, _config.GetValue<string>("SendGridApiKey:Key"));
                 if (sendToken)
                 {
                     var saveCode = _authService.SaveUserCode(token, email);

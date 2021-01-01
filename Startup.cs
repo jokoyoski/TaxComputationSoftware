@@ -99,6 +99,7 @@ namespace TaxComputationAPI
             services.AddScoped<IMinimumTaxService, MinimumTaxService>();
             services.AddScoped<IITLevyRepository, ITLevyRepository>();
             services.AddScoped<IITLevyService, ITLevyService>();
+            services.AddScoped<IMailManagerService, MailManagerService>();
             services.AddScoped<IInvestmentAllowanceRepository, InvestmentAllowanceRepository>();
             services.AddScoped<IInvestmentAllowanceService, InvestmentAllowanceService>();
             services.AddSingleton<DatabaseManager>();

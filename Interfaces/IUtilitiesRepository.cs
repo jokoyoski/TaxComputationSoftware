@@ -37,7 +37,5 @@ namespace TaxComputationAPI.Interfaces
          Task AddCompanyCode(CompanyCode companyCode);
 
          Task<CompanyCode> GetCompanyCodeByCodeId(int companyId);
-
-        Task<string> SendCompanyReminder(int companyId, string message);
     }
 }

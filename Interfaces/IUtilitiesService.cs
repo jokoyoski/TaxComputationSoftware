@@ -27,7 +27,5 @@ namespace TaxComputationAPI.Interfaces
 
         Task UnmapValue(int trialBalanceId);
 
-        Task SendCompanyReminder(int companyId, string message);
-
     }
 }
