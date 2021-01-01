@@ -23,7 +23,7 @@ namespace TaxComputationAPI.Interfaces
          Task<List<ModuleTypeDto>> GetModuleMappingbyCode(string code);
 
         Task UpdateAssetMappingAsync(AssetMapping assetMapping);
-        Task DeleteAssetMappingAsync(AssetMapping assetMapping);
+        Task DeleteAssetMappingAsync(int id);
 
         Task UnmapValue(int trialBalanceId);
 

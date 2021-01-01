@@ -46,9 +46,7 @@ const CapitalAllowanceView = ({ assetId, toast }) => {
                       style={{ fontSize: 14, marginTop: 2 }}
                       onClick={async () => {
                         try {
-                          const data = await capitalAllowanceDelete({
-                            id: capitalAllowance.id
-                          });
+                          const data = await capitalAllowanceDelete(capitalAllowance.id);
                           if (data) {
                             toast.show(
                               utils.toastCallback({

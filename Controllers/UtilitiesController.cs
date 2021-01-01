@@ -111,7 +111,7 @@ namespace TaxComputationAPI.Controllers {
 
         [HttpDelete("asset-class/{Id}")]
         [Authorize]
-        public async Task<IActionResult> DeleteAssetMapping(int Id, AssetMappingDeleteDto assetMappingDeleteDto)
+        public async Task<IActionResult> DeleteAssetMapping(int Id)
         {
             try
             {
@@ -123,10 +123,8 @@ namespace TaxComputationAPI.Controllers {
                     return StatusCode(400, new { errors = new[] { "Asset mapping does not exist!" } });
 
                 }
-                var assetMappingToDelete = _mapper.Map<AssetMapping>(assetMappingDeleteDto);
-                assetMappingToDelete.Id = Id;
 
-                await _utilitiesService.DeleteAssetMappingAsync(assetMappingToDelete);
+                await _utilitiesService.DeleteAssetMappingAsync(Id);
 
                 return Ok("Asset mapping deleted successfully !!");
             }

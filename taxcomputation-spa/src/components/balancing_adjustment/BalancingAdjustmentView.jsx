@@ -52,9 +52,7 @@ const BalancingAdjustmentView = ({ year, toast }) => {
                       style={{ fontSize: 14, marginTop: 2 }}
                       onClick={async () => {
                         try {
-                          const data = await balancingAdjustmentDelete({
-                            id: assetYear.id
-                          });
+                          const data = await balancingAdjustmentDelete(assetYear.id);
                           if (data) {
                             toast.show(
                               utils.toastCallback({

@@ -5,7 +5,7 @@ IF NOT EXISTS(SELECT 1 FROM sysobjects WHERE type = 'U' and name = 'ProfitsAndLo
 BEGIN
    create table ProfitsAndLoss(
 
- Id   int identity(1,1) NOT NULL ,
+Id   int identity(1,1) NOT NULL ,
  Pick   varchar(20),
  CompanyId   varchar(20),
  TrialBalanceId  varchar(20),
@@ -27,9 +27,9 @@ GO
 CREATE PROCEDURE [dbo].[usp_Insert_Profits_And_Loss](
     @Id int OUTPUT,
     @Pick varchar(10),
+    @CompanyId varchar(20),
     @TrialBalanceId int,
     @YearId varchar(20),
-    @CompanyId varchar(20),
     @TypeValue varchar(20)
 
 )
@@ -37,18 +37,17 @@ AS
 
 INSERT [dbo].[ProfitsAndLoss]
 (
-    Pick,
+   Pick,
+    CompanyId ,
     TrialBalanceId,
-    YearId,
-    CompanyId,
+    YearId ,
     TypeValue
    
 )
 VALUES
-(
-    @Pick,
-    @TrialBalanceId,
+(    @Pick,
     @CompanyId,
+    @TrialBalanceId,
     @YearId,
     @TypeValue
 )
