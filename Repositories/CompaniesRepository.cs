@@ -15,11 +15,9 @@ namespace TaxComputationAPI.Repositories
 {
     public class CompaniesRepository : ICompaniesRepository
     {
-        private readonly DataContext _context;
         private readonly DatabaseManager _databaseManager;
-        public CompaniesRepository(DataContext context,  DatabaseManager databaseManager)
+        public CompaniesRepository(DatabaseManager databaseManager)
         {
-            _context = context;
             _databaseManager = databaseManager;
 
         }

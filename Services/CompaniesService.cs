@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using TaxComputationAPI.Helpers;
 using TaxComputationAPI.Interfaces;
 using TaxComputationAPI.Models;
+using TaxComputationSoftware.Interfaces;
+using TaxComputationSoftware.Model;
 using TaxComputationSoftware.Models;
 
 namespace TaxComputationAPI.Services
@@ -13,12 +15,15 @@ namespace TaxComputationAPI.Services
     {
         private readonly ICompaniesRepository _companiesRepository;
         private readonly IUtilitiesRepository _utilitiesRepository;
-        public CompaniesService(ICompaniesRepository companiesRepository, IUtilitiesRepository utilitiesRepository)
+        private readonly INotificationRepository _notificationRepository;
+
+        public CompaniesService(ICompaniesRepository companiesRepository, IUtilitiesRepository utilitiesRepository, INotificationRepository notificationRepository)
         {
             _companiesRepository = companiesRepository;
             _utilitiesRepository = utilitiesRepository;
-
+            _notificationRepository = notificationRepository;
         }
+
         public async Task<PagedList<Company>> GetCompaniesAsync(PaginationParams pagination)
         {
             return await _companiesRepository.GetCompaniesAsync(pagination);
@@ -51,6 +56,8 @@ namespace TaxComputationAPI.Services
                 CompanyId = companyDetails.Id
 
             });
+
+            _notificationRepository.InsertPreNotification(new PreNotification{ CompanyId = companyDetails.Id, OpeningDate = companyDetails.OpeningYear });
         }
 
         public async Task<Company> GetCompanyByTinAsync(string tinNumber)
