@@ -15,6 +15,7 @@ BEGIN
         [CompanyId] [int] NOT NULL,
         [OpeningDate] [datetime2](7) NOT NULL,
         [JobDate] [datetime2](7) NULL,
+        [IsLocked] BIT NOT NULL,
         CONSTRAINT [PK_PreNotification] PRIMARY KEY CLUSTERED
 (
 	[Id] ASC
@@ -95,9 +96,9 @@ GO
 
 
 
-PRINT('====================================================Update Job Date PreNotification table===========================================================')
+PRINT('====================================================Update Job Date PreNotification to Null table===========================================================')
 
------------------------------------------------- STORED PROCEDURE TO Update Job Date PreNotification table--------------------------------------------
+------------------------------------------------ STORED PROCEDURE TO Update Job Date PreNotification to Null table--------------------------------------------
 
 IF OBJECT_ID('[dbo].[usp_Update_Jobdate_To_Null]') IS NOT NULL
 BEGIN
@@ -111,6 +112,28 @@ AS
 BEGIN
 UPDATE [dbo].[PreNotification]
 SET  JobDate = Null
+WHERE Id=@Id
+END
+GO
+
+
+PRINT('====================================================Lock PreNotification table===========================================================')
+
+------------------------------------------------ STORED PROCEDURE To Lock PreNotification table--------------------------------------------
+
+IF OBJECT_ID('[dbo].[usp_Lock]') IS NOT NULL
+BEGIN
+DROP PROCEDURE [dbo].[usp_Lock]
+END
+GO
+CREATE PROCEDURE [dbo].[usp_Lock](
+    @Id INT,
+    @IsLocked BIT
+)
+AS
+BEGIN
+UPDATE [dbo].[PreNotification]
+SET  IsLocked = @IsLocked
 WHERE Id=@Id
 END
 GO

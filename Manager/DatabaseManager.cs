@@ -10,17 +10,21 @@ using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using TaxComputationAPI.Models;
+using TaxComputationSoftware.Interfaces;
+using TaxComputationSoftware.Services;
 
 namespace TaxComputationAPI.Manager
 {
     public class DatabaseManager
     {
         private readonly ConnectionString _connectionString;
+        private readonly IEmailService _emailService;
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly ILogger<DatabaseManager> _logger;
-        public DatabaseManager(IOptions<ConnectionString> connectionString, IWebHostEnvironment webHostEnvironment, ILogger<DatabaseManager> logger)
+        public DatabaseManager(IEmailService emailService, IOptions<ConnectionString> connectionString, IWebHostEnvironment webHostEnvironment, ILogger<DatabaseManager> logger)
         {
             _connectionString = connectionString.Value;
+            _emailService = emailService;
             _webHostEnvironment = webHostEnvironment;
             _logger = logger;
         }
@@ -68,6 +72,7 @@ namespace TaxComputationAPI.Manager
             catch (SqlException er)
             {
                 _logger.LogError("Could not Connect to Database", er);
+                _emailService.Send(AnnualEmailNotificationJob.LogEmail, AnnualEmailNotificationJob.AdminEmail, "Application Exception", er.Message, null);
             }
             finally
             {

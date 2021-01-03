@@ -13,5 +13,6 @@ namespace TaxComputationSoftware.Interfaces
         Task InsertPreNotification(PreNotification preNotification);
         Task UpdatePreNotification(PreNotification preNotification);
         Task UpdateJobDate(PreNotification preNotification);
+        Task Lock(PreNotification preNotification);
     }
 }
