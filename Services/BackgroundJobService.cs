@@ -12,13 +12,13 @@ using TaxComputationSoftware.Helpers;
 namespace TaxComputation.Service
 {
 
-    public class QuartzHostedService : IHostedService
+    public class BackgroundJobService : IHostedService
     {
         private readonly ISchedulerFactory _schedulerFactory;
         private readonly IJobFactory _jobFactory;
         private readonly IEnumerable<JobSchedule> _jobSchedules;
 
-        public QuartzHostedService(ISchedulerFactory schedulerFactory, IJobFactory jobFactory, IEnumerable<JobSchedule> jobSchedules)
+        public BackgroundJobService(ISchedulerFactory schedulerFactory, IJobFactory jobFactory, IEnumerable<JobSchedule> jobSchedules)
         {
             _schedulerFactory = schedulerFactory;
             _jobFactory = jobFactory;

@@ -14,6 +14,7 @@ BEGIN
         [Id] [int] IDENTITY(1,1) NOT NULL,
         [CompanyId] [int] NOT NULL,
         [OpeningDate] [datetime2](7) NOT NULL,
+        [JobDate] [datetime2](7) NULL,
         CONSTRAINT [PK_PreNotification] PRIMARY KEY CLUSTERED
 (
 	[Id] ASC
@@ -71,7 +72,7 @@ GO
 
 PRINT('====================================================Update PreNotification table===========================================================')
 
------------------------------------------------- STORED PROCEDURE TO GET PreNotification BY ID--------------------------------------------
+------------------------------------------------ STORED PROCEDURE TO Update PreNotification table--------------------------------------------
 
 IF OBJECT_ID('[dbo].[usp_UpdatePreNotification]') IS NOT NULL
 BEGIN
@@ -80,12 +81,36 @@ END
 GO
 CREATE PROCEDURE [dbo].[usp_UpdatePreNotification](
     @Id INT,
-    @OpeningDate datetime2 (7)
+    @OpeningDate datetime2 (7),
+    @JobDate datetime2 (7)
 )
 AS
 BEGIN
 UPDATE [dbo].[PreNotification]
-SET  OpeningDate = @OpeningDate
+SET  OpeningDate = @OpeningDate,
+     JobDate = @JobDate
+WHERE Id=@Id
+END
+GO
+
+
+
+PRINT('====================================================Update Job Date PreNotification table===========================================================')
+
+------------------------------------------------ STORED PROCEDURE TO Update Job Date PreNotification table--------------------------------------------
+
+IF OBJECT_ID('[dbo].[usp_Update_Jobdate_To_Null]') IS NOT NULL
+BEGIN
+DROP PROCEDURE [dbo].[usp_Update_Jobdate_To_Null]
+END
+GO
+CREATE PROCEDURE [dbo].[usp_Update_Jobdate_To_Null](
+    @Id INT
+)
+AS
+BEGIN
+UPDATE [dbo].[PreNotification]
+SET  JobDate = Null
 WHERE Id=@Id
 END
 GO

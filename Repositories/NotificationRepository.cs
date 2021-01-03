@@ -46,7 +46,36 @@ namespace TaxComputationSoftware.Repositories
                     throw e;
                 }
             }
+
         }
+
+
+        public async Task InsertPreNotification(PreNotification preNotification)
+        {
+            if (preNotification == null) throw new ArgumentNullException(nameof(preNotification));
+
+            using (IDbConnection conn = await _databaseManager.DatabaseConnection())
+            {
+                if (conn.State == ConnectionState.Closed) conn.Open();
+
+                DynamicParameters parameters = new DynamicParameters();
+
+                parameters.Add("@Id", preNotification.Id);
+                parameters.Add("@OpeningDate", preNotification.OpeningDate);
+
+                try
+                {
+                    var respone = conn.Execute("[dbo].[usp_Insert_PreNotification]", parameters, commandType: CommandType.StoredProcedure);
+                    conn.Close();
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError($"{e.Message}");
+                    throw e;
+                }
+            }
+        }
+
 
         public async Task UpdatePreNotification(PreNotification preNotification)
         {
@@ -64,6 +93,32 @@ namespace TaxComputationSoftware.Repositories
                 try
                 {
                     var respone = conn.Execute("[dbo].[usp_UpdatePreNotification]", parameters, commandType: CommandType.StoredProcedure);
+                    conn.Close();
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError($"{e.Message}");
+                    throw e;
+                }
+            }
+        }
+
+
+        public async Task UpdateJobDate(PreNotification preNotification)
+        {
+            if (preNotification == null) throw new ArgumentNullException(nameof(preNotification));
+
+            using (IDbConnection conn = await _databaseManager.DatabaseConnection())
+            {
+                if (conn.State == ConnectionState.Closed) conn.Open();
+
+                DynamicParameters parameters = new DynamicParameters();
+
+                parameters.Add("@Id", preNotification.Id);
+
+                try
+                {
+                    var respone = conn.Execute("[dbo].[usp_Update_Jobdate_To_Null]", parameters, commandType: CommandType.StoredProcedure);
                     conn.Close();
                 }
                 catch (Exception e)

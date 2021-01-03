@@ -91,15 +91,15 @@ namespace TaxComputationAPI
             services.AddSingleton<IEmailService, EmailService>();
 
 
-            services.AddSingleton<TestJob>();
+            services.AddSingleton<AnnualEmailNotificationJob>();
 
             services.AddSingleton(new JobSchedule
             (
-                jobType: typeof(TestJob),
+                jobType: typeof(AnnualEmailNotificationJob),
                 cronExpression: "0 */5 * * * ?"
             ));
 
-            services.AddHostedService<QuartzHostedService>();
+            services.AddHostedService<BackgroundJobService>();
 
             services.AddScoped<IUsersRepository, UsersRepository>();
 

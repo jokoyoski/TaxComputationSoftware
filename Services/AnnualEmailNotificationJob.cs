@@ -11,14 +11,15 @@ using TaxComputationSoftware.Model;
 
 namespace TaxComputationSoftware.Services
 {
-    public class TestJob : IJob
+    public class AnnualEmailNotificationJob : IJob
     {
         private readonly INotificationRepository _notificationRepository;
         private readonly ICompaniesRepository _companyRepository;
         private readonly IEmailService _emailService;
-        private readonly ILogger<TestJob> _logger;
+        private readonly ILogger<AnnualEmailNotificationJob> _logger;
+        public const int AnnualJob = 48;
 
-        public TestJob(INotificationRepository notificationRepository, ICompaniesRepository companyRepository, IEmailService emailService, ILogger<TestJob> logger)
+        public AnnualEmailNotificationJob(INotificationRepository notificationRepository, ICompaniesRepository companyRepository, IEmailService emailService, ILogger<AnnualEmailNotificationJob> logger)
         {
             _notificationRepository = notificationRepository;
             _companyRepository = companyRepository;
@@ -51,10 +52,13 @@ namespace TaxComputationSoftware.Services
 
                 var companyDate = item.OpeningDate.Date;
                 var emailDate = DateTime.Now.AddDays(5).Date;
+                
 
                 if (companyDate == emailDate) 
                 {
-                    email = new PreNotification { Id = item.Id, CompanyId = item.CompanyId, OpeningDate = item.OpeningDate };
+                    item.JobDate = item.OpeningDate.AddDays(AnnualJob);
+
+                    email = new PreNotification { Id = item.Id, CompanyId = item.CompanyId, OpeningDate = item.OpeningDate, JobDate = item.JobDate };
                 }
 
                 if (email != null) emailList.Add(email);
