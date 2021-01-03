@@ -9,9 +9,13 @@ namespace TaxComputationSoftware.Dtos
 
         public int FairValueGainId { get; set; }
 
+        public decimal DeferredTaxBroughtFoward { get; set; }
+
         public List<TrialBalanceValue> TrialBalanceList { get; set; }
 
         public int CompanyId { get; set; }
+
+        public bool IsStarted {get;set;}
 
         public int YearId { get; set; }
     }

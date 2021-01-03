@@ -61,6 +61,7 @@ namespace TaxComputationSoftware.Services
             decimal twothird = (decimal)662 / 3;
             twothird = Math.Round(twothird, 1);
             bool isAssessibleProfit = false;
+            decimal compareLoss = 0;
             decimal iTLevy = 0;
 
 
@@ -78,7 +79,8 @@ namespace TaxComputationSoftware.Services
                 {
                     Description = "Profits/Loss per accounts",
                     ColumnOne = "",
-                    ColumnTwo = $"₦{Utilities.FormatAmount(profitOrLoss)}"
+                    ColumnTwo = $"₦{Utilities.FormatAmount(profitOrLoss)}",
+                    CanBolden=true
                 });
 
                 if (iTLevy < 0)
@@ -87,7 +89,8 @@ namespace TaxComputationSoftware.Services
                     {
                         Description = "Less : I.T Levy",
                         ColumnOne = "",
-                        ColumnTwo = $"₦{Utilities.FormatAmount(iTLevy)}"
+                        ColumnTwo = $"₦{Utilities.FormatAmount(iTLevy)}",
+                         CanBolden=true
                     });
 
                 }
@@ -97,7 +100,8 @@ namespace TaxComputationSoftware.Services
                     {
                         Description = "Less : I.T Levy",
                         ColumnOne = "",
-                        ColumnTwo = $"₦({Utilities.FormatAmount(iTLevy)})"
+                        ColumnTwo = $"₦({Utilities.FormatAmount(iTLevy)})",
+                         CanBolden=true
                     });
 
                 }
@@ -120,7 +124,8 @@ namespace TaxComputationSoftware.Services
                 {
                     Description = "Profits/Loss per accounts",
                     ColumnOne = "",
-                    ColumnTwo = $"₦{Utilities.FormatAmount(profitOrLoss)}"
+                    ColumnTwo = $"₦{Utilities.FormatAmount(profitOrLoss)}",
+                     CanBolden=true
                 });
 
             }
@@ -160,7 +165,7 @@ namespace TaxComputationSoftware.Services
                         ColumnOne = $"₦{Utilities.FormatAmount(item.Debit)}",
                         ColumnTwo = $"₦{Utilities.FormatAmount(totalDisallowable)}",
                         Id = item.Id,
-                        CanDelete = true,
+                      
                     });
 
 
@@ -176,7 +181,7 @@ namespace TaxComputationSoftware.Services
                         ColumnOne = $"₦{Utilities.FormatAmount(item.Debit)}",
                         ColumnTwo = "",
                         Id = item.Id,
-                        CanDelete = true,
+                        
                     });
 
                 }
@@ -219,7 +224,7 @@ namespace TaxComputationSoftware.Services
                     incomeListDto.Add(new IncomeTaxDto
                     {
                         Description = allowable.Item,
-                        ColumnOne = $"₦({Utilities.FormatAmount(-allowable.Credit)})",
+                        ColumnOne = $"₦{Utilities.FormatAmount(-allowable.Credit)}",
                         ColumnTwo = "",
                         CanDelete = true,
                         Id = allowable.Id
@@ -310,13 +315,21 @@ namespace TaxComputationSoftware.Services
                     Accessible = 0
                 };
             }
-            if (broughtFoward.LossBf > 0 && !isAssessibleProfit)
+            if (broughtFoward.LossBf != 0)
+            {
+                compareLoss += -broughtFoward.LossBf;
+            }
+
+
+
+            if (compareLoss > 0 && !isAssessibleProfit) //los broughtfoward + loss
             {
                 incomeListDto.Add(new IncomeTaxDto
                 {
                     Description = "Loss b/f",
                     ColumnOne = "",
                     ColumnTwo = $"₦{Utilities.FormatAmount(broughtFoward.LossBf)}",
+                     CanBolden=true
                 });
                 losscf = accessibleBalancingCharge + broughtFoward.LossBf;
                 incomeListDto.Add(new IncomeTaxDto
@@ -324,41 +337,109 @@ namespace TaxComputationSoftware.Services
                     Description = "Loss c/f",
                     ColumnOne = "",
                     ColumnTwo = $"₦{Utilities.FormatAmount(losscf)}",
+                     CanBolden=true
                 });
 
             }
 
-            if (broughtFoward.LossBf > 0 && isAssessibleProfit)
+
+            if (compareLoss>0 && isAssessibleProfit) //loss brought fooward and gain
+            {
+
+                if (accessibleBalancingCharge > compareLoss)
+                {
+                    incomeListDto.Add(new IncomeTaxDto
+                    {
+                        Description = "Loss b/f",
+                        ColumnOne = "",
+                        ColumnTwo = $"₦{Utilities.FormatAmount(broughtFoward.LossBf)}",
+                         CanBolden=true
+                    });
+                    incomeListDto.Add(new IncomeTaxDto
+                    {
+                        Description = "Current Gain is Greater than Loss b/f",
+                        ColumnOne = "",
+                        ColumnTwo = "",
+                        CanBolden = true
+                    });
+
+                    incomeListDto.Add(new IncomeTaxDto
+                    {
+                        Description = "Loss c/f",
+                        ColumnOne = "",
+                        ColumnTwo = "-",
+                        CanBolden = true
+                    });
+                    losscf = 0;
+                }
+                else if (accessibleBalancingCharge < compareLoss)
+                {
+                    losscf = compareLoss - accessibleBalancingCharge;
+                    losscf= -losscf;
+                    incomeListDto.Add(new IncomeTaxDto
+                    {
+                        Description = "Loss b/f",
+                        ColumnOne = "",
+                        ColumnTwo = $"₦{Utilities.FormatAmount(broughtFoward.LossBf)}",
+                    });
+                    incomeListDto.Add(new IncomeTaxDto
+                    {
+                        Description = "Current Gain is Lesser than Loss b/f",
+                        ColumnOne = "",
+                        ColumnTwo = "",
+                        CanBolden = true
+                    });
+
+                    incomeListDto.Add(new IncomeTaxDto
+                    {
+                        Description = "Loss c/f",
+                        ColumnOne = "",
+                        ColumnTwo = $"₦{Utilities.FormatAmount(losscf)}",
+                        CanBolden = true
+                    });
+
+                }
+            }
+
+
+            if (broughtFoward.LossBf == 0 && isAssessibleProfit) //no loss bf + gain
             {
                 incomeListDto.Add(new IncomeTaxDto
                 {
-                    Description = "Loss b/f",
+                    Description = "No Loss b/f and No Current Loss",
                     ColumnOne = "",
-                    ColumnTwo = $"₦{Utilities.FormatAmount(broughtFoward.LossBf)}",
+                    ColumnTwo = "",
+                    CanBolden = true
                 });
-                losscf = accessibleBalancingCharge - broughtFoward.LossBf;
+                incomeListDto.Add(new IncomeTaxDto
+                {
+                    Description = "Loss c/f",
+                    ColumnOne = "",
+                    ColumnTwo = "",
+                    CanBolden = true
+                });
+                losscf = 0;
+            }
+
+            if (broughtFoward.LossBf == 0 && !isAssessibleProfit)   //no loss bf  + loss
+            {
+                losscf = accessibleBalancingCharge;
+                incomeListDto.Add(new IncomeTaxDto
+                {
+                    Description = "No Loss b/f but Current Loss Exist",
+                    ColumnOne = "",
+                    ColumnTwo = "",
+                    CanBolden = true
+                });
                 incomeListDto.Add(new IncomeTaxDto
                 {
                     Description = "Loss c/f",
                     ColumnOne = "",
                     ColumnTwo = $"₦{Utilities.FormatAmount(losscf)}",
+                    CanBolden = true
                 });
 
             }
-
-            if (broughtFoward.LossBf <= 0 && !isAssessibleProfit)
-            {
-
-                losscf = accessibleBalancingCharge - broughtFoward.LossBf;
-                incomeListDto.Add(new IncomeTaxDto
-                {
-                    Description = "Loss c/f",
-                    ColumnOne = "",
-                    ColumnTwo = $"₦{Utilities.FormatAmount(losscf)}",
-                });
-
-            }
-
             incomeListDto.Add(new IncomeTaxDto
             {
                 Description = "",
@@ -385,7 +466,8 @@ namespace TaxComputationSoftware.Services
             {
                 Description = "Claims of the Year",
                 ColumnOne = $"₦{Utilities.FormatAmount(total)}",
-                ColumnTwo = ""
+                ColumnTwo = "",
+                 CanBolden=true
             });
 
 
@@ -393,21 +475,24 @@ namespace TaxComputationSoftware.Services
             {
                 Description = "Balancing Allowance",
                 ColumnOne = $"₦{Utilities.FormatAmount(value.Item1)}",
-                ColumnTwo = ""
+                ColumnTwo = "",
+                 CanBolden=true
             });
 
             incomeListDto.Add(new IncomeTaxDto
             {
                 Description = "Investment Allowance",
                 ColumnOne = $"₦{Utilities.FormatAmount(investment)}",
-                ColumnTwo = ""
+                ColumnTwo = "",
+                 CanBolden=true
             });
             capitalAllowanceOfTheYear = broughtFoward.UnRelievedBf + total + value.Item1 + investment;
             incomeListDto.Add(new IncomeTaxDto
             {
                 Description = "Capital allowance for the year",
                 ColumnOne = $"₦{Utilities.FormatAmount(capitalAllowanceOfTheYear)}",
-                ColumnTwo = ""
+                ColumnTwo = "",
+                 CanBolden=true
             });
 
             if (!isAssessibleProfit)     //if accessible loss 
@@ -416,7 +501,8 @@ namespace TaxComputationSoftware.Services
                 {
                     Description = "Capital allowance claimed",
                     ColumnOne = "-",
-                    ColumnTwo = "-"
+                    ColumnTwo = "-",
+                     CanBolden=true
                 });
             }
             else
@@ -439,6 +525,7 @@ namespace TaxComputationSoftware.Services
                         Description = "Capital allowance claimed",
                         ColumnOne = $"₦{Utilities.FormatAmount(capitalAllowanceClaimed)}",
                         ColumnTwo = $"₦{Utilities.FormatAmount(capitalAllowanceClaimed)}",
+                         CanBolden=true
                     });
 
                 }
@@ -449,6 +536,7 @@ namespace TaxComputationSoftware.Services
                         Description = "Capital allowance claimed",
                         ColumnOne = $"₦({Utilities.FormatAmount(capitalAllowanceClaimed)})",
                         ColumnTwo = $"₦({Utilities.FormatAmount(capitalAllowanceClaimed)})",
+                         CanBolden=true
                     });
 
 
@@ -458,7 +546,8 @@ namespace TaxComputationSoftware.Services
                 {
                     Description = "Unrelieved Capital Allowance Carried Foward c/f",
                     ColumnOne = $"₦{Utilities.FormatAmount(unrelievedCf)}",
-                    ColumnTwo = ""
+                    ColumnTwo = "",
+                     CanBolden=true
                 });
 
 
@@ -471,13 +560,11 @@ namespace TaxComputationSoftware.Services
                 {
                     Description = "Unrelieved Capital Allowance Carried Foward c/f",
                     ColumnOne = $"₦{Utilities.FormatAmount(capitalAllowanceOfTheYear)}",
-                    ColumnTwo = ""
+                    ColumnTwo = "",
+                     CanBolden=true
                 });
 
             }
-
-
-
             incomeListDto.Add(new IncomeTaxDto
             {
                 Description = "",
@@ -499,7 +586,8 @@ namespace TaxComputationSoftware.Services
                     Description = "Total Taxable Profit",
                     ColumnOne = "",
                     ColumnTwo = $"₦{Utilities.FormatAmount(taxableProfit)}",
-                    CanBolden = true
+                    CanBolden = true,
+                     
                 });
             }
             else
@@ -510,6 +598,7 @@ namespace TaxComputationSoftware.Services
                     ColumnOne = "-",
                     ColumnTwo = "-",
                     CanBolden = true,
+                     
                 });
             }
             if (isAssessibleProfit)
@@ -620,7 +709,9 @@ namespace TaxComputationSoftware.Services
             _incomeTaxRepository.UpdateAcessibleByIncomeTax(new BroughtFoward
             {
                 LossCf = losscf,
-                UnRelievedCf =unrelievedCf
+                UnRelievedCf = unrelievedCf,
+                Accessible = accessibleBalancingCharge,
+                CompanyId = companyId
             });
             //update borught foward
 

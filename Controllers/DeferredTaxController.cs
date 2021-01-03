@@ -1,108 +1,95 @@
 
+using System;
 using System.Collections.Generic;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using TaxComputationAPI.Interfaces;
 using TaxComputationSoftware.Dtos;
+using TaxComputationSoftware.Interfaces;
 
-namespace TaxComputationAPI.Controllers 
+namespace TaxComputationAPI.Controllers
 {
-    [Route ("api/[controller]")]
+    [Route("api/[controller]")]
     [ApiController]
-    public class DeferredTaxController : ControllerBase 
+    public class DeferredTaxController : ControllerBase
     {
-        public DeferredTaxController()
+
+        private readonly IDeferredTaxService _deferredTaxService;
+         private readonly ITrialBalanceService _trialBalanceService;
+        private readonly ILogger<DeferredTaxController> _logger;
+        public DeferredTaxController(IDeferredTaxService deferredTaxService, ITrialBalanceService trialBalanceService,ILogger<DeferredTaxController> logger)
         {
-            
+            _deferredTaxService = deferredTaxService;
+            _logger = logger;
+            _trialBalanceService=trialBalanceService;
         }
 
 
         [HttpGet]
         public async Task<IActionResult> GetDeferredTax(int companyId, string year)
         {
-            var response = new List<IncomeTaxDto>
+
+            try
             {
+                var value = await _deferredTaxService.GetDeferredTax(companyId, int.Parse(year));
 
-                new  IncomeTaxDto 
-                { 
-                    Description = "Net Book Value of Fixed Assests",
-                    ColumnOne = "",
-                    ColumnTwo = "₦ 56,881,000.71",
-                    Id=70
-                },
-                new  IncomeTaxDto 
-                { 
-                    Description = "Tax Written Down Value",
-                    ColumnOne = "₦ 26,890,205.624",
-                    ColumnTwo = "",
-                    Id=34
-                },
-                new  IncomeTaxDto 
-                { 
-                    Description = "Unutilised Capital Allowances c/f",
-                    ColumnOne = "₦ 0.376",
-                    ColumnTwo = "",
-                    Id=12
-                },
-                new  IncomeTaxDto 
-                { 
-                    Description = "Unabsorbed losses c/f",
-                    ColumnOne = "₦ 0",
-                    ColumnTwo = "₦ (26,890,205.624)",
-                    Id=28
-                },
-                new  IncomeTaxDto 
-                { 
-                    Description = "Taxable Temporary Difference",
-                    ColumnOne = "",
-                    ColumnTwo = "₦ 29,990,794.71",
-                    Id=91
-                },
-                new  IncomeTaxDto 
-                { 
-                    Description = "Deferred Tax Liability at 30%",
-                    ColumnOne = "",
-                    ColumnTwo = "₦ 8,997,238.413",
-                    Id=2
-                },
-                new  IncomeTaxDto 
-                { 
-                    Description = "Deferred Tax on Fair Value Gain on Investment Property at 10%",
-                    ColumnOne = "₦ 25,000,000",
-                    ColumnTwo = "₦ 2,500,000",
-                    Id=84
-                },
-                new  IncomeTaxDto 
-                { 
-                    Description = "",
-                    ColumnOne = "",
-                    ColumnTwo = "₦ 11,497,238.413",
-                    Id=9
-                },
-                new  IncomeTaxDto 
-                { 
-                    Description = "Deferred Tax B/F 31/12/2018",
-                    ColumnOne = "",
-                    ColumnTwo = "₦ 13,071,175",
-                    Id=9
-                },
-                new  IncomeTaxDto 
-                { 
-                    Description = "Deferred Tax Movement",
-                    ColumnOne = "",
-                    ColumnTwo = "₦ (1,573,936.587)",
-                    Id=84
-                }
+                return Ok(value);
 
-            };
+            }
+            catch (Exception ex)
+            {
+                var email = User.FindFirst(ClaimTypes.Email).Value;
+                _logger.LogInformation("Exception for {email}, {ex}", email, ex.Message);
+                return StatusCode(500, new { errors = new[] { "Error occured while trying to process your request please try again later !" } });
 
-            return Ok(response);
+            }
+
+
         }
 
         [HttpPost]
         public async Task<IActionResult> AddDeferredTax(CreateDeferredTax createDeferredTax)
         {
 
-            return Ok();
+            try
+            {
+                   foreach (var j in createDeferredTax.TrialBalanceList)
+                {
+                    var trialBalanceRecord = await _trialBalanceService.GetTrialBalanceById(j.TrialBalanceId);
+                    if (trialBalanceRecord.IsCheck)
+                    {
+                        return StatusCode(400, new { errors = new[] { "One of the item selected has already been mapped, please reload" } });
+                    }
+                }
+
+                if (createDeferredTax.YearId < DateTime.Now.Year)
+                {
+                    return StatusCode(400, new { errors = new[] { "Income Tax for Previous Year is not Alllowed!" } });
+                }
+
+                  var broughtFowardInfo = await _deferredTaxService.GetBroughtFoward(createDeferredTax.CompanyId);
+                if (broughtFowardInfo != null)
+                {
+                    createDeferredTax.IsStarted=true;
+                    if (broughtFowardInfo.IsStarted && createDeferredTax.DeferredTaxBroughtFoward > 0)
+                    {
+                        return StatusCode(400, new { errors = new[] { "The Deferred Tax Brought Foward is required once" } });
+                    }
+                }
+                _deferredTaxService.SaveDeferredTax(createDeferredTax);
+                return Ok("Saved Successfully!!!");
+
+            }
+            catch (Exception ex)
+            {
+                var email = User.FindFirst(ClaimTypes.Email).Value;
+                _logger.LogInformation("Exception for {email}, {ex}", email, ex.Message);
+                return StatusCode(500, new { errors = new[] { "Error occured while trying to process your request please try again later !" } });
+
+            }
+
         }
 
     }

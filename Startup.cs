@@ -30,7 +30,7 @@ namespace TaxComputationAPI
 {
     public class Startup
     {
-        
+
         private readonly IConfiguration _configuration;
         public Startup(IConfiguration configuration)
         {
@@ -67,11 +67,11 @@ namespace TaxComputationAPI
                         ValidateAudience = false
                     };
                 });
-             services.AddAuthorization(options =>
-          {
-        options.AddPolicy("SystemAdmin", policy =>
-            policy.Requirements.Add(new SystemAdminRequirment()));
-       });
+            services.AddAuthorization(options =>
+         {
+             options.AddPolicy("SystemAdmin", policy =>
+                  policy.Requirements.Add(new SystemAdminRequirment()));
+         });
 
             services.AddControllers()
             .AddNewtonsoftJson(opt =>
@@ -94,7 +94,7 @@ namespace TaxComputationAPI
             services.AddScoped<IUtilitiesRepository, UtilitiesRepository>();
             services.AddScoped<IAuthenticationRepository, AuthenticationRepository>();
             services.AddScoped<IAuthenticationService, AuthenticationService>();
-            services.AddSingleton<IAuthorizationHandler,SystemAdminHandler>();
+            services.AddSingleton<IAuthorizationHandler, SystemAdminHandler>();
             services.AddScoped<ICapitalAllowanceService, CapitalAllowanceService>();
             services.AddScoped<ICapitalAllowanceRepository, CapitalAllowanceRepository>();
             services.AddScoped<IProfitAndLossService, ProfitAndLossService>();
@@ -105,44 +105,46 @@ namespace TaxComputationAPI
             services.AddScoped<IITLevyService, ITLevyService>();
             services.AddScoped<IInvestmentAllowanceRepository, InvestmentAllowanceRepository>();
             services.AddScoped<IInvestmentAllowanceService, InvestmentAllowanceService>();
-             services.AddScoped<IIncomeTaxRepository, IncomeTaxRepository>();
-              services.AddScoped<IIncomeTaxService, IncomeTaxService>();
+            services.AddScoped<IIncomeTaxRepository, IncomeTaxRepository>();
+            services.AddScoped<IIncomeTaxService, IncomeTaxService>();
+             services.AddScoped<IDeferredTaxRepository, DeferredTaxRepository>();
+            services.AddScoped<IDeferredTaxService, DeferredTaxService>();
             services.AddSingleton<DatabaseManager>();
             services.Configure<ConnectionString>(_configuration.GetSection("ConnectionString"));
             services.AddDbContext<DataContext>(options => options.UseSqlServer(_configuration.GetConnectionString("DefaultConnection")));
             services.AddAutoMapper(typeof(Startup));
             services.AddCors();
 
-             services.AddSwaggerGen(options =>
-            {
-                options.SwaggerDoc("v2", new Microsoft.OpenApi.Models.OpenApiInfo
-                {
-                    Title = "Tax Computation Service API",
-                    Version = "v2",
-                    Description = "Sample service for Learner",
-                });
+            services.AddSwaggerGen(options =>
+           {
+               options.SwaggerDoc("v2", new Microsoft.OpenApi.Models.OpenApiInfo
+               {
+                   Title = "Tax Computation Service API",
+                   Version = "v2",
+                   Description = "Sample service for Learner",
+               });
                 // define swagger docs and other options
                 var securityScheme = new OpenApiSecurityScheme
-                {
-                    Name = "Authorization",
-                    Description = "Enter JWT Bearer authorisation token",
-                    In = ParameterLocation.Header,
-                    Type = SecuritySchemeType.Http,
-                    Scheme = "bearer", // must be lowercase!!!
+               {
+                   Name = "Authorization",
+                   Description = "Enter JWT Bearer authorisation token",
+                   In = ParameterLocation.Header,
+                   Type = SecuritySchemeType.Http,
+                   Scheme = "bearer", // must be lowercase!!!
                     BearerFormat = "Bearer {token}",
-                    Reference = new OpenApiReference
-                    {
-                        Id = JwtBearerDefaults.AuthenticationScheme,
-                        Type = ReferenceType.SecurityScheme
-                    }
-                };
-                options.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, securityScheme);
-                options.AddSecurityRequirement(new OpenApiSecurityRequirement
-    {
+                   Reference = new OpenApiReference
+                   {
+                       Id = JwtBearerDefaults.AuthenticationScheme,
+                       Type = ReferenceType.SecurityScheme
+                   }
+               };
+               options.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, securityScheme);
+               options.AddSecurityRequirement(new OpenApiSecurityRequirement
+   {
         // defines scope - without a protocol use an empty array for global scope
         { securityScheme, Array.Empty<string>() }
-    });
-            });
+   });
+           });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -170,7 +172,7 @@ namespace TaxComputationAPI
             app.UseEndpoints(endpoints =>
            {
                //endpoints.MapControllers();
-               endpoints.MapFallbackToController("Index","Fallback");
+               endpoints.MapFallbackToController("Index", "Fallback");
            });
             app.UseSwagger();
             app.UseSwaggerUI(options => options.SwaggerEndpoint("/swagger/v2/swagger.json", "TaxComputation Service"));

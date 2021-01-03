@@ -89,7 +89,7 @@ namespace TaxComputationAPI.Services
                 Initial = addition * assetDetails.Initial / 100;     //initial=addition*%rateinitial
                 Initial = Math.Round(Initial, 2);
                 value = addition - Initial;         //  
-                annual = value * annualPercentage;   //addition-initial* %annualpercenatgerate
+                annual = value * annualPercentage;   //addition-initial* %annualpercenatgerate  
                 total = Initial + annual;         //total=addition-initial+total;
                 closingResidue = addition - total;      //closingresidue=addition-total
                 remianingYears = totalNoOfYears - 1;    //remainingyears-1
@@ -237,8 +237,12 @@ namespace TaxComputationAPI.Services
             decimal openingResidue = 0;
             var residueValue = residue;
             var previousRecord = await _capitalAllowanceRepository.GetArchivedCapitalAllowanceByAssetIdYear(assetId, companyId, year);
-            await _capitalAllowanceRepository.UpdateCapitalAllowanceByFixedAssetOrBalancingAdjustemnt(previousRecord);
-            SaveCapitalAllowanceSummary(assetId, companyId);
+            if (previousRecord != null)
+            {
+                await _capitalAllowanceRepository.UpdateCapitalAllowanceByFixedAssetOrBalancingAdjustemnt(previousRecord);
+                SaveCapitalAllowanceSummary(assetId, companyId);
+            }
+
         }
 
         private CapitalAllowanceDto GetCapitalAllowance(List<CapitalAllowance> capitalAllowances)
@@ -351,40 +355,48 @@ namespace TaxComputationAPI.Services
             decimal closingResidue = 0;
             decimal disposal = 0;
             var value = await _capitalAllowanceRepository.GetCapitalAllowance(assetId, companyId);
-
-            foreach (var v in value)
+            if (value.Count() > 0)
             {
-                openingResidue += v.OpeningResidue;
-                addition += v.Addition;
-                initial += v.Initial;
-                annual += v.Annual;
-                total += v.Total;
-                closingResidue += v.ClosingResidue;
-                disposal += v.Disposal;
+
+                foreach (var v in value)
+                {
+                    openingResidue += v.OpeningResidue;
+                    addition += v.Addition;
+                    initial += v.Initial;
+                    annual += v.Annual;
+                    total += v.Total;
+                    closingResidue += v.ClosingResidue;
+                    disposal += v.Disposal;
+                }
+
+                _capitalAllowanceRepository.SaveCapitaLAllowanceSummary(new CapitalAllowanceSummary
+                {
+
+                    OpeningResidue = openingResidue,
+                    Addition = addition,
+                    Initial = initial,
+                    Annual = annual,
+                    Total = total,
+                    ClosingResidue = closingResidue,
+                    Disposal = disposal,
+                    AssetId = assetId,
+                    CompanyId = companyId
+
+
+                });
             }
 
-            _capitalAllowanceRepository.SaveCapitaLAllowanceSummary(new CapitalAllowanceSummary
-            {
-
-                OpeningResidue = openingResidue,
-                Addition = addition,
-                Initial = initial,
-                Annual = annual,
-                Total = total,
-                ClosingResidue = closingResidue,
-                Disposal = disposal,
-                AssetId = assetId,
-                CompanyId = companyId
-
-
-            });
         }
 
         public async Task DeleteCapitalAllowanceById(int capitalAllowanceId)
         {
+
             var itemToDelete = await _capitalAllowanceRepository.GetCapitalAllowanceById(capitalAllowanceId);
-            var value = _capitalAllowanceRepository.DeleteCapitalAllowanceById(capitalAllowanceId);
+            var value = _capitalAllowanceRepository.DeleteCapitalAllowanceByAssetIdCompanyIdYearId(itemToDelete.CompanyId, int.Parse(itemToDelete.TaxYear), itemToDelete.AssetId);
             _capitalAllowanceRepository.DeleteCapitalAllowanceSummaryById(itemToDelete.AssetId, itemToDelete.CompanyId);
+            SaveCapitalAllowanceSummary(itemToDelete.AssetId, itemToDelete.CompanyId);
+
+
         }
 
         public async Task<List<CapitalAllowanceSummaryDto>> GetCapitalAllowanceSummaryByCompanyId(int companyId)
@@ -469,6 +481,30 @@ namespace TaxComputationAPI.Services
             }
 
             return total;
+
+        }
+
+
+        public async Task<decimal> GetCapitalAllowanceSummaryForDeferredTax(int companyId)
+        {
+
+
+            List<CapitalAllowanceSummaryDto> values = new List<CapitalAllowanceSummaryDto>();
+            var item = await _capitalAllowanceRepository.GetCapitalAllowanceSummaryByCompanyId(companyId);
+            if (item.Count() == 0)
+            {
+                return 0;
+            }
+
+
+            decimal closingResidue = 0;
+            foreach (var value in item)
+            {
+
+                closingResidue += value.ClosingResidue;
+            }
+
+            return closingResidue;
 
         }
     }

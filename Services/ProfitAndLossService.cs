@@ -509,10 +509,10 @@ namespace TaxComputationAPI.Services
             revenue.Total = $"₦{Utilities.FormatAmount(record.Revenue)}";
             revenueValue = record.Revenue;
             otherIncomeValue = record.OtherOperatingIncome;
-            if (decimal.Parse(record.OtherOperatingIncome) < 0)
+           /* if (decimal.Parse(record.OtherOperatingIncome) < 0)
             {
               otherIncomeValue= await GetBackUpOtherOperatingIcome(companyId,yearId);
-            }
+            }*/
 
             return new MinimumTaxObject
             {

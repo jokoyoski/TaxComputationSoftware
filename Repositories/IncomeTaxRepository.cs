@@ -120,7 +120,7 @@ namespace TaxComputationSoftware.Repositories
         }
 
 
-         public async Task<AllowableDisAllowable> GetAllowableDisAllowableByTrialBalanceId(int Id)
+        public async Task<AllowableDisAllowable> GetAllowableDisAllowableByTrialBalanceId(int Id)
         {
 
 
@@ -145,7 +145,7 @@ namespace TaxComputationSoftware.Repositories
 
         public async Task<BroughtFoward> GetBroughtFowardByCompanyId(int companyId)
         {
-         
+
 
             using (IDbConnection conn = await _databaseManager.DatabaseConnection())
             {
@@ -157,7 +157,7 @@ namespace TaxComputationSoftware.Repositories
 
                 parameters.Add("@CompanyId", companyId);
 
-                var record =  conn.QueryFirstOrDefault<BroughtFoward>("[dbo].[usp_Get_Brought_Foward_By_CompanyId]", parameters, commandType: CommandType.StoredProcedure);
+                var record = conn.QueryFirstOrDefault<BroughtFoward>("[dbo].[usp_Get_Brought_Foward_By_CompanyId]", parameters, commandType: CommandType.StoredProcedure);
                 return record;
             }
 
@@ -191,24 +191,33 @@ namespace TaxComputationSoftware.Repositories
 
         public async Task<int> CreateBalanceBroughtFoward(BroughtFoward broughtFoward)
         {
-            int rowAffected = 0;
-            using (IDbConnection con = await _databaseManager.DatabaseConnection())
+            try
             {
-                if (con.State == ConnectionState.Closed)
-                    con.Open();
+                int rowAffected = 0;
+                using (IDbConnection con = await _databaseManager.DatabaseConnection())
+                {
+                    if (con.State == ConnectionState.Closed)
+                        con.Open();
 
-                DynamicParameters parameters = new DynamicParameters();
-                parameters.Add("@CompanyId", broughtFoward.CompanyId);
-                parameters.Add("@IsStarted", broughtFoward.IsStarted);
-                parameters.Add("@LossBf", broughtFoward.LossBf);
-                parameters.Add("@LossCf", broughtFoward.LossCf);
-                parameters.Add("@Accessible", broughtFoward.Accessible);
-                parameters.Add("@UnRelievedCf", broughtFoward.UnRelievedCf);
-                parameters.Add("@UnRelievedBf", broughtFoward.UnRelievedBf);
-                rowAffected = con.Execute("[dbo].[usp_Insert_Into_Brought_Foward]", parameters, commandType: CommandType.StoredProcedure);
+                    DynamicParameters parameters = new DynamicParameters();
+                    parameters.Add("@CompanyId", broughtFoward.CompanyId);
+                    parameters.Add("@IsStarted", broughtFoward.IsStarted);
+                    parameters.Add("@LossBf", broughtFoward.LossBf);
+                    parameters.Add("@LossCf", broughtFoward.LossCf);
+                    parameters.Add("@Accessible", 0);
+                    parameters.Add("@UnRelievedCf", broughtFoward.UnRelievedCf);
+                    parameters.Add("@UnRelievedBf", broughtFoward.UnRelievedBf);
+                    rowAffected = con.Execute("[dbo].[usp_Insert_Into_Brought_Foward]", parameters, commandType: CommandType.StoredProcedure);
+                }
+
+                return rowAffected;
+
             }
+            catch (Exception ex)
+            {
 
-            return rowAffected;
+            }
+            return 3;
         }
 
 
@@ -225,7 +234,8 @@ namespace TaxComputationSoftware.Repositories
                 parameters.Add("@CompanyId", broughtFoward.CompanyId);
                 parameters.Add("@LossCf", broughtFoward.LossCf);
                 parameters.Add("@UnRelievedCf", broughtFoward.UnRelievedCf);
-                rowAffected = con.Execute("[dbo].[usp_Update_Accessible_By_Income_Tax]", parameters, commandType: CommandType.StoredProcedure);
+                parameters.Add("@Accessible", broughtFoward.Accessible);
+                rowAffected = con.Execute("[dbo].[usp_Accessible_Cf_By_Income_Tax]", parameters, commandType: CommandType.StoredProcedure);
             }
 
             return rowAffected;

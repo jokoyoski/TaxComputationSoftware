@@ -297,20 +297,18 @@ AS
 select  TaxYear,OpeningResidue,Addition,Disposal,Initial,Annual,Total,ClosingResidue,YearsToGo,NumberOfYearsAvailable,CompanyCode,Channel,CompanyId,AssetId from [dbo].[ArchivedCapitalAllowance] where CompanyId=@CompanyId AND AssetId=@AssetId AND TaxYear=@Year
 GO
 
---------------------------------------- STORED PROCEDURE TO  DELETE CAPITALALLOWANCE BY ID-----------------------------------------
-IF OBJECT_ID('[dbo].[usp_Delete_Capital_Allowance_By_Id]') IS nOT NULL
+--------------------------------------- STORED PROCEDURE TO  DELETE CAPITALALLOWANCE BY ASSETID YEARID COMPANYID-----------------------------------------
+IF OBJECT_ID('[dbo].[usp_Delete_Capital_Allowance_By_Company_Id_YearId_Asset_Id]') IS nOT NULL
 BEGIN
-DROP procedure [dbo].[usp_Delete_Capital_Allowance_By_Id]
+DROP procedure [dbo].[usp_Delete_Capital_Allowance_By_Company_Id_YearId_Asset_Id]
 END
 GO
-CREATE procedure [dbo].[usp_Delete_Capital_Allowance_By_Id](
-@Id varchar(20)
+CREATE procedure [dbo].[usp_Delete_Capital_Allowance_By_Company_Id_YearId_Asset_Id](
+@AssetId int,
+@Year int,
+@CompanyId int
 )
 AS
-declare  @AssetId int
-declare  @Year int
-declare  @CompanyId int
-select @AssetId=AssetId,@Year=TaxYear, @CompanyId=CompanyId   from [dbo].[CapitalAllowance] where Id=Id
 Delete from [dbo].[ArchivedCapitalAllowance] where AssetId=@AssetId and TaxYear=@Year and CompanyId=@CompanyId
 Delete from [dbo].CapitalAllowance where AssetId=@AssetId and TaxYear=@Year and CompanyId=@CompanyId
 GO

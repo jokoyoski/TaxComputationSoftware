@@ -245,17 +245,19 @@ namespace TaxComputationAPI.Repositories
             }
             return 0;
         }
-        public async Task DeleteCapitalAllowanceById(int Id)
+        public async Task DeleteCapitalAllowanceByAssetIdCompanyIdYearId(int companyId, int yearId, int assetId)
         {
             using (IDbConnection conn = await _databaseManager.DatabaseConnection())
             {
                 if (conn.State == ConnectionState.Closed) conn.Open();
 
                 DynamicParameters parameters = new DynamicParameters();
-                parameters.Add("@Id", Id);
+                parameters.Add("@CompanyId", companyId);
+                parameters.Add("@Year", yearId);
+                parameters.Add("@AssetId", assetId);
                 try
                 {
-                    conn.Execute("[dbo].[usp_Delete_Capital_Allowance_By_Id]", parameters, commandType: CommandType.StoredProcedure);
+                    conn.Execute("[dbo].[usp_Delete_Capital_Allowance_By_Company_Id_YearId_Asset_Id]", parameters, commandType: CommandType.StoredProcedure);
                     conn.Close();
                 }
                 catch (Exception e)

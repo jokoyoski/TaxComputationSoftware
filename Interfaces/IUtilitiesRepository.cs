@@ -39,5 +39,7 @@ namespace TaxComputationAPI.Interfaces
         Task AddCompanyCode(CompanyCode companyCode);
 
         Task<CompanyCode> GetCompanyCodeByCodeId(int companyId);
+
+        Task DeleteFairGainByTrialBalanceId(int Id);
     }
 }

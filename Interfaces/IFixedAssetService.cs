@@ -11,6 +11,8 @@ namespace TaxComputationAPI.Interfaces
         // decimal GetAmount(string type, List<int> trialBalance);
          Task DeleteFixedAsset (int fixedAssetId);
 
+         Task<decimal> GetFixedAssetsByCompanyForDeferredTax(int companyId, int yearId);
+
          Task<decimal> GetAmount(List<int> trialBalances, bool isCost);
          Task<TaxComputationAPI.Dtos.FixedAssetResponseDto> GetFixedAssetsByCompany(int companyId, int yearId);
     }

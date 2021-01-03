@@ -22,11 +22,11 @@ namespace TaxComputationSoftware.Controllers
         private readonly ITrialBalanceService _trialBalanceService;
         private readonly IIncomeTaxService _incomeTaxService;
 
-        public IncomeTaxController(ILogger<IncomeTaxController> logger, ITrialBalanceService trialBalanceService,IIncomeTaxService incomeTaxService)
+        public IncomeTaxController(ILogger<IncomeTaxController> logger, ITrialBalanceService trialBalanceService, IIncomeTaxService incomeTaxService)
         {
             _logger = logger;
             _incomeTaxService = incomeTaxService;
-            _trialBalanceService=trialBalanceService;
+            _trialBalanceService = trialBalanceService;
         }
 
         [HttpGet("{companyId}/{yearId}/{IsItLevyView}")]
@@ -34,17 +34,13 @@ namespace TaxComputationSoftware.Controllers
         public async Task<IActionResult> GetIncometax(int companyId, int yearId, bool IsItLevyView)
         {
 
-
-
             if (yearId == 0)
             {
                 return StatusCode(400, new { errors = new[] { "Please select a Valid year" } });
             }
             try
             {
-
                 var value = await _incomeTaxService.GetIncomeTax(companyId, yearId, IsItLevyView);
-
                 return Ok(value);
 
             }
@@ -65,7 +61,37 @@ namespace TaxComputationSoftware.Controllers
         {
             try
             {
-                  foreach (var j in createIncomeTaxDto.IncomeList)
+                if (createIncomeTaxDto.LossBroughtFoward > 0)
+                {
+                    return StatusCode(400, new { errors = new[] { "Since it is a loss brought foward, a negative value is needed!!" } });
+                }
+
+                if (createIncomeTaxDto.TypeId == 0)
+                {
+                    foreach (var j in createIncomeTaxDto.IncomeList)
+                    {
+
+                        if (j.IsCredit && !j.IsBoth && !j.IsDebit)
+                        {
+                            return StatusCode(400, new { errors = new[] { "Debit Values only are required for DisAlllowable" } });
+                        }
+                    }
+
+                }
+
+                if (createIncomeTaxDto.TypeId == 1)
+                {
+                    foreach (var j in createIncomeTaxDto.IncomeList)
+                    {
+
+                        if (!j.IsCredit && !j.IsBoth && j.IsDebit)
+                        {
+                            return StatusCode(400, new { errors = new[] { "Credit Values only are required for Allowable" } });
+                        }
+                    }
+                };
+
+                foreach (var j in createIncomeTaxDto.IncomeList)
                 {
                     var trialBalanceRecord = await _trialBalanceService.GetTrialBalanceById(j.TrialBalanceId);
                     if (trialBalanceRecord.IsCheck)
@@ -78,7 +104,7 @@ namespace TaxComputationSoftware.Controllers
                 {
                     return StatusCode(400, new { errors = new[] { "Income Tax for Previous Year is not Alllowed!" } });
                 }
-                
+
                 var broughtFowardInfo = await _incomeTaxService.GetBroughtFoward(createIncomeTaxDto.CompanyId);
                 if (broughtFowardInfo != null)
                 {
@@ -87,6 +113,7 @@ namespace TaxComputationSoftware.Controllers
                         return StatusCode(400, new { errors = new[] { "The LossBf/UnRelievedBf is required once" } });
                     }
                 }
+
                 _incomeTaxService.SaveAllowableDisAllowable(createIncomeTaxDto);
                 return Ok("Income tax created successfully");
 

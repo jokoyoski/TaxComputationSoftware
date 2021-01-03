@@ -195,6 +195,28 @@ namespace TaxComputationAPI.Repositories
             return null;
         }
 
+         public async Task DeleteFairGainByTrialBalanceId(int Id)
+        {
+            using (IDbConnection conn = await _databaseManager.DatabaseConnection())
+            {
+                if (conn.State == ConnectionState.Closed) conn.Open();
+
+                DynamicParameters parameters = new DynamicParameters();
+                parameters.Add("@TrialBalanceId", Id);
+                try
+                {
+                    conn.Execute("[dbo].[Delete_Fair_Gain_By_TrialBalanceId]", parameters, commandType: CommandType.StoredProcedure);
+                    conn.Close();
+                }
+                catch (Exception e)
+                {
+
+                    throw e;
+                }
+            }
+        }
+
+
 
 
         public async Task<AllowableDisAllowable> GetAllowableDisAllowableById(int Id)

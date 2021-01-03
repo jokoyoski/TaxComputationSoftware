@@ -138,6 +138,7 @@ BEGIN
  IsStarted bit,
  LossBf decimal,
  LossCf decimal,
+ Accessible decimal,
  UnRelievedCf decimal,
  UnRelievedBf decimal
  )
@@ -183,6 +184,7 @@ CREATE procedure [usp_Insert_Into_Brought_Foward](
 @IsStarted bit,
 @LossBf decimal,
 @LossCf decimal,
+@Accessible decimal,
 @UnRelievedCf decimal,
 @UnRelievedBf decimal
 )
@@ -194,8 +196,8 @@ CompanyId,
 IsStarted,
 LossBf,
 LossCf,
-UnRelievedCf,
 Accessible,
+UnRelievedCf,
 UnRelievedBf
 )
 VALUES(
@@ -203,6 +205,7 @@ VALUES(
 @IsStarted,
 @LossBf,
 @LossCf,
+@Accessible,
 @UnRelievedCf,
 @UnRelievedBf
 )
@@ -215,18 +218,19 @@ GO
 
 IF OBJECT_ID('[dbo].[usp_Accessible_Cf_By_Income_Tax]') IS NOT NULL
 BEGIN
-DROP procedure [dbo].[usp_Update_Cf_By_Income_Tax]
+DROP procedure [dbo].[usp_Accessible_Cf_By_Income_Tax]
 PRINT('OK')
 END
 GO
 
-CREATE procedure [usp_Update_Accessible_By_Income_Tax](
+CREATE procedure [usp_Accessible_Cf_By_Income_Tax](
 @CompanyId int,
 @LossCf decimal,
-@UnRelievedCf decimal
+@UnRelievedCf decimal,
+@Accessible decimal
 )
 AS
-Update [dbo].[BroughtFoward] set LossCf=@LossCf, UnRelievedCf=@UnRelievedCf where CompanyId=@CompanyId
+Update [dbo].[BroughtFoward] set LossCf=@LossCf, UnRelievedCf=@UnRelievedCf ,Accessible=@Accessible where CompanyId=@CompanyId
 GO
 
 
@@ -256,5 +260,5 @@ AS
 declare @lossCfValue decimal
 declare @UnRelievedCf decimal
 select @lossCfValue=LossCf, @UnRelievedCf=UnRelievedCf from [dbo].[BroughtFoward] where CompanyId=@CompanyId
-Update [dbo].[BroughtFoward] set LossBf=@lossCfValue ,LossCf=null, UnRelievedBf=@UnRelievedCf,UnRelievedCf=null where CompanyId=@CompanyId
+Update [dbo].[BroughtFoward] set LossBf=@lossCfValue ,LossCf=null, UnRelievedBf=@UnRelievedCf,UnRelievedCf=null ,Accessible=null where CompanyId=@CompanyId
 GO

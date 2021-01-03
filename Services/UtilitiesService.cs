@@ -118,6 +118,13 @@ namespace TaxComputationAPI.Services
 
                 await _trialBalanceRepository.UpdateTrialBalance(itemToDelete.TrialBalanceId, null, true);  //fice
             }
+             else if (module == "DEFERRED TAX")
+            {
+    
+                _utilitiesRepository.DeleteFairGainByTrialBalanceId(trialBalanceId);
+
+                await _trialBalanceRepository.UpdateTrialBalance(trialBalanceId, null, true);  //fice
+            }
 
 
         }

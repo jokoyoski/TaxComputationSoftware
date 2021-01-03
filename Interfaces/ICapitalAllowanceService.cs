@@ -27,5 +27,7 @@ namespace TaxComputationAPI.Interfaces
 
         Task<List<CapitalAllowanceSummaryDto>> GetCapitalAllowanceSummaryByCompanyId(int companyId);
 
+        Task<decimal> GetCapitalAllowanceSummaryForDeferredTax(int companyId);
+
     }
 }
