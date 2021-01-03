@@ -18,6 +18,7 @@ namespace TaxComputationSoftware.Services
         private readonly IEmailService _emailService;
         private readonly ILogger<AnnualEmailNotificationJob> _logger;
         public const int AnnualJob = 48;
+        public const int EmailDay = 2;
 
         public AnnualEmailNotificationJob(INotificationRepository notificationRepository, ICompaniesRepository companyRepository, IEmailService emailService, ILogger<AnnualEmailNotificationJob> logger)
         {
@@ -51,7 +52,7 @@ namespace TaxComputationSoftware.Services
                 PreNotification email = default(PreNotification);
 
                 var companyDate = item.OpeningDate.Date;
-                var emailDate = DateTime.Now.AddDays(5).Date;
+                var emailDate = DateTime.Now.AddDays(EmailDay).Date;
                 
 
                 if (companyDate == emailDate) 

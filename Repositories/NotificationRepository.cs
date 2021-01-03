@@ -61,12 +61,14 @@ namespace TaxComputationSoftware.Repositories
                 DynamicParameters parameters = new DynamicParameters();
 
                 parameters.Add("@Id", preNotification.Id);
+                parameters.Add("@CompanyId", preNotification.CompanyId);
                 parameters.Add("@OpeningDate", preNotification.OpeningDate);
 
                 try
                 {
                     var respone = conn.Execute("[dbo].[usp_Insert_PreNotification]", parameters, commandType: CommandType.StoredProcedure);
                     conn.Close();
+                    var tim = preNotification;
                 }
                 catch (Exception e)
                 {
@@ -89,6 +91,7 @@ namespace TaxComputationSoftware.Repositories
 
                 parameters.Add("@Id", preNotification.Id);
                 parameters.Add("@OpeningDate", preNotification.OpeningDate);
+                parameters.Add("@JobDate", preNotification.JobDate);
 
                 try
                 {
