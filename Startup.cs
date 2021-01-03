@@ -96,7 +96,7 @@ namespace TaxComputationAPI
             services.AddSingleton(new JobSchedule
             (
                 jobType: typeof(AnnualEmailNotificationJob),
-                cronExpression: "0 */1 * * * ?"
+                cronExpression: "0 */5 * * * ?"
             ));
 
             services.AddHostedService<BackgroundJobService>();
