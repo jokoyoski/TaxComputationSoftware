@@ -29,5 +29,9 @@ namespace TaxComputationAPI.Interfaces
 
         Task<decimal> GetCapitalAllowanceSummaryForDeferredTax(int companyId);
 
+         Task<int> UpdateCapitalAllowanceForChannel(string channel, int Id);
+
+         Task<int> UpdateArchivedCapitalAllowanceForChannel(string channel, int companyId, string taxYear, int assetId);
+
     }
 }

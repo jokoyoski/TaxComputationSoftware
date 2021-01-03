@@ -309,6 +309,8 @@ namespace TaxComputationAPI.Services
                         YearsToGo = x.YearsToGo,
                         NumberOfYearsAvailable = x.NumberOfYearsAvailable,
                         ClosingResidue = $"₦{Utilities.FormatAmount(x.ClosingResidue)}",
+                        Channel=x.Channel,
+                        CompanyId=x.CompanyId
                     };
                     capitalAllowanceList.Add(m);
                 }
@@ -506,6 +508,16 @@ namespace TaxComputationAPI.Services
 
             return closingResidue;
 
+        }
+
+        public Task<int> UpdateCapitalAllowanceForChannel(string channel, int Id)
+        {
+            return _capitalAllowanceRepository.UpdateCapitalAllowanceForChannel(channel,Id);
+        }
+
+        public Task<int> UpdateArchivedCapitalAllowanceForChannel(string channel, int companyId, string taxYear, int assetId)
+        {
+           return _capitalAllowanceRepository.UpdateArchivedCapitalAllowanceForChannel(channel,companyId,taxYear,assetId);
         }
     }
 }

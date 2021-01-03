@@ -438,3 +438,53 @@ AS
 Delete from [dbo].[CapitalAllowanceSummary] where AssetId=@AssetId and CompanyId=@CompanyId
 GO
 
+
+
+
+
+--------------------------------------- STORED PROCEDURE TO  GET UPDATE CAPITAL ALLOWANCE BY CHANNEL-----------------------------------------
+
+IF OBJECT_ID('[dbo].[Update_Capital_Allowance_By_Channel]') IS nOT NULL
+BEGIN
+DROP procedure [dbo].[Update_Capital_Allowance_By_Channel]
+END
+GO
+CREATE procedure [dbo].[Update_Capital_Allowance_By_Channel](
+@Id int,
+@Channel varchar(10)
+)
+AS
+
+UPDATE [dbo].[CapitalAllowance]
+set Channel=@Channel  WHERE Id=@Id
+
+GO
+
+
+
+
+
+
+
+--------------------------------------- STORED PROCEDURE TO  GET UPDATE  ARCHIVED CAPITAL ALLOWANCE BY COMPANYID, ASSETID,TAXYEAR  FRO CHANNEL-----------------------------------------
+
+IF OBJECT_ID('[dbo].[Update_Archived_Capital_Allowance_By_Channel]') IS nOT NULL
+BEGIN
+DROP procedure [dbo].[Update_Archived_Capital_Allowance_By_Channel]
+END
+GO
+CREATE procedure [dbo].[Update_Archived_Capital_Allowance_By_Channel](
+@CompanyId int,
+@AssetId int,
+@Channel varchar(10),
+@TaxYear varchar (6)
+)
+AS
+
+UPDATE [dbo].[ArchivedCapitalAllowance]
+set Channel=@Channel  WHERE CompanyId=@CompanyId  and AssetId=@AssetId and  TaxYear=@TaxYear
+GO
+
+
+
+

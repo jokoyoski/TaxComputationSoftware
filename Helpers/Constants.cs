@@ -8,6 +8,7 @@ namespace TaxComputationAPI.Helpers
         public const string  User ="USER";
         public const string  SYS ="SYSTEMADMIN";
         public const string FixedAsset="FA";
+        public const string ProceedFixedAsset ="PFA";
         public const string BalancingAdjustment="BA";
 
         public const string OldBalancingAdjustment ="OBA";

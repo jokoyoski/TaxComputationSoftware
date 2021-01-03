@@ -139,6 +139,45 @@ namespace TaxComputationAPI.Repositories
         }
 
 
+        public async Task<int> UpdateCapitalAllowanceForChannel(string channel, int Id)
+        {
+            int rowAffected = 0;
+            using (IDbConnection con = await _databaseManager.DatabaseConnection())
+            {
+                if (con.State == ConnectionState.Closed)
+                    con.Open();
+
+                DynamicParameters parameters = new DynamicParameters();
+
+                parameters.Add("@Channel", channel);
+                parameters.Add("@Id", Id);
+                rowAffected = con.Execute("[dbo].[Update_Capital_Allowance_By_Channel]", parameters, commandType: CommandType.StoredProcedure);
+            }
+
+            return rowAffected;
+        }
+
+
+        public async Task<int> UpdateArchivedCapitalAllowanceForChannel(string channel, int companyId, string taxYear, int assetId)
+        {
+            int rowAffected = 0;
+            using (IDbConnection con = await _databaseManager.DatabaseConnection())
+            {
+                if (con.State == ConnectionState.Closed)
+                    con.Open();
+
+                DynamicParameters parameters = new DynamicParameters();
+
+                parameters.Add("@Channel", channel);
+                parameters.Add("@CompanyId", companyId);
+                parameters.Add("@TaxYear", taxYear);
+                parameters.Add("@AssetId", assetId);
+                rowAffected = con.Execute("[dbo].[Update_Archived_Capital_Allowance_By_Channel]", parameters, commandType: CommandType.StoredProcedure);
+            }
+
+            return rowAffected;
+        }
+
 
 
 
