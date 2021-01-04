@@ -47,7 +47,7 @@ namespace TaxComputationAPI.Controllers
                         return StatusCode(400, new { errors = new[] { "One of the item selected has already been mapped, please reload" } });
                     }
                 }
-                 var startDate = _memoryCache.Get<DateTime>(Constants.OpeningDate);
+                var startDate = _memoryCache.Get<DateTime>(Constants.OpeningDate);
                 var endDate = _memoryCache.Get<DateTime>(Constants.ClosingDate);
                 var isValid = Utilities.ValidateDate(startDate, endDate, profitAndLoss.YearId);
                 if (!isValid)

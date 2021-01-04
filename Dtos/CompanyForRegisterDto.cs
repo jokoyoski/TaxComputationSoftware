@@ -20,7 +20,7 @@ namespace TaxComputationAPI.Dtos
         [Required(ErrorMessage = "OpeningYear is Required")]
         public string OpeningYear { get; set; }
 
-        [Required(ErrorMessage = "Month of Operation is Required")]
+       // [Required(ErrorMessage = "Month of Operation is Required")]
         public string MonthOfOperation { get; set; }
         public string ClosingYear { get; set; }
     }

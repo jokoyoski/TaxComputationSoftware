@@ -18,17 +18,18 @@ namespace TaxComputationAPI.Helpers
             return $"{value}";
         }
 
-        public static bool ValidateDate(DateTime openingDate,DateTime closingDate, int yearId)
+        public static bool ValidateDate(DateTime openingDate, DateTime closingDate, int yearId)
         {
             int openingDay = openingDate.Day;
             int openingMonth = openingDate.Month;
             string timeFormat = $"{yearId}/{openingMonth}/{openingDay}";
-            var openingDateValue=openingDate;
-            if (DateTime.Parse(timeFormat) >=openingDate)
+            var openingDateValue = openingDate;
+            DateTime timeDate = DateTime.Parse(timeFormat).Date;
+            if (timeDate < openingDate.Date)
             {
                 return false;
             }
-            if (DateTime.Parse(timeFormat) < closingDate)
+            if (timeDate > closingDate)
             {
                 return false;
             }

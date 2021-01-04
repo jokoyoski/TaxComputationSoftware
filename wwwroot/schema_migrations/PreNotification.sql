@@ -14,12 +14,12 @@ BEGIN
         [Id] [int] IDENTITY(1,1) NOT NULL,
         [CompanyId] [int] NOT NULL,
         [OpeningDate] [datetime2](7) NOT NULL,
-        [ClosingingDate] [datetime2](7) NOT NULL,
+        [ClosingDate] [datetime2](7) NOT NULL,
         [JobDate] [datetime2](7) NULL,
         [IsLocked] BIT NOT NULL,
         CONSTRAINT [PK_PreNotification] PRIMARY KEY CLUSTERED
 (
-	[Id] ASC
+    [Id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 END
@@ -51,7 +51,7 @@ CREATE PROCEDURE [dbo].[usp_Insert_PreNotification](
     @Id int out,
     @CompanyId int,
     @OpeningDate datetime2 (7),
-    @ClosingingDate datetime2 (7),
+    @ClosingDate datetime2 (7),
     @IsLocked bit
 
 )
@@ -61,14 +61,14 @@ INSERT [dbo].[PreNotification]
 (
     CompanyId,
     OpeningDate,
-    ClosingingDate,
+    ClosingDate,
     IsLocked
 )
 VALUES
 (
     @CompanyId,
     @OpeningDate,
-    @ClosingingDate,
+    @ClosingDate,
     @IsLocked
 )
 SET @Id = SCOPE_IDENTITY()
@@ -95,7 +95,7 @@ AS
 BEGIN
 UPDATE [dbo].[PreNotification]
 SET  OpeningDate = @OpeningDate,
-     ClosingingDate = @ClosingingDate,
+     ClosingDate = @ClosingDate,
      JobDate = @JobDate
 WHERE Id=@Id
 END
@@ -144,4 +144,3 @@ SET  IsLocked = @IsLocked
 WHERE Id=@Id
 END
 GO
-

@@ -32,19 +32,21 @@ namespace TaxComputationSoftware.Services
                 var pre = await _notificationRepository.GetPreNotification();
                 foreach (var item in pre)
                 {
-                    if (DateTime.Now.Date == item.OpeningDate.Date)
+                    if (DateTime.Now.Date == item.OpeningDate.Date && !item.IsLocked)
                     {  //add unlock
-                        UnlockCapitalAllowance(item.CompanyId);
+                        UnlockCapitalAllowance(item.CompanyId, item.Id);
                     }
                 }
-            }catch(Exception ex){
-        var v=ex.Message;
+            }
+            catch (Exception ex)
+            {
+                var v = ex.Message;
             }
 
 
         }
 
-        public async Task UnlockCapitalAllowance(int companyId)
+        public async Task UnlockCapitalAllowance(int companyId, int Id)
         {
             try
             {
@@ -58,33 +60,25 @@ namespace TaxComputationSoftware.Services
                         foreach (var value in record.capitalAllowances)
                         {
                             string channel = "";
-                            if (value.Channel == Constants.FixedAsset)
+                            if (value.Channel.ElementAt(0) == 'F')
                             {
-                                channel = Constants.ProceedFixedAssetOpen;
+                                channel = Constants.FixedAssetOpen;
                             }
-                            else if (value.Channel == Constants.ProceedFixedAssetClosed)
+                            if (value.Channel.ElementAt(0) == 'B')
                             {
-                                channel = Constants.ProceedFixedAssetOpen;
+                                channel = Constants.BalancingAdjustementOpen;
                             }
-                            else if (value.Channel == Constants.BalancingAdjustment)
+                            if (value.Channel.ElementAt(0) == 'O')
                             {
-                                channel = Constants.BalancingAdjustment;
+                                channel = Constants.OldBalancingAdjustmentOpen;
                             }
-                            else if (value.Channel == Constants.BalancingAdjustmentSet)
-                            {
-                                channel = Constants.BalancingAdjustment;
-                            }
-                            else if (value.Channel == Constants.OldBalancingAdjustment)
-                            {
-                                channel = Constants.OldBalancingAdjustment;
-                            }
-                            else if (value.Channel == Constants.OldBalancingAdjustmentSet)
-                            {
-                                channel = Constants.OldBalancingAdjustmentSet;
-                            }
-
                             await _notificationRepository.UpdateCapitalAllowanceForChannel(channel, value.Id);
                             await _notificationRepository.UpdateArchivedCapitalAllowanceForChannel(channel, value.CompanyId, value.TaxYear, item.Id);
+                            _notificationRepository.Lock(new Model.PreNotification
+                            {
+                                Id = Id,
+                                IsLocked = true
+                            });
                         }
                     }
                 }

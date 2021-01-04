@@ -5,26 +5,33 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using TaxComputationAPI.Dtos;
+using TaxComputationAPI.Helpers;
 using TaxComputationAPI.Interfaces;
 using TaxComputationAPI.Models;
 
-namespace TaxComputationAPI.Controllers {
-    [Route ("api/[controller]")]
+namespace TaxComputationAPI.Controllers
+{
+    [Route("api/[controller]")]
     [ApiController]
-    public class UtilitiesController : ControllerBase {
+    public class UtilitiesController : ControllerBase
+    {
         private readonly IUtilitiesService _utilitiesService;
         private readonly IMapper _mapper;
         private readonly ILogger<UtilitiesController> _logger;
+        private readonly IMemoryCache _memoryCache;
 
-        public UtilitiesController (IUtilitiesService utilitiesService, IMapper mapper, ILogger<UtilitiesController> logger) {
+        public UtilitiesController(IUtilitiesService utilitiesService, IMemoryCache memoryCache, IMapper mapper, ILogger<UtilitiesController> logger)
+        {
             _logger = logger;
             _mapper = mapper;
             _utilitiesService = utilitiesService;
+            _memoryCache = memoryCache;
         }
 
-      
+
         [HttpGet("asset-class")]
         [Authorize]
         public async Task<IActionResult> ListAssetClassMapping()
@@ -103,16 +110,16 @@ namespace TaxComputationAPI.Controllers {
         {
             try
             {
-               
-               // var assetMappingRecord = await _utilitiesService.GetAssetMappingById(Id);
-              /*  if (assetMappingRecord == null)
-                {
-                    // var error = new[] { "Asset mapping does not exist!" };
-                    return StatusCode(400, new { errors = new[] { "Asset mapping does not exist!" } });
 
-                }
+                // var assetMappingRecord = await _utilitiesService.GetAssetMappingById(Id);
+                /*  if (assetMappingRecord == null)
+                  {
+                      // var error = new[] { "Asset mapping does not exist!" };
+                      return StatusCode(400, new { errors = new[] { "Asset mapping does not exist!" } });
 
-                await _utilitiesService.DeleteAssetMappingAsync(Id); */
+                  }
+
+                  await _utilitiesService.DeleteAssetMappingAsync(Id); */
 
                 return Ok("Feature disabled !!!");
             }
@@ -123,7 +130,27 @@ namespace TaxComputationAPI.Controllers {
             }
         }
 
-       
+
+        [HttpGet("end-date")]
+        //[Authorize]
+        public async Task<IActionResult> EndDate()
+        {
+            try
+            {
+                var endDate = _memoryCache.Get<DateTime>(Constants.ClosingDate);
+                return Ok(endDate);
+
+            }
+            catch (Exception ex)
+            {
+                var email = User.FindFirst(ClaimTypes.Email).Value;
+                _logger.LogInformation("Exception for {email}, {ex}", email, ex.Message);
+                return StatusCode(500, new { errors = new[] { "Error occured while trying to process your request please try again later !" } });
+
+            }
+        }
+
+
         [HttpGet("financial-year")]
         [Authorize]
         public async Task<IActionResult> GetFinancialYear()
@@ -143,13 +170,14 @@ namespace TaxComputationAPI.Controllers {
 
             }
         }
-         [HttpGet("module-items/{moduleCode}")]
-       /// [Authorize]
+        [HttpGet("module-items/{moduleCode}")]
+        /// [Authorize]
         public async Task<IActionResult> GetItemModules(string moduleCode)
         {
             try
             {
-                if(moduleCode==null){
+                if (moduleCode == null)
+                {
                     return StatusCode(400, new { errors = new[] { "Your module code annot be null" } });
 
                 }
@@ -167,6 +195,6 @@ namespace TaxComputationAPI.Controllers {
             }
         }
 
-        
+
     }
 }

@@ -7,8 +7,10 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using TaxComputationAPI.Dtos;
+using TaxComputationAPI.Helpers;
 using TaxComputationAPI.Interfaces;
 using TaxComputationAPI.Models;
 
@@ -21,11 +23,14 @@ namespace TaxComputationAPI.Controllers
         private readonly ILogger<InvestmentAllowanceController> _logger;
         private readonly IMapper _mapper;
         private readonly IInvestmentAllowanceService _investmentAllowanceService;
-        public InvestmentAllowanceController(ILogger<InvestmentAllowanceController> logger, IMapper mapper, IInvestmentAllowanceService investmentAllowanceService)
+
+        private readonly IMemoryCache _memoryCache;
+        public InvestmentAllowanceController(ILogger<InvestmentAllowanceController> logger,IMemoryCache memoryCache ,IMapper mapper, IInvestmentAllowanceService investmentAllowanceService)
         {
             _logger = logger;
             _mapper = mapper;
             _investmentAllowanceService = investmentAllowanceService;
+            _memoryCache=memoryCache;
         }
 
         [HttpPost("investment-allowance")]
@@ -34,10 +39,14 @@ namespace TaxComputationAPI.Controllers
             try
             {
 
-                if (investmentAllowanceDto.YearId < DateTime.Now.Year)
+                 var startDate = _memoryCache.Get<DateTime>(Constants.OpeningDate);
+                var endDate = _memoryCache.Get<DateTime>(Constants.ClosingDate);
+                var isValid = Utilities.ValidateDate(startDate, endDate, investmentAllowanceDto.YearId);
+                if (!isValid)
                 {
-                    return StatusCode(400, new { errors = new[] { "Investment Allowance Tax for Previous Year is not Alllowed!" } });
+                    return StatusCode(400, new { errors = new[] { "The year selected has to be within the financial year!!" } });
                 }
+
                 var investmentAllowanceToAdd = _mapper.Map<InvestmentAllowance>(investmentAllowanceDto);
                 investmentAllowanceToAdd.AssetId = investmentAllowanceDto.AssetId;
                 investmentAllowanceToAdd.CompanyId = investmentAllowanceDto.CompanyId;

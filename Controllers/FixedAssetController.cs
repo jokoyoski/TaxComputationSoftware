@@ -53,18 +53,10 @@ namespace TaxComputationAPI.Controllers
                     }
                 }
 
-                bool isDisposalNegative = false;
-                decimal costDisposal = 0;
-                if (createFixed.CostDisposal == -1)
-                {
-                    costDisposal = createFixed.CostDisposal;
-                    createFixed.CostDisposal = 0;
-                    isDisposalNegative = true;
-                }
+               
                 var startDate = _memoryCache.Get<DateTime>(Constants.OpeningDate);
                 var endDate = _memoryCache.Get<DateTime>(Constants.ClosingDate);
                 var isValid = Utilities.ValidateDate(startDate, endDate, createFixed.YearId);
-
                 if (!isValid)
                 {
                     return StatusCode(400, new { errors = new[] { "The year selected has to be within the financial year!!" } });
@@ -144,11 +136,7 @@ namespace TaxComputationAPI.Controllers
                     return StatusCode(400, new { errors = new[] { "Please select a valid company" } });
 
                 }
-                if (isDisposalNegative)
-                {
-                    createFixed.CostDisposal = costDisposal;
-                }
-
+                
                 await _fixedAssetService.SaveFixedAsset(createFixed);
 
                 return Ok("saved successfully");

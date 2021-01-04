@@ -40,11 +40,6 @@ namespace TaxComputationAPI.Controllers
         {
 
 
-            if (int.Parse(addBalanceAdjustmentDto.Year) < int.Parse(addBalanceAdjustmentDto.YearBought))
-            {
-                return BadRequest(new { errors = new[] { "Year asset was bought cannot be greater than the year of balancing adjustment!!" } });
-
-            }
 
             var previousRecord = await _capitalAllowanceService.GetCapitalAllowanceByAssetIdYear(addBalanceAdjustmentDto.AssetId, addBalanceAdjustmentDto.CompanyId, addBalanceAdjustmentDto.YearBought);
             var startDate = _memoryCache.Get<DateTime>(Constants.OpeningDate);
@@ -66,25 +61,17 @@ namespace TaxComputationAPI.Controllers
                 if (previousRecord.Channel == Constants.FixedAsset)
                 {
                     return BadRequest(new { errors = new[] { "The annual for this item has already been calculated from fixed asset" } });
-
-
                 }
 
-                if (previousRecord.Channel == Constants.OldBalancingAdjustmentSet)
+                if (previousRecord.Channel == Constants.FixedAssetClosed || previousRecord.Channel == Constants.BalancingAdjustementClosed || previousRecord.Channel == Constants.OldBalancingAdjustmenClosed)
                 {
-                    return BadRequest(new { errors = new[] { "The annual for this item has already been calculated" } });
-
-
+                    return BadRequest(new { errors = new[] { "The annual for this item has already been  closed for the financial year" } });
                 }
-                if (previousRecord.Channel == Constants.BalancingAdjustmentSet)
+
+                if (previousRecord.Channel == Constants.FixedAssetLock || previousRecord.Channel == Constants.BalancingAdjustmentlOCK || previousRecord.Channel == Constants.OldBalancingAdjustmentLock)
                 {
-                    return BadRequest(new { errors = new[] { "The annual for this item has already been calculated from balancing adjustment" } });
-
-
+                    return BadRequest(new { errors = new[] { "The annual for this item has been calculated!!" } });
                 }
-
-
-
 
                 if (previousRecord.NumberOfYearsAvailable == 0)
                 {

@@ -509,10 +509,10 @@ namespace TaxComputationAPI.Services
             revenue.Total = $"₦{Utilities.FormatAmount(record.Revenue)}";
             revenueValue = record.Revenue;
             otherIncomeValue = record.OtherOperatingIncome;
-           /* if (decimal.Parse(record.OtherOperatingIncome) < 0)
+            if (decimal.Parse(record.OtherOperatingIncome) < 0)
             {
               otherIncomeValue= await GetBackUpOtherOperatingIcome(companyId,yearId);
-            }*/
+            }
 
             return new MinimumTaxObject
             {
@@ -725,7 +725,7 @@ namespace TaxComputationAPI.Services
         }
 
         private async Task<string> GetBackUpOtherOperatingIcome(int companyId ,int yearId){
-           var otherOperatingIncomeCreditTotal="";
+           var otherOperatingIncomeCreditTotal="0";
               var items = await _profitAndLossRepository.GetProfitsAndLossByType("OtherOperatingIncome", companyId, yearId);
               if (items.Count > 0)
                {

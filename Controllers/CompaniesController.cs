@@ -79,6 +79,7 @@ namespace TaxComputationAPI.Controllers
         {
             try
             {
+                companyForRegisterDto.MonthOfOperation="6";
                 var companyRecord = await _companiesService.GetCompanyByTinAsync(companyForRegisterDto.TinNumber);
                 if (companyRecord != null)
                 {

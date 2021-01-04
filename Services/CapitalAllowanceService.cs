@@ -64,7 +64,7 @@ namespace TaxComputationAPI.Services
             var previousRecord = await _capitalAllowanceRepository.GetCapitalAllowanceByAssetIdYear(assetId, companyId, year);
 
 
-            if (disposal < 0)  //less than zero specifies that the account needs balancing aadjustmnet
+            if (disposal != 0)  //less than zero specifies that the account needs balancing aadjustmnet
             {
 
 
@@ -172,7 +172,7 @@ namespace TaxComputationAPI.Services
                         CompanyId = companyId,
                         AssetId = assetId,
                         CompanyCode = companyCode.Code,
-                        Channel = Constants.OldBalancingAdjustmentSet,
+                        Channel = ChannelType(previousRecord.Channel),
                         NumberOfYearsAvailable = previousRecord.NumberOfYearsAvailable
 
 
@@ -212,7 +212,7 @@ namespace TaxComputationAPI.Services
                         CompanyId = companyId,
                         AssetId = assetId,
                         CompanyCode = companyCode.Code,
-                        Channel = Constants.BalancingAdjustmentSet,
+                        Channel =ChannelType(previousRecord.Channel),
                         NumberOfYearsAvailable = newtotalNoOfYears,
 
 
@@ -309,8 +309,8 @@ namespace TaxComputationAPI.Services
                         YearsToGo = x.YearsToGo,
                         NumberOfYearsAvailable = x.NumberOfYearsAvailable,
                         ClosingResidue = $"₦{Utilities.FormatAmount(x.ClosingResidue)}",
-                        Channel=x.Channel,
-                        CompanyId=x.CompanyId
+                        Channel = x.Channel,
+                        CompanyId = x.CompanyId
                     };
                     capitalAllowanceList.Add(m);
                 }
@@ -333,8 +333,9 @@ namespace TaxComputationAPI.Services
             }
             else
             {
-                return new CapitalAllowanceDto(){
-                    capitalAllowances= new List<CapitalAllowanceViewDto>()
+                return new CapitalAllowanceDto()
+                {
+                    capitalAllowances = new List<CapitalAllowanceViewDto>()
                 };
             }
 
@@ -514,12 +515,31 @@ namespace TaxComputationAPI.Services
 
         public Task<int> UpdateCapitalAllowanceForChannel(string channel, int Id)
         {
-            return _capitalAllowanceRepository.UpdateCapitalAllowanceForChannel(channel,Id);
+            return _capitalAllowanceRepository.UpdateCapitalAllowanceForChannel(channel, Id);
         }
 
         public Task<int> UpdateArchivedCapitalAllowanceForChannel(string channel, int companyId, string taxYear, int assetId)
         {
-           return _capitalAllowanceRepository.UpdateArchivedCapitalAllowanceForChannel(channel,companyId,taxYear,assetId);
+            return _capitalAllowanceRepository.UpdateArchivedCapitalAllowanceForChannel(channel, companyId, taxYear, assetId);
+        }
+
+        public string ChannelType(string currentChannel)
+        {
+            if (currentChannel == Constants.FixedAssetOpen)
+            {
+                return Constants.FixedAssetLock;
+            }
+            if (currentChannel == Constants.BalancingAdjustment || currentChannel == Constants.BalancingAdjustementOpen)
+            {
+                return Constants.BalancingAdjustmentlOCK;
+            }
+
+            if (currentChannel == Constants.OldBalancingAdjustment || currentChannel == Constants.OldBalancingAdjustmentOpen)
+            {
+                return Constants.OldBalancingAdjustmentLock;
+            }
+            return null;
+
         }
     }
 }
