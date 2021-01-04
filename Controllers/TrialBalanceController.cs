@@ -24,14 +24,16 @@ namespace TaxComputationAPI.Controllers
         private readonly ILogger<TrialBalanceController> _logger;
 
         private readonly IUtilitiesService _utilityService;
+        private readonly IMemoryCache _memoryCache ;
         private IMemoryCache _cache;
 
-        public TrialBalanceController(ITrialBalanceService trialBalanceService, IUtilitiesService utilityService, ILogger<TrialBalanceController> logger, IMemoryCache cache)
+        public TrialBalanceController(ITrialBalanceService trialBalanceService,IMemoryCache memoryCache ,IUtilitiesService utilityService, ILogger<TrialBalanceController> logger, IMemoryCache cache)
         {
             _logger = logger;
             _trialBalanceService = trialBalanceService;
             _cache = cache;
             _utilityService = utilityService;
+            _memoryCache=memoryCache;
         }
 
         [HttpGet()]
@@ -69,9 +71,12 @@ namespace TaxComputationAPI.Controllers
             {
 
 
-                if (excel.YearId < DateTime.Now.Year)
+                var date = _memoryCache.Get<DateTime>(Constants.OpeningDate);
+                var isValid = Utilities.ValidateDate(date, excel.YearId);
+               
+                if (!isValid)
                 {
-                    return StatusCode(400, new { errors = new[] { "Uploading of Trial Balance for Previous Year is not Alllowed!" } });
+                    return StatusCode(400, new { errors = new[] { "The year selected has to be within the financial year!!" } });
                 }
 
                 await _trialBalanceService.UploadTrialBalance(excel);

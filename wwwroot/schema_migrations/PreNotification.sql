@@ -14,6 +14,7 @@ BEGIN
         [Id] [int] IDENTITY(1,1) NOT NULL,
         [CompanyId] [int] NOT NULL,
         [OpeningDate] [datetime2](7) NOT NULL,
+        [ClosingingDate] [datetime2](7) NOT NULL,
         [JobDate] [datetime2](7) NULL,
         [IsLocked] BIT NOT NULL,
         CONSTRAINT [PK_PreNotification] PRIMARY KEY CLUSTERED
@@ -38,9 +39,7 @@ FROM [dbo].[PreNotification]
 GO
 
 
-PRINT('========================================Creating Insert stored procedure into PreNotification table===================================================')
-
---------------------------------------- STORED PROCEDURE TO  INSERT INTO PreNotification TABLE-----------------------------------------
+-------------------------------------- STORED PROCEDURE TO  INSERT INTO PreNotification TABLE-----------------------------------------
 
 IF OBJECT_ID('[dbo].[usp_Insert_PreNotification]') IS NOT NULL
 BEGIN
@@ -49,9 +48,11 @@ PRINT('OK')
 END
 GO
 CREATE PROCEDURE [dbo].[usp_Insert_PreNotification](
-    @Id int out, 
+    @Id int out,
     @CompanyId int,
-    @OpeningDate datetime2 (7)
+    @OpeningDate datetime2 (7),
+    @ClosingingDate datetime2 (7),
+    @IsLocked bit
 
 )
 AS
@@ -59,16 +60,21 @@ AS
 INSERT [dbo].[PreNotification]
 (
     CompanyId,
-    OpeningDate
+    OpeningDate,
+    ClosingingDate,
+    IsLocked
 )
 VALUES
 (
     @CompanyId,
-    @OpeningDate
+    @OpeningDate,
+    @ClosingingDate,
+    @IsLocked
 )
 SET @Id = SCOPE_IDENTITY()
 SELECT @Id
 GO
+
 
 
 PRINT('====================================================Update PreNotification table===========================================================')
@@ -89,6 +95,7 @@ AS
 BEGIN
 UPDATE [dbo].[PreNotification]
 SET  OpeningDate = @OpeningDate,
+     ClosingingDate = @ClosingingDate,
      JobDate = @JobDate
 WHERE Id=@Id
 END

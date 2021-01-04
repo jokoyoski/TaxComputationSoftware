@@ -23,11 +23,13 @@ namespace TaxComputationAPI.Helpers
             int openingDay = openingDate.Day;
             int openingMonth = openingDate.Month;
             string timeFormat = $"{yearId}/{openingMonth}/{openingDay}";
+            var openingDateValue=openingDate;
+            var closingDate=openingDate.AddDays(364);
             if (DateTime.Parse(timeFormat) < openingDate)
             {
                 return false;
             }
-            if (DateTime.Parse(timeFormat) >= openingDate)
+            if (DateTime.Parse(timeFormat) >= closingDate)
             {
                 return false;
             }

@@ -153,6 +153,7 @@ namespace TaxComputationSoftware.Repositories
                 parameters.Add("@Id", preNotification.Id);
                 parameters.Add("@CompanyId", preNotification.CompanyId);
                 parameters.Add("@OpeningDate", preNotification.OpeningDate);
+                parameters.Add("@ClosingingDate", preNotification.OpeningDate);
                 parameters.Add("@IsLocked", false);
 
                 try
@@ -182,6 +183,7 @@ namespace TaxComputationSoftware.Repositories
 
                 parameters.Add("@Id", preNotification.Id);
                 parameters.Add("@OpeningDate", preNotification.OpeningDate);
+                parameters.Add("@ClosingingDate", preNotification.OpeningDate);
                 parameters.Add("@JobDate", preNotification.JobDate);
 
                 try
