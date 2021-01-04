@@ -4,6 +4,7 @@ using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using TaxComputationAPI.Dto;
 using TaxComputationAPI.Helpers;
 using TaxComputationAPI.Interfaces;
@@ -16,12 +17,14 @@ namespace TaxComputationAPI.Controllers
     {
         private readonly IBalancingAdjustmentService _balancingAdjustmentService;
         private readonly ICapitalAllowanceService _capitalAllowanceService;
+        private readonly IMemoryCache _memoryCache;
 
 
-        public BalancingAdjustmentController(IBalancingAdjustmentService balancingAdjustmentService, ICapitalAllowanceService capitalAllowanceService)
+        public BalancingAdjustmentController(IBalancingAdjustmentService balancingAdjustmentService, IMemoryCache memoryCache, ICapitalAllowanceService capitalAllowanceService)
         {
             _balancingAdjustmentService = balancingAdjustmentService;
             _capitalAllowanceService = capitalAllowanceService;
+            _memoryCache = memoryCache;
         }
 
         [HttpGet]
@@ -44,9 +47,13 @@ namespace TaxComputationAPI.Controllers
             }
 
             var previousRecord = await _capitalAllowanceService.GetCapitalAllowanceByAssetIdYear(addBalanceAdjustmentDto.AssetId, addBalanceAdjustmentDto.CompanyId, addBalanceAdjustmentDto.YearBought);
-            if (int.Parse(addBalanceAdjustmentDto.Year) < DateTime.Now.Year)
+            var startDate = _memoryCache.Get<DateTime>(Constants.OpeningDate);
+            var endDate = _memoryCache.Get<DateTime>(Constants.ClosingDate);
+            var isValid = Utilities.ValidateDate(startDate, endDate, int.Parse(addBalanceAdjustmentDto.Year));
+
+            if (!isValid)
             {
-                return StatusCode(400, new { errors = new[] { "Balancing Adjustment for previous year is not allowed !!!" } });
+                return StatusCode(400, new { errors = new[] { "The year selected has to be within the financial year!!" } });
             }
             if (previousRecord == null)
             {

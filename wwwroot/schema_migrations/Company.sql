@@ -56,6 +56,7 @@ DateCreated datetime null,
 OpeningYear datetime  null,
 ClosingYear datetime  null,
 IsActive bit null,
+MonthOfOperation int
 
  )
 
@@ -76,7 +77,8 @@ create procedure usp_Insert_Company(
 @DateCreated datetime  null,
 @OpeningYear datetime  null,
 @ClosingYear datetime  null,
-@IsActive bit null
+@IsActive bit null,
+@MonthOfOperation int  null
 )
 AS
 
@@ -89,7 +91,8 @@ TinNumber,
 DateCreated,
 OpeningYear,
 ClosingYear,
-IsActive
+IsActive,
+MonthOfOperation
 )
 values(
 
@@ -100,5 +103,6 @@ values(
 @DateCreated,
 @OpeningYear,
 @ClosingYear,
-@IsActive
+@IsActive,
+@MonthOfOperation
 )

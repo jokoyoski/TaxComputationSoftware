@@ -4,7 +4,9 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
+using TaxComputationAPI.Helpers;
 using TaxComputationAPI.Interfaces;
 using TaxComputationSoftware.Dtos;
 using TaxComputationSoftware.Interfaces;
@@ -21,12 +23,14 @@ namespace TaxComputationSoftware.Controllers
 
         private readonly ITrialBalanceService _trialBalanceService;
         private readonly IIncomeTaxService _incomeTaxService;
+        private readonly IMemoryCache _memoryCache ;
 
-        public IncomeTaxController(ILogger<IncomeTaxController> logger, ITrialBalanceService trialBalanceService, IIncomeTaxService incomeTaxService)
+        public IncomeTaxController(ILogger<IncomeTaxController> logger, IMemoryCache memoryCache,ITrialBalanceService trialBalanceService, IIncomeTaxService incomeTaxService)
         {
             _logger = logger;
             _incomeTaxService = incomeTaxService;
             _trialBalanceService = trialBalanceService;
+            _memoryCache=memoryCache;
         }
 
         [HttpGet("{companyId}/{yearId}/{IsItLevyView}")]
@@ -100,11 +104,14 @@ namespace TaxComputationSoftware.Controllers
                     }
                 }
 
-                if (createIncomeTaxDto.YearId < DateTime.Now.Year)
-                {
-                    return StatusCode(400, new { errors = new[] { "Income Tax for Previous Year is not Alllowed!" } });
-                }
+                 var startDate = _memoryCache.Get<DateTime>(Constants.OpeningDate);
+                var endDate = _memoryCache.Get<DateTime>(Constants.ClosingDate);
+                var isValid = Utilities.ValidateDate(startDate, endDate, createIncomeTaxDto.YearId);
 
+                if (!isValid)
+                {
+                    return StatusCode(400, new { errors = new[] { "The year selected has to be within the financial year!!" } });
+                }
                 var broughtFowardInfo = await _incomeTaxService.GetBroughtFoward(createIncomeTaxDto.CompanyId);
                 if (broughtFowardInfo != null)
                 {

@@ -61,9 +61,10 @@ namespace TaxComputationAPI.Controllers
                     createFixed.CostDisposal = 0;
                     isDisposalNegative = true;
                 }
-                var date = _memoryCache.Get<DateTime>(Constants.OpeningDate);
-                var isValid = Utilities.ValidateDate(date, createFixed.YearId);
-               
+                var startDate = _memoryCache.Get<DateTime>(Constants.OpeningDate);
+                var endDate = _memoryCache.Get<DateTime>(Constants.ClosingDate);
+                var isValid = Utilities.ValidateDate(startDate, endDate, createFixed.YearId);
+
                 if (!isValid)
                 {
                     return StatusCode(400, new { errors = new[] { "The year selected has to be within the financial year!!" } });

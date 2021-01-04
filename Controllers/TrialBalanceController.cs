@@ -24,16 +24,16 @@ namespace TaxComputationAPI.Controllers
         private readonly ILogger<TrialBalanceController> _logger;
 
         private readonly IUtilitiesService _utilityService;
-        private readonly IMemoryCache _memoryCache ;
+        private readonly IMemoryCache _memoryCache;
         private IMemoryCache _cache;
 
-        public TrialBalanceController(ITrialBalanceService trialBalanceService,IMemoryCache memoryCache ,IUtilitiesService utilityService, ILogger<TrialBalanceController> logger, IMemoryCache cache)
+        public TrialBalanceController(ITrialBalanceService trialBalanceService, IMemoryCache memoryCache, IUtilitiesService utilityService, ILogger<TrialBalanceController> logger, IMemoryCache cache)
         {
             _logger = logger;
             _trialBalanceService = trialBalanceService;
             _cache = cache;
             _utilityService = utilityService;
-            _memoryCache=memoryCache;
+            _memoryCache = memoryCache;
         }
 
         [HttpGet()]
@@ -45,6 +45,7 @@ namespace TaxComputationAPI.Controllers
             var companyDate = companyDetails.FirstOrDefault(x => x.CompanyId == companyId);
             _cache.Set(Constants.CompanyId, companyDate.CompanyId);
             _cache.Set(Constants.OpeningDate, companyDate.OpeningDate);
+            _cache.Set(Constants.ClosingDate, companyDate.ClosingDate);
             if (companyId <= 0 && yearId <= 0) return BadRequest($"{companyId} and {yearId} are required");
 
             try
@@ -71,9 +72,10 @@ namespace TaxComputationAPI.Controllers
             {
 
 
-                var date = _memoryCache.Get<DateTime>(Constants.OpeningDate);
-                var isValid = Utilities.ValidateDate(date, excel.YearId);
-               
+                var startDate = _memoryCache.Get<DateTime>(Constants.OpeningDate);
+                var endDate = _memoryCache.Get<DateTime>(Constants.ClosingDate);
+                var isValid = Utilities.ValidateDate(startDate, endDate, excel.YearId);
+
                 if (!isValid)
                 {
                     return StatusCode(400, new { errors = new[] { "The year selected has to be within the financial year!!" } });

@@ -86,6 +86,7 @@ namespace TaxComputationAPI.Repositories
                 parameters.Add("@OpeningYear", company.OpeningYear);
                 parameters.Add("@ClosingYear", DateTime.Today);
                 parameters.Add("@IsActive", company.IsActive);
+                parameters.Add("@MonthOfOperation", company.MonthOfOperation);
                 rowAffected = con.Execute("[dbo].[usp_Insert_Company]", parameters, commandType: CommandType.StoredProcedure);
             }
 

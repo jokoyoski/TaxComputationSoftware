@@ -4,7 +4,9 @@ using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
+using TaxComputationAPI.Helpers;
 using TaxComputationAPI.Interfaces;
 using TaxComputationSoftware.Dtos;
 using TaxComputationSoftware.Interfaces;
@@ -17,13 +19,15 @@ namespace TaxComputationAPI.Controllers
     {
 
         private readonly IDeferredTaxService _deferredTaxService;
-         private readonly ITrialBalanceService _trialBalanceService;
+        private readonly ITrialBalanceService _trialBalanceService;
         private readonly ILogger<DeferredTaxController> _logger;
-        public DeferredTaxController(IDeferredTaxService deferredTaxService, ITrialBalanceService trialBalanceService,ILogger<DeferredTaxController> logger)
+        private readonly IMemoryCache _memoryCache;
+        public DeferredTaxController(IDeferredTaxService deferredTaxService, IMemoryCache memoryCache, ITrialBalanceService trialBalanceService, ILogger<DeferredTaxController> logger)
         {
             _deferredTaxService = deferredTaxService;
             _logger = logger;
-            _trialBalanceService=trialBalanceService;
+            _trialBalanceService = trialBalanceService;
+            _memoryCache = memoryCache;
         }
 
 
@@ -55,7 +59,15 @@ namespace TaxComputationAPI.Controllers
 
             try
             {
-                   foreach (var j in createDeferredTax.TrialBalanceList)
+
+                var startDate = _memoryCache.Get<DateTime>(Constants.OpeningDate);
+                var endDate = _memoryCache.Get<DateTime>(Constants.ClosingDate);
+                var isValid = Utilities.ValidateDate(startDate, endDate, createDeferredTax.YearId);
+                if (!isValid)
+                {
+                    return StatusCode(400, new { errors = new[] { "The year selected has to be within the financial year!!" } });
+                }
+                foreach (var j in createDeferredTax.TrialBalanceList)
                 {
                     var trialBalanceRecord = await _trialBalanceService.GetTrialBalanceById(j.TrialBalanceId);
                     if (trialBalanceRecord.IsCheck)
@@ -64,15 +76,10 @@ namespace TaxComputationAPI.Controllers
                     }
                 }
 
-                if (createDeferredTax.YearId < DateTime.Now.Year)
-                {
-                    return StatusCode(400, new { errors = new[] { "Income Tax for Previous Year is not Alllowed!" } });
-                }
-
-                  var broughtFowardInfo = await _deferredTaxService.GetBroughtFoward(createDeferredTax.CompanyId);
+                var broughtFowardInfo = await _deferredTaxService.GetBroughtFoward(createDeferredTax.CompanyId);
                 if (broughtFowardInfo != null)
                 {
-                    createDeferredTax.IsStarted=true;
+                    createDeferredTax.IsStarted = true;
                     if (broughtFowardInfo.IsStarted && createDeferredTax.DeferredTaxBroughtFoward > 0)
                     {
                         return StatusCode(400, new { errors = new[] { "The Deferred Tax Brought Foward is required once" } });

@@ -17,5 +17,6 @@ namespace TaxComputationAPI.Models
         public DateTime OpeningYear { get; set; }
         public DateTime ClosingYear { get; set; }
         public bool IsActive { get; set; }
+        public int MonthOfOperation {get;set;}
     }
 }

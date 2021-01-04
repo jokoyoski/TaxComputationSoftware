@@ -60,11 +60,11 @@ namespace TaxComputationSoftware.Services
                             string channel = "";
                             if (value.Channel == Constants.FixedAsset)
                             {
-                                channel = Constants.ProceedFixedAsset;
+                                channel = Constants.ProceedFixedAssetOpen;
                             }
-                            else if (value.Channel == Constants.ProceedFixedAsset)
+                            else if (value.Channel == Constants.ProceedFixedAssetClosed)
                             {
-                                channel = Constants.ProceedFixedAsset;
+                                channel = Constants.ProceedFixedAssetOpen;
                             }
                             else if (value.Channel == Constants.BalancingAdjustment)
                             {

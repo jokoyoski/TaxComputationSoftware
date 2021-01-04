@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using TaxComputationAPI.Dtos;
+using TaxComputationAPI.Helpers;
 using TaxComputationAPI.Interfaces;
 
 namespace TaxComputationAPI.Controllers
@@ -19,11 +21,13 @@ namespace TaxComputationAPI.Controllers
         private readonly ILogger<ProfitAndLossController> _logger;
         private readonly IProfitAndLossService _profitAndLossService;
         private readonly ITrialBalanceService _trialBalanceService;
-        public ProfitAndLossController(IProfitAndLossService profitAndLossService,ITrialBalanceService trialBalanceService ,ILogger<ProfitAndLossController> logger)
+        private readonly IMemoryCache _memoryCache;
+        public ProfitAndLossController(IProfitAndLossService profitAndLossService,ITrialBalanceService trialBalanceService,IMemoryCache memoryCache ,ILogger<ProfitAndLossController> logger)
         {
             _profitAndLossService = profitAndLossService;
             _trialBalanceService=trialBalanceService;
             _logger = logger;
+            _memoryCache=memoryCache;
         }
 
 
@@ -43,9 +47,12 @@ namespace TaxComputationAPI.Controllers
                         return StatusCode(400, new { errors = new[] { "One of the item selected has already been mapped, please reload" } });
                     }
                 }
-                if (profitAndLoss.YearId < DateTime.Now.Year)
+                 var startDate = _memoryCache.Get<DateTime>(Constants.OpeningDate);
+                var endDate = _memoryCache.Get<DateTime>(Constants.ClosingDate);
+                var isValid = Utilities.ValidateDate(startDate, endDate, profitAndLoss.YearId);
+                if (!isValid)
                 {
-                    return StatusCode(400, new { errors = new[] { "Profit And Loss for Previous Year is not Alllowed!" } });
+                    return StatusCode(400, new { errors = new[] { "The year selected has to be within the financial year!!" } });
                 }
 
                 await _profitAndLossService.SaveProfitsAndLoss(profitAndLoss);
