@@ -63,12 +63,19 @@ namespace TaxComputationAPI.Controllers
 
                 }
 
-                if (previousRecord.Channel == Constants.OldBalancingAdjustment)
+                if (previousRecord.Channel == Constants.OldBalancingAdjustmentSet)
                 {
-                    return BadRequest(new { errors = new[] { "You are required to have created the balancing adjustment before you added it" } });
+                    return BadRequest(new { errors = new[] { "The annual for this item has already been calculated" } });
 
 
                 }
+                if (previousRecord.Channel == Constants.BalancingAdjustmentSet)
+                {
+                    return BadRequest(new { errors = new[] { "The annual for this item has already been calculated from balancing adjustment" } });
+
+
+                }
+
 
 
 

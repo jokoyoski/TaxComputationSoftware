@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -92,17 +93,24 @@ namespace TaxComputationAPI
 
 
             services.AddSingleton<AnnualEmailNotificationJob>();
+             services.AddSingleton<AnnualService>();
 
             services.AddSingleton(new JobSchedule
             (
                 jobType: typeof(AnnualEmailNotificationJob),
-                cronExpression: "0 */5 * * * ?"
+                cronExpression: "0 */1 * * * ?"
+            ));
+
+             services.AddSingleton(new JobSchedule
+            (
+                jobType: typeof(AnnualService),
+                cronExpression: "0 */1 * * * ?"
             ));
 
             services.AddHostedService<BackgroundJobService>();
 
             services.AddScoped<IUsersRepository, UsersRepository>();
-
+            services.AddMemoryCache();
             services.AddScoped<IBalancingAdjustmentRepository, BalancingAdjustmentRepository>();
             services.AddScoped<IUsersService, UsersService>();
             services.AddScoped<IBalancingAdjustmentService, BalancingAdjustmentService>();

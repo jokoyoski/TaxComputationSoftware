@@ -17,6 +17,9 @@ namespace TaxComputationAPI.Helpers
 
         public const string  BalancingAdjustmentSet ="BAS";
 
+        public const string OpeningDate="OpeningDate";
+        public const string CompanyId ="CompanyId";
+
     }
 
 

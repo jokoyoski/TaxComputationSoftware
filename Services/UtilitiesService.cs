@@ -7,6 +7,7 @@ using TaxComputationAPI.Helpers;
 using TaxComputationAPI.Interfaces;
 using TaxComputationAPI.Models;
 using TaxComputationSoftware.Interfaces;
+using TaxComputationSoftware.Model;
 using TaxComputationSoftware.Repositories;
 
 namespace TaxComputationAPI.Services
@@ -61,6 +62,11 @@ namespace TaxComputationAPI.Services
         public async Task<AssetMapping> GetAssetMappingAsync(string Name)
         {
             return await _utilitiesRepository.GetAssetMappingAsync(Name);
+        }
+
+         public async Task<List<PreNotification>> GetPreNotificationsAsync()
+        {
+            return await _utilitiesRepository.GetPreNotification();
         }
         public async Task AddAssetMappingAsync(AssetMapping assetMapping)
         {

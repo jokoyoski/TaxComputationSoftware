@@ -18,13 +18,29 @@ namespace TaxComputationAPI.Helpers
             return $"{value}";
         }
 
+        public static bool ValidateDate(DateTime openingDate, int yearId)
+        {
+            int openingDay = openingDate.Day;
+            int openingMonth = openingDate.Month;
+            string timeFormat = $"{yearId}/{openingMonth}/{openingDay}";
+            if (DateTime.Parse(timeFormat) < openingDate)
+            {
+                return false;
+            }
+            if (DateTime.Parse(timeFormat) >= openingDate)
+            {
+                return false;
+            }
+            return true;
+        }
+
 
         public static string AreaMapped(string mappedTo)
         {
             string areaMapped = "";
             bool isReady = false;
 
-            for(int i = 0; i < mappedTo.Length; i++)
+            for (int i = 0; i < mappedTo.Length; i++)
             {
                 if (mappedTo[i] == ']')
                 {
@@ -42,11 +58,11 @@ namespace TaxComputationAPI.Helpers
             }
 
             return areaMapped;
-         
+
 
         }
 
-      
+
         private static Random random = new Random();
         public static string RandomString()
         {

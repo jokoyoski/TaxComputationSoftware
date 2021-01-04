@@ -5,8 +5,10 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using TaxComputationAPI.Dtos;
+using TaxComputationAPI.Helpers;
 using TaxComputationAPI.Interfaces;
 
 namespace TaxComputationAPI.Controllers
@@ -23,12 +25,15 @@ namespace TaxComputationAPI.Controllers
         private readonly IUtilitiesService _utilitiesService;
         private readonly ILogger<FixedAssetController> _logger;
 
-        public FixedAssetController(IMapper mapper, IFixedAssetService fixedAssetService, ITrialBalanceService trialBalanceService, IUtilitiesService utilitiesService, ILogger<FixedAssetController> logger)
+        private readonly IMemoryCache _memoryCache;
+
+        public FixedAssetController(IMapper mapper, IFixedAssetService fixedAssetService, IMemoryCache memoryCache, ITrialBalanceService trialBalanceService, IUtilitiesService utilitiesService, ILogger<FixedAssetController> logger)
         {
             _logger = logger;
             _mapper = mapper;
             _fixedAssetService = fixedAssetService;
             _utilitiesService = utilitiesService;
+            _memoryCache = memoryCache;
             _trialBalanceService = trialBalanceService;
         }
 
@@ -56,10 +61,14 @@ namespace TaxComputationAPI.Controllers
                     createFixed.CostDisposal = 0;
                     isDisposalNegative = true;
                 }
-                if (createFixed.YearId < DateTime.Now.Year)
+                var date = _memoryCache.Get<DateTime>(Constants.OpeningDate);
+                var isValid = Utilities.ValidateDate(date, createFixed.YearId);
+               
+                if (!isValid)
                 {
-                    return StatusCode(400, new { errors = new[] { "Fixed Asset fro Previous Year is not Alllowed!" } });
+                    return StatusCode(400, new { errors = new[] { "The year selected has to be within the financial year!!" } });
                 }
+
                 bool status = createFixed.IsCost ? true : false;
                 var value = await _fixedAssetService.GetAmount(createFixed.TriBalanceId, status);
 

@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Dapper;
 using Microsoft.Extensions.Logging;
 using TaxComputationAPI.Manager;
+using TaxComputationAPI.Models;
 using TaxComputationSoftware.Interfaces;
 using TaxComputationSoftware.Model;
 
@@ -25,6 +26,95 @@ namespace TaxComputationSoftware.Repositories
             _databaseManager = databaseManager;
             _logger = logger;
         }
+
+
+        public async Task<int> UpdateCapitalAllowanceForChannel(string channel, int Id)
+        {
+            int rowAffected = 0;
+            using (IDbConnection con = await _databaseManager.DatabaseConnection())
+            {
+                if (con.State == ConnectionState.Closed)
+                    con.Open();
+
+                DynamicParameters parameters = new DynamicParameters();
+
+                parameters.Add("@Channel", channel);
+                parameters.Add("@Id", Id);
+                rowAffected = con.Execute("[dbo].[Update_Capital_Allowance_By_Channel]", parameters, commandType: CommandType.StoredProcedure);
+            }
+
+            return rowAffected;
+        }
+
+
+        public async Task<int> UpdateArchivedCapitalAllowanceForChannel(string channel, int companyId, string taxYear, int assetId)
+        {
+            int rowAffected = 0;
+            using (IDbConnection con = await _databaseManager.DatabaseConnection())
+            {
+                if (con.State == ConnectionState.Closed)
+                    con.Open();
+
+                DynamicParameters parameters = new DynamicParameters();
+
+                parameters.Add("@Channel", channel);
+                parameters.Add("@CompanyId", companyId);
+                parameters.Add("@TaxYear", taxYear);
+                parameters.Add("@AssetId", assetId);
+                rowAffected = con.Execute("[dbo].[Update_Archived_Capital_Allowance_By_Channel]", parameters, commandType: CommandType.StoredProcedure);
+            }
+
+            return rowAffected;
+        }
+
+
+
+        public async Task<List<AssetMapping>> GetAssetMappingAsync()
+        {
+            var result = default(IEnumerable<AssetMapping>);
+
+            using (IDbConnection conn = await _databaseManager.DatabaseConnection())
+            {
+                if (conn.State == ConnectionState.Closed) conn.Open();
+
+                DynamicParameters parameters = new DynamicParameters();
+
+                try
+                {
+                    result = await conn.QueryAsync<AssetMapping>("[dbo].[usp_Get_Asset_Mapping]", parameters, commandType: CommandType.StoredProcedure);
+                    conn.Close();
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError($"{e.Message}");
+
+                    throw e;
+                }
+
+                return result.ToList();
+            }
+        }
+
+        public async Task<IEnumerable<CapitalAllowance>> GetCapitalAllowance(int assetId, int companyId)
+        {
+
+            using (IDbConnection conn = await _databaseManager.DatabaseConnection())
+            {
+                if (conn.State == ConnectionState.Closed)
+                    conn.Open();
+
+                DynamicParameters parameters = new DynamicParameters();
+
+                parameters.Add("@CompanyId", companyId);
+                parameters.Add("@AssetId", assetId);
+                var record = await conn.QueryMultipleAsync("[dbo].[usp_Get_Capital_Allowance_By_CompanyId_And_AssetId]", parameters, commandType: CommandType.StoredProcedure);
+                var result = await record.ReadAsync<CapitalAllowance>();
+                return result;
+            }
+
+            return null;
+        }
+
 
 
         public async Task<List<PreNotification>> GetPreNotification()
@@ -63,6 +153,7 @@ namespace TaxComputationSoftware.Repositories
                 parameters.Add("@Id", preNotification.Id);
                 parameters.Add("@CompanyId", preNotification.CompanyId);
                 parameters.Add("@OpeningDate", preNotification.OpeningDate);
+                parameters.Add("@IsLocked", false);
 
                 try
                 {

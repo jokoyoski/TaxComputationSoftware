@@ -1,68 +1,91 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using TaxComputationAPI.Dtos;
+using TaxComputationAPI.Helpers;
 using TaxComputationAPI.Interfaces;
 using TaxComputationAPI.Models;
 
-namespace TaxComputationAPI.Controllers {
-    [Route ("api/[controller]")]
+namespace TaxComputationAPI.Controllers
+{
+    [Route("api/[controller]")]
     [ApiController]
 
-    public class TrialBalanceController : ControllerBase {
+    public class TrialBalanceController : ControllerBase
+    {
         private readonly ITrialBalanceService _trialBalanceService;
         private readonly ILogger<TrialBalanceController> _logger;
 
-        public TrialBalanceController (ITrialBalanceService trialBalanceService, ILogger<TrialBalanceController> logger) {
+        private readonly IUtilitiesService _utilityService;
+        private IMemoryCache _cache;
+
+        public TrialBalanceController(ITrialBalanceService trialBalanceService, IUtilitiesService utilityService, ILogger<TrialBalanceController> logger, IMemoryCache cache)
+        {
             _logger = logger;
             _trialBalanceService = trialBalanceService;
+            _cache = cache;
+            _utilityService = utilityService;
         }
 
-        [HttpGet ()]
+        [HttpGet()]
         //[Authorize]
-        public async Task<IActionResult> GetTrialBalance (int companyId, int yearId) {
+        public async Task<IActionResult> GetTrialBalance(int companyId, int yearId)
+        {
 
-            if (companyId <= 0 && yearId <= 0) return BadRequest ($"{companyId} and {yearId} are required");
+            var companyDetails = await _utilityService.GetPreNotificationsAsync();
+            var companyDate = companyDetails.FirstOrDefault(x => x.CompanyId == companyId);
+            _cache.Set(Constants.CompanyId, companyDate.CompanyId);
+            _cache.Set(Constants.OpeningDate, companyDate.OpeningDate);
+            if (companyId <= 0 && yearId <= 0) return BadRequest($"{companyId} and {yearId} are required");
 
-            try {
-                return Ok (await _trialBalanceService.GetTrialBalance (companyId, yearId));
+            try
+            {
+                return Ok(await _trialBalanceService.GetTrialBalance(companyId, yearId));
 
-            } catch (Exception ex) {
+            }
+            catch (Exception ex)
+            {
                 // var error = ex.Message;
-                var email = User.FindFirst (ClaimTypes.Email).Value;
-                _logger.LogInformation ("Exception for {email}, {ex}", email, ex.Message);
-                 return StatusCode (500, new { errors = new []{"Error occured while trying to process your request please try again later !"} });
-            
-                
+                var email = User.FindFirst(ClaimTypes.Email).Value;
+                _logger.LogInformation("Exception for {email}, {ex}", email, ex.Message);
+                return StatusCode(500, new { errors = new[] { "Error occured while trying to process your request please try again later !" } });
+
+
             }
         }
 
-        [HttpPost ()]
+        [HttpPost()]
         //[Authorize]
-        public async Task<IActionResult> UploadTrialBalance ([FromForm] UploadTrackTrialBalanceDto excel) {
-            try {
-                
+        public async Task<IActionResult> UploadTrialBalance([FromForm] UploadTrackTrialBalanceDto excel)
+        {
+            try
+            {
+
 
                 if (excel.YearId < DateTime.Now.Year)
                 {
                     return StatusCode(400, new { errors = new[] { "Uploading of Trial Balance for Previous Year is not Alllowed!" } });
                 }
 
-                await _trialBalanceService.UploadTrialBalance (excel);
+                await _trialBalanceService.UploadTrialBalance(excel);
 
-                return Ok ($"{excel.File.FileName} successfully upload");
+                return Ok($"{excel.File.FileName} successfully upload");
 
-            } catch (Exception ex) {
+            }
+            catch (Exception ex)
+            {
                 // var error = ex.Message;
-                var email = User.FindFirst (ClaimTypes.Email).Value;
-                _logger.LogInformation ("Exception for {email}, {ex}", email, ex.Message);
-                  return StatusCode (500, new { errors = new []{"Error occured while trying to process your request please try again later !"} });
-            
+                var email = User.FindFirst(ClaimTypes.Email).Value;
+                _logger.LogInformation("Exception for {email}, {ex}", email, ex.Message);
+                return StatusCode(500, new { errors = new[] { "Error occured while trying to process your request please try again later !" } });
+
             }
         }
     }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using TaxComputationAPI.Dtos;
 using TaxComputationAPI.Models;
+using TaxComputationSoftware.Model;
 
 namespace TaxComputationAPI.Interfaces
 {
@@ -23,6 +24,7 @@ namespace TaxComputationAPI.Interfaces
          Task<List<ModuleTypeDto>> GetModuleMappingbyCode(string code);
 
         Task UpdateAssetMappingAsync(AssetMapping assetMapping);
+        Task<List<PreNotification>> GetPreNotificationsAsync();
         Task DeleteAssetMappingAsync(int id);
 
         Task UnmapValue(int trialBalanceId);

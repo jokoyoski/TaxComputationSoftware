@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TaxComputationAPI.Models;
+using TaxComputationSoftware.Model;
 using TaxComputationSoftware.Models;
 
 namespace TaxComputationAPI.Interfaces
@@ -41,5 +42,7 @@ namespace TaxComputationAPI.Interfaces
         Task<CompanyCode> GetCompanyCodeByCodeId(int companyId);
 
         Task DeleteFairGainByTrialBalanceId(int Id);
+
+        Task<List<PreNotification>> GetPreNotification();
     }
 }

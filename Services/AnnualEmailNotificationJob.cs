@@ -11,6 +11,8 @@ using TaxComputationSoftware.Model;
 
 namespace TaxComputationSoftware.Services
 {
+
+     [DisallowConcurrentExecution]
     public class AnnualEmailNotificationJob : IJob
     {
         private readonly INotificationRepository _notificationRepository;

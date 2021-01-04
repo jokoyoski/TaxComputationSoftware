@@ -333,7 +333,9 @@ namespace TaxComputationAPI.Services
             }
             else
             {
-                return new CapitalAllowanceDto();
+                return new CapitalAllowanceDto(){
+                    capitalAllowances= new List<CapitalAllowanceViewDto>()
+                };
             }
 
 

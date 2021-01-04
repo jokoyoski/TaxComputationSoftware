@@ -11,6 +11,7 @@ using TaxComputationAPI.Helpers.Response;
 using TaxComputationAPI.Interfaces;
 using TaxComputationAPI.Manager;
 using TaxComputationAPI.Models;
+using TaxComputationSoftware.Model;
 using TaxComputationSoftware.Models;
 
 namespace TaxComputationAPI.Repositories
@@ -142,6 +143,30 @@ namespace TaxComputationAPI.Repositories
                 return result.ToList();
             }
         }
+
+
+         public async Task<List<PreNotification>> GetPreNotification()
+        {
+            using (IDbConnection conn = await _databaseManager.DatabaseConnection())
+            {
+                if (conn.State == ConnectionState.Closed) conn.Open();
+
+                try
+                {
+                    var record = await conn.QueryMultipleAsync("[dbo].[usp_Get_All_PreNotification]", null, commandType: CommandType.StoredProcedure);
+                    var result = await record.ReadAsync<PreNotification>();
+                    conn.Close();
+                    return result.ToList();
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError($"{e.Message}");
+                    throw e;
+                }
+            }
+
+        }
+
 
         public async Task<AssetMapping> GetAssetMappingAsync(string Name)
         {
