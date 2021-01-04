@@ -21,6 +21,8 @@ namespace TaxComputationSoftware.Services
         private readonly ILogger<AnnualEmailNotificationJob> _logger;
         public const int AnnualJob = 48;
         public const int EmailDay = 2;
+        public static string AdminEmail = "bomana.ogoni@gmail.com";
+        public static string LogEmail = "bomana.ogoni@hotmail.com";
 
         public AnnualEmailNotificationJob(INotificationRepository notificationRepository, ICompaniesRepository companyRepository, IEmailService emailService, ILogger<AnnualEmailNotificationJob> logger)
         {
@@ -53,8 +55,8 @@ namespace TaxComputationSoftware.Services
 
                 PreNotification email = default(PreNotification);
 
-                var companyDate = item.OpeningDate.Date;
-                var emailDate = DateTime.Now.AddDays(EmailDay).Date;
+                var companyDate = item.OpeningDate.AddDays(EmailDay).Date;
+                var emailDate = DateTime.Now.Date;
                 
 
                 if (companyDate == emailDate) 
@@ -99,6 +101,8 @@ namespace TaxComputationSoftware.Services
                 catch (Exception e)
                 {
                     _logger.LogError(e.Message);
+                    await _emailService.Send(LogEmail, AdminEmail, "Application Exception", e.Message, null);
+
                 }
             }
         }

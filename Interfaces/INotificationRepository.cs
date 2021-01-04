@@ -18,5 +18,6 @@ namespace TaxComputationSoftware.Interfaces
         Task UpdateJobDate(PreNotification preNotification);
         Task<List<AssetMapping>> GetAssetMappingAsync();
         Task<IEnumerable<CapitalAllowance>> GetCapitalAllowance(int assetId, int companyId);
+        Task Lock(PreNotification preNotification);
     }
 }

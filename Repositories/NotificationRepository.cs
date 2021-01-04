@@ -223,5 +223,32 @@ namespace TaxComputationSoftware.Repositories
             }
         }
 
+
+        public async Task Lock(PreNotification preNotification)
+        {
+            if (preNotification == null) throw new ArgumentNullException(nameof(preNotification));
+
+            using (IDbConnection conn = await _databaseManager.DatabaseConnection())
+            {
+                if (conn.State == ConnectionState.Closed) conn.Open();
+
+                DynamicParameters parameters = new DynamicParameters();
+
+                parameters.Add("@Id", preNotification.Id);
+                parameters.Add("@IsLocked", preNotification.IsLocked);
+
+                try
+                {
+                    var respone = conn.Execute("[dbo].[usp_Lock]", parameters, commandType: CommandType.StoredProcedure);
+                    conn.Close();
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError($"{e.Message}");
+                    throw e;
+                }
+            }
+        }
+
     }
 }

@@ -10,5 +10,6 @@ namespace TaxComputationSoftware.Model
         public int CompanyId { get; set; }
         public DateTime OpeningDate { get; set; }
         public DateTime JobDate { get; set; }
+        public bool IsLocked { get; set; }
     }
 }
