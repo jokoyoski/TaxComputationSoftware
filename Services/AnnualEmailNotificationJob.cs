@@ -78,7 +78,7 @@ namespace TaxComputationSoftware.Services
                     {
                         var company = await _companyRepository.GetCompanyAsync(mail.CompanyId);
 
-                        var date = mail.ClosingDate.AddDays(AnnualJob).ToString("dddd, dd MMMM yyyy"); 
+                        var date = mail.ClosingDate.AddDays(AnnualJob+3).ToString("dddd, dd MMMM yyyy"); 
 
                         string mg = $"Hello as you all know that {company.CompanyName} financial year has started , you are required to have done the necessary adjustment on or before {date}.";
 
