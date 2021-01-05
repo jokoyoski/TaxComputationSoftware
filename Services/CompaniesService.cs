@@ -57,7 +57,7 @@ namespace TaxComputationAPI.Services
 
             });
 
-            _notificationRepository.InsertPreNotification(new PreNotification{ CompanyId = companyDetails.Id, OpeningDate = companyDetails.OpeningYear,ClosingDate=companyDetails.OpeningYear.AddDays(364) });
+            _notificationRepository.InsertPreNotification(new PreNotification{ CompanyId = companyDetails.Id, OpeningDate = companyDetails.OpeningYear, ClosingDate=companyDetails.OpeningYear.AddDays(364) });
         }
 
         public async Task<Company> GetCompanyByTinAsync(string tinNumber)
