@@ -34,6 +34,11 @@ namespace TaxComputationAPI.Services
             return await _utilitiesRepository.GetFinancialYearAsync();
         }
 
+        public async Task<List<FinancialYear>> GetFinancialCompanyAsync(int companyId)
+        {
+            return await _utilitiesRepository.GetFinancialCompanyAsync(companyId);
+        }
+
         public async Task AddFinancialYearAsync(FinancialYear financialYear)
         {
             if (financialYear == null)

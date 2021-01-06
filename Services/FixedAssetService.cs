@@ -133,15 +133,6 @@ namespace TaxComputationAPI.Services
             string type = fixedAsset.IsCost ? "Cost" : "Depreciation";
             GetMappedDetails getMappedDetails = new GetMappedDetails();
 
-            var yearRecord = await _utilitiesRepository.GetFinancialYearAsync(fixedAsset.YearId);
-            if (yearRecord == null)
-            {
-                var createYear = new FinancialYear
-                {
-                    Name = fixedAsset.YearId
-                };
-                await _utilitiesRepository.AddFinancialYearAsync(createYear);
-            }
             var assetName = await _utilitiesRepository.GetAssetMappingById(fixedAsset.AssetId);
             if (fixedAsset.TriBalanceId.Count > 0)
             {
