@@ -34,8 +34,9 @@ namespace TaxComputationAPI.Services
 
         public Task SaveCapitalAllowance(CapitalAllowance capitalAllowance)
         {
-            _capitalAllowanceRepository.SaveArchivedCapitaLAllowance(capitalAllowance, capitalAllowance.Channel);
-            _capitalAllowanceRepository.SaveCapitaLAllowance(capitalAllowance, Constants.OldBalancingAdjustment);
+            capitalAllowance.Channel=Constants.OldBalancingAdjustmentOpen;
+            _capitalAllowanceRepository.SaveArchivedCapitaLAllowance(capitalAllowance, Constants.OldBalancingAdjustmentOpen);
+            _capitalAllowanceRepository.SaveCapitaLAllowance(capitalAllowance, Constants.OldBalancingAdjustmentOpen);
             SaveCapitalAllowanceSummary(capitalAllowance.AssetId, capitalAllowance.CompanyId);
             return Task.CompletedTask;
 
@@ -81,12 +82,12 @@ namespace TaxComputationAPI.Services
             }
             else
             {
-
-
+                //cos-initial/no of years* no of month used/12
+         
                 totalNoOfYears = (int)100 / assetDetails.Annual;  //no of years
                 annualPercentage = (decimal)assetDetails.Annual / 100;     //annual percentage rate
                 additionValue = addition;   //addittion
-                Initial = addition * assetDetails.Initial / 100;     //initial=addition*%rateinitial
+                Initial = addition * assetDetails.Initial / 100;     //initial=addition*%rateinitial   
                 Initial = Math.Round(Initial, 2);
                 value = addition - Initial;         //  
                 annual = value * annualPercentage;   //addition-initial* %annualpercenatgerate  
@@ -149,10 +150,10 @@ namespace TaxComputationAPI.Services
 
             if (previousRecord != null)
             {
-                if (previousRecord.Initial <= 0 && previousRecord.Channel == Constants.OldBalancingAdjustment)
+                if (previousRecord.Initial <= 0 && previousRecord.Channel == Constants.OldBalancingAdjustment || previousRecord.Channel==Constants.BalancingAdjustementOpen || previousRecord.Channel==Constants.FixedAssetOpen || previousRecord.Channel==Constants.OldBalancingAdjustmentOpen)
                 {
-                    decimal openingResidueValue = previousRecord.OpeningResidue - residue;   //openingresidue- residue 
-                    decimal annualValue = openingResidueValue / previousRecord.YearsToGo;  //opening residual/total no of years
+                    decimal openingResidueValue = previousRecord.OpeningResidue-residue;   //openingresidue- residue 
+                    decimal annualValue = openingResidueValue / previousRecord.NumberOfYearsAvailable;  //opening residual/no of years available
                     annualValue = Math.Round(annualValue, 2);
                     decimal total = annualValue;   //total
                     decimal closingResidue = openingResidueValue - total; //openingresidual-total
@@ -168,7 +169,7 @@ namespace TaxComputationAPI.Services
                         Initial = previousRecord.Initial,
                         Disposal = residue,
                         Total = total,
-                        YearsToGo = previousRecord.NumberOfYearsAvailable - 1,
+                        YearsToGo = previousRecord.YearsToGo - 1,
                         CompanyId = companyId,
                         AssetId = assetId,
                         CompanyCode = companyCode.Code,
@@ -529,12 +530,12 @@ namespace TaxComputationAPI.Services
             {
                 return Constants.FixedAssetLock;
             }
-            if (currentChannel == Constants.BalancingAdjustment || currentChannel == Constants.BalancingAdjustementOpen)
+            if (currentChannel == Constants.BalancingAdjustment)
             {
                 return Constants.BalancingAdjustmentlOCK;
             }
 
-            if (currentChannel == Constants.OldBalancingAdjustment || currentChannel == Constants.OldBalancingAdjustmentOpen)
+            if (currentChannel == Constants.OldBalancingAdjustmentOpen)
             {
                 return Constants.OldBalancingAdjustmentLock;
             }

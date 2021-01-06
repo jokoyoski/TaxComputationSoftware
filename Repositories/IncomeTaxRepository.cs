@@ -157,7 +157,7 @@ namespace TaxComputationSoftware.Repositories
 
                 parameters.Add("@CompanyId", companyId);
 
-                var record = conn.QueryFirstOrDefault<BroughtFoward>("[dbo].[usp_Get_Brought_Foward_By_CompanyId]", parameters, commandType: CommandType.StoredProcedure);
+                var record = conn.QueryFirstOrDefault<BroughtFoward>("[dbo].[usp_Get_Income_Tax_Brought_Foward_By_CompanyId]", parameters, commandType: CommandType.StoredProcedure);
                 return record;
             }
 
@@ -201,13 +201,10 @@ namespace TaxComputationSoftware.Repositories
 
                     DynamicParameters parameters = new DynamicParameters();
                     parameters.Add("@CompanyId", broughtFoward.CompanyId);
-                    parameters.Add("@IsStarted", broughtFoward.IsStarted);
-                    parameters.Add("@LossBf", broughtFoward.LossBf);
                     parameters.Add("@LossCf", broughtFoward.LossCf);
-                    parameters.Add("@Accessible", 0);
                     parameters.Add("@UnRelievedCf", broughtFoward.UnRelievedCf);
-                    parameters.Add("@UnRelievedBf", broughtFoward.UnRelievedBf);
-                    rowAffected = con.Execute("[dbo].[usp_Insert_Into_Brought_Foward]", parameters, commandType: CommandType.StoredProcedure);
+                    parameters.Add("@YearId", broughtFoward.YearId);
+                    rowAffected = con.Execute("[dbo].[usp_Insert_Into_Income_Tax_Brought_Foward]", parameters, commandType: CommandType.StoredProcedure);
                 }
 
                 return rowAffected;
@@ -234,7 +231,6 @@ namespace TaxComputationSoftware.Repositories
                 parameters.Add("@CompanyId", broughtFoward.CompanyId);
                 parameters.Add("@LossCf", broughtFoward.LossCf);
                 parameters.Add("@UnRelievedCf", broughtFoward.UnRelievedCf);
-                parameters.Add("@Accessible", broughtFoward.Accessible);
                 rowAffected = con.Execute("[dbo].[usp_Accessible_Cf_By_Income_Tax]", parameters, commandType: CommandType.StoredProcedure);
             }
 

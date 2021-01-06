@@ -50,11 +50,11 @@ namespace TaxComputationSoftware.Services
                 await _deferredTaxRepository.CreateFairValueGain(fairValueGain);
 
             }
-            if (!deferredTax.IsStarted)
-            {
-                _deferredTaxRepository.CreateDeferredTaxBroughtFoward(deferredTax.CompanyId, deferredTax.DeferredTaxBroughtFoward);
+           // if (!deferredTax.IsStarted)
+          //  {
+              //  _deferredTaxRepository.CreateDeferredTaxBroughtFoward(deferredTax.CompanyId, deferredTax.DeferredTaxBroughtFoward);
 
-            }
+           // }
 
 
         }

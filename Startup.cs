@@ -93,7 +93,8 @@ namespace TaxComputationAPI
 
 
             services.AddSingleton<AnnualEmailNotificationJob>();
-             services.AddSingleton<AnnualService>();
+           // services.AddSingleton<AnnualService>();
+            services.AddSingleton<AnnualCalculation>();
 
             services.AddSingleton(new JobSchedule
             (
@@ -101,11 +102,15 @@ namespace TaxComputationAPI
                 cronExpression: "0 */1 * * * ?"
             ));
 
-             services.AddSingleton(new JobSchedule
-            (
-                jobType: typeof(AnnualService),
-                cronExpression: "0 */1 * * * ?"
-            ));
+            
+
+            services.AddSingleton<JobSchedule>((x) =>
+            {
+
+                var cronExpression = "0 */9 * * * ?";
+                return new JobSchedule(jobType: typeof(AnnualCalculation), cronExpression: cronExpression);
+
+            });
 
             services.AddHostedService<BackgroundJobService>();
 
@@ -138,7 +143,7 @@ namespace TaxComputationAPI
             services.AddScoped<IInvestmentAllowanceService, InvestmentAllowanceService>();
             services.AddScoped<IIncomeTaxRepository, IncomeTaxRepository>();
             services.AddScoped<IIncomeTaxService, IncomeTaxService>();
-             services.AddScoped<IDeferredTaxRepository, DeferredTaxRepository>();
+            services.AddScoped<IDeferredTaxRepository, DeferredTaxRepository>();
             services.AddScoped<IDeferredTaxService, DeferredTaxService>();
             services.AddSingleton<DatabaseManager>();
             services.Configure<ConnectionString>(_configuration.GetSection("ConnectionString"));
@@ -154,15 +159,15 @@ namespace TaxComputationAPI
                    Version = "v2",
                    Description = "Sample service for Learner",
                });
-                // define swagger docs and other options
-                var securityScheme = new OpenApiSecurityScheme
+               // define swagger docs and other options
+               var securityScheme = new OpenApiSecurityScheme
                {
                    Name = "Authorization",
                    Description = "Enter JWT Bearer authorisation token",
                    In = ParameterLocation.Header,
                    Type = SecuritySchemeType.Http,
                    Scheme = "bearer", // must be lowercase!!!
-                    BearerFormat = "Bearer {token}",
+                   BearerFormat = "Bearer {token}",
                    Reference = new OpenApiReference
                    {
                        Id = JwtBearerDefaults.AuthenticationScheme,

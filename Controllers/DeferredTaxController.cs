@@ -69,18 +69,22 @@ namespace TaxComputationAPI.Controllers
                 }
                 foreach (var j in createDeferredTax.TrialBalanceList)
                 {
-                    var trialBalanceRecord = await _trialBalanceService.GetTrialBalanceById(j.TrialBalanceId);
-                    if (trialBalanceRecord.IsCheck)
+                    if (j.TrialBalanceId != 0)
                     {
-                        return StatusCode(400, new { errors = new[] { "One of the item selected has already been mapped, please reload" } });
+                        var trialBalanceRecord = await _trialBalanceService.GetTrialBalanceById(j.TrialBalanceId);
+                        if (trialBalanceRecord.IsCheck)
+                        {
+                            return StatusCode(400, new { errors = new[] { "One of the item selected has already been mapped, please reload" } });
+                        }
                     }
+
                 }
 
                 var broughtFowardInfo = await _deferredTaxService.GetBroughtFoward(createDeferredTax.CompanyId);
                 if (broughtFowardInfo != null)
                 {
-                    createDeferredTax.IsStarted = true;
-                    if (broughtFowardInfo.IsStarted && createDeferredTax.DeferredTaxBroughtFoward > 0)
+                    //createDeferredTax.IsStarted = true;
+                    if (createDeferredTax.DeferredTaxBroughtFoward > 0)
                     {
                         return StatusCode(400, new { errors = new[] { "The Deferred Tax Brought Foward is required once" } });
                     }

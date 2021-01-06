@@ -14,8 +14,7 @@ namespace TaxComputationSoftware.Interfaces
 
         Task<int> UpdateDeferredTaxfById(int companyId);  //background job
         Task<int> UpdateDeferredTaxBroughtFowardByDeferredTax(int companyId, decimal broughtFoward);
-        Task<int> CreateDeferredTaxBroughtFoward(int companyId, decimal deferredTaxBroughtFoward);
-
+        Task<int> CreateDeferredTaxBroughtFoward(int companyId, decimal deferredTaxBroughtFoward,int yearId);
         Task <DeferredTaxFoward> GetDeferredTaxFowarByCompanyId(int companyId);
     }
 }

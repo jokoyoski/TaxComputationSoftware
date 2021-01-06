@@ -23,14 +23,14 @@ namespace TaxComputationSoftware.Controllers
 
         private readonly ITrialBalanceService _trialBalanceService;
         private readonly IIncomeTaxService _incomeTaxService;
-        private readonly IMemoryCache _memoryCache ;
+        private readonly IMemoryCache _memoryCache;
 
-        public IncomeTaxController(ILogger<IncomeTaxController> logger, IMemoryCache memoryCache,ITrialBalanceService trialBalanceService, IIncomeTaxService incomeTaxService)
+        public IncomeTaxController(ILogger<IncomeTaxController> logger, IMemoryCache memoryCache, ITrialBalanceService trialBalanceService, IIncomeTaxService incomeTaxService)
         {
             _logger = logger;
             _incomeTaxService = incomeTaxService;
             _trialBalanceService = trialBalanceService;
-            _memoryCache=memoryCache;
+            _memoryCache = memoryCache;
         }
 
         [HttpGet("{companyId}/{yearId}/{IsItLevyView}")]
@@ -97,14 +97,19 @@ namespace TaxComputationSoftware.Controllers
 
                 foreach (var j in createIncomeTaxDto.IncomeList)
                 {
-                    var trialBalanceRecord = await _trialBalanceService.GetTrialBalanceById(j.TrialBalanceId);
-                    if (trialBalanceRecord.IsCheck)
+                    if (j.TrialBalanceId > 0)
                     {
-                        return StatusCode(400, new { errors = new[] { "One of the item selected has already been mapped, please reload" } });
+                        var trialBalanceRecord = await _trialBalanceService.GetTrialBalanceById(j.TrialBalanceId);
+                        if (trialBalanceRecord.IsCheck)
+                        {
+                            return StatusCode(400, new { errors = new[] { "One of the item selected has already been mapped, please reload" } });
+                        }
                     }
+
+
                 }
 
-                 var startDate = _memoryCache.Get<DateTime>(Constants.OpeningDate);
+                var startDate = _memoryCache.Get<DateTime>(Constants.OpeningDate);
                 var endDate = _memoryCache.Get<DateTime>(Constants.ClosingDate);
                 var isValid = Utilities.ValidateDate(startDate, endDate, createIncomeTaxDto.YearId);
 
