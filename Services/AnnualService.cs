@@ -32,7 +32,7 @@ namespace TaxComputationSoftware.Services
                 var pre = await _notificationRepository.GetPreNotification();
                 foreach (var item in pre)
                 {
-                    if (DateTime.Now.Date == item.OpeningDate.Date && !item.IsLocked)
+                    if (DateTime.Now.Date == item.ClosingDate.Date && !item.IsLocked)
                     {  //add unlock
                         UnlockCapitalAllowance(item.CompanyId, item.Id);
                     }

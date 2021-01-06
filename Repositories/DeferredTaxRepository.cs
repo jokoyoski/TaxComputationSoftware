@@ -17,7 +17,6 @@ namespace TaxComputationSoftware.Repositories
         public DeferredTaxRepository(DatabaseManager databaseManager)
         {
             _databaseManager = databaseManager;
-
         }
 
         public async Task<int> CreateFairValueGain(FairValueGain fairValueGain)
@@ -50,7 +49,7 @@ namespace TaxComputationSoftware.Repositories
             return 4;
         }
 
-        public async Task<int> CreateDeferredTaxBroughtFoward(int companyId, decimal deferredTaxBroughtFoward)
+        public async Task<int> CreateDeferredTaxBroughtFoward(int companyId, decimal deferredTaxBroughtFoward,int yearId)
         {
             int rowAffected = 0;
             using (IDbConnection con = await _databaseManager.DatabaseConnection())
@@ -60,7 +59,7 @@ namespace TaxComputationSoftware.Repositories
 
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@CompanyId", companyId);
-                parameters.Add("@IsStarted", true);
+                parameters.Add("@YearId", yearId);
                 parameters.Add("@DeferredTaxBroughtFoward", deferredTaxBroughtFoward);
                 rowAffected = con.Execute("[dbo].[usp_Insert_Into_DeferredTax_Brought_Foward]", parameters, commandType: CommandType.StoredProcedure);
             }
@@ -112,13 +111,8 @@ namespace TaxComputationSoftware.Repositories
 
                     if (conn.State == ConnectionState.Closed)
                         conn.Open();
-
                     DynamicParameters parameters = new DynamicParameters();
-
                     parameters.Add("@CompanyId", companyId);
-
-
-
                     var record =  conn.QueryFirstOrDefault<DeferredTaxFoward>("[dbo].[usp_Get_Deferred_Tax_Brought_Foward_By_CompanyId]", parameters, commandType: CommandType.StoredProcedure);
                     return record;
                 }

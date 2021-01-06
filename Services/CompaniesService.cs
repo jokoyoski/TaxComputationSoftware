@@ -16,12 +16,16 @@ namespace TaxComputationAPI.Services
         private readonly ICompaniesRepository _companiesRepository;
         private readonly IUtilitiesRepository _utilitiesRepository;
         private readonly INotificationRepository _notificationRepository;
+        private readonly IDeferredTaxRepository _deferredTaxRepository;
+        private readonly IIncomeTaxRepository _incomeTaxTaxRepository;
 
-        public CompaniesService(ICompaniesRepository companiesRepository, IUtilitiesRepository utilitiesRepository, INotificationRepository notificationRepository)
+        public CompaniesService(ICompaniesRepository companiesRepository, IIncomeTaxRepository incomeTaxTaxRepository, IUtilitiesRepository utilitiesRepository, IDeferredTaxRepository deferredTaxRepository, INotificationRepository notificationRepository)
         {
             _companiesRepository = companiesRepository;
             _utilitiesRepository = utilitiesRepository;
             _notificationRepository = notificationRepository;
+            _deferredTaxRepository = deferredTaxRepository;
+            _incomeTaxTaxRepository = incomeTaxTaxRepository;
         }
 
         public async Task<PagedList<Company>> GetCompaniesAsync(PaginationParams pagination)
@@ -45,16 +49,19 @@ namespace TaxComputationAPI.Services
             }
 
 
+
+
             await _companiesRepository.AddCompanyAsync(company);
 
             var companyDetails = await GetCompanyByTinAsync(company.TinNumber);
 
-            _utilitiesRepository.AddCompanyCode(new CompanyCode
+            _deferredTaxRepository.CreateDeferredTaxBroughtFoward(companyDetails.Id, company.DeferredTaxBroughtFoward, 4);
+            _incomeTaxTaxRepository.CreateBalanceBroughtFoward(new BroughtFoward
             {
-                Code = Utilities.RandomString(),
-                NextExecution = company.OpeningYear,
-                CompanyId = companyDetails.Id
-
+                UnRelievedCf = company.UnRelievedCf,
+                LossCf = company.LossCf,
+                CompanyId = companyDetails.Id,
+                YearId = 4,
             });
 
             var opening = companyDetails.OpeningYear;

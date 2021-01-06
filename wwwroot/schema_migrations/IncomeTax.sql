@@ -129,18 +129,15 @@ GO
 
 
 
-IF NOT EXISTS(SELECT 1 FROM sysobjects WHERE type = 'U' and name = 'BroughtFoward')
+IF NOT EXISTS(SELECT 1 FROM sysobjects WHERE type = 'U' and name = 'IncomeTaxBroughtFoward')
 BEGIN
-   create table BroughtFoward(
+   create table IncomeTaxBroughtFoward(
 
  Id   int identity(1,1) NOT NULL ,
  CompanyId int,
- IsStarted bit,
- LossBf decimal,
  LossCf decimal,
- Accessible decimal,
  UnRelievedCf decimal,
- UnRelievedBf decimal
+ YearId int
  )
 END
 GO
@@ -149,17 +146,17 @@ GO
 
 
 --------------------------------------- STORED PROCEDURE TO  GET BROUGHT FOWARD BY COMPANYID-----------------------------------------
-IF OBJECT_ID('[dbo].[usp_Get_Brought_Foward_By_CompanyId]') IS nOT NULL
+IF OBJECT_ID('[dbo].[usp_Get_Income_Tax_Brought_Foward_By_CompanyId]') IS nOT NULL
 BEGIN
-DROP procedure [dbo].[usp_Get_Brought_Foward_By_CompanyId]
+DROP procedure [dbo].[usp_Get_Income_Tax_Brought_Foward_By_CompanyId]
 END
 GO
-CREATE procedure [dbo].[usp_Get_Brought_Foward_By_CompanyId](
+CREATE procedure [dbo].[usp_Get_Income_Tax_Brought_Foward_By_CompanyId](
 @CompanyId int
 
 )
 AS
-select  * from  [dbo].[BroughtFoward] where CompanyId=@CompanyId
+select  * from  [dbo].[IncomeTaxBroughtFoward] where CompanyId=@CompanyId
 GO
 
 
@@ -171,67 +168,39 @@ GO
 
 
 --------------------------------------- STORED PROCEDURE TO  INSERT INTO BROUGHT FOWARD TABLE-----------------------------------------
-IF OBJECT_ID('[dbo].[usp_Insert_Into_Brought_Foward]') IS NOT NULL
+IF OBJECT_ID('[dbo].[usp_Insert_Into_Income_Tax_Brought_Foward]') IS NOT NULL
 BEGIN
-DROP procedure [dbo].[usp_Insert_Into_Brought_Foward]
+DROP procedure [dbo].[usp_Insert_Into_Income_Tax_Brought_Foward]
 PRINT('OK')
 END
 GO
 
-CREATE procedure [usp_Insert_Into_Brought_Foward](
+CREATE procedure [usp_Insert_Into_Income_Tax_Brought_Foward](
 
 @CompanyId int,
-@IsStarted bit,
-@LossBf decimal,
 @LossCf decimal,
-@Accessible decimal,
 @UnRelievedCf decimal,
-@UnRelievedBf decimal
+@YearId int
 )
 AS
 
 
-INSERT [dbo].[BroughtFoward](
-CompanyId,
-IsStarted,
-LossBf,
-LossCf,
-Accessible,
-UnRelievedCf,
-UnRelievedBf
+INSERT [dbo].[IncomeTaxBroughtFoward](
+CompanyId
+LossCf
+UnRelievedCf
+YearId
 )
 VALUES(
-@CompanyId,
-@IsStarted,
-@LossBf,
-@LossCf,
-@Accessible,
-@UnRelievedCf,
-@UnRelievedBf
+@CompanyId
+@LossCf
+@UnRelievedCf
+@YearId
 )
 GO
 
 
 
---------------------------------------- STORED PROCEDURE TO  UPDATE ACCESSIBLE AND UNRELIEVED CF FROM INCOME TAX-----------------------------------------
-
-
-IF OBJECT_ID('[dbo].[usp_Accessible_Cf_By_Income_Tax]') IS NOT NULL
-BEGIN
-DROP procedure [dbo].[usp_Accessible_Cf_By_Income_Tax]
-PRINT('OK')
-END
-GO
-
-CREATE procedure [usp_Accessible_Cf_By_Income_Tax](
-@CompanyId int,
-@LossCf decimal,
-@UnRelievedCf decimal,
-@Accessible decimal
-)
-AS
-Update [dbo].[BroughtFoward] set LossCf=@LossCf, UnRelievedCf=@UnRelievedCf ,Accessible=@Accessible where CompanyId=@CompanyId
-GO
 
 
 
@@ -239,26 +208,3 @@ GO
 
 
 
-
-
---------------------------------------- STORED PROCEDURE TO  UPDATE BR and UNRELEIEVD BF FROM BACKGROUND JOB-----------------------------------------
-
-
-IF OBJECT_ID('[dbo].[usp_Update_lossBf_Background]') IS NOT NULL
-BEGIN
-DROP procedure [dbo].[usp_Update_lossBf_Background]
-PRINT('OK')
-END
-GO
-
-CREATE procedure [usp_Update_lossBf_Background](
-
-@CompanyId int
-
-)
-AS
-declare @lossCfValue decimal
-declare @UnRelievedCf decimal
-select @lossCfValue=LossCf, @UnRelievedCf=UnRelievedCf from [dbo].[BroughtFoward] where CompanyId=@CompanyId
-Update [dbo].[BroughtFoward] set LossBf=@lossCfValue ,LossCf=null, UnRelievedBf=@UnRelievedCf,UnRelievedCf=null ,Accessible=null where CompanyId=@CompanyId
-GO

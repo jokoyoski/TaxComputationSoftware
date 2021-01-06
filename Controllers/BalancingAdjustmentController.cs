@@ -63,10 +63,7 @@ namespace TaxComputationAPI.Controllers
                     return BadRequest(new { errors = new[] { "The annual for this item has already been calculated from fixed asset" } });
                 }
 
-                if (previousRecord.Channel == Constants.FixedAssetClosed || previousRecord.Channel == Constants.BalancingAdjustementClosed || previousRecord.Channel == Constants.OldBalancingAdjustmenClosed)
-                {
-                    return BadRequest(new { errors = new[] { "The annual for this item has already been  closed for the financial year" } });
-                }
+               
 
                 if (previousRecord.Channel == Constants.FixedAssetLock || previousRecord.Channel == Constants.BalancingAdjustmentlOCK || previousRecord.Channel == Constants.OldBalancingAdjustmentLock)
                 {

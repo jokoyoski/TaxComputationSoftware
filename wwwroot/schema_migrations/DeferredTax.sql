@@ -77,15 +77,14 @@ GO
 
 
 
-IF NOT EXISTS(SELECT 1 FROM sysobjects WHERE type = 'U' and name = 'DeferredTaxFoward')
+IF NOT EXISTS(SELECT 1 FROM sysobjects WHERE type = 'U' and name = 'DeferredTaxBroughtFoward')
 BEGIN
-   create table DeferredTaxFoward(
+   create table DeferredTaxBroughtFoward(
 
  Id   int identity(1,1) NOT NULL ,
  CompanyId int,
- IsStarted bit,
- DeferredTaxBroughtFoward decimal,
  DeferredTaxCarriedFoward decimal,
+ YearId int
  )
 END
 GO
@@ -104,28 +103,7 @@ CREATE procedure [dbo].[usp_Get_Deferred_Tax_Brought_Foward_By_CompanyId](
 
 )
 AS
-select  * from  [dbo].[DeferredTaxFoward] where CompanyId=@CompanyId
-GO
-
-
-
-
---------------------------------------- STORED PROCEDURE TO  UPDATE BROUGHT FOWARD AND FROM DEFERRED TAX-----------------------------------------
-
-
-IF OBJECT_ID('[dbo].[usp_Update_BroughtFoward_By_Deferred_Tax]') IS NOT NULL
-BEGIN
-DROP procedure [dbo].[usp_Update_BroughtFoward_By_Deferred_Tax]
-PRINT('OK')
-END
-GO
-
-CREATE procedure [usp_Update_BroughtFoward_By_Deferred_Tax](
-@CompanyId int,
-@DeferredTaxCarriedFoward decimal
-)
-AS
-Update [dbo].[DeferredTaxFoward] set DeferredTaxCarriedFoward=@DeferredTaxCarriedFoward where CompanyId=@CompanyId
+select  * from  [dbo].[DeferredTaxBroughtFoward] where CompanyId=@CompanyId
 GO
 
 
@@ -133,29 +111,6 @@ GO
 
 
 
-
-
-
---------------------------------------- STORED PROCEDURE TO  UPDATE DEFERRED TAX  BF FROM BACKGROUND JOB-----------------------------------------
-
-
-IF OBJECT_ID('[dbo].[usp_Update_Deferred_Tax_Bf_Background]') IS NOT NULL
-BEGIN
-DROP procedure [dbo].[usp_Update_Deferred_Tax_Bf_Background]
-PRINT('OK')
-END
-GO
-
-CREATE procedure [usp_Update_Deferred_Tax_Bf_Background](
-
-@CompanyId int
-
-)
-AS
-declare @deferredTaxCarriedFoward decimal
-select @deferredTaxCarriedFoward=DeferredTaxCarriedFoward  from [dbo].[DeferredTaxFoward] where CompanyId=@CompanyId
-Update [dbo].[DeferredTaxFoward] set DeferredTaxBroughtFoward=@deferredTaxCarriedFoward ,DeferredTaxCarriedFoward=null where CompanyId=@CompanyId
-GO
 
 
 
@@ -173,26 +128,20 @@ GO
 CREATE procedure [usp_Insert_Into_DeferredTax_Brought_Foward](
 
 @CompanyId int,
-@IsStarted bit,
-@DeferredTaxBroughtFoward decimal
+@DeferredTaxCarriedFoward decimal,
+@YearId int
 )
 AS
 
-if exists (select * from [dbo].[DeferredTaxFoward]  where CompanyId=@CompanyId)
-begin
-Update [dbo].[DeferredTaxFoward] set DeferredTaxBroughtFoward=@DeferredTaxBroughtFoward ,DeferredTaxCarriedFoward=null where CompanyId=@CompanyId
-end
-else
-begin
+
 INSERT [dbo].[DeferredTaxFoward](
 CompanyId,
-IsStarted ,
-DeferredTaxBroughtFoward
+DeferredTaxCarriedFoward,
+YearId 
 )
 VALUES(
 @CompanyId,
-@IsStarted,
-@DeferredTaxBroughtFoward
+@DeferredTaxCarriedFoward,
+@YearId 
 )
-end
 GO
