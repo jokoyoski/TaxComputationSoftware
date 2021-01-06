@@ -67,6 +67,9 @@ namespace TaxComputationAPI.Repositories
                     DynamicParameters parameters = new DynamicParameters();
 
                     parameters.Add("@Name", financialYear.Name);
+                    parameters.Add("@CompanyId", financialYear.CompanyId);
+                    parameters.Add("@OpeningDate", financialYear.OpeningDate);
+                    parameters.Add("@ClosingDate", financialYear.ClosingDate);
 
                     try
                     {
@@ -115,6 +118,36 @@ namespace TaxComputationAPI.Repositories
                 }
 
                 return result;
+            }
+        }
+
+        public async Task<List<FinancialYear>> GetFinancialCompanyAsync(int companyId)
+        {
+            if (companyId <= 0) throw new ArgumentNullException(nameof(companyId));
+
+            var result = default(IEnumerable<FinancialYear>);
+
+            using (IDbConnection conn = await _databaseManager.DatabaseConnection())
+            {
+                if (conn.State == ConnectionState.Closed) conn.Open();
+
+                DynamicParameters parameters = new DynamicParameters();
+
+                parameters.Add("@CompanyId", companyId);
+
+                try
+                {
+                    result = await conn.QueryAsync<FinancialYear>("[dbo].[usp_Get_Financial_Year_By_CompanyId]", parameters, commandType: CommandType.StoredProcedure);
+                    conn.Close();
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError($"{e.Message}");
+
+                    throw e;
+                }
+
+                return result.ToList();
             }
         }
 

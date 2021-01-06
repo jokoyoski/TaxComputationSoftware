@@ -89,6 +89,7 @@ GO
 CREATE PROCEDURE [dbo].[usp_UpdatePreNotification](
     @Id INT,
     @OpeningDate datetime2 (7),
+    @ClosingDate datetime2 (7),
     @JobDate datetime2 (7)
 )
 AS

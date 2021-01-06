@@ -196,5 +196,30 @@ namespace TaxComputationAPI.Controllers
         }
 
 
+        [HttpGet("company-financial-year")]
+        public async Task<IActionResult> GetFinancialYears(int companyId)
+        {
+            try
+            {
+                if (companyId <= 0)
+                {
+                    return StatusCode(400, new { errors = new[] { "CompanyId is invalid" } });
+
+                }
+                var itemModules = await _utilitiesService.GetFinancialCompanyAsync(companyId);
+
+                return Ok(itemModules);
+
+            }
+            catch (Exception ex)
+            {
+                var email = User.FindFirst(ClaimTypes.Email).Value;
+                _logger.LogInformation("Exception for {email}, {ex}", email, ex.Message);
+                return StatusCode(500, new { errors = new[] { "Error occured while trying to process your request please try again later !" } });
+
+            }
+        }
+
+
     }
 }

@@ -93,15 +93,6 @@ namespace TaxComputationAPI.Services
             else
             {
 
-                var yearRecord = await _utilitiesRepository.GetFinancialYearAsync(upload.YearId);
-                if (yearRecord == null)
-                {
-                    var createYear = new FinancialYear
-                    {
-                        Name = upload.YearId
-                    };
-                    await _utilitiesRepository.AddFinancialYearAsync(createYear);
-                }
                 TrackTrialBalance track = new TrackTrialBalance
                 {
                     CompanyId = upload.CompanyId,
