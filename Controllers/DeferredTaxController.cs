@@ -59,7 +59,7 @@ namespace TaxComputationAPI.Controllers
 
             try
             {
-
+            
                 var startDate = _memoryCache.Get<DateTime>(Constants.OpeningDate);
                 var endDate = _memoryCache.Get<DateTime>(Constants.ClosingDate);
                 var isValid = Utilities.ValidateDate(startDate, endDate, createDeferredTax.YearId);
@@ -81,14 +81,7 @@ namespace TaxComputationAPI.Controllers
                 }
 
                 var broughtFowardInfo = await _deferredTaxService.GetBroughtFoward(createDeferredTax.CompanyId);
-                if (broughtFowardInfo != null)
-                {
-                    //createDeferredTax.IsStarted = true;
-                    if (createDeferredTax.DeferredTaxBroughtFoward > 0)
-                    {
-                        return StatusCode(400, new { errors = new[] { "The Deferred Tax Brought Foward is required once" } });
-                    }
-                }
+               
                 _deferredTaxService.SaveDeferredTax(createDeferredTax);
                 return Ok("Saved Successfully!!!");
 

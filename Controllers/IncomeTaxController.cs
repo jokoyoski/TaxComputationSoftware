@@ -65,11 +65,7 @@ namespace TaxComputationSoftware.Controllers
         {
             try
             {
-                if (createIncomeTaxDto.LossBroughtFoward > 0)
-                {
-                    return StatusCode(400, new { errors = new[] { "Since it is a loss brought foward, a negative value is needed!!" } });
-                }
-
+               
                 if (createIncomeTaxDto.TypeId == 0)
                 {
                     foreach (var j in createIncomeTaxDto.IncomeList)

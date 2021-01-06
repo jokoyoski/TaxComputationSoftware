@@ -80,6 +80,9 @@ namespace TaxComputationAPI.Controllers
             try
             {
                 companyForRegisterDto.MonthOfOperation="6";
+                if(companyForRegisterDto.LossCf>0){
+                    return StatusCode(400, new { errors = new[] { "Since it is a loss brought foward, a negative value is needed!!" } });
+                }
                 var companyRecord = await _companiesService.GetCompanyByTinAsync(companyForRegisterDto.TinNumber);
                 if (companyRecord != null)
                 {

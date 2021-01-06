@@ -134,7 +134,7 @@ CREATE procedure [usp_Insert_Into_DeferredTax_Brought_Foward](
 AS
 
 
-INSERT [dbo].[DeferredTaxFoward](
+INSERT [dbo].[DeferredTaxBroughtFoward](
 CompanyId,
 DeferredTaxCarriedFoward,
 YearId 
