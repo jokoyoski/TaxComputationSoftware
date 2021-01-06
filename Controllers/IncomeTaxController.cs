@@ -117,14 +117,7 @@ namespace TaxComputationSoftware.Controllers
                 {
                     return StatusCode(400, new { errors = new[] { "The year selected has to be within the financial year!!" } });
                 }
-                var broughtFowardInfo = await _incomeTaxService.GetBroughtFoward(createIncomeTaxDto.CompanyId);
-                if (broughtFowardInfo != null)
-                {
-                    if (broughtFowardInfo.IsStarted && createIncomeTaxDto.LossBroughtFoward > 0 || createIncomeTaxDto.UnrelievedCapitalAllowanceBroughtFoward > 0)
-                    {
-                        return StatusCode(400, new { errors = new[] { "The LossBf/UnRelievedBf is required once" } });
-                    }
-                }
+                
 
                 _incomeTaxService.SaveAllowableDisAllowable(createIncomeTaxDto);
                 return Ok("Income tax created successfully");
