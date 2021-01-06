@@ -45,7 +45,7 @@ namespace TaxComputationSoftware.Services
 
         private async Task PreFinancialYearNotification()
         {
-            //TODO: save list in cache and check cache before going to db
+
             var pre = await _notificationRepository.GetPreNotification();
 
             var emailList = new List<PreNotification>();
@@ -55,7 +55,7 @@ namespace TaxComputationSoftware.Services
 
                 PreNotification email = default(PreNotification);
 
-                var companyDate = item.OpeningDate.AddDays(EmailDay).Date;
+                var companyDate = item.ClosingDate.AddDays(EmailDay + 1).Date;
                 var emailDate = DateTime.Now.Date;
                 
 
@@ -76,9 +76,19 @@ namespace TaxComputationSoftware.Services
 
                     foreach (var mail in emailList)
                     {
+
+                        mail.OpeningDate = mail.OpeningDate.AddYears(1); 
+                        mail.ClosingDate = mail.ClosingDate.AddYears(1); 
+
+                        await _notificationRepository.UpdatePreNotification(mail);
+
+                        mail.IsLocked = false;
+
+                        await _notificationRepository.Lock(mail);
+
                         var company = await _companyRepository.GetCompanyAsync(mail.CompanyId);
 
-                        var date = mail.OpeningDate.ToString("dddd, dd MMMM yyyy"); 
+                        var date = mail.ClosingDate.AddYears(1).ToString("dddd, dd MMMM yyyy"); 
 
                         string mg = $"Hello as you all know that {company.CompanyName} financial year has started , you are required to have done the necessary adjustment on or before {date}.";
 
@@ -92,9 +102,6 @@ namespace TaxComputationSoftware.Services
 
                         await _emailService.Send(toEmail, fromEmail, subject, message, null);
 
-                        mail.OpeningDate = mail.OpeningDate.AddYears(1); 
-
-                        await _notificationRepository.UpdatePreNotification(mail);
                     }
 
                 }
