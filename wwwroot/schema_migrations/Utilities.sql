@@ -208,8 +208,6 @@ CREATE procedure [dbo].[usp_Insert_Financial_Year](
   @CompanyId int
 )
 AS
-if NOT EXISTS(select * from  [dbo].[FinancialYear]  where Name=@Name)
- BEGIN
 INSERT [dbo].[FinancialYear]
   (
   Name,
@@ -223,7 +221,6 @@ VALUES(
     @ClosingDate,
     @CompanyId
 )
-END
 GO
 --------------------------------------- STORED PROCEDURE TO  GET FINANCIAL YEAR -------------------------------------------------------
 IF OBJECT_ID('[dbo].[usp_Get_Financial_Year]') IS nOT NULL
