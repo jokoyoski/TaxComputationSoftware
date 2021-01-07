@@ -15,14 +15,28 @@ const AddCompanyForm = ({ showAddCompany, setShowAddCompany, toast, refresh }) =
     if (loading) return;
 
     setLoading(true);
-    const { companyName, cacNumber, tinNumber, companyDescription, openingYear } = data;
+    const {
+      companyName,
+      cacNumber,
+      tinNumber,
+      companyDescription,
+      openingYear,
+      monthOfOperation,
+      unRelievedCf,
+      lossCf,
+      deferredTaxBroughtFoward
+    } = data;
     try {
       const response = await addCompany({
         companyName,
         cacNumber,
         tinNumber,
         companyDescription,
-        openingYear
+        openingYear,
+        monthOfOperation,
+        unRelievedCf,
+        lossCf,
+        deferredTaxBroughtFoward
       });
       if (response.status === 201) {
         toast.show(
@@ -144,7 +158,76 @@ const AddCompanyForm = ({ showAddCompany, setShowAddCompany, toast, refresh }) =
             )}
           </div>
         </div>
-        {/* <div className="p-d-flex"> */}
+        <div className="p-d-flex">
+          <div className="p-d-flex p-flex-column" style={{ marginBottom: 15, marginRight: 10 }}>
+            <label htmlFor="unRelievedCfInput" style={{ marginBottom: 10 }}>
+              Unrelieved C/f
+            </label>
+            <Controller
+              name="unRelievedCf"
+              control={control}
+              rules={{ required: true }}
+              defaultValue=""
+              render={props => (
+                <InputText
+                  style={{ marginBottom: 5, width: "100%" }}
+                  id="unRelievedCfInput"
+                  value={props.value}
+                  onChange={e => props.onChange(e.target.value)}
+                />
+              )}
+            />
+            {errors.unRelievedCf && (
+              <span style={{ fontSize: 12, color: "red" }}>Unrelieved C/f is required</span>
+            )}
+          </div>
+          <div className="p-d-flex p-flex-column" style={{ marginBottom: 15, marginLeft: 10 }}>
+            <label htmlFor="lossCfInput" style={{ marginBottom: 10 }}>
+              Loss C/f
+            </label>
+            <Controller
+              name="lossCf"
+              control={control}
+              rules={{ required: true }}
+              defaultValue=""
+              render={props => (
+                <InputText
+                  style={{ marginBottom: 5, width: "100%" }}
+                  id="lossCfInput"
+                  value={props.value}
+                  onChange={e => props.onChange(e.target.value)}
+                />
+              )}
+            />
+            {errors.lossCf && (
+              <span style={{ fontSize: 12, color: "red" }}>Loss C/f is required</span>
+            )}
+          </div>
+        </div>
+        <div className="p-d-flex p-flex-column" style={{ marginBottom: 15 }}>
+          <label htmlFor="deferredTaxBroughtFowardInput" style={{ marginBottom: 10 }}>
+            Deferred Tax Brought Foward
+          </label>
+          <Controller
+            name="deferredTaxBroughtFoward"
+            control={control}
+            rules={{ required: true }}
+            defaultValue=""
+            render={props => (
+              <InputText
+                style={{ marginBottom: 5, width: "100%" }}
+                id="deferredTaxBroughtFowardInput"
+                value={props.value}
+                onChange={e => props.onChange(e.target.value)}
+              />
+            )}
+          />
+          {errors.deferredTaxBroughtFoward && (
+            <span style={{ fontSize: 12, color: "red" }}>
+              Deferred Tax Brought Foward is required
+            </span>
+          )}
+        </div>
         <div className="p-d-flex p-flex-column" style={{ marginBottom: 15 }}>
           <label htmlFor="openingYearInput" style={{ marginBottom: 10 }}>
             Last Opening Financial Year
@@ -169,29 +252,28 @@ const AddCompanyForm = ({ showAddCompany, setShowAddCompany, toast, refresh }) =
             </span>
           )}
         </div>
-        {/* <div className="p-d-flex p-flex-column" style={{ marginBottom: 15, marginLeft: 10 }}>
-            <label htmlFor="closingYearInput" style={{ marginBottom: 10 }}>
-              Closing Year
-            </label>
-            <Controller
-              name="closingYear"
-              control={control}
-              rules={{ required: true }}
-              defaultValue=""
-              render={props => (
-                <InputText
-                  style={{ marginBottom: 5, width: "100%" }}
-                  id="closingYearInput"
-                  value={props.value}
-                  onChange={e => props.onChange(e.target.value)}
-                />
-              )}
-            />
-            {errors.closingYear && (
-              <span style={{ fontSize: 12, color: "red" }}>Closing Year is required</span>
+        <div className="p-d-flex p-flex-column" style={{ marginBottom: 15 }}>
+          <label htmlFor="monthOfOperationInput" style={{ marginBottom: 10 }}>
+            Month of Operation
+          </label>
+          <Controller
+            name="monthOfOperation"
+            control={control}
+            rules={{ required: true }}
+            defaultValue=""
+            render={props => (
+              <InputText
+                style={{ marginBottom: 5, width: "100%" }}
+                id="monthOfOperationInput"
+                value={props.value}
+                onChange={e => props.onChange(e.target.value)}
+              />
             )}
-          </div> */}
-        {/* </div> */}
+          />
+          {errors.monthOfOperation && (
+            <span style={{ fontSize: 12, color: "red" }}>Month of Operation is required</span>
+          )}
+        </div>
         <div className="p-d-flex p-flex-column" style={{ marginBottom: 15 }}>
           <label htmlFor="companyDescriptionInput" style={{ marginBottom: 10 }}>
             Address
