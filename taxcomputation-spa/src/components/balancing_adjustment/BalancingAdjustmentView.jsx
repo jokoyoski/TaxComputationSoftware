@@ -74,10 +74,10 @@ const BalancingAdjustmentView = ({ year, toast }) => {
                 initialAllowanceRow.category = "Initial Allowance";
                 initialAllowanceRow.credit = utils.currencyFormatter(assetYear.initialAllowance);
 
-                annualAllowanceRow.category = `Annual allowances up to ${year - 1}`;
+                annualAllowanceRow.category = `Annual allowances`;
                 annualAllowanceRow.credit = utils.currencyFormatter(assetYear.annualAllowance);
 
-                residueRow.category = `Residue at 31.12.${year - 1}`;
+                residueRow.category = `Residue`;
                 residueRow.credit = utils.currencyFormatter(assetYear.residue);
                 residueRow.twdv = utils.currencyFormatter(assetYear.residue);
 
