@@ -4,7 +4,6 @@ import { Button } from "primereact/button";
 import { Dropdown } from "primereact/dropdown";
 import utils from "../../utils";
 import { uploadTrialBalance } from "../../apis/TrialBalance";
-import constants from "../../constants";
 
 const FileUploader = ({ company: { companyId }, toast, setRefreshTrialBalanceTable }) => {
   const [file, setFile] = React.useState();
@@ -39,23 +38,7 @@ const FileUploader = ({ company: { companyId }, toast, setRefreshTrialBalanceTab
         toast.show(utils.toastCallback({ severity: "success", detail: response.data }));
       }
     } catch (error) {
-      if (error.response) {
-        toast.show(
-          utils.toastCallback({
-            severity: "error",
-            summary: "Error",
-            detail: "An error occurred, kindly contact your admin"
-          })
-        );
-      } else {
-        // network errors
-        toast.show(
-          utils.toastCallback({
-            summary: "Network Error",
-            detail: constants.networkErrorMessage
-          })
-        );
-      }
+      utils.apiErrorHandling(error, toast);
     } finally {
       setLoading(false);
     }
