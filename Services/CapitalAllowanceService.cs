@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Caching.Memory;
 using TaxComputationAPI.Dtos;
 using TaxComputationAPI.Helpers;
 using TaxComputationAPI.Interfaces;
@@ -15,11 +16,15 @@ namespace TaxComputationAPI.Services
     {
         private readonly ICapitalAllowanceRepository _capitalAllowanceRepository;
         private readonly IUtilitiesRepository _utilitiesRepository;
+        private readonly ICompaniesRepository _companyRepository;
+        private readonly IMemoryCache _memoryCache;
 
-        public CapitalAllowanceService(ICapitalAllowanceRepository capitalAllowanceRepository, IUtilitiesRepository utilitiesRepository)
+        public CapitalAllowanceService(ICapitalAllowanceRepository capitalAllowanceRepository, ICompaniesRepository companyRepository,IMemoryCache memoryCache, IUtilitiesRepository utilitiesRepository)
         {
             _capitalAllowanceRepository = capitalAllowanceRepository;
             _utilitiesRepository = utilitiesRepository;
+            _companyRepository=companyRepository;
+            _memoryCache = memoryCache;
         }
 
         public async Task<CapitalAllowanceDto> GetCapitalAllowance(int assetId, int companyId)
@@ -34,7 +39,7 @@ namespace TaxComputationAPI.Services
 
         public Task SaveCapitalAllowance(CapitalAllowance capitalAllowance)
         {
-            capitalAllowance.Channel=Constants.OldBalancingAdjustmentOpen;
+            capitalAllowance.Channel = Constants.OldBalancingAdjustmentOpen;
             _capitalAllowanceRepository.SaveArchivedCapitaLAllowance(capitalAllowance, Constants.OldBalancingAdjustmentOpen);
             _capitalAllowanceRepository.SaveCapitaLAllowance(capitalAllowance, Constants.OldBalancingAdjustmentOpen);
             SaveCapitalAllowanceSummary(capitalAllowance.AssetId, capitalAllowance.CompanyId);
@@ -57,11 +62,15 @@ namespace TaxComputationAPI.Services
             decimal annual = 0;
             decimal total = 0;
             decimal closingResidue = 0;
+            decimal annualValue1 = 0;
+            decimal annualValue2 = 0;
+            decimal annualValue3 = 0;
             int remianingYears = 0;
             int numOfYearsAvailable = 0;
 
             var companyCode = await _utilitiesRepository.GetCompanyCodeByCodeId(companyId);
             var assetDetails = await _utilitiesRepository.GetAssetMappingById(assetId);
+            var companyDetails=await _companyRepository.GetCompanyAsync(companyId);
             var previousRecord = await _capitalAllowanceRepository.GetCapitalAllowanceByAssetIdYear(assetId, companyId, year);
 
 
@@ -83,18 +92,21 @@ namespace TaxComputationAPI.Services
             else
             {
                 //cos-initial/no of years* no of month used/12
-         
+
                 totalNoOfYears = (int)100 / assetDetails.Annual;  //no of years
                 annualPercentage = (decimal)assetDetails.Annual / 100;     //annual percentage rate
                 additionValue = addition;   //addittion
                 Initial = addition * assetDetails.Initial / 100;     //initial=addition*%rateinitial   
                 Initial = Math.Round(Initial, 2);
+                annualValue1 = addition - Initial;
+                annualValue2 = annualValue1 / totalNoOfYears;
+                annualValue3 = annualValue2 * companyDetails.MonthOfOperation / 12;
                 value = addition - Initial;         //  
-                annual = value * annualPercentage;   //addition-initial* %annualpercenatgerate  
+                annual = annualValue3;   //addition-initial* %annualpercenatgerate  
                 total = Initial + annual;         //total=addition-initial+total;
                 closingResidue = addition - total;      //closingresidue=addition-total
                 remianingYears = totalNoOfYears - 1;    //remainingyears-1
-                code = companyCode.Code;
+                code = "0";
                 channel = Constants.FixedAsset;
                 numOfYearsAvailable = totalNoOfYears;
             }
@@ -147,12 +159,13 @@ namespace TaxComputationAPI.Services
             var residueValue = residue;
             var previousRecord = await _capitalAllowanceRepository.GetCapitalAllowanceByAssetIdYear(assetId, companyId, year);
             var companyCode = await _utilitiesRepository.GetCompanyCodeByCodeId(companyId);
+            var companyDetails=await _companyRepository.GetCompanyAsync(companyId);
 
             if (previousRecord != null)
             {
-                if (previousRecord.Initial <= 0 && previousRecord.Channel == Constants.OldBalancingAdjustment || previousRecord.Channel==Constants.BalancingAdjustementOpen || previousRecord.Channel==Constants.FixedAssetOpen || previousRecord.Channel==Constants.OldBalancingAdjustmentOpen)
+                if (previousRecord.Initial <= 0 && previousRecord.Channel == Constants.OldBalancingAdjustment || previousRecord.Channel == Constants.BalancingAdjustementOpen || previousRecord.Channel == Constants.FixedAssetOpen || previousRecord.Channel == Constants.OldBalancingAdjustmentOpen)
                 {
-                    decimal openingResidueValue = previousRecord.OpeningResidue-residue;   //openingresidue- residue 
+                    decimal openingResidueValue = previousRecord.OpeningResidue - residue;   //openingresidue- residue 
                     decimal annualValue = openingResidueValue / previousRecord.NumberOfYearsAvailable;  //opening residual/no of years available
                     annualValue = Math.Round(annualValue, 2);
                     decimal total = annualValue;   //total
@@ -172,7 +185,7 @@ namespace TaxComputationAPI.Services
                         YearsToGo = previousRecord.YearsToGo - 1,
                         CompanyId = companyId,
                         AssetId = assetId,
-                        CompanyCode = companyCode.Code,
+                        CompanyCode = "companyCode.Code",
                         Channel = ChannelType(previousRecord.Channel),
                         NumberOfYearsAvailable = previousRecord.NumberOfYearsAvailable
 
@@ -186,7 +199,9 @@ namespace TaxComputationAPI.Services
                 }
                 else
                 {
-
+                    decimal annualValue1 = 0;
+                    decimal annualValue2 = 0;
+                    decimal annualValue3 = 0;
                     decimal newadditionValue = previousRecord.Addition - residue;      // new addition  =  addition-residue
                     var assetDetails = await _utilitiesRepository.GetAssetMappingById(assetId);
                     int newtotalNoOfYears = (int)100 / assetDetails.Annual;      //total no years
@@ -194,7 +209,9 @@ namespace TaxComputationAPI.Services
                     decimal newInitialValue = newadditionValue * assetDetails.Initial / 100;
                     newInitialValue = Math.Round(newInitialValue, 2);
                     decimal newAnnualValue = newadditionValue - newInitialValue; // addition-initial * annual percentage
-                    newAnnualValue = newAnnualValue * annualPercentage;
+                    annualValue2 = newAnnualValue / newtotalNoOfYears;
+                    annualValue3 = annualValue2 * companyDetails.MonthOfOperation/ 12;
+                    newAnnualValue = annualValue3;
                     var newTotalValue = newAnnualValue + newInitialValue;   // initial+total
                     var newClosingResidue = newadditionValue - newTotalValue;  // addition-total
                     var newRemainingyears = newtotalNoOfYears - 1;   //years to go
@@ -212,8 +229,8 @@ namespace TaxComputationAPI.Services
                         YearsToGo = newRemainingyears,
                         CompanyId = companyId,
                         AssetId = assetId,
-                        CompanyCode = companyCode.Code,
-                        Channel =ChannelType(previousRecord.Channel),
+                        CompanyCode = "companyCode.Code",
+                        Channel = ChannelType(previousRecord.Channel),
                         NumberOfYearsAvailable = newtotalNoOfYears,
 
 

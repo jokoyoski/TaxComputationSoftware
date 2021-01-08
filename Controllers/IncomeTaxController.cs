@@ -25,26 +25,29 @@ namespace TaxComputationSoftware.Controllers
         private readonly IIncomeTaxService _incomeTaxService;
         private readonly IMemoryCache _memoryCache;
 
-        public IncomeTaxController(ILogger<IncomeTaxController> logger, IMemoryCache memoryCache, ITrialBalanceService trialBalanceService, IIncomeTaxService incomeTaxService)
+        private readonly IUtilitiesService _utilitiesService;
+
+        public IncomeTaxController(ILogger<IncomeTaxController> logger, IMemoryCache memoryCache, IUtilitiesService utilitiesService,ITrialBalanceService trialBalanceService, IIncomeTaxService incomeTaxService)
         {
             _logger = logger;
             _incomeTaxService = incomeTaxService;
             _trialBalanceService = trialBalanceService;
+            _utilitiesService=utilitiesService;
             _memoryCache = memoryCache;
         }
 
         [HttpGet("{companyId}/{yearId}/{IsItLevyView}")]
         [Authorize]
-        public async Task<IActionResult> GetIncometax(int companyId, int yearId, bool IsItLevyView)
+        public async Task<IActionResult> GetIncometax(int companyId, int yearId, bool IsItLevyView, bool isBringLossFoward)
         {
-
+             yearId=14;
             if (yearId == 0)
             {
                 return StatusCode(400, new { errors = new[] { "Please select a Valid year" } });
             }
             try
             {
-                var value = await _incomeTaxService.GetIncomeTax(companyId, yearId, IsItLevyView);
+                var value = await _incomeTaxService.GetIncomeTax(companyId, yearId, IsItLevyView,isBringLossFoward);
                 return Ok(value);
 
             }
@@ -65,7 +68,7 @@ namespace TaxComputationSoftware.Controllers
         {
             try
             {
-               
+               createIncomeTaxDto.YearId=14;
                 if (createIncomeTaxDto.TypeId == 0)
                 {
                     foreach (var j in createIncomeTaxDto.IncomeList)
@@ -105,15 +108,15 @@ namespace TaxComputationSoftware.Controllers
 
                 }
 
+                var details = await _utilitiesService.GetFinancialYearAsync(createIncomeTaxDto.YearId);
                 var startDate = _memoryCache.Get<DateTime>(Constants.OpeningDate);
                 var endDate = _memoryCache.Get<DateTime>(Constants.ClosingDate);
-                var isValid = Utilities.ValidateDate(startDate, endDate, createIncomeTaxDto.YearId);
-
+                var isValid = Utilities.ValidateDate(startDate, endDate, details.OpeningDate, details.ClosingDate);
                 if (!isValid)
                 {
                     return StatusCode(400, new { errors = new[] { "The year selected has to be within the financial year!!" } });
                 }
-                
+
 
                 _incomeTaxService.SaveAllowableDisAllowable(createIncomeTaxDto);
                 return Ok("Income tax created successfully");

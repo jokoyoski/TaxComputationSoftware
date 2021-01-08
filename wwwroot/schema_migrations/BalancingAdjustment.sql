@@ -77,7 +77,6 @@ GO
 PRINT('============================================Creating balancing adjustment by companyId and year=====================================================')
 
 ------------------------------------------------STORED PROCEDURE TO  GET TRACK TRIAL BALANCE BY COMPANYID AND YEARID---------------------------------------------
-
 IF OBJECT_ID('[dbo].[usp_GetBalancingAdjustment_BalancingAdjustmentId_AssetId]') IS NOT NULL
 BEGIN
 DROP PROCEDURE [dbo].[usp_GetBalancingAdjustment_BalancingAdjustmentId_AssetId]
@@ -88,9 +87,9 @@ CREATE PROCEDURE [dbo].[usp_GetBalancingAdjustment_BalancingAdjustmentId_AssetId
     @BalancingAdjustmentId int
 )
 AS
-SELECT *
+SELECT [dbo].[BalancingAdjustmentYearBought].Id,AssestId,Cost,InitialAllowance,AnnualAllowance,SalesProceed,Residue,BalancingAllowance,BalancingCharge,DateCreated,[dbo].[FinancialYear].Name As YearBought,BalancingAdjustmentId
 FROM [dbo].[BalancingAdjustmentYearBought]
-WHERE AssestId=@AssetId AND BalancingAdjustmentId=@BalancingAdjustmentId
+ inner join [dbo].[FinancialYear]on [dbo].[BalancingAdjustmentYearBought].YearBought=[FinancialYear].Id  WHERE AssestId=@AssetId AND BalancingAdjustmentId=@BalancingAdjustmentId
 GO
 
 
@@ -108,9 +107,9 @@ CREATE PROCEDURE [dbo].[usp_GetBalancingAdjustment_YearBought_AssetId](
     @YearBought int
 )
 AS
-SELECT *
+SELECT AssetId,Cost,InitialAllowance,AnnualAllowance,SalesProceed,Residue,BalancingAllowance,BalancingCharge,DateCreated,[dbo].[FinancialYear].Name As YearBought,BalancingAdjustmentId
 FROM [dbo].[BalancingAdjustmentYearBought]
-WHERE AssestId=@AssetId AND YearBought=@YearBought
+WHERE AssestId=@AssetId AND YearBought=@YearBought inner join [dbo].[FinancialYear]on [dbo].[BalancingAdjustmentYearBought].YearBought=[FinancialYear].Id
 GO
 
 

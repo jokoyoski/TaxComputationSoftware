@@ -40,7 +40,7 @@ namespace TaxComputationAPI.Controllers
         //[Authorize]
         public async Task<IActionResult> GetTrialBalance(int companyId, int yearId)
         {
-
+            yearId=14;
             var companyDetails = await _utilityService.GetPreNotificationsAsync();
             var companyDate = companyDetails.FirstOrDefault(x => x.CompanyId == companyId);
             _cache.Set(Constants.CompanyId, companyDate.CompanyId);
@@ -71,10 +71,12 @@ namespace TaxComputationAPI.Controllers
             try
             {
 
-
+                 excel.YearId=14;
+                var details = await _utilityService.GetFinancialYearAsync(excel.YearId);
                 var startDate = _memoryCache.Get<DateTime>(Constants.OpeningDate);
                 var endDate = _memoryCache.Get<DateTime>(Constants.ClosingDate);
-                var isValid = Utilities.ValidateDate(startDate, endDate, excel.YearId);
+                var isValid = Utilities.ValidateDate(startDate, endDate, details.OpeningDate, details.ClosingDate);
+
 
                 if (!isValid)
                 {

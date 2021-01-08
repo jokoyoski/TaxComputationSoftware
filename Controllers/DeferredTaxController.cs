@@ -21,23 +21,27 @@ namespace TaxComputationAPI.Controllers
         private readonly IDeferredTaxService _deferredTaxService;
         private readonly ITrialBalanceService _trialBalanceService;
         private readonly ILogger<DeferredTaxController> _logger;
+
+        private readonly IUtilitiesService _utilitiesService;
         private readonly IMemoryCache _memoryCache;
-        public DeferredTaxController(IDeferredTaxService deferredTaxService, IMemoryCache memoryCache, ITrialBalanceService trialBalanceService, ILogger<DeferredTaxController> logger)
+        public DeferredTaxController(IDeferredTaxService deferredTaxService, IMemoryCache memoryCache, IUtilitiesService utilitiesService,ITrialBalanceService trialBalanceService, ILogger<DeferredTaxController> logger)
         {
             _deferredTaxService = deferredTaxService;
             _logger = logger;
             _trialBalanceService = trialBalanceService;
             _memoryCache = memoryCache;
+            _utilitiesService=utilitiesService;
         }
 
 
         [HttpGet]
-        public async Task<IActionResult> GetDeferredTax(int companyId, string year)
+        public async Task<IActionResult> GetDeferredTax(int companyId, string year,bool IsBringDeferredTaxFoward)
         {
 
             try
             {
-                var value = await _deferredTaxService.GetDeferredTax(companyId, int.Parse(year));
+                 year="14";
+                var value = await _deferredTaxService.GetDeferredTax(companyId, int.Parse(year),IsBringDeferredTaxFoward);
 
                 return Ok(value);
 
@@ -59,10 +63,11 @@ namespace TaxComputationAPI.Controllers
 
             try
             {
-            
+              createDeferredTax.YearId=14;
+                var details = await _utilitiesService.GetFinancialYearAsync(createDeferredTax.YearId);
                 var startDate = _memoryCache.Get<DateTime>(Constants.OpeningDate);
                 var endDate = _memoryCache.Get<DateTime>(Constants.ClosingDate);
-                var isValid = Utilities.ValidateDate(startDate, endDate, createDeferredTax.YearId);
+                var isValid = Utilities.ValidateDate(startDate, endDate, details.OpeningDate, details.ClosingDate);
                 if (!isValid)
                 {
                     return StatusCode(400, new { errors = new[] { "The year selected has to be within the financial year!!" } });
@@ -81,7 +86,7 @@ namespace TaxComputationAPI.Controllers
                 }
 
                 var broughtFowardInfo = await _deferredTaxService.GetBroughtFoward(createDeferredTax.CompanyId);
-               
+
                 _deferredTaxService.SaveDeferredTax(createDeferredTax);
                 return Ok("Saved Successfully!!!");
 

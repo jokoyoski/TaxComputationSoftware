@@ -1,4 +1,5 @@
-IF NOT EXISTS(SELECT 1 FROM sysobjects WHERE type = 'U' and name = 'AllowableDisAllowable')
+IF NOT EXISTS(SELECT 1 FROM sysobjects WHERE type = 'U' and name =
+'AllowableDisAllowable')
 BEGIN
    create table AllowableDisAllowable(
 
@@ -15,13 +16,17 @@ GO
 
 
 
---------------------------------------- STORED PROCEDURE TO  GET ALLOWABLE AND DISALLOWABLE BY COMPANY ID, YEAR, ALLOWABLE-----------------------------------------
-IF OBJECT_ID('[dbo].[usp_Get_Allowable_DisAllowable_By_CompanyId_YearId_Allowable]') IS nOT NULL
+--------------------------------------- STORED PROCEDURE TO  GET
+ALLOWABLE AND DISALLOWABLE BY COMPANY ID, YEAR,
+ALLOWABLE-----------------------------------------
+IF OBJECT_ID('[dbo].[usp_Get_Allowable_DisAllowable_By_CompanyId_YearId_Allowable]')
+IS nOT NULL
 BEGIN
 DROP procedure [dbo].usp_Get_Allowable_DisAllowable_By_CompanyId_YearId_Allowable
 END
 GO
-CREATE procedure [dbo].[usp_Get_Allowable_DisAllowable_By_CompanyId_YearId_Allowable](
+CREATE procedure
+[dbo].[usp_Get_Allowable_DisAllowable_By_CompanyId_YearId_Allowable](
 @CompanyId int,
 @YearId int,
 @IsAllowable bit
@@ -30,12 +35,19 @@ CREATE procedure [dbo].[usp_Get_Allowable_DisAllowable_By_CompanyId_YearId_Allow
 )
 AS
 
-select  [dbo].[AllowableDisAllowable].Id, [dbo].[TrialBalance].Item ,[dbo].[TrialBalance].Debit,[dbo].[TrialBalance].Credit,SelectionId,IsAllowable from [dbo].[AllowableDisAllowable] inner join [dbo].[TrialBalance] on [dbo].[AllowableDisAllowable].TrialBalanceId=[dbo].[TrialBalance].Id where CompanyId=@CompanyId and @YearId=YearId and IsAllowable=@IsAllowable
+select  [dbo].[AllowableDisAllowable].Id, [dbo].[TrialBalance].Item
+,[dbo].[TrialBalance].Debit,[dbo].[TrialBalance].Credit,SelectionId,IsAllowable
+from [dbo].[AllowableDisAllowable] inner join [dbo].[TrialBalance] on
+[dbo].[AllowableDisAllowable].TrialBalanceId=[dbo].[TrialBalance].Id
+where CompanyId=@CompanyId and @YearId=YearId and
+IsAllowable=@IsAllowable
 
 GO
 
 
---------------------------------------- STORED PROCEDURE TO  GET ALLOWABLE AND DISALLOWABLE BY ID-----------------------------------------
+--------------------------------------- STORED PROCEDURE TO  GET
+ALLOWABLE AND DISALLOWABLE BY
+ID-----------------------------------------
 IF OBJECT_ID('[dbo].[usp_Get_Allowable_DisAllowable_By_Id]') IS nOT NULL
 BEGIN
 DROP procedure [dbo].[usp_Get_Allowable_DisAllowable_By_Id]
@@ -53,8 +65,11 @@ GO
 
 
 
---------------------------------------- STORED PROCEDURE TO  GET ALLOWABLE AND DISALLOWABLE BY TRIALBALANCEID-----------------------------------------
-IF OBJECT_ID('[dbo].[usp_Get_Allowable_DisAllowable_By_TrialBalanceId]') IS nOT NULL
+--------------------------------------- STORED PROCEDURE TO  GET
+ALLOWABLE AND DISALLOWABLE BY
+TRIALBALANCEID-----------------------------------------
+IF OBJECT_ID('[dbo].[usp_Get_Allowable_DisAllowable_By_TrialBalanceId]')
+IS nOT NULL
 BEGIN
 DROP procedure [dbo].[usp_Get_Allowable_DisAllowable_By_TrialBalanceId]
 END
@@ -65,13 +80,17 @@ CREATE procedure [dbo].[usp_Get_Allowable_DisAllowable_By_TrialBalanceId](
 
 )
 AS
- select * from [dbo].[AllowableDisAllowable] where TrialBalanceId=@TrialBalanceId
+ select * from [dbo].[AllowableDisAllowable] where
+TrialBalanceId=@TrialBalanceId
 GO
 
 
 
---------------------------------------- STORED PROCEDURE TO  GET ALLOWABLE AND DISALLOWABLE BY COMPANYID AND YEARID-----------------------------------------
-IF OBJECT_ID('[dbo].[usp_Get_Allowable_DisAllowable_By_CompanyId_YearId]') IS nOT NULL
+--------------------------------------- STORED PROCEDURE TO  GET
+ALLOWABLE AND DISALLOWABLE BY COMPANYID AND
+YEARID-----------------------------------------
+IF OBJECT_ID('[dbo].[usp_Get_Allowable_DisAllowable_By_CompanyId_YearId]')
+IS nOT NULL
 BEGIN
 DROP procedure [dbo].[usp_Get_Allowable_DisAllowable_By_CompanyId_YearId]
 END
@@ -82,13 +101,18 @@ CREATE procedure [dbo].[usp_Get_Allowable_DisAllowable_By_CompanyId_YearId](
 
 )
 AS
-select  [dbo].[AllowableDisAllowable].Id, [dbo].[TrialBalance].Item ,[dbo].[TrialBalance].Debit,[dbo].[TrialBalance].Credit,SelectionId,IsAllowable from [dbo].[AllowableDisAllowable] inner join [dbo].[TrialBalance] on [dbo].[AllowableDisAllowable].TrialBalanceId=[dbo].[TrialBalance].Id where CompanyId=@CompanyId and @YearId=YearId
+select  [dbo].[AllowableDisAllowable].Id, [dbo].[TrialBalance].Item
+,[dbo].[TrialBalance].Debit,[dbo].[TrialBalance].Credit,SelectionId,IsAllowable
+from [dbo].[AllowableDisAllowable] inner join [dbo].[TrialBalance] on
+[dbo].[AllowableDisAllowable].TrialBalanceId=[dbo].[TrialBalance].Id
+where CompanyId=@CompanyId and @YearId=YearId
 GO
 
 
 
 
---------------------------------------- STORED PROCEDURE TO  DELETE ALLOWABLE DISALLOWABLE BY ID-----------------------------------------
+--------------------------------------- STORED PROCEDURE TO  DELETE
+ALLOWABLE DISALLOWABLE BY ID-----------------------------------------
 IF OBJECT_ID('[dbo].[Delete_Allowable_DisAllowable_By_Id]') IS nOT NULL
 BEGIN
 DROP procedure [dbo].[Delete_Allowable_DisAllowable_By_Id]
@@ -108,7 +132,8 @@ GO
 
 
 
---------------------------------------- STORED PROCEDURE TO  INSERT INTO ALLOWABLE DISALLOWABLE-----------------------------------------
+--------------------------------------- STORED PROCEDURE TO  INSERT
+INTO ALLOWABLE DISALLOWABLE-----------------------------------------
 IF OBJECT_ID('[dbo].[Insert_Into_Allowable_DisAllowable]') IS nOT NULL
 BEGIN
 DROP procedure [dbo].[Insert_Into_Allowable_DisAllowable]
@@ -122,14 +147,17 @@ CREATE procedure [dbo].[Insert_Into_Allowable_DisAllowable](
 @IsAllowable bit
 )
 AS
-Insert into [dbo].[AllowableDisAllowable] (CompanyId,YearId,TrialBalanceId,SelectionId,IsAllowable) values(@CompanyId,@YearId,@TrialBalanceId,@SelectionId,@IsAllowable)
+Insert into [dbo].[AllowableDisAllowable]
+(CompanyId,YearId,TrialBalanceId,SelectionId,IsAllowable)
+values(@CompanyId,@YearId,@TrialBalanceId,@SelectionId,@IsAllowable)
 GO
 
 
 
 
 
-IF NOT EXISTS(SELECT 1 FROM sysobjects WHERE type = 'U' and name = 'IncomeTaxBroughtFoward')
+IF NOT EXISTS(SELECT 1 FROM sysobjects WHERE type = 'U' and name =
+'IncomeTaxBroughtFoward')
 BEGIN
    create table IncomeTaxBroughtFoward(
 
@@ -145,8 +173,10 @@ GO
 
 
 
---------------------------------------- STORED PROCEDURE TO  GET BROUGHT FOWARD BY COMPANYID-----------------------------------------
-IF OBJECT_ID('[dbo].[usp_Get_Income_Tax_Brought_Foward_By_CompanyId]') IS nOT NULL
+--------------------------------------- STORED PROCEDURE TO  GET
+BROUGHT FOWARD BY COMPANYID-----------------------------------------
+IF OBJECT_ID('[dbo].[usp_Get_Income_Tax_Brought_Foward_By_CompanyId]')
+IS nOT NULL
 BEGIN
 DROP procedure [dbo].[usp_Get_Income_Tax_Brought_Foward_By_CompanyId]
 END
@@ -167,7 +197,8 @@ GO
 
 
 
---------------------------------------- STORED PROCEDURE TO  INSERT INTO BROUGHT FOWARD TABLE-----------------------------------------
+--------------------------------------- STORED PROCEDURE TO  INSERT
+INTO BROUGHT FOWARD TABLE-----------------------------------------
 IF OBJECT_ID('[dbo].[usp_Insert_Into_Income_Tax_Brought_Foward]') IS NOT NULL
 BEGIN
 DROP procedure [dbo].[usp_Insert_Into_Income_Tax_Brought_Foward]
@@ -184,27 +215,25 @@ CREATE procedure [usp_Insert_Into_Income_Tax_Brought_Foward](
 )
 AS
 
-
+if exists(select * from IncomeTaxBroughtFoward where
+CompanyId=@CompanyId and YearId=@YearId)
+BEGIN
+UPDATE [dbo].[IncomeTaxBroughtFoward]
+SET CompanyId = @CompanyId, YearId =
+@YearId,LossCf=@LossCf,UnRelievedCf=@UnRelievedCf
+WHERE CompanyId=@CompanyId and YearId=@YearId
+end
+else
 INSERT [dbo].[IncomeTaxBroughtFoward](
-CompanyId
-LossCf
-UnRelievedCf
+CompanyId,
+LossCf,
+UnRelievedCf,
 YearId
 )
 VALUES(
-@CompanyId
-@LossCf
-@UnRelievedCf
+@CompanyId,
+@LossCf,
+@UnRelievedCf,
 @YearId
 )
 GO
-
-
-
-
-
-
-
-
-
-

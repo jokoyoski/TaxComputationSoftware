@@ -123,6 +123,10 @@ namespace TaxComputationAPI.Services
 
 
             };
+            netBookValues.Add(new NetBookValue
+            {
+                value = closingCostTotal - closingDepreciationTotal
+            });
             result.netBookValue = netBookValues;
 
             return await FormatAmount(result, costList.ToArray(), depreciationList.ToArray());

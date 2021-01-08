@@ -51,6 +51,7 @@ namespace TaxComputationSoftware.Repositories
 
         public async Task<int> CreateDeferredTaxBroughtFoward(int companyId, decimal deferredTaxBroughtFoward,int yearId)
         {
+           
             int rowAffected = 0;
             using (IDbConnection con = await _databaseManager.DatabaseConnection())
             {
@@ -60,7 +61,7 @@ namespace TaxComputationSoftware.Repositories
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@CompanyId", companyId);
                 parameters.Add("@YearId", yearId);
-                parameters.Add("@DeferredTaxBroughtFoward", deferredTaxBroughtFoward);
+                parameters.Add("@DeferredTaxCarriedFoward", deferredTaxBroughtFoward);
                 rowAffected = con.Execute("[dbo].[usp_Insert_Into_DeferredTax_Brought_Foward]", parameters, commandType: CommandType.StoredProcedure);
             }
 

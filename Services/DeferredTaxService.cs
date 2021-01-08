@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+/*using System.Collections.Generic;
 using System.Threading.Tasks;
 using TaxComputationAPI.Dtos;
 using TaxComputationAPI.Helpers;
@@ -59,7 +59,7 @@ namespace TaxComputationSoftware.Services
 
         }
 
-        public async Task<List<DeferredTaxDto>> GetDeferredTax(int companyId, int yearId)
+        public async Task<List<DeferredTaxDto>> GetDeferredTax(int companyId, int yearId, bool IsBringDeferredTaxFoward)
         {
             var netbookValue = await _fixedAssetService.GetFixedAssetsByCompanyForDeferredTax(companyId, yearId);
             var capitalAllowanceSummary = await _capitalAllowanceService.GetCapitalAllowanceSummaryForDeferredTax(companyId);
@@ -84,13 +84,7 @@ namespace TaxComputationSoftware.Services
             decimal taxLiabilityAsset = 0;
             decimal lossCf = 0;
             bool isTaxable = false;
-            if (unrelievedCapitalAllowanceCf == null)
-            {
-                unrelievedCapitalAllowanceCf = new BroughtFoward
-                {
-                    UnRelievedCf = 0
-                };
-            }
+           
             var deferredTaxDto = new List<DeferredTaxDto>();
             deferredTaxDto.Add(new DeferredTaxDto
             {
@@ -312,4 +306,4 @@ namespace TaxComputationSoftware.Services
 
         }
     }
-}
+} */

@@ -8,7 +8,7 @@ namespace TaxComputationSoftware.Interfaces
     {
         Task DeleteAllowableDisAllowableById(int Id);
         Task<IEnumerable<AllowableDisAllowable>> GetAllowableDisAllowableByCompanyIdYearId(int companyId, int year);
-        Task<BroughtFoward> GetBroughtFowardByCompanyId(int companyId);
+        Task<IEnumerable<BroughtFoward>> GetBroughtFowardByCompanyId(int companyId);
         Task<int> CreateAllowableDisAllowable(AllowableDisAllowable allowableDisAllowable);
 
         Task<IEnumerable<AllowableDisAllowable>> GetAllowableDisAllowableByCompanyIdYearIdAllowable(int companyId, int year, int allowable);

@@ -18,34 +18,35 @@ namespace TaxComputationAPI.Controllers
         private readonly IBalancingAdjustmentService _balancingAdjustmentService;
         private readonly ICapitalAllowanceService _capitalAllowanceService;
         private readonly IMemoryCache _memoryCache;
+        private readonly IUtilitiesService _utilitiesService;
 
 
-        public BalancingAdjustmentController(IBalancingAdjustmentService balancingAdjustmentService, IMemoryCache memoryCache, ICapitalAllowanceService capitalAllowanceService)
+        public BalancingAdjustmentController(IBalancingAdjustmentService balancingAdjustmentService,IUtilitiesService utilitiesService ,IMemoryCache memoryCache, ICapitalAllowanceService capitalAllowanceService)
         {
             _balancingAdjustmentService = balancingAdjustmentService;
             _capitalAllowanceService = capitalAllowanceService;
+            _utilitiesService=utilitiesService;
             _memoryCache = memoryCache;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetBalancingAdjustment(int companyId, string year)
         {
+            year="14";
             var response = await _balancingAdjustmentService.DisplayBalancingAdjustment(companyId, year);
-
             return Ok(response);
         }
 
         [HttpPost]
         public async Task<IActionResult> AddBalancingAdjustment([FromForm] AddBalanceAdjustmentDto addBalanceAdjustmentDto)
         {
-
-
-
+            addBalanceAdjustmentDto.YearBought="14";
+            addBalanceAdjustmentDto.Year="14";
             var previousRecord = await _capitalAllowanceService.GetCapitalAllowanceByAssetIdYear(addBalanceAdjustmentDto.AssetId, addBalanceAdjustmentDto.CompanyId, addBalanceAdjustmentDto.YearBought);
+            var details = await _utilitiesService.GetFinancialYearAsync(int.Parse(addBalanceAdjustmentDto.Year));
             var startDate = _memoryCache.Get<DateTime>(Constants.OpeningDate);
             var endDate = _memoryCache.Get<DateTime>(Constants.ClosingDate);
-            var isValid = Utilities.ValidateDate(startDate, endDate, int.Parse(addBalanceAdjustmentDto.Year));
-
+            var isValid = Utilities.ValidateDate(startDate, endDate, details.OpeningDate, details.ClosingDate);
             if (!isValid)
             {
                 return StatusCode(400, new { errors = new[] { "The year selected has to be within the financial year!!" } });
@@ -63,7 +64,7 @@ namespace TaxComputationAPI.Controllers
                     return BadRequest(new { errors = new[] { "The annual for this item has already been calculated from fixed asset" } });
                 }
 
-               
+
 
                 if (previousRecord.Channel == Constants.FixedAssetLock || previousRecord.Channel == Constants.BalancingAdjustmentlOCK || previousRecord.Channel == Constants.OldBalancingAdjustmentLock)
                 {

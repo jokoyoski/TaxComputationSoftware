@@ -1,5 +1,4 @@
-﻿
---------------------------------------- STORED PROCEDURE TO  GET FIXED ASSET BY COMPANYID,YEARID-----------------------------------------
+﻿--------------------------------------- STORED PROCEDURE TO  GET FIXED ASSET BY COMPANYID,YEARID-----------------------------------------
 
 IF OBJECT_ID('[dbo].[usp_Get_Fixed_Asset_By_CompanyId_And_YearId]') IS nOT NULL
 BEGIN
@@ -12,7 +11,7 @@ CREATE procedure usp_Get_Fixed_Asset_By_CompanyId_And_YearId(
 )
 AS
 
-select [dbo].[FixedAsset].Id,[dbo].[Company].CompanyName AS CompanyName,[dbo].[FinancialYear].Name AS Year,[dbo].[AssetMapping].AssetName As FixedAssetName,OpeningCost,CostAddition,CostDisposal,OpeningDepreciation,DepreciationAddition,DepreciationDisposal,TransferCost,TransferDepreciation,IsTransferCostRemoved,IsTransferDepreciationRemoved  from [dbo].[FixedAsset] inner join [dbo].[FinancialYear] on [dbo].[FixedAsset].YearId=Name
+select [dbo].[FixedAsset].Id,[dbo].[Company].CompanyName AS CompanyName,[dbo].[FinancialYear].Name AS Year,[dbo].[AssetMapping].AssetName As FixedAssetName,OpeningCost,CostAddition,CostDisposal,OpeningDepreciation,DepreciationAddition,DepreciationDisposal,TransferCost,TransferDepreciation,IsTransferCostRemoved,IsTransferDepreciationRemoved  from [dbo].[FixedAsset] inner join [dbo].[FinancialYear] on [dbo].[FixedAsset].YearId=[dbo].[FinancialYear].Id
 inner join [dbo].[AssetMapping] on [dbo].[FixedAsset].AssetId=[dbo].[AssetMapping].Id
 inner join [dbo].[Company] on [dbo].[FixedAsset].CompanyId= [dbo].[Company].Id
 where [dbo].[FixedAsset].CompanyId=@CompanyId and [dbo].[FixedAsset].YearId=@YearId

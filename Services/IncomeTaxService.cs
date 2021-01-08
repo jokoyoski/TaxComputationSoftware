@@ -36,7 +36,9 @@ namespace TaxComputationSoftware.Services
             _utilitiesRepository = utilitiesRepository;
         }
 
-        public async Task<List<IncomeTaxDto>> GetIncomeTax(int companyId, int yearId, bool IsItLevyView)
+
+       
+        public async Task<List<IncomeTaxDto>> GetIncomeTax(int companyId, int yearId, bool IsItLevyView, bool IsBringLossFoward)
         {
             decimal totalAllowable = 0;
             decimal totalDisallowable = 0;
@@ -49,7 +51,8 @@ namespace TaxComputationSoftware.Services
             var investment = await _investmentAllowanceService.GetInvestmentAllowanceForIncomeTax(companyId, yearId);
             decimal capitalAllowanceOfTheYear = 0;
             var value = await _balancingAdjustmentService.GetBalancingAdjustmentForIncomeTax(companyId, yearId.ToString());
-            var broughtFoward = await _incomeTaxRepository.GetBroughtFowardByCompanyId(companyId);
+            var record = await _incomeTaxRepository.GetBroughtFowardByCompanyId(companyId);
+            var broughtFoward = record.ToList().FirstOrDefault();
             var incomeListDto = new List<IncomeTaxDto>();
             var profitOrLoss = await _profitAndLossService.GetProfitAndLossForIncomeTax(companyId, yearId);
             decimal unrelievedCf = 0;
@@ -80,7 +83,7 @@ namespace TaxComputationSoftware.Services
                     Description = "Profits/Loss per accounts",
                     ColumnOne = "",
                     ColumnTwo = $"₦{Utilities.FormatAmount(profitOrLoss)}",
-                    CanBolden=true
+                    CanBolden = true
                 });
 
                 if (iTLevy < 0)
@@ -90,7 +93,7 @@ namespace TaxComputationSoftware.Services
                         Description = "Less : I.T Levy",
                         ColumnOne = "",
                         ColumnTwo = $"₦{Utilities.FormatAmount(iTLevy)}",
-                         CanBolden=true
+                        CanBolden = true
                     });
 
                 }
@@ -101,7 +104,7 @@ namespace TaxComputationSoftware.Services
                         Description = "Less : I.T Levy",
                         ColumnOne = "",
                         ColumnTwo = $"₦({Utilities.FormatAmount(iTLevy)})",
-                         CanBolden=true
+                        CanBolden = true
                     });
 
                 }
@@ -125,7 +128,7 @@ namespace TaxComputationSoftware.Services
                     Description = "Profits/Loss per accounts",
                     ColumnOne = "",
                     ColumnTwo = $"₦{Utilities.FormatAmount(profitOrLoss)}",
-                     CanBolden=true
+                    CanBolden = true
                 });
 
             }
@@ -165,7 +168,7 @@ namespace TaxComputationSoftware.Services
                         ColumnOne = $"₦{Utilities.FormatAmount(item.Debit)}",
                         ColumnTwo = $"₦{Utilities.FormatAmount(totalDisallowable)}",
                         Id = item.Id,
-                      
+
                     });
 
 
@@ -181,7 +184,7 @@ namespace TaxComputationSoftware.Services
                         ColumnOne = $"₦{Utilities.FormatAmount(item.Debit)}",
                         ColumnTwo = "",
                         Id = item.Id,
-                        
+
                     });
 
                 }
@@ -308,9 +311,9 @@ namespace TaxComputationSoftware.Services
             {
                 broughtFoward = new BroughtFoward
                 {
-                   
+
                     LossCf = 0,
-                
+
                 };
             }
             if (broughtFoward.LossCf != 0)
@@ -327,7 +330,7 @@ namespace TaxComputationSoftware.Services
                     Description = "Loss b/f",
                     ColumnOne = "",
                     ColumnTwo = $"₦{Utilities.FormatAmount(broughtFoward.LossCf)}",
-                     CanBolden=true
+                    CanBolden = true
                 });
                 losscf = accessibleBalancingCharge + broughtFoward.LossCf;
                 incomeListDto.Add(new IncomeTaxDto
@@ -335,13 +338,13 @@ namespace TaxComputationSoftware.Services
                     Description = "Loss c/f",
                     ColumnOne = "",
                     ColumnTwo = $"₦{Utilities.FormatAmount(losscf)}",
-                     CanBolden=true
+                    CanBolden = true
                 });
 
             }
 
 
-            if (compareLoss>0 && isAssessibleProfit) //loss brought fooward and gain
+            if (compareLoss > 0 && isAssessibleProfit) //loss brought fooward and gain
             {
 
                 if (accessibleBalancingCharge > compareLoss)
@@ -351,7 +354,7 @@ namespace TaxComputationSoftware.Services
                         Description = "Loss b/f",
                         ColumnOne = "",
                         ColumnTwo = $"₦{Utilities.FormatAmount(broughtFoward.LossCf)}",
-                         CanBolden=true
+                        CanBolden = true
                     });
                     incomeListDto.Add(new IncomeTaxDto
                     {
@@ -373,7 +376,7 @@ namespace TaxComputationSoftware.Services
                 else if (accessibleBalancingCharge < compareLoss)
                 {
                     losscf = compareLoss - accessibleBalancingCharge;
-                    losscf= -losscf;
+                    losscf = -losscf;
                     incomeListDto.Add(new IncomeTaxDto
                     {
                         Description = "Loss b/f",
@@ -465,7 +468,7 @@ namespace TaxComputationSoftware.Services
                 Description = "Claims of the Year",
                 ColumnOne = $"₦{Utilities.FormatAmount(total)}",
                 ColumnTwo = "",
-                 CanBolden=true
+                CanBolden = true
             });
 
 
@@ -474,7 +477,7 @@ namespace TaxComputationSoftware.Services
                 Description = "Balancing Allowance",
                 ColumnOne = $"₦{Utilities.FormatAmount(value.Item1)}",
                 ColumnTwo = "",
-                 CanBolden=true
+                CanBolden = true
             });
 
             incomeListDto.Add(new IncomeTaxDto
@@ -482,7 +485,7 @@ namespace TaxComputationSoftware.Services
                 Description = "Investment Allowance",
                 ColumnOne = $"₦{Utilities.FormatAmount(investment)}",
                 ColumnTwo = "",
-                 CanBolden=true
+                CanBolden = true
             });
             capitalAllowanceOfTheYear = broughtFoward.UnRelievedCf + total + value.Item1 + investment;
             incomeListDto.Add(new IncomeTaxDto
@@ -490,7 +493,7 @@ namespace TaxComputationSoftware.Services
                 Description = "Capital allowance for the year",
                 ColumnOne = $"₦{Utilities.FormatAmount(capitalAllowanceOfTheYear)}",
                 ColumnTwo = "",
-                 CanBolden=true
+                CanBolden = true
             });
 
             if (!isAssessibleProfit)     //if accessible loss 
@@ -500,7 +503,7 @@ namespace TaxComputationSoftware.Services
                     Description = "Capital allowance claimed",
                     ColumnOne = "-",
                     ColumnTwo = "-",
-                     CanBolden=true
+                    CanBolden = true
                 });
             }
             else
@@ -523,7 +526,7 @@ namespace TaxComputationSoftware.Services
                         Description = "Capital allowance claimed",
                         ColumnOne = $"₦{Utilities.FormatAmount(capitalAllowanceClaimed)}",
                         ColumnTwo = $"₦{Utilities.FormatAmount(capitalAllowanceClaimed)}",
-                         CanBolden=true
+                        CanBolden = true
                     });
 
                 }
@@ -534,7 +537,7 @@ namespace TaxComputationSoftware.Services
                         Description = "Capital allowance claimed",
                         ColumnOne = $"₦({Utilities.FormatAmount(capitalAllowanceClaimed)})",
                         ColumnTwo = $"₦({Utilities.FormatAmount(capitalAllowanceClaimed)})",
-                         CanBolden=true
+                        CanBolden = true
                     });
 
 
@@ -545,7 +548,7 @@ namespace TaxComputationSoftware.Services
                     Description = "Unrelieved Capital Allowance Carried Foward c/f",
                     ColumnOne = $"₦{Utilities.FormatAmount(unrelievedCf)}",
                     ColumnTwo = "",
-                     CanBolden=true
+                    CanBolden = true
                 });
 
 
@@ -559,7 +562,7 @@ namespace TaxComputationSoftware.Services
                     Description = "Unrelieved Capital Allowance Carried Foward c/f",
                     ColumnOne = $"₦{Utilities.FormatAmount(capitalAllowanceOfTheYear)}",
                     ColumnTwo = "",
-                     CanBolden=true
+                    CanBolden = true
                 });
 
             }
@@ -585,7 +588,7 @@ namespace TaxComputationSoftware.Services
                     ColumnOne = "",
                     ColumnTwo = $"₦{Utilities.FormatAmount(taxableProfit)}",
                     CanBolden = true,
-                     
+
                 });
             }
             else
@@ -596,7 +599,7 @@ namespace TaxComputationSoftware.Services
                     ColumnOne = "-",
                     ColumnTwo = "-",
                     CanBolden = true,
-                     
+
                 });
             }
             if (isAssessibleProfit)
@@ -704,13 +707,13 @@ namespace TaxComputationSoftware.Services
                 });
 
             }
-          /*  _incomeTaxRepository.UpdateAcessibleByIncomeTax(new BroughtFoward
-            {
-                LossCf = losscf,
-                UnRelievedCf = unrelievedCf,
-                Accessible = accessibleBalancingCharge,
-                CompanyId = companyId
-            }); */
+            /*  _incomeTaxRepository.UpdateAcessibleByIncomeTax(new BroughtFoward
+              {
+                  LossCf = losscf,
+                  UnRelievedCf = unrelievedCf,
+                  Accessible = accessibleBalancingCharge,
+                  CompanyId = companyId
+              }); */
             //update borught foward
 
             return incomeListDto;
@@ -748,13 +751,13 @@ namespace TaxComputationSoftware.Services
 
             }
 
-          /*  _incomeTaxRepository.CreateBalanceBroughtFoward(new BroughtFoward
-            {
-                CompanyId = incomeTax.CompanyId,
-                IsStarted = true,
-                LossCf = incomeTax.LossBroughtFoward,
-                UnRelievedBf = incomeTax.UnrelievedCapitalAllowanceBroughtFoward
-            }); */
+            /*  _incomeTaxRepository.CreateBalanceBroughtFoward(new BroughtFoward
+              {
+                  CompanyId = incomeTax.CompanyId,
+                  IsStarted = true,
+                  LossCf = incomeTax.LossBroughtFoward,
+                  UnRelievedBf = incomeTax.UnrelievedCapitalAllowanceBroughtFoward
+              }); */
 
 
         }
@@ -777,7 +780,7 @@ namespace TaxComputationSoftware.Services
         public async Task<BroughtFoward> GetBroughtFoward(int companyId)
         {
 
-            return await _incomeTaxRepository.GetBroughtFowardByCompanyId(companyId);
+            return null;
 
         }
 

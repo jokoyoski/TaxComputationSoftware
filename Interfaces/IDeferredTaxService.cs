@@ -10,6 +10,6 @@ namespace TaxComputationSoftware.Interfaces
         Task SaveDeferredTax(CreateDeferredTax deferredTax);
 
         Task<DeferredTaxFoward> GetBroughtFoward(int companyId);
-        Task<List<DeferredTaxDto>> GetDeferredTax(int companyId, int yearId);
+        Task<List<DeferredTaxDto>> GetDeferredTax(int companyId, int yearId, bool IsBringDeferredTaxFoward);
     }
 }

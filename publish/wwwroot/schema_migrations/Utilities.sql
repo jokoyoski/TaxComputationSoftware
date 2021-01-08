@@ -188,7 +188,10 @@ BEGIN
   (
 
     Id int identity(1,1) NOT NULL ,
-    Name varchar(50)
+    Name varchar(50),
+    OpeningDate DATETIME2 NOT NULL,
+    ClosingDate DATETIME2 NOT NULL,
+    CompanyId int
   )
 END
 GO
@@ -199,19 +202,25 @@ BEGIN
 END
 GO
 CREATE procedure [dbo].[usp_Insert_Financial_Year](
-  @Name varchar(50)
+  @Name varchar(50),
+  @OpeningDate datetime2,
+  @ClosingDate datetime2,
+  @CompanyId int
 )
 AS
-if NOT EXISTS(select * from  [dbo].[FinancialYear]  where Name=@Name)
- BEGIN
 INSERT [dbo].[FinancialYear]
   (
-  Name
+  Name,
+  OpeningDate,
+  ClosingDate,
+  CompanyId
   )
 VALUES(
-    @Name
+    @Name,
+    @OpeningDate,
+    @ClosingDate,
+    @CompanyId
 )
-END
 GO
 --------------------------------------- STORED PROCEDURE TO  GET FINANCIAL YEAR -------------------------------------------------------
 IF OBJECT_ID('[dbo].[usp_Get_Financial_Year]') IS nOT NULL
@@ -239,6 +248,23 @@ AS
 select *
 from [dbo].[FinancialYear]
 where Id = @Id
+GO
+
+
+--------------------------------------- STORED PROCEDURE TO  GET ASSET FINANCIALYEAR BY COMPANYID -----------------------------------------
+IF OBJECT_ID('[dbo].[usp_Get_Financial_Year_By_CompanyId]') IS nOT NULL
+BEGIN
+  DROP procedure [dbo].[usp_Get_Financial_Year_By_CompanyId]
+END
+GO
+CREATE procedure [dbo].[usp_Get_Financial_Year_By_CompanyId](
+  @CompanyId int
+)
+AS
+
+select *
+from [dbo].[FinancialYear]
+where CompanyId = @CompanyId
 GO
 
 

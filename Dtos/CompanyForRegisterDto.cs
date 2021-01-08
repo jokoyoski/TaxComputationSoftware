@@ -20,16 +20,14 @@ namespace TaxComputationAPI.Dtos
         [Required(ErrorMessage = "OpeningYear is Required")]
         public string OpeningYear { get; set; }
 
-       // [Required(ErrorMessage = "Month of Operation is Required")]
-        public string MonthOfOperation { get; set; }
- 
-        public decimal UnRelievedCf {get;set;}
+        [Required(ErrorMessage = "Month of Operation is Required")]
+        public int MonthOfOperation { get; set; }
+        [Required(ErrorMessage = "UnRelievedCf is Required")]
+        public decimal UnRelievedCf { get; set; }
+        [Required(ErrorMessage = "LossCf is Required")]
+        public decimal LossCf { get; set; }
 
-        public decimal LossCf {get;set;}
-
-
-        public decimal DeferredTaxBroughtFoward {get;set;}
-
-        public string ClosingYear { get; set; }
+        [Required(ErrorMessage = "Month of Operation is Required")]
+        public decimal DeferredTaxBroughtFoward { get; set; }
     }
 }

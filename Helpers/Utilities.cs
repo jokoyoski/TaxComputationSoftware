@@ -7,6 +7,7 @@ namespace TaxComputationAPI.Helpers
     public static class Utilities
     {
 
+
         public static string FormatAmount(object amount, short decimalDigits = 2)
         {
 
@@ -18,18 +19,13 @@ namespace TaxComputationAPI.Helpers
             return $"{value}";
         }
 
-        public static bool ValidateDate(DateTime openingDate, DateTime closingDate, int yearId)
+        public static bool ValidateDate(DateTime openingDate, DateTime closingDate, DateTime currentOpenDate, DateTime currentClosingDate)
         {
-            int openingDay = openingDate.Day;
-            int openingMonth = openingDate.Month;
-            string timeFormat = $"{yearId}/{openingMonth}/{openingDay}";
-            var openingDateValue = openingDate;
-            DateTime timeDate = DateTime.Parse(timeFormat).Date;
-            if (timeDate < openingDate.Date)
+            if (currentOpenDate < openingDate)
             {
                 return false;
             }
-            if (timeDate > closingDate)
+            if (currentOpenDate > closingDate)
             {
                 return false;
             }

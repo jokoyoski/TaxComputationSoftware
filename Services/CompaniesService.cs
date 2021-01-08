@@ -55,7 +55,6 @@ namespace TaxComputationAPI.Services
 
             var previousOpening = opening.AddYears(-1);
             var previousClosing = closing.AddYears(-1);
-
             await _utilitiesRepository.AddFinancialYearAsync(new FinancialYear { Name = $"{previousOpening.ToString("dddd, dd MMMM yyyy")} - {previousClosing.ToString("dddd, dd MMMM yyyy")}", OpeningDate = previousOpening, ClosingDate = previousClosing, CompanyId = companyDetails.Id });
 
             var companyFinancialYearList = await _utilitiesRepository.GetFinancialCompanyAsync(companyDetails.Id);

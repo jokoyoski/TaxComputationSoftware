@@ -143,7 +143,7 @@ namespace TaxComputationSoftware.Repositories
         }
 
 
-        public async Task<BroughtFoward> GetBroughtFowardByCompanyId(int companyId)
+        public async Task<IEnumerable<BroughtFoward>> GetBroughtFowardByCompanyId(int companyId)
         {
 
 
@@ -157,8 +157,12 @@ namespace TaxComputationSoftware.Repositories
 
                 parameters.Add("@CompanyId", companyId);
 
-                var record = conn.QueryFirstOrDefault<BroughtFoward>("[dbo].[usp_Get_Income_Tax_Brought_Foward_By_CompanyId]", parameters, commandType: CommandType.StoredProcedure);
-                return record;
+
+                var record = await conn.QueryMultipleAsync("[dbo].[usp_Get_Income_Tax_Brought_Foward_By_CompanyId]", parameters, commandType: CommandType.StoredProcedure);
+                var result = await record.ReadAsync<BroughtFoward>();
+                return result;
+
+               
             }
 
 

@@ -22,12 +22,14 @@ namespace TaxComputationAPI.Controllers
         private readonly IProfitAndLossService _profitAndLossService;
         private readonly ITrialBalanceService _trialBalanceService;
         private readonly IMemoryCache _memoryCache;
-        public ProfitAndLossController(IProfitAndLossService profitAndLossService,ITrialBalanceService trialBalanceService,IMemoryCache memoryCache ,ILogger<ProfitAndLossController> logger)
+        private IUtilitiesService _utilitiesServices;
+        public ProfitAndLossController(IProfitAndLossService profitAndLossService, IUtilitiesService utilitiesServices, ITrialBalanceService trialBalanceService, IMemoryCache memoryCache, ILogger<ProfitAndLossController> logger)
         {
             _profitAndLossService = profitAndLossService;
-            _trialBalanceService=trialBalanceService;
+            _trialBalanceService = trialBalanceService;
             _logger = logger;
-            _memoryCache=memoryCache;
+            _memoryCache = memoryCache;
+            _utilitiesServices = utilitiesServices;
         }
 
 
@@ -38,7 +40,7 @@ namespace TaxComputationAPI.Controllers
         {
             try
             {
-
+               profitAndLoss.YearId=14;
                 foreach (var j in profitAndLoss.TrialBalanceList)
                 {
                     var trialBalanceRecord = await _trialBalanceService.GetTrialBalanceById(j.TrialBalanceId);
@@ -47,9 +49,10 @@ namespace TaxComputationAPI.Controllers
                         return StatusCode(400, new { errors = new[] { "One of the item selected has already been mapped, please reload" } });
                     }
                 }
+                var details = await _utilitiesServices.GetFinancialYearAsync(profitAndLoss.YearId);
                 var startDate = _memoryCache.Get<DateTime>(Constants.OpeningDate);
                 var endDate = _memoryCache.Get<DateTime>(Constants.ClosingDate);
-                var isValid = Utilities.ValidateDate(startDate, endDate, profitAndLoss.YearId);
+                var isValid = Utilities.ValidateDate(startDate, endDate, details.OpeningDate, details.ClosingDate);
                 if (!isValid)
                 {
                     return StatusCode(400, new { errors = new[] { "The year selected has to be within the financial year!!" } });
@@ -75,7 +78,7 @@ namespace TaxComputationAPI.Controllers
         [Authorize]
         public async Task<IActionResult> GetProftAndLoss(int companyId, int yearId)
         {
-
+            yearId=14;
             if (yearId == 0)
             {
                 return StatusCode(400, new { errors = new[] { "Please select a Valid year" } });

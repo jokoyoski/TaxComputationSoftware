@@ -109,12 +109,8 @@ CREATE procedure [dbo].[usp_Get_Capital_Allowance_By_CompanyId_And_AssetId](
 )
 AS
 
-select  Id,TaxYear,OpeningResidue,Addition,Disposal,Initial,Annual,Total,ClosingResidue,YearsToGo,NumberOfYearsAvailable,CompanyCode,Channel,CompanyId,AssetId from [dbo].[CapitalAllowance] where CompanyId=@CompanyId AND AssetId=@AssetId
+select  [dbo].[CapitalAllowance].Id,[dbo].[FinancialYear].Name As TaxYear,OpeningResidue,Addition,Disposal,Initial,Annual,Total,ClosingResidue,YearsToGo,NumberOfYearsAvailable,CompanyCode,Channel,[dbo].[CapitalAllowance].CompanyId,AssetId from [dbo].[CapitalAllowance] inner join [dbo].[FinancialYear]on [dbo].[CapitalAllowance].TaxYear=[FinancialYear].Id  where [dbo].[CapitalAllowance].CompanyId=@CompanyId AND AssetId=@AssetId
 GO
-
-
-
-
 
 
 --------------------------------------- STORED PROCEDURE TO  GET CAPITAL aALLOWANCE BY ASSET ,COMPANY AND YEAR-----------------------------------------

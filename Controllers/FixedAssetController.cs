@@ -44,6 +44,7 @@ namespace TaxComputationAPI.Controllers
         {
             try
             {
+               createFixed.YearId=14;
                 foreach (var j in createFixed.TriBalanceId)
                 {
                     var trialBalanceRecord = await _trialBalanceService.GetTrialBalanceById(j);
@@ -53,10 +54,10 @@ namespace TaxComputationAPI.Controllers
                     }
                 }
 
-               
+                var details = await _utilitiesService.GetFinancialYearAsync(createFixed.YearId);
                 var startDate = _memoryCache.Get<DateTime>(Constants.OpeningDate);
                 var endDate = _memoryCache.Get<DateTime>(Constants.ClosingDate);
-                var isValid = Utilities.ValidateDate(startDate, endDate, createFixed.YearId);
+                var isValid = Utilities.ValidateDate(startDate, endDate, details.OpeningDate, details.ClosingDate);
                 if (!isValid)
                 {
                     return StatusCode(400, new { errors = new[] { "The year selected has to be within the financial year!!" } });
@@ -136,7 +137,7 @@ namespace TaxComputationAPI.Controllers
                     return StatusCode(400, new { errors = new[] { "Please select a valid company" } });
 
                 }
-                
+
                 await _fixedAssetService.SaveFixedAsset(createFixed);
 
                 return Ok("saved successfully");
@@ -167,6 +168,7 @@ namespace TaxComputationAPI.Controllers
         {
             try
             {
+                yearId=14;
                 if (yearId == 0)
                 {
                     return StatusCode(400, new { errors = new[] { "Please select a Valid year" } });
