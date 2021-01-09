@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Quartz;
 using TaxComputationAPI.Interfaces;
+using TaxComputationAPI.Models;
 using TaxComputationSoftware.Interfaces;
 using TaxComputationSoftware.Model;
 
@@ -16,6 +17,7 @@ namespace TaxComputationSoftware.Services
     public class AnnualEmailNotificationJob : IJob
     {
         private readonly INotificationRepository _notificationRepository;
+        private readonly IUtilitiesRepository _utilitiesRepository;
         private readonly ICompaniesRepository _companyRepository;
         private readonly IEmailService _emailService;
         private readonly ILogger<AnnualEmailNotificationJob> _logger;
@@ -24,9 +26,10 @@ namespace TaxComputationSoftware.Services
         public static string AdminEmail = "bomana.ogoni@gmail.com";
         public static string LogEmail = "bomana.ogoni@hotmail.com";
 
-        public AnnualEmailNotificationJob(INotificationRepository notificationRepository, ICompaniesRepository companyRepository, IEmailService emailService, ILogger<AnnualEmailNotificationJob> logger)
+        public AnnualEmailNotificationJob(INotificationRepository notificationRepository, IUtilitiesRepository utilitiesRepository, ICompaniesRepository companyRepository, IEmailService emailService, ILogger<AnnualEmailNotificationJob> logger)
         {
             _notificationRepository = notificationRepository;
+            _utilitiesRepository = utilitiesRepository;
             _companyRepository = companyRepository;
             _emailService = emailService;
             _logger = logger;
@@ -101,6 +104,8 @@ namespace TaxComputationSoftware.Services
                         string subject = "Annual Preparation";
 
                         await _emailService.Send(toEmail, fromEmail, subject, message, null);
+
+                        await _utilitiesRepository.AddFinancialYearAsync(new FinancialYear { Name = $"{mail.OpeningDate.ToString("dd/yy")} - {mail.ClosingDate.ToString("dd/yy")}", CompanyId = company.Id, OpeningDate = mail.OpeningDate, ClosingDate = mail.ClosingDate });                        
 
                     }
 

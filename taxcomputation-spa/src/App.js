@@ -9,16 +9,19 @@ import { useAuth } from "./store/AuthStore";
 import utils from "./utils";
 import { useCompany } from "./store/CompanyStore";
 import axiosConfig from "./configs/axios.config";
+import { useResources } from "./store/ResourcesStore";
 
 const history = createBrowserHistory();
 
 function App() {
   const [auth, { initAuth }] = useAuth();
   const [company, { initCompany }] = useCompany();
+  const [resource, { initResource }] = useResources();
 
   window.onbeforeunload = () => {
     utils.saveState(auth, "auth");
     utils.saveState(company, "company");
+    utils.saveState(resource, "resource");
     sessionStorage.setItem("path", history.location.pathname);
     sessionStorage.setItem("token", auth.token);
   };
@@ -26,6 +29,7 @@ function App() {
   window.onload = () => {
     initAuth(utils.loadState("auth"));
     initCompany(utils.loadState("company"));
+    initResource(utils.loadState("resource"));
     sessionStorage.removeItem("token");
   };
 

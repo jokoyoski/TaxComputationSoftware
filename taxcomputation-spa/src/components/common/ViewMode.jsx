@@ -43,9 +43,9 @@ const ViewMode = ({ title, year, children }) => {
               "Income Tax": "INCOME TAX COMPUTATION",
               "Deferred Tax": "DEFERRED TAX COMPUTATION",
               "Minimum Tax": "MINIMUM TAX COMPUTATION",
-              "I.T Levy": "I.T. LEVY COMPUTATION (BASED ON THE 2007 CITA AMENDMENT)",
+              "I.T Levy": "I.T. LEVY COMPUTATION",
               "Investment Allowance": "COMPUTATION OF INVESTMENT ALLOWANCE",
-              "Balancing Allowance": "COMPUTATION OF BALANCING ALLOWANCE/CHARGE"
+              "Balancing Adjustment": "COMPUTATION OF BALANCING ALLOWANCE/CHARGE"
             }[title]
           ]}
         />

@@ -109,7 +109,8 @@ CREATE PROCEDURE [dbo].[usp_GetBalancingAdjustment_YearBought_AssetId](
 AS
 SELECT AssetId,Cost,InitialAllowance,AnnualAllowance,SalesProceed,Residue,BalancingAllowance,BalancingCharge,DateCreated,[dbo].[FinancialYear].Name As YearBought,BalancingAdjustmentId
 FROM [dbo].[BalancingAdjustmentYearBought]
-WHERE AssestId=@AssetId AND YearBought=@YearBought inner join [dbo].[FinancialYear]on [dbo].[BalancingAdjustmentYearBought].YearBought=[FinancialYear].Id
+inner join [dbo].[FinancialYear] on [dbo].[BalancingAdjustmentYearBought].YearBought=[FinancialYear].Id
+WHERE AssestId=@AssetId AND YearBought=@YearBought 
 GO
 
 

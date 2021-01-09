@@ -127,7 +127,7 @@ namespace TaxComputationAPI
             services.AddScoped<IUtilitiesService, UtilitiesService>();
             services.AddScoped<ITrialBalanceService, TrialBalanceService>();
             services.AddScoped<ITrialBalanceRepository, TrialBalanceRepository>();
-            services.AddScoped<IUtilitiesRepository, UtilitiesRepository>();
+            services.AddSingleton<IUtilitiesRepository, UtilitiesRepository>();
             services.AddScoped<IAuthenticationRepository, AuthenticationRepository>();
             services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddSingleton<IAuthorizationHandler, SystemAdminHandler>();
