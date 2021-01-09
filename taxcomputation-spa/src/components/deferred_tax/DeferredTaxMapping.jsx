@@ -5,7 +5,6 @@ import TrialBalanceMappingTable from "../common/TrialBalanceMappingTable";
 import { useCompany } from "../../store/CompanyStore";
 import utils from "../../utils";
 import DropdownController from "../controllers/DropdownController";
-import InputController from "../controllers/InputController";
 import { deferredTaxMapping } from "../../apis/DeferredTax";
 import constants from "../../constants";
 import { useResources } from "../../store/ResourcesStore";
