@@ -6,7 +6,7 @@ import { deferredTaxViewData, deferredTaxDelete } from "../../apis/DeferredTax";
 import utils from "../../utils";
 import ViewModeDataTable from "../common/ViewModeDataTable";
 
-const DeferredTaxView = ({ year, toast }) => {
+const DeferredTaxView = ({ year, toast, isBringDeferredTaxFoward }) => {
   const isMounted = React.useRef(false);
   const [{ companyId }] = useCompany();
   const [loading, setLoading] = React.useState();
@@ -21,7 +21,7 @@ const DeferredTaxView = ({ year, toast }) => {
       try {
         setError(null);
         setLoading(true);
-        const data = await deferredTaxViewData({ companyId, year });
+        const data = await deferredTaxViewData({ companyId, year, isBringDeferredTaxFoward });
         if (isMounted.current) {
           setDeferredTaxData(
             data.map(item => ({
@@ -69,7 +69,7 @@ const DeferredTaxView = ({ year, toast }) => {
     fetchDeferredTaxViewData();
 
     return () => (isMounted.current = false);
-  }, [companyId, toast, year]);
+  }, [companyId, toast, year, isBringDeferredTaxFoward]);
 
   if (error) return <p style={{ color: "#f00" }}>{error}</p>;
 

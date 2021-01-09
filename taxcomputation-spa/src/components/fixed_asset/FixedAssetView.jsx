@@ -4,7 +4,6 @@ import { fixedAssetViewData } from "../../apis/FixedAsset";
 import { useCompany } from "../../store/CompanyStore";
 import Loader from "../common/Loader";
 import ViewModeDataTable from "../common/ViewModeDataTable";
-import utils from "../../utils";
 
 const FixedAssetView = ({ year }) => {
   const isMounted = React.useRef(false);
@@ -131,26 +130,10 @@ const FixedAssetView = ({ year }) => {
                     s.total = <strong>{data.total.closingDepreciationTotal}</strong>;
                     break;
                   case "netValue":
-                    let totalNetValue = data.netBookValue.reduce(
-                      (acc, cur) =>
-                        acc +
-                        Number(
-                          cur.value.includes("(")
-                            ? `-${cur.value.replaceAll(/[(,)]/g, "")}`
-                            : isNaN(cur.value)
-                            ? cur.value.slice(1).replaceAll(/,/g, "")
-                            : cur.value.replaceAll(/,/g, "")
-                        ),
-                      0
-                    );
-                    if (totalNetValue.toString().includes("-"))
-                      totalNetValue = `₦(${utils
-                        .currencyFormatter(totalNetValue)
-                        .replaceAll(/[₦-]/g, "")})`;
-                    else totalNetValue = utils.currencyFormatter(totalNetValue);
-
                     s[d.fixedAssetName] = <strong>{`₦${data.netBookValue[index].value}`}</strong>;
-                    s.total = <strong>{totalNetValue}</strong>;
+                    s.total = (
+                      <strong>{`₦${data.netBookValue[data.netBookValue.length - 1].value}`}</strong>
+                    );
                     break;
                   default:
                     break;

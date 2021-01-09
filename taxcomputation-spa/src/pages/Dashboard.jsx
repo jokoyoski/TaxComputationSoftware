@@ -23,13 +23,18 @@ const Dashboard = () => {
   const [showAddCompany, setShowAddCompany] = React.useState(false);
   const [companySelectItems, setCompanySelectItems] = React.useState(null);
   const [showFinancialYear, setShowFinancialYear] = React.useState(false);
+  const [loading, setLoading] = React.useState(false);
   const [refreshTrialBalanceTable, setRefreshTrialBalanceTable] = React.useState(true);
   const [company, { onSelectCompany }] = useCompany();
   const [resources, { onCompanies, onFinancialYear }] = useResources();
 
   React.useEffect(() => {
-    if (resources.financialYears.length < 1)
+    if (resources.financialYears.length < 1 && company.companyId) {
+      setLoading(true);
       utils.fetchCompanyFinancialYear(company, onFinancialYear, toast);
+    } else {
+      setLoading(false);
+    }
   }, [company, onFinancialYear, resources.financialYears]);
 
   React.useEffect(() => {
@@ -62,7 +67,7 @@ const Dashboard = () => {
 
   if (error) return <Error title={title} error={error} refresh={refresh} />;
 
-  if (!resources.companies) return <PageLoader title={title} />;
+  if (!resources.companies || loading) return <PageLoader title={title} activeSidebar={!loading} />;
 
   return (
     <Layout title={title}>

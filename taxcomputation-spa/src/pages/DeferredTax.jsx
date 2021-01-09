@@ -22,6 +22,7 @@ const DeferredTax = () => {
     refresh: trialBalanceRefresh
   } = useResource(trialBalanceResource);
   const [tbData, setTbData] = React.useState([]);
+  const [isBringDeferredTaxFoward, setIsBringDeferredTaxFoward] = React.useState(false);
   const [mode, setMode] = usePathParam("mode");
   const [year, setYear] = React.useState(utils.currentYear());
   const [resources, { onTrialBalance }] = useResources();
@@ -41,7 +42,14 @@ const DeferredTax = () => {
 
   return (
     <Layout title={title}>
-      <Main title={title} mode={mode} setMode={setMode} year={year} setYear={setYear}>
+      <Main
+        title={title}
+        mode={mode}
+        setMode={setMode}
+        year={year}
+        setYear={setYear}
+        isBringDeferredTaxFoward={isBringDeferredTaxFoward}
+        setIsBringDeferredTaxFoward={setIsBringDeferredTaxFoward}>
         {
           {
             mapping: (
@@ -54,7 +62,11 @@ const DeferredTax = () => {
             ),
             view: (
               <ViewMode title={title} year={year}>
-                <DeferredTaxView year={year} toast={toast.current} />
+                <DeferredTaxView
+                  year={year}
+                  toast={toast.current}
+                  isBringDeferredTaxFoward={isBringDeferredTaxFoward}
+                />
               </ViewMode>
             )
           }[mode]

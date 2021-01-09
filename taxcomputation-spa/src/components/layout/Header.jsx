@@ -44,11 +44,13 @@ const Header = ({ title, loading }) => {
         <p style={{ marginTop: 5, marginBottom: 0, fontSize: 18, fontWeight: 600 }}>{title}</p>
         {!loading && (
           <div className="p-d-flex p-ai-center">
-            <p style={{ marginRight: 20 }}>
-              {`Year:
+            {selectedFinancialYear && (
+              <p style={{ marginRight: 20 }}>
+                {`Year:
               ${financialYears.find(year => year.value === selectedFinancialYear)?.label}`}
-            </p>
-            <p style={{ marginRight: 10 }}>{`Company: ${companyName}`}</p>
+              </p>
+            )}
+            {companyName && <p style={{ marginRight: 10 }}>{`Company: ${companyName}`}</p>}
             <div style={{ position: "relative" }}>
               <Button
                 icon="pi pi-cog pi-20"
