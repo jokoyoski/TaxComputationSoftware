@@ -37,8 +37,6 @@ const ViewMode = ({ title, year, children }) => {
         <ViewModeHeaders
           headers={[
             companyName.toUpperCase(),
-            `${year} INCOME TAX COMPUTATIONS`,
-            `AUDITED ACCOUNTS FOR THE YEAR ENDED 31 DECEMBER, ${year - 1}`,
             {
               "Fixed Asset": "ANALYSIS OF FIXED ASSET MOVEMENT",
               "Profit & Loss": "SUMMARY OF PROFIT & LOSS ACCOUNTS",
