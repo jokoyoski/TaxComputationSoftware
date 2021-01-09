@@ -4,8 +4,9 @@ import { useCompany } from "../../store/CompanyStore";
 import Loader from "../common/Loader";
 import { profitAndLossViewData } from "../../apis/ProfitAndLoss";
 import ViewModeDataTable from "../common/ViewModeDataTable";
+import utils from "../../utils";
 
-const ProfitAndLossView = ({ year }) => {
+const ProfitAndLossView = ({ year, toast }) => {
   const isMounted = React.useRef(false);
   const [{ companyId }] = useCompany();
   const [loading, setLoading] = React.useState();
@@ -25,10 +26,8 @@ const ProfitAndLossView = ({ year }) => {
           setProfitAndLossApiData(data);
         }
       } catch (error) {
-        if (isMounted.current) {
-          if (error.response) setError(error.response.data.errors[0]);
-          else setError(error.message);
-        }
+        let errorString = utils.apiErrorHandling(error, toast);
+        setError(errorString);
       } finally {
         if (isMounted.current) setLoading(false);
       }
@@ -36,7 +35,7 @@ const ProfitAndLossView = ({ year }) => {
     fetchProfitAndLossViewData();
 
     return () => (isMounted.current = false);
-  }, [companyId, year]);
+  }, [companyId, toast, year]);
 
   if (error) return <p style={{ color: "#f00" }}>{error}</p>;
 

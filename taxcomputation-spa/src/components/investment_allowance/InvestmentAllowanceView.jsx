@@ -64,10 +64,8 @@ const InvestmentAllowanceView = ({ year, toast }) => {
           );
         }
       } catch (error) {
-        if (isMounted.current) {
-          if (error.response) setError(error.response.data.errors[0]);
-          else setError(error.message);
-        }
+        let errorString = utils.apiErrorHandling(error, toast);
+        setError(errorString);
       } finally {
         if (isMounted.current) setLoading(false);
       }

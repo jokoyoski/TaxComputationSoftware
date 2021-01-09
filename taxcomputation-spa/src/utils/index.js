@@ -88,22 +88,32 @@ const onTbData = (resources, setTbData) => {
 
 /** api error handling */
 const apiErrorHandling = (error, toast) => {
-  if (error.response.data.errors) {
-    toast.show(
-      toastCallback({
-        severity: "error",
-        detail: error.response.data.errors[0]
-      })
-    );
+  let errorString = "";
+
+  if (error?.response?.data?.errors) {
+    errorString = error.response.data.errors[0];
+    if (toast) {
+      toast.show(
+        toastCallback({
+          severity: "error",
+          detail: errorString
+        })
+      );
+    }
   } else {
-    toast.show(
-      toastCallback({
-        severity: "error",
-        summary: "Network Error",
-        detail: constants.networkErrorMessage
-      })
-    );
+    errorString = constants.networkErrorMessage;
+    if (toast) {
+      toast.show(
+        toastCallback({
+          severity: "error",
+          summary: "Network Error",
+          detail: errorString
+        })
+      );
+    }
   }
+
+  return errorString;
 };
 
 /** mapping successful callback */
