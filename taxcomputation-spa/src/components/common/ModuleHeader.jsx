@@ -2,6 +2,7 @@ import React from "react";
 import { Dropdown } from "primereact/dropdown";
 import { InputSwitch } from "primereact/inputswitch";
 import constants from "../../constants";
+import { useResources } from "../../store/ResourcesStore";
 
 const ModuleHeader = ({
   title,
@@ -13,13 +14,13 @@ const ModuleHeader = ({
   setShowITLevy,
   assetId,
   setAssetId,
-  yearSelectItems,
   assetClassSelectItems
 }) => {
   const [addingModules] = React.useState([
     constants.modules.balancingAdjustment,
     constants.modules.capitalAllowance
   ]);
+  const [{ financialYears }] = useResources();
   const [summaryModules] = React.useState([constants.modules.capitalAllowance]);
   const [modeSelectItems, setModeSelectItems] = React.useState([
     addingModules.includes(title)
@@ -70,7 +71,7 @@ const ModuleHeader = ({
                 style={{ width: 180, marginLeft: 20 }}
                 placeholder="Select year"
                 value={year}
-                options={yearSelectItems}
+                options={financialYears}
                 onChange={e => {
                   setYear(e.value);
                 }}

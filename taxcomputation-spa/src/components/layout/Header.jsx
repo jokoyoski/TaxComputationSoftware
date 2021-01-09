@@ -8,6 +8,7 @@ import CreateUser from "../common/CreateUser";
 import { useResources } from "../../store/ResourcesStore";
 import CreateAsset from "../common/CreateAsset";
 import AssetList from "../common/AssetList";
+import FinancialYear from "../common/FinancialYear";
 
 const Header = ({ title, loading }) => {
   const { replace } = useRouterActions();
@@ -16,8 +17,9 @@ const Header = ({ title, loading }) => {
   const [showCreateUser, setShowCreateUser] = React.useState();
   const [showCreateAsset, setShowCreateAsset] = React.useState();
   const [showAssetList, setShowAssetList] = React.useState();
+  const [showFinancialYear, setShowFinancialYear] = React.useState(false);
   const [{ companyName }, { resetCompany }] = useCompany();
-  const [, { resetResources }] = useResources();
+  const [{ financialYears, selectedFinancialYear }, { resetResources }] = useResources();
 
   const onSwitchCompany = () => {
     setShowSettings(false);
@@ -42,7 +44,11 @@ const Header = ({ title, loading }) => {
         <p style={{ marginTop: 5, marginBottom: 0, fontSize: 18, fontWeight: 600 }}>{title}</p>
         {!loading && (
           <div className="p-d-flex p-ai-center">
-            <p style={{ marginRight: 10 }}>{companyName}</p>
+            <p style={{ marginRight: 20 }}>
+              {`Year:
+              ${financialYears.find(year => year.value === selectedFinancialYear)?.label}`}
+            </p>
+            <p style={{ marginRight: 10 }}>{`Company: ${companyName}`}</p>
             <div style={{ position: "relative" }}>
               <Button
                 icon="pi pi-cog pi-20"
@@ -75,6 +81,14 @@ const Header = ({ title, loading }) => {
                     }}>
                     Create User
                   </p>
+                  <p
+                    className="settings-item"
+                    onClick={() => {
+                      setShowFinancialYear(true);
+                      setShowSettings(false);
+                    }}>
+                    Financial Year
+                  </p>
                   <p className="settings-item" onClick={onSwitchCompany}>
                     Switch Company
                   </p>
@@ -102,6 +116,13 @@ const Header = ({ title, loading }) => {
           showAssetList={showAssetList}
           setShowAssetList={setShowAssetList}
           setShowCreateAsset={setShowCreateAsset}
+        />
+      )}
+      {showFinancialYear && (
+        <FinancialYear
+          showFinancialYear={showFinancialYear}
+          setShowFinancialYear={setShowFinancialYear}
+          setShowSettings={setShowSettings}
         />
       )}
     </>

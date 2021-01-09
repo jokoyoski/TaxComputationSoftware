@@ -23,10 +23,6 @@ const InvestmentAllowance = () => {
   const [assetClassSelectItems, setAssetClassSelectItems] = React.useState([]);
   const [mode, setMode] = usePathParam("mode");
   const [year, setYear] = React.useState(utils.currentYear());
-  const yearSelectItems = utils.getYears(year => ({
-    label: year.toString(),
-    value: year.toString()
-  }));
 
   React.useEffect(() => {
     if (assetClass) onFixedAssetModuleItems(assetClass);
@@ -50,18 +46,11 @@ const InvestmentAllowance = () => {
 
   return (
     <Layout title={title}>
-      <Main
-        title={title}
-        mode={mode}
-        setMode={setMode}
-        year={year}
-        setYear={setYear}
-        yearSelectItems={yearSelectItems}>
+      <Main title={title} mode={mode} setMode={setMode} year={year} setYear={setYear}>
         {
           {
             mapping: (
               <InvestmentAllowanceMapping
-                yearSelectItems={yearSelectItems}
                 assetClassSelectItems={assetClassSelectItems}
                 toast={toast.current}
               />

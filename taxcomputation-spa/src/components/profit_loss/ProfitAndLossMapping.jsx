@@ -7,11 +7,9 @@ import constants from "../../constants";
 import { useCompany } from "../../store/CompanyStore";
 import utils from "../../utils";
 import { profitAndLossMapping } from "../../apis/ProfitAndLoss";
+import { useResources } from "../../store/ResourcesStore";
 
 const ProfitAndLossMapping = ({
-  year,
-  setYear,
-  yearSelectItems,
   assetClassSelectItems,
   tbData,
   onTrialBalance,
@@ -20,6 +18,7 @@ const ProfitAndLossMapping = ({
 }) => {
   const { errors, handleSubmit, control } = useForm();
   const [{ companyId }] = useCompany();
+  const [{ financialYears }] = useResources();
   const [loading, setLoading] = React.useState(false);
   const [init, setInit] = React.useState(true);
   const [selectedAccounts, setSelectedAccounts] = React.useState([]);
@@ -92,10 +91,8 @@ const ProfitAndLossMapping = ({
           label="Year"
           width={250}
           required
-          dropdownOptions={yearSelectItems}
-          onChangeCallback={setYear}
+          dropdownOptions={financialYears}
           errorMessage="Year is required"
-          defaultValue={year}
         />
         <div>
           <p style={{ color: "transparent", marginTop: 0, marginBottom: 5 }}>Submit</p>
