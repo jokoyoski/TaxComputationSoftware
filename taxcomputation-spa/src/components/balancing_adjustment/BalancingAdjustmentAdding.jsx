@@ -108,7 +108,7 @@ const BalancingAdjustmentAdding = ({ yearSelectItems, assetClassSelectItems, toa
           controllerName="yearBought"
           label="Year Bought"
           required
-          dropdownOptions={yearSelectItems}
+          dropdownOptions={financialYears}
           errorMessage="Year Bought is required"
           labelWidth={120}
           className="p-d-flex p-ai-center"

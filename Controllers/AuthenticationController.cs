@@ -202,7 +202,7 @@ namespace TaxComputationAPI.Controllers
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.Now.AddYears(100),
+                Expires = DateTime.Now.AddDays(100),
                 SigningCredentials = creds
             };
 

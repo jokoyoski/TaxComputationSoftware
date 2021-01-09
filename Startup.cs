@@ -107,7 +107,7 @@ namespace TaxComputationAPI
             services.AddSingleton<JobSchedule>((x) =>
             {
 
-                var cronExpression = "0 */9 * * * ?";
+                var cronExpression = "0 */3 * * * ?";
                 return new JobSchedule(jobType: typeof(AnnualCalculation), cronExpression: cronExpression);
 
             });

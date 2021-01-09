@@ -31,7 +31,7 @@ namespace TaxComputationSoftware.Services
                 var pre = await _notificationRepository.GetPreNotification();
                 foreach (var item in pre)
                 {
-                    if (DateTime.Now.Date == item.ClosingDate.Date)   // add isLockBack
+                    if (DateTime.Now.Date > item.ClosingDate.Date)   // add isLockBack
                     {  //add unlock
                         await CalculateAnnualCalculation(item.CompanyId, item.Id);
                     }
@@ -101,7 +101,7 @@ namespace TaxComputationSoftware.Services
                     var m = new CapitalAllowanceViewDto
                     {
                         Id = x.Id,
-                        TaxYear = x.TaxYear,
+                        TaxYear = x.YearId,
                         OpeningResidue = x.OpeningResidue.ToString(),
                         Addition = x.Addition.ToString(),
                         Disposal = x.Disposal.ToString(),
@@ -195,7 +195,7 @@ namespace TaxComputationSoftware.Services
                                 {
                                     TaxYear = value.TaxYear,
                                     OpeningResidue = decimal.Parse(value.ClosingResidue),
-                                    ClosingResidue = 0,
+                                    ClosingResidue = decimal.Parse(value.ClosingResidue),
                                     Addition = 0,
                                     Annual = 0,
                                     Initial = 0,
@@ -360,7 +360,7 @@ namespace TaxComputationSoftware.Services
 
 
                             }
-                            if (closingResidue <= 1)
+                            if (value.YearsToGo<=0 ||value.YearsToGo-1==0)
                             {
                                 var capitalAllowance = new CapitalAllowance
                                 {
@@ -423,7 +423,7 @@ namespace TaxComputationSoftware.Services
 
 
                             }
-                            if (closingResidue<= 1)
+                            if (value.YearsToGo<=0 ||value.YearsToGo-1==0)
                             {
                                 var capitalAllowance = new CapitalAllowance
                                 {
@@ -491,7 +491,7 @@ namespace TaxComputationSoftware.Services
 
 
                             }
-                            if (closingResidue<= 1)
+                            if (value.YearsToGo<=0 ||value.YearsToGo-1==0)
                             {
                                 var capitalAllowance = new CapitalAllowance
                                 {

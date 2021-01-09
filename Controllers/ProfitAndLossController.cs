@@ -40,7 +40,7 @@ namespace TaxComputationAPI.Controllers
         {
             try
             {
-               profitAndLoss.YearId=14;
+              
                 foreach (var j in profitAndLoss.TrialBalanceList)
                 {
                     var trialBalanceRecord = await _trialBalanceService.GetTrialBalanceById(j.TrialBalanceId);
@@ -75,10 +75,10 @@ namespace TaxComputationAPI.Controllers
 
 
         [HttpGet("{companyId}/{yearId}")]
-       // [Authorize]
+       [Authorize]
         public async Task<IActionResult> GetProftAndLoss(int companyId, int yearId)
         {
-            yearId=14;
+           
             if (yearId == 0)
             {
                 return StatusCode(400, new { errors = new[] { "Please select a Valid year" } });

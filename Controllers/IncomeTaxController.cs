@@ -37,10 +37,10 @@ namespace TaxComputationSoftware.Controllers
         }
 
         [HttpGet("{companyId}/{yearId}/{IsItLevyView}")]
-       // [Authorize]
+       [Authorize]
         public async Task<IActionResult> GetIncometax(int companyId, int yearId, bool IsItLevyView, bool isBringLossFoward)
         {
-             yearId=14;
+            
             if (yearId == 0)
             {
                 return StatusCode(400, new { errors = new[] { "Please select a Valid year" } });
@@ -63,12 +63,12 @@ namespace TaxComputationSoftware.Controllers
 
 
         [HttpPost("add-income-tax")]
-      //  [Authorize]
+       [Authorize]
         public async Task<IActionResult> AddIncomeTax(CreateIncomeTaxDto createIncomeTaxDto)
         {
             try
             {
-               createIncomeTaxDto.YearId=14;
+              
                 if (createIncomeTaxDto.TypeId == 0)
                 {
                     foreach (var j in createIncomeTaxDto.IncomeList)
@@ -135,7 +135,7 @@ namespace TaxComputationSoftware.Controllers
 
 
         [HttpDelete("remove-allowable/disallowable/{id}")]
-       // [Authorize]
+       [Authorize]
         public async Task<IActionResult> RemoveItem(int id)
         {
             try

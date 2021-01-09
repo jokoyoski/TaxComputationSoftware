@@ -31,7 +31,7 @@ namespace TaxComputationAPI.Controllers
         [Authorize]
         public async Task<IActionResult> GetMinimumTax(int companyId, int yearId)
         {
-         yearId=14;
+        
             if (yearId == 0)
             {
                 return StatusCode(400, new { errors = new[] { "Please select a Valid year" } });

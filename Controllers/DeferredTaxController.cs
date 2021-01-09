@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
@@ -35,12 +36,13 @@ namespace TaxComputationAPI.Controllers
 
 
         [HttpGet]
+          [Authorize]
         public async Task<IActionResult> GetDeferredTax(int companyId, string year,bool IsBringDeferredTaxFoward)
         {
 
             try
             {
-                 year="14";
+             
                 var value = await _deferredTaxService.GetDeferredTax(companyId, int.Parse(year),IsBringDeferredTaxFoward);
 
                 return Ok(value);
@@ -58,12 +60,13 @@ namespace TaxComputationAPI.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> AddDeferredTax(CreateDeferredTax createDeferredTax)
         {
 
             try
             {
-                createDeferredTax.YearId=14;
+               
                 var details = await _utilitiesService.GetFinancialYearAsync(createDeferredTax.YearId);
                 var startDate = _memoryCache.Get<DateTime>(Constants.OpeningDate);
                 var endDate = _memoryCache.Get<DateTime>(Constants.ClosingDate);

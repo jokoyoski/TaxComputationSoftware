@@ -21,18 +21,18 @@ namespace TaxComputationAPI.Controllers
         private readonly IUtilitiesService _utilitiesService;
 
 
-        public BalancingAdjustmentController(IBalancingAdjustmentService balancingAdjustmentService,IUtilitiesService utilitiesService ,IMemoryCache memoryCache, ICapitalAllowanceService capitalAllowanceService)
+        public BalancingAdjustmentController(IBalancingAdjustmentService balancingAdjustmentService, IUtilitiesService utilitiesService, IMemoryCache memoryCache, ICapitalAllowanceService capitalAllowanceService)
         {
             _balancingAdjustmentService = balancingAdjustmentService;
             _capitalAllowanceService = capitalAllowanceService;
-            _utilitiesService=utilitiesService;
+            _utilitiesService = utilitiesService;
             _memoryCache = memoryCache;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetBalancingAdjustment(int companyId, string year)
         {
-            year="14";
+
             var response = await _balancingAdjustmentService.DisplayBalancingAdjustment(companyId, year);
             return Ok(response);
         }
@@ -40,10 +40,19 @@ namespace TaxComputationAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> AddBalancingAdjustment([FromForm] AddBalanceAdjustmentDto addBalanceAdjustmentDto)
         {
-            addBalanceAdjustmentDto.YearBought="14";
-            addBalanceAdjustmentDto.Year="14";
+            var record =await  _balancingAdjustmentService.GetBalancingAdjustmentYearBoughtByAssetIdYearIdYearBought(int.Parse(addBalanceAdjustmentDto.Year), addBalanceAdjustmentDto.AssetId, int.Parse(addBalanceAdjustmentDto.YearBought));
+            if(record!=null){
+                return BadRequest(new { errors = new[] { "Delete the previous balancing adjustment associated with this asset!" } });
+
+            }
             var previousRecord = await _capitalAllowanceService.GetCapitalAllowanceByAssetIdYear(addBalanceAdjustmentDto.AssetId, addBalanceAdjustmentDto.CompanyId, addBalanceAdjustmentDto.YearBought);
-            var details = await _utilitiesService.GetFinancialYearAsync(int.Parse(addBalanceAdjustmentDto.Year));
+            if (previousRecord == null)
+            {
+                return BadRequest(new { errors = new[] { "The asset you are trying to calulate its balancing adjustment does not exist" } });
+
+
+            }
+            var details = await _utilitiesService.GetFinancialYearAsync(int.Parse(addBalanceAdjustmentDto.YearBought));
             var startDate = _memoryCache.Get<DateTime>(Constants.OpeningDate);
             var endDate = _memoryCache.Get<DateTime>(Constants.ClosingDate);
             var isValid = Utilities.ValidateDate(startDate, endDate, details.OpeningDate, details.ClosingDate);
@@ -51,11 +60,7 @@ namespace TaxComputationAPI.Controllers
             {
                 return StatusCode(400, new { errors = new[] { "The year selected has to be within the financial year!!" } });
             }
-            if (previousRecord == null)
-            {
-                return BadRequest(new { errors = new[] { "The asset you are trying to calulate its balancing adjustment does not exist" } });
 
-            }
 
             if (previousRecord != null)
             {

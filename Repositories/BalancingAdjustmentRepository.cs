@@ -66,12 +66,56 @@ namespace TaxComputationAPI.Repositories
 
         }
 
-          public async Task<BalancingAdjustment> GetBalancingAdjustmentById(int balancingAdjustmentId)
-         {
+
+
+        public async Task<BalancingAdjustmentYearBought> GetBalancingAdjustmentYearBoughtByAssetIdYearIdYearBought(int yearId,int assetId, int yearBought)
+        {
+
+
+
+            try
+            {
+                var result = default(BalancingAdjustmentYearBought);
+
+                using (IDbConnection conn = await _databaseManager.DatabaseConnection())
+                {
+                    if (conn.State == ConnectionState.Closed) conn.Open();
+
+                    DynamicParameters parameters = new DynamicParameters();
+
+
+                    parameters.Add("@YearId", yearId);
+                    parameters.Add("@AssetId", assetId);
+                    parameters.Add("@YearBought", yearBought);
+
+                    try
+                    {
+                        result = await conn.QueryFirstOrDefaultAsync<BalancingAdjustmentYearBought>("[dbo].[usp_GetBalancingAdjustmentBought_By_Year_Asset_YearBought]", parameters, commandType: CommandType.StoredProcedure);
+                        conn.Close();
+                    }
+                    catch (Exception e)
+                    {
+                        _logger.LogError($"{e.Message}");
+
+                        throw e;
+                    }
+
+                    return result;
+                }
+            }
+            catch (Exception e)
+            {
+                throw new SystemException(e.Message);
+            }
+
+        }
+
+        public async Task<BalancingAdjustment> GetBalancingAdjustmentById(int balancingAdjustmentId)
+        {
 
             if (balancingAdjustmentId <= 0) throw new ArgumentNullException(nameof(balancingAdjustmentId));
 
-          
+
             try
             {
                 var result = default(BalancingAdjustment);
@@ -82,7 +126,7 @@ namespace TaxComputationAPI.Repositories
 
                     DynamicParameters parameters = new DynamicParameters();
 
-                    
+
                     parameters.Add("@Id", balancingAdjustmentId);
 
                     try
@@ -97,15 +141,17 @@ namespace TaxComputationAPI.Repositories
                         throw e;
                     }
 
-                   return result;
+                    return result;
                 }
-             }
+            }
             catch (Exception e)
             {
                 throw new SystemException(e.Message);
             }
 
         }
+
+
 
 
 
@@ -150,7 +196,7 @@ namespace TaxComputationAPI.Repositories
         }
 
         public async Task<List<BalancingAdjustmentYearBought>> GetBalancingAdjustmentYeatBought(int balancingAdjustmentId, int assetId)
-        
+
         {
 
             if (balancingAdjustmentId <= 0) throw new ArgumentNullException(nameof(balancingAdjustmentId));
@@ -184,7 +230,7 @@ namespace TaxComputationAPI.Repositories
 
                     return result.ToList();
                 }
-             }
+            }
             catch (Exception e)
             {
                 throw new SystemException(e.Message);
@@ -237,7 +283,7 @@ namespace TaxComputationAPI.Repositories
         {
             if (balancingAdjustmentYearBought == null) throw new ArgumentNullException(nameof(balancingAdjustmentYearBought));
 
-          
+
             try
             {
                 var result = default(BalancingAdjustmentYearBought);
@@ -260,6 +306,7 @@ namespace TaxComputationAPI.Repositories
                     parameters.Add("@YearBought", balancingAdjustmentYearBought.YearBought);
                     parameters.Add("@BalancingAdjustmentId", balancingAdjustmentYearBought.BalancingAdjustmentId);
                     parameters.Add("@DateCreated", balancingAdjustmentYearBought.DateCreated);
+                    parameters.Add("@YearId", balancingAdjustmentYearBought.YearId);
 
                     try
                     {
@@ -289,7 +336,7 @@ namespace TaxComputationAPI.Repositories
 
             try
             {
-           
+
                 using (IDbConnection conn = await _databaseManager.DatabaseConnection())
                 {
                     if (conn.State == ConnectionState.Closed) conn.Open();
@@ -319,7 +366,7 @@ namespace TaxComputationAPI.Repositories
                 throw new SystemException(e.Message);
             }
         }
-        
+
         public async Task<BalancingAdjustmentYearBought> GetBalancingAdjustmentYearBoughtById(int Id)
         {
             if (Id <= 0) throw new ArgumentNullException(nameof(Id));

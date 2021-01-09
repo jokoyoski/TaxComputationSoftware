@@ -37,11 +37,12 @@ namespace TaxComputationAPI.Controllers
         }
 
         [HttpPost("investment-allowance")]
+          [Authorize]
         public async Task<IActionResult> AddInvestmentAllowance(InvestmentAllowanceDto investmentAllowanceDto)
         {
             try
             {
-                investmentAllowanceDto.YearId=14;
+               
                 var details = await _utilitiesService.GetFinancialYearAsync(investmentAllowanceDto.YearId);
                 var startDate = _memoryCache.Get<DateTime>(Constants.OpeningDate);
                 var endDate = _memoryCache.Get<DateTime>(Constants.ClosingDate);
@@ -89,7 +90,7 @@ namespace TaxComputationAPI.Controllers
         [Authorize]
         public async Task<IActionResult> GetInvestmentAllowanceByCompanyIdAndYearId(int companyId, int yearId)
         {
-           yearId=14;
+          
             if (yearId == 0)
             {
                 return StatusCode(400, new { errors = new[] { "Please select a Valid year" } });

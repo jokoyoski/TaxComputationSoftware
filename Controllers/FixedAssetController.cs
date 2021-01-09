@@ -38,13 +38,12 @@ namespace TaxComputationAPI.Controllers
         }
 
         [HttpPost]
-        //[Authorize]
-
+      //  [Authorize]
         public async Task<IActionResult> AddFixedAsset(CreateFixedAssetDto createFixed)
         {
             try
             {
-               createFixed.YearId=14;
+             
                 foreach (var j in createFixed.TriBalanceId)
                 {
                     var trialBalanceRecord = await _trialBalanceService.GetTrialBalanceById(j);
@@ -153,7 +152,7 @@ namespace TaxComputationAPI.Controllers
         }
 
         [HttpPut("fixed-asset/{id}")]
-      //  [Authorize]
+        [Authorize]
         public async Task<IActionResult> DeleteFixedAsset(int id)
         {
             // await _fixedAssetService.DeleteFixedAsset(id);
@@ -163,12 +162,12 @@ namespace TaxComputationAPI.Controllers
 
 
         [HttpGet("{companyId}/{yearId}")]
-       // [Authorize]
+       [Authorize]
         public async Task<IActionResult> GetFixedAsset(int companyId, int yearId)
         {
             try
             {
-                yearId=14;
+               
                 if (yearId == 0)
                 {
                     return StatusCode(400, new { errors = new[] { "Please select a Valid year" } });

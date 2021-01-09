@@ -267,7 +267,8 @@ namespace TaxComputationAPI.Services
                         SalesProceed = addBalanceAdjustmentDto.SalesProceed,
                         BalancingAdjustmentId = assetBalancing == null ? b1.Id : assetBalancing.Id,
                         YearBought = addBalanceAdjustmentDto.YearBought,
-                        DateCreated = DateTime.Now
+                        DateCreated = DateTime.Now,
+                        YearId = int.Parse(addBalanceAdjustmentDto.Year)
                     };
 
                     if (balancingAdjustment.Item1 == BalancingAdjustment.BalancingAllowance) bb1.BalancingAllowance = balancingAdjustment.Item2;
@@ -315,7 +316,8 @@ namespace TaxComputationAPI.Services
                         SalesProceed = addBalanceAdjustmentDto.SalesProceed,
                         BalancingAdjustmentId = assetBalancing == null ? b2.Id : assetBalancing.Id,
                         YearBought = addBalanceAdjustmentDto.YearBought,
-                        DateCreated = DateTime.UtcNow
+                        DateCreated = DateTime.UtcNow,
+                        YearId = int.Parse(addBalanceAdjustmentDto.Year)
                     };
 
                     if (balancingAdjustment.Item1 == BalancingAdjustment.BalancingAllowance) bb2.BalancingAllowance = balancingAdjustment.Item2;
@@ -365,7 +367,8 @@ namespace TaxComputationAPI.Services
                     SalesProceed = addBalanceAdjustmentDto.SalesProceed,
                     BalancingAdjustmentId = assetBalancing == null ? b3.Id : assetBalancing.Id,
                     YearBought = addBalanceAdjustmentDto.YearBought,
-                    DateCreated = DateTime.Now
+                    DateCreated = DateTime.Now,
+                    YearId = int.Parse(addBalanceAdjustmentDto.Year)
                 };
 
                 if (balancingAdjustment.Item1 == BalancingAdjustment.BalancingAllowance) bb3.BalancingAllowance = balancingAdjustment.Item2;
@@ -485,6 +488,11 @@ namespace TaxComputationAPI.Services
                 ResponseDescription = "Balancing adjustment year bought deleted successfully"
             };
 
+        }
+
+        public Task<BalancingAdjustmentYearBought> GetBalancingAdjustmentYearBoughtByAssetIdYearIdYearBought(int yearId, int assetId, int yearBought)
+        {
+            return _balancingAdjustmentRepository.GetBalancingAdjustmentYearBoughtByAssetIdYearIdYearBought(yearId,assetId,yearBought);
         }
     }
 }

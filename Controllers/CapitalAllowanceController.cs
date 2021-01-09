@@ -25,13 +25,13 @@ namespace TaxComputationAPI.Controllers
 
 
         [HttpPost]
-     //   [Authorize]
+       [Authorize]
 
         public async Task<IActionResult> SaveCapitalAllowance(CapitalAllowance capitalAllowance)
         {
             try
             {
-               capitalAllowance.TaxYear="14";
+              
                 if (capitalAllowance.Initial > 0)
                 {
                     return BadRequest(new { errors = new[] { "Asset cannot have Initial Item" } });

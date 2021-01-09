@@ -197,6 +197,7 @@ namespace TaxComputationAPI.Controllers
 
 
         [HttpGet("company-financial-year")]
+        [Authorize]
         public async Task<IActionResult> GetFinancialYears(int companyId)
         {
             try
