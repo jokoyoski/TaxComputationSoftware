@@ -1,7 +1,8 @@
+import { getCompanyFinancialYear } from "../apis/Utilities";
 import constants from "../constants";
 
 /** get current year */
-const currentYear = () => new Date().getFullYear();
+const currentYear = () => Number(sessionStorage.getItem("year"));
 
 /** get years from start year to current year */
 const getYears = () => {
@@ -126,6 +127,22 @@ const onMappingSuccess = (
   }, 2000);
 };
 
+/** fetch company financial year */
+const fetchCompanyFinancialYear = (company, onFinancialYear, toast) => {
+  const fetcher = async () => {
+    if (!company.companyId) return;
+
+    try {
+      const data = await getCompanyFinancialYear(company.companyId);
+      if (data) onFinancialYear(data.map(item => ({ label: item.name, value: item.id })));
+    } catch (error) {
+      if (toast) apiErrorHandling(error, toast);
+      else console.log(error);
+    }
+  };
+  fetcher();
+};
+
 export default {
   currentYear,
   getYears,
@@ -136,5 +153,6 @@ export default {
   toastCallback,
   onTbData,
   apiErrorHandling,
-  onMappingSuccess
+  onMappingSuccess,
+  fetchCompanyFinancialYear
 };

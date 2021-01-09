@@ -5,10 +5,12 @@ import { useCompany } from "../../store/CompanyStore";
 import utils from "../../utils";
 import DropdownController from "../controllers/DropdownController";
 import { investmentAllowanceMapping } from "../../apis/InvestmentAllowance";
+import { useResources } from "../../store/ResourcesStore";
 
-const InvestmentAllowanceMapping = ({ yearSelectItems, assetClassSelectItems, toast }) => {
+const InvestmentAllowanceMapping = ({ assetClassSelectItems, toast }) => {
   const { errors, handleSubmit, control } = useForm();
   const [{ companyId }] = useCompany();
+  const [{ financialYears }] = useResources();
   const [loading, setLoading] = React.useState(false);
 
   const onSubmit = async data => {
@@ -49,7 +51,7 @@ const InvestmentAllowanceMapping = ({ yearSelectItems, assetClassSelectItems, to
             controllerName="yearId"
             label="Year"
             required
-            dropdownOptions={yearSelectItems}
+            dropdownOptions={financialYears}
             errorMessage="Year is required"
             labelWidth={120}
             className="p-d-flex p-ai-center"

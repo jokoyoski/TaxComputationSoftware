@@ -12,7 +12,6 @@ const Main = ({
   setYear,
   showITLevy,
   setShowITLevy,
-  yearSelectItems,
   assetId,
   setAssetId,
   assetClassSelectItems,
@@ -33,7 +32,6 @@ const Main = ({
           setShowITLevy={setShowITLevy}
           assetId={assetId}
           setAssetId={setAssetId}
-          yearSelectItems={yearSelectItems}
           assetClassSelectItems={assetClassSelectItems}
         />
       }

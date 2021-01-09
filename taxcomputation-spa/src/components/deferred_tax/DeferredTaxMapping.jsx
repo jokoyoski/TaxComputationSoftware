@@ -8,16 +8,12 @@ import DropdownController from "../controllers/DropdownController";
 import InputController from "../controllers/InputController";
 import { deferredTaxMapping } from "../../apis/DeferredTax";
 import constants from "../../constants";
+import { useResources } from "../../store/ResourcesStore";
 
-const DeferredTaxMapping = ({
-  tbData,
-  yearSelectItems,
-  onTrialBalance,
-  trialBalanceRefresh,
-  toast
-}) => {
+const DeferredTaxMapping = ({ tbData, onTrialBalance, trialBalanceRefresh, toast }) => {
   const { errors, handleSubmit, control } = useForm();
   const [{ companyId }] = useCompany();
+  const [{ financialYears }] = useResources();
   const [loading, setLoading] = React.useState(false);
   const [init, setInit] = React.useState(true);
   const [selectedAccounts, setSelectedAccounts] = React.useState([]);
@@ -35,17 +31,7 @@ const DeferredTaxMapping = ({
 
   const onSubmit = async data => {
     if (loading) return;
-    const { fairValueGainId, yearId, deferredTaxBroughtFoward } = data;
-
-    if (deferredTaxBroughtFoward !== "" && isNaN(deferredTaxBroughtFoward)) {
-      toast.show(
-        utils.toastCallback({
-          severity: "error",
-          detail: "Deferred Tax B/F is not a numeric value"
-        })
-      );
-      return;
-    }
+    const { fairValueGainId, yearId } = data;
 
     if (selectedAccounts.length === 0) {
       toast.show(
@@ -62,7 +48,6 @@ const DeferredTaxMapping = ({
     try {
       const response = await deferredTaxMapping({
         fairValueGainId,
-        deferredTaxBroughtFoward: deferredTaxBroughtFoward === "" ? 0 : deferredTaxBroughtFoward,
         trialBalanceList: selectedAccounts,
         companyId,
         yearId
@@ -95,7 +80,7 @@ const DeferredTaxMapping = ({
           required
           dropdownOptions={fairValueGainItems}
           errorMessage="Fair Value Gain is required"
-          width={200}
+          width={250}
         />
         <DropdownController
           Controller={Controller}
@@ -104,18 +89,9 @@ const DeferredTaxMapping = ({
           controllerName="yearId"
           label="Year"
           required
-          dropdownOptions={yearSelectItems}
+          dropdownOptions={financialYears}
           errorMessage="Year is required"
-          width={200}
-        />
-        <InputController
-          Controller={Controller}
-          control={control}
-          errors={errors}
-          controllerName="deferredTaxBroughtFoward"
-          label="Deferred Tax B/F"
-          required={false}
-          width={200}
+          width={250}
         />
         <div>
           <p style={{ color: "transparent", marginTop: 0, marginBottom: 5 }}>Submit</p>
@@ -123,7 +99,7 @@ const DeferredTaxMapping = ({
             type="submit"
             label={!loading ? "Submit" : null}
             icon={loading ? "pi pi-spin pi-spinner" : null}
-            style={{ width: 200 }}
+            style={{ width: 250 }}
           />
         </div>
       </form>

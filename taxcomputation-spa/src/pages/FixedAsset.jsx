@@ -29,10 +29,6 @@ const FixedAsset = () => {
   const [tbData, setTbData] = React.useState([]);
   const [assetClassSelectItems, setAssetClassSelectItems] = React.useState([]);
   const [resources, { onTrialBalance, onFixedAssetModuleItems }] = useResources();
-  const yearSelectItems = utils.getYears(year => ({
-    label: year.toString(),
-    value: year.toString()
-  }));
 
   React.useEffect(() => {
     if (assetClass) onFixedAssetModuleItems(assetClass);
@@ -68,20 +64,11 @@ const FixedAsset = () => {
 
   return (
     <Layout title={title}>
-      <Main
-        title={title}
-        mode={mode}
-        setMode={setMode}
-        year={year}
-        setYear={setYear}
-        yearSelectItems={yearSelectItems}>
+      <Main title={title} mode={mode} setMode={setMode} year={year} setYear={setYear}>
         {
           {
             mapping: (
               <FixedAssetMapping
-                year={year}
-                setYear={setYear}
-                yearSelectItems={yearSelectItems}
                 assetClassSelectItems={assetClassSelectItems}
                 tbData={tbData}
                 onTrialBalance={onTrialBalance}

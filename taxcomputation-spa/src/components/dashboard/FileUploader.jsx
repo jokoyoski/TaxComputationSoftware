@@ -4,12 +4,13 @@ import { Button } from "primereact/button";
 import { Dropdown } from "primereact/dropdown";
 import utils from "../../utils";
 import { uploadTrialBalance } from "../../apis/TrialBalance";
+import { useResources } from "../../store/ResourcesStore";
 
 const FileUploader = ({ company: { companyId }, toast, setRefreshTrialBalanceTable }) => {
   const [file, setFile] = React.useState();
   const [year, setYear] = React.useState();
-  const [yearSelectItems] = React.useState(utils.getYears());
   const [loading, setLoading] = React.useState(false);
+  const [{ financialYears }] = useResources();
 
   const onUpload = async () => {
     if (loading) return;
@@ -54,7 +55,7 @@ const FileUploader = ({ company: { companyId }, toast, setRefreshTrialBalanceTab
               <Dropdown
                 style={{ marginRight: 20, width: 110 }}
                 value={year}
-                options={yearSelectItems}
+                options={financialYears}
                 onChange={e => {
                   setYear(e.value);
                 }}

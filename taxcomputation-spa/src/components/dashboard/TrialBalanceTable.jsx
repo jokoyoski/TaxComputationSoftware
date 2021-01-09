@@ -5,21 +5,25 @@ import { Card } from "primereact/card";
 import { Dropdown } from "primereact/dropdown";
 import utils from "../../utils";
 import { getTrialBalance } from "../../apis/TrialBalance";
+import { useResources } from "../../store/ResourcesStore";
 
 const TrialBalanceTable = ({
   company: { companyId },
+  toast,
   refreshTrialBalanceTable,
   setRefreshTrialBalanceTable
 }) => {
   const isMounted = React.useRef(false);
-  const [year, setYear] = React.useState(utils.currentYear());
-  const [yearSelectItems] = React.useState(utils.getYears());
+  const [year, setYear] = React.useState(null);
   const [tbData, setTbData] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
+  const [{ financialYears }] = useResources();
 
   React.useEffect(() => {
     isMounted.current = true;
     const fetchTrialBalance = async () => {
+      if (!year) return;
+
       setLoading(true);
       try {
         const data = await getTrialBalance({ companyId, year });
@@ -41,7 +45,7 @@ const TrialBalanceTable = ({
           );
         }
       } catch (error) {
-        console.log(error);
+        utils.apiErrorHandling(error, toast);
       } finally {
         if (isMounted.current) setLoading(false);
       }
@@ -52,13 +56,13 @@ const TrialBalanceTable = ({
     }
 
     return () => (isMounted.current = false);
-  }, [companyId, year, refreshTrialBalanceTable, setRefreshTrialBalanceTable]);
+  }, [companyId, year, refreshTrialBalanceTable, setRefreshTrialBalanceTable, toast]);
 
   return (
     <Card style={{ width: "100%" }}>
       <DataTable
         className="p-datatable-gridlines"
-        value={tbData}
+        value={!loading ? tbData : []}
         paginator={!loading && tbData.length !== 0}
         rows={10}
         rowsPerPageOptions={[10, 20, 50, 100]}
@@ -68,7 +72,7 @@ const TrialBalanceTable = ({
             <Dropdown
               style={{ width: 110 }}
               value={year}
-              options={yearSelectItems}
+              options={financialYears}
               onChange={e => {
                 setYear(e.value);
                 setRefreshTrialBalanceTable(true);

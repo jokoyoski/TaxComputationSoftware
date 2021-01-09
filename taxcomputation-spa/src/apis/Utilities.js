@@ -44,3 +44,14 @@ export const deleteAssetClass = async id => {
     throw error;
   }
 };
+
+export const getCompanyFinancialYear = async companyId => {
+  try {
+    const { data } = await axios.get(
+      `/api/Utilities/company-financial-year?companyId=${companyId}`
+    );
+    return data;
+  } catch (error) {
+    throw error;
+  }
+};
