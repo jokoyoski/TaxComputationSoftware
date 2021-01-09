@@ -13,9 +13,11 @@ export const incomeTaxMapping = async ({ typeId, yearId, incomeList, companyId }
   }
 };
 
-export const incomeTaxViewData = async ({ companyId, year, isItLevyView }) => {
+export const incomeTaxViewData = async ({ companyId, year, isItLevyView, isBringLossFoward }) => {
   try {
-    const { data } = await axios.get(`/api/incomeTax/${companyId}/${year}/${isItLevyView}`);
+    const { data } = await axios.get(
+      `/api/incomeTax/${companyId}/${year}/${isItLevyView}?isBringLossFoward=${isBringLossFoward}`
+    );
     return data;
   } catch (error) {
     throw error;
