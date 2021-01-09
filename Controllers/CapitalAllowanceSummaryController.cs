@@ -18,7 +18,7 @@ namespace TaxComputationSoftware.Controllers
 
         }
         [HttpGet("companyId")]
-        [Authorize]
+      //  [Authorize]
 
         public async Task<IActionResult> Allowance(int companyId)
         {

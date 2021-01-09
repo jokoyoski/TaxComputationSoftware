@@ -140,6 +140,7 @@ UPDATE [dbo].[DeferredTaxBroughtFoward]
 SET CompanyId = @CompanyId, YearId = @YearId,DeferredTaxCarriedFoward=@DeferredTaxCarriedFoward
 WHERE CompanyId=@CompanyId and YearId=@YearId
 end
+else
 INSERT [dbo].[DeferredTaxBroughtFoward](
 CompanyId,
 DeferredTaxCarriedFoward,

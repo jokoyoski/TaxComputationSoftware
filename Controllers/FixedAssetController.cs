@@ -38,7 +38,7 @@ namespace TaxComputationAPI.Controllers
         }
 
         [HttpPost]
-        [Authorize]
+        //[Authorize]
 
         public async Task<IActionResult> AddFixedAsset(CreateFixedAssetDto createFixed)
         {
@@ -153,7 +153,7 @@ namespace TaxComputationAPI.Controllers
         }
 
         [HttpPut("fixed-asset/{id}")]
-        [Authorize]
+      //  [Authorize]
         public async Task<IActionResult> DeleteFixedAsset(int id)
         {
             // await _fixedAssetService.DeleteFixedAsset(id);
@@ -163,7 +163,7 @@ namespace TaxComputationAPI.Controllers
 
 
         [HttpGet("{companyId}/{yearId}")]
-        [Authorize]
+       // [Authorize]
         public async Task<IActionResult> GetFixedAsset(int companyId, int yearId)
         {
             try

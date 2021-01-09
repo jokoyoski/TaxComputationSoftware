@@ -35,7 +35,7 @@ namespace TaxComputationAPI.Controllers
 
 
         [HttpPost()]
-        [Authorize]
+      //  [Authorize]
         public async Task<IActionResult> CreateProfitandLoss(CreateProfitAndLoss profitAndLoss)
         {
             try
@@ -75,7 +75,7 @@ namespace TaxComputationAPI.Controllers
 
 
         [HttpGet("{companyId}/{yearId}")]
-        [Authorize]
+       // [Authorize]
         public async Task<IActionResult> GetProftAndLoss(int companyId, int yearId)
         {
             yearId=14;

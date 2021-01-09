@@ -9,7 +9,9 @@ namespace TaxComputationSoftware.Models
 
         public bool IsStarted {get;set;}
 
-        public decimal DeferredTaxBroughtFoward {get;set;}
+        public int YearId {get;set;}
+
+        public decimal DeferredTaxCarriedFoward {get;set;}
       
     }
 }

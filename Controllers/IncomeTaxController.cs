@@ -37,7 +37,7 @@ namespace TaxComputationSoftware.Controllers
         }
 
         [HttpGet("{companyId}/{yearId}/{IsItLevyView}")]
-        [Authorize]
+       // [Authorize]
         public async Task<IActionResult> GetIncometax(int companyId, int yearId, bool IsItLevyView, bool isBringLossFoward)
         {
              yearId=14;
@@ -63,7 +63,7 @@ namespace TaxComputationSoftware.Controllers
 
 
         [HttpPost("add-income-tax")]
-        [Authorize]
+      //  [Authorize]
         public async Task<IActionResult> AddIncomeTax(CreateIncomeTaxDto createIncomeTaxDto)
         {
             try
@@ -135,7 +135,7 @@ namespace TaxComputationSoftware.Controllers
 
 
         [HttpDelete("remove-allowable/disallowable/{id}")]
-        [Authorize]
+       // [Authorize]
         public async Task<IActionResult> RemoveItem(int id)
         {
             try

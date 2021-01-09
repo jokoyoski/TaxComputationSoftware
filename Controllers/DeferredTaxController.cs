@@ -63,7 +63,7 @@ namespace TaxComputationAPI.Controllers
 
             try
             {
-              createDeferredTax.YearId=14;
+                createDeferredTax.YearId=14;
                 var details = await _utilitiesService.GetFinancialYearAsync(createDeferredTax.YearId);
                 var startDate = _memoryCache.Get<DateTime>(Constants.OpeningDate);
                 var endDate = _memoryCache.Get<DateTime>(Constants.ClosingDate);
@@ -85,7 +85,7 @@ namespace TaxComputationAPI.Controllers
 
                 }
 
-                var broughtFowardInfo = await _deferredTaxService.GetBroughtFoward(createDeferredTax.CompanyId);
+              //  var broughtFowardInfo = await _deferredTaxService.GetBroughtFoward(createDeferredTax.CompanyId);
 
                 _deferredTaxService.SaveDeferredTax(createDeferredTax);
                 return Ok("Saved Successfully!!!");

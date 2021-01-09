@@ -28,20 +28,14 @@ namespace TaxComputationAPI.Services
 
         public async Task<decimal> GetFixedAssetsByCompanyForDeferredTax(int companyId, int yearId)
         {
-
-
             decimal netBookValue = 0;
             List<Total> totals = new List<Total>();
             List<NetBookValue> netBookValues = new List<NetBookValue>();
-
-
             var result = await _fixedAssetRepository.GetFixedAssetsByCompany(companyId, yearId);
             if (result.FixedAssetData.Count <= 0)
             {
                 return 0;
             }
-
-
             foreach (var x in result.FixedAssetData)
             {
                 decimal costValue = await _utilitiesRepository.GetAmount(x.Id, "cost");
