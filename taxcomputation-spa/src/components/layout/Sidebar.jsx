@@ -5,7 +5,7 @@ import { useAuth } from "../../store/AuthStore";
 import { useCompany } from "../../store/CompanyStore";
 import utils from "../../utils";
 
-const Sidebar = ({ selectedTitle }) => {
+const Sidebar = ({ selectedTitle, isActive }) => {
   const [{ firstName, lastName, email }, { onLogout }] = useAuth();
   const [{ companyId }, { resetCompany }] = useCompany();
   const menuItems = [
@@ -78,7 +78,7 @@ const Sidebar = ({ selectedTitle }) => {
         {menuItems.map((item, index) => (
           <Link
             key={index}
-            href={companyId ? item.href : null}
+            href={companyId && isActive ? item.href : null}
             className="sidebar-link"
             style={{ padding: "5px 20px" }}>
             <p

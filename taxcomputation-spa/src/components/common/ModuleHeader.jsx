@@ -12,6 +12,10 @@ const ModuleHeader = ({
   setYear,
   showITLevy,
   setShowITLevy,
+  isBringLossFoward,
+  setIsBringLossFoward,
+  isBringDeferredTaxFoward,
+  setIsBringDeferredTaxFoward,
   assetId,
   setAssetId,
   assetClassSelectItems
@@ -56,12 +60,32 @@ const ModuleHeader = ({
         </p>
         <div className="p-d-flex p-ai-center">
           {mode === "view" && title === constants.modules.incomeTax && (
+            <>
+              <div className="p-d-flex p-ai-center">
+                <span>Bring Loss Forward</span>
+                <InputSwitch
+                  style={{ marginLeft: 10, marginRight: 20 }}
+                  checked={isBringLossFoward}
+                  onChange={e => setIsBringLossFoward(e.value)}
+                />
+              </div>
+              <div className="p-d-flex p-ai-center">
+                <span>Show IT Levy</span>
+                <InputSwitch
+                  style={{ marginLeft: 10 }}
+                  checked={showITLevy}
+                  onChange={e => setShowITLevy(e.value)}
+                />
+              </div>
+            </>
+          )}
+          {mode === "view" && title === constants.modules.deferredTax && (
             <div className="p-d-flex p-ai-center">
-              <span>Show IT Levy</span>
+              <span>Bring Deferred Tax Foward</span>
               <InputSwitch
                 style={{ marginLeft: 10 }}
-                checked={showITLevy}
-                onChange={e => setShowITLevy(e.value)}
+                checked={isBringDeferredTaxFoward}
+                onChange={e => setIsBringDeferredTaxFoward(e.value)}
               />
             </div>
           )}
