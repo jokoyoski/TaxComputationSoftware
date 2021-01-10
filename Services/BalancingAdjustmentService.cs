@@ -36,7 +36,7 @@ namespace TaxComputationAPI.Services
             decimal balancingCharge = 0;
             var balancingAdjustment = await _balancingAdjustmentRepository.GetBalancingAdjustment(companyId, year);
 
-            if (balancingAdjustment == null)
+            if (balancingAdjustment.Count==0)
             {
                 return (balancingAllowance, balancingCharge);
             }
@@ -268,7 +268,7 @@ namespace TaxComputationAPI.Services
                         BalancingAdjustmentId = assetBalancing == null ? b1.Id : assetBalancing.Id,
                         YearBought = addBalanceAdjustmentDto.YearBought,
                         DateCreated = DateTime.Now,
-                        YearId = int.Parse(addBalanceAdjustmentDto.Year)
+                        YearId = addBalanceAdjustmentDto.Year
                     };
 
                     if (balancingAdjustment.Item1 == BalancingAdjustment.BalancingAllowance) bb1.BalancingAllowance = balancingAdjustment.Item2;
@@ -317,7 +317,7 @@ namespace TaxComputationAPI.Services
                         BalancingAdjustmentId = assetBalancing == null ? b2.Id : assetBalancing.Id,
                         YearBought = addBalanceAdjustmentDto.YearBought,
                         DateCreated = DateTime.UtcNow,
-                        YearId = int.Parse(addBalanceAdjustmentDto.Year)
+                        YearId = addBalanceAdjustmentDto.Year
                     };
 
                     if (balancingAdjustment.Item1 == BalancingAdjustment.BalancingAllowance) bb2.BalancingAllowance = balancingAdjustment.Item2;
@@ -368,7 +368,7 @@ namespace TaxComputationAPI.Services
                     BalancingAdjustmentId = assetBalancing == null ? b3.Id : assetBalancing.Id,
                     YearBought = addBalanceAdjustmentDto.YearBought,
                     DateCreated = DateTime.Now,
-                    YearId = int.Parse(addBalanceAdjustmentDto.Year)
+                    YearId = addBalanceAdjustmentDto.Year
                 };
 
                 if (balancingAdjustment.Item1 == BalancingAdjustment.BalancingAllowance) bb3.BalancingAllowance = balancingAdjustment.Item2;
@@ -493,6 +493,11 @@ namespace TaxComputationAPI.Services
         public Task<BalancingAdjustmentYearBought> GetBalancingAdjustmentYearBoughtByAssetIdYearIdYearBought(int yearId, int assetId, int yearBought)
         {
             return _balancingAdjustmentRepository.GetBalancingAdjustmentYearBoughtByAssetIdYearIdYearBought(yearId,assetId,yearBought);
+        }
+
+        public Task<BalancingAdjustmentYearBought> GetBalancingAdjustmentYearBoughtById(int Id)
+        {
+            return _balancingAdjustmentRepository.GetBalancingAdjustmentYearBoughtById(Id);
         }
     }
 }

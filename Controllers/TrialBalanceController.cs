@@ -37,15 +37,11 @@ namespace TaxComputationAPI.Controllers
         }
 
         [HttpGet()]
-     [Authorize]
+        [Authorize]
         public async Task<IActionResult> GetTrialBalance(int companyId, int yearId)
         {
-          
-            var companyDetails = await _utilityService.GetPreNotificationsAsync();
-            var companyDate = companyDetails.FirstOrDefault(x => x.CompanyId == companyId);
-            _cache.Set(Constants.CompanyId, companyDate.CompanyId);
-            _cache.Set(Constants.OpeningDate, companyDate.OpeningDate);
-            _cache.Set(Constants.ClosingDate, companyDate.ClosingDate);
+
+
             if (companyId <= 0 && yearId <= 0) return BadRequest($"{companyId} and {yearId} are required");
 
             try
@@ -71,12 +67,12 @@ namespace TaxComputationAPI.Controllers
             try
             {
 
-               
-                var details = await _utilityService.GetFinancialYearAsync(excel.YearId);
-                var startDate = _memoryCache.Get<DateTime>(Constants.OpeningDate);
-                var endDate = _memoryCache.Get<DateTime>(Constants.ClosingDate);
-                var isValid = Utilities.ValidateDate(startDate, endDate, details.OpeningDate, details.ClosingDate);
 
+                var details = await _utilityService.GetFinancialYearAsync(excel.YearId);
+
+                var companyDetails = await _utilityService.GetPreNotificationsAsync();
+                var companyDate = companyDetails.FirstOrDefault(x => x.CompanyId == excel.CompanyId);
+                var isValid = Utilities.ValidateDate(companyDate.OpeningDate, companyDate.ClosingDate, details.OpeningDate, details.ClosingDate);
 
                 if (!isValid)
                 {

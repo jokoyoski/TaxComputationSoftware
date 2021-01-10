@@ -1125,7 +1125,7 @@ namespace TaxComputationSoftware.Services
             }
             if (IsBringLossFoward)
             {
-                _incomeTaxRepository.UpdateAcessibleByIncomeTax(new BroughtFoward
+                _incomeTaxRepository.CreateBalanceBroughtFoward(new BroughtFoward
                 {
                     LossCf = losscf,
                     UnRelievedCf = unrelievedCf,

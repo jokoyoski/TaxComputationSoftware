@@ -312,13 +312,10 @@ namespace TaxComputationAPI.Services
             await _utilitiesRepository.DeleteTrialBalancingMapping(trialbalanceId);
         }
 
-
-
-
-
-
-
-
+        public Task DeleteFixedAssetById(int Id)
+        {
+            return _fixedAssetRepository.DeleteFixedAssetById(Id);
+        }
     }
 }
 

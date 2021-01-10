@@ -17,7 +17,7 @@ namespace TaxComputationAPI.Models
         public decimal BalancingCharge { get; set; }
         public DateTime DateCreated { get; set; }
         public string YearBought { get; set; }
-        public int YearId{get;set;}
+        public string YearId{get;set;}
         public int BalancingAdjustmentId { get; set; }
 
     }

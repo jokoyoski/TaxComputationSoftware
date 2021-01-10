@@ -88,6 +88,29 @@ namespace TaxComputationAPI.Repositories
 
         }
 
+         public async Task DeleteFixedAssetById(int Id)
+        {
+            using (IDbConnection conn = await _databaseManager.DatabaseConnection())
+            {
+                if (conn.State == ConnectionState.Closed) conn.Open();
+
+                DynamicParameters parameters = new DynamicParameters();
+                parameters.Add("@Id", Id);
+                try
+                {
+                    conn.Execute("[dbo].[usp_Delete_Fixed_Asset_By_Id]", parameters, commandType: CommandType.StoredProcedure);
+                    conn.Close();
+                }
+                catch (Exception e)
+                {
+
+                    throw e;
+                }
+            }
+        }
+
+
+
         public async Task<int> SaveFixedAsset(CreateFixedAssetDto fixedAssetDto)
         {
            int valueId=0;

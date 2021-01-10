@@ -162,7 +162,7 @@ namespace TaxComputationSoftware.Repositories
                 var result = await record.ReadAsync<BroughtFoward>();
                 return result;
 
-               
+
             }
 
 
@@ -225,20 +225,28 @@ namespace TaxComputationSoftware.Repositories
 
         public async Task<int> UpdateAcessibleByIncomeTax(BroughtFoward broughtFoward)
         {
-            int rowAffected = 0;
-            using (IDbConnection con = await _databaseManager.DatabaseConnection())
+            try
             {
-                if (con.State == ConnectionState.Closed)
-                    con.Open();
+                int rowAffected = 0;
+                using (IDbConnection con = await _databaseManager.DatabaseConnection())
+                {
+                    if (con.State == ConnectionState.Closed)
+                        con.Open();
 
-                DynamicParameters parameters = new DynamicParameters();
-                parameters.Add("@CompanyId", broughtFoward.CompanyId);
-                parameters.Add("@LossCf", broughtFoward.LossCf);
-                parameters.Add("@UnRelievedCf", broughtFoward.UnRelievedCf);
-                rowAffected = con.Execute("[dbo].[usp_Accessible_Cf_By_Income_Tax]", parameters, commandType: CommandType.StoredProcedure);
+                    DynamicParameters parameters = new DynamicParameters();
+                    parameters.Add("@CompanyId", broughtFoward.CompanyId);
+                    parameters.Add("@LossCf", broughtFoward.LossCf);
+                    parameters.Add("@Accessible",0);
+                    parameters.Add("@UnRelievedCf", broughtFoward.UnRelievedCf);
+                    rowAffected = con.Execute("[dbo].[usp_Accessible_Cf_By_Income_Tax]", parameters, commandType: CommandType.StoredProcedure);
+                }
+
+                return rowAffected;
+            }catch(Exception ex){
+
             }
+         return 5;
 
-            return rowAffected;
         }
 
 

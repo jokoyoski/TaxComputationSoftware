@@ -27,26 +27,26 @@ namespace TaxComputationAPI.Controllers
         private readonly IUtilitiesService _utilitiesService;
 
         private readonly IMemoryCache _memoryCache;
-        public InvestmentAllowanceController(ILogger<InvestmentAllowanceController> logger, IUtilitiesService utilitiesService,IMemoryCache memoryCache, IMapper mapper, IInvestmentAllowanceService investmentAllowanceService)
+        public InvestmentAllowanceController(ILogger<InvestmentAllowanceController> logger, IUtilitiesService utilitiesService, IMemoryCache memoryCache, IMapper mapper, IInvestmentAllowanceService investmentAllowanceService)
         {
             _logger = logger;
             _mapper = mapper;
             _investmentAllowanceService = investmentAllowanceService;
-            _utilitiesService=utilitiesService;
+            _utilitiesService = utilitiesService;
             _memoryCache = memoryCache;
         }
 
         [HttpPost("investment-allowance")]
-          [Authorize]
+        [Authorize]
         public async Task<IActionResult> AddInvestmentAllowance(InvestmentAllowanceDto investmentAllowanceDto)
         {
             try
             {
-               
+
                 var details = await _utilitiesService.GetFinancialYearAsync(investmentAllowanceDto.YearId);
-                var startDate = _memoryCache.Get<DateTime>(Constants.OpeningDate);
-                var endDate = _memoryCache.Get<DateTime>(Constants.ClosingDate);
-                var isValid = Utilities.ValidateDate(startDate, endDate, details.OpeningDate, details.ClosingDate);
+                var companyDetails = await _utilitiesService.GetPreNotificationsAsync();
+                var companyDate = companyDetails.FirstOrDefault(x => x.CompanyId == investmentAllowanceDto.CompanyId);
+                var isValid = Utilities.ValidateDate(companyDate.OpeningDate, companyDate.ClosingDate, details.OpeningDate, details.ClosingDate);
                 if (!isValid)
                 {
                     return StatusCode(400, new { errors = new[] { "The year selected has to be within the financial year!!" } });
@@ -90,7 +90,7 @@ namespace TaxComputationAPI.Controllers
         [Authorize]
         public async Task<IActionResult> GetInvestmentAllowanceByCompanyIdAndYearId(int companyId, int yearId)
         {
-          
+
             if (yearId == 0)
             {
                 return StatusCode(400, new { errors = new[] { "Please select a Valid year" } });

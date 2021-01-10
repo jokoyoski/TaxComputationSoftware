@@ -8,6 +8,7 @@ using TaxComputationAPI.Helpers;
 using TaxComputationAPI.Models;
 using TaxComputationSoftware.Dtos;
 using TaxComputationSoftware.Interfaces;
+using TaxComputationSoftware.Models;
 
 namespace TaxComputationSoftware.Services
 {
@@ -31,7 +32,7 @@ namespace TaxComputationSoftware.Services
                 var pre = await _notificationRepository.GetPreNotification();
                 foreach (var item in pre)
                 {
-                    if (DateTime.Now.Date > item.ClosingDate.Date)   // add isLockBack
+                    if (DateTime.Now.Date == item.ClosingDate.Date)   // add isLockBack
                     {  //add unlock
                         await CalculateAnnualCalculation(item.CompanyId, item.Id);
                     }
@@ -188,6 +189,7 @@ namespace TaxComputationSoftware.Services
                                 };
                                 _notificationRepository.SaveArchivedCapitaLAllowance(capitalAllowance, capitalAllowance.Channel);
                                 _notificationRepository.UpdateCapitalAllowanceByFixedAssetOrBalancingAdjustemnt(capitalAllowance);
+                                SaveCapitalAllowanceSummary(capitalAllowance.AssetId,capitalAllowance.CompanyId);
                             }
                             else
                             {
@@ -211,6 +213,7 @@ namespace TaxComputationSoftware.Services
                                 };
                                 _notificationRepository.SaveArchivedCapitaLAllowance(capitalAllowance, capitalAllowance.Channel);
                                 _notificationRepository.UpdateCapitalAllowanceByFixedAssetOrBalancingAdjustemnt(capitalAllowance);
+                                SaveCapitalAllowanceSummary(capitalAllowance.AssetId,capitalAllowance.CompanyId);
                             }
 
                         }
@@ -239,6 +242,7 @@ namespace TaxComputationSoftware.Services
                                 };
                                 _notificationRepository.SaveArchivedCapitaLAllowance(capitalAllowance, capitalAllowance.Channel);
                                 _notificationRepository.UpdateCapitalAllowanceByFixedAssetOrBalancingAdjustemnt(capitalAllowance);
+                                SaveCapitalAllowanceSummary(capitalAllowance.AssetId,capitalAllowance.CompanyId);
                             }
                             else
                             {
@@ -263,6 +267,7 @@ namespace TaxComputationSoftware.Services
                                 };
                                 _notificationRepository.SaveArchivedCapitaLAllowance(capitalAllowance, capitalAllowance.Channel);
                                 _notificationRepository.UpdateCapitalAllowanceByFixedAssetOrBalancingAdjustemnt(capitalAllowance);
+                                SaveCapitalAllowanceSummary(capitalAllowance.AssetId,capitalAllowance.CompanyId);
                             }
 
                         }
@@ -291,6 +296,7 @@ namespace TaxComputationSoftware.Services
                                 };
                                 _notificationRepository.SaveArchivedCapitaLAllowance(capitalAllowance, capitalAllowance.Channel);
                                 _notificationRepository.UpdateCapitalAllowanceByFixedAssetOrBalancingAdjustemnt(capitalAllowance);
+                                SaveCapitalAllowanceSummary(capitalAllowance.AssetId,capitalAllowance.CompanyId);
                             }
                             else
                             {
@@ -315,6 +321,7 @@ namespace TaxComputationSoftware.Services
                                 };
                                 _notificationRepository.SaveArchivedCapitaLAllowance(capitalAllowance, capitalAllowance.Channel);
                                 _notificationRepository.UpdateCapitalAllowanceByFixedAssetOrBalancingAdjustemnt(capitalAllowance);
+                                SaveCapitalAllowanceSummary(capitalAllowance.AssetId,capitalAllowance.CompanyId);
                             }
 
 
@@ -343,6 +350,7 @@ namespace TaxComputationSoftware.Services
                             };
                             _notificationRepository.SaveArchivedCapitaLAllowance(capitalAllowance, capitalAllowance.Channel);
                             _notificationRepository.UpdateCapitalAllowanceByFixedAssetOrBalancingAdjustemnt(capitalAllowance);
+                            SaveCapitalAllowanceSummary(capitalAllowance.AssetId,capitalAllowance.CompanyId);
 
 
 
@@ -382,6 +390,7 @@ namespace TaxComputationSoftware.Services
                                 };
                                 _notificationRepository.SaveArchivedCapitaLAllowance(capitalAllowance, capitalAllowance.Channel);
                                 _notificationRepository.UpdateCapitalAllowanceByFixedAssetOrBalancingAdjustemnt(capitalAllowance);
+                                SaveCapitalAllowanceSummary(capitalAllowance.AssetId,capitalAllowance.CompanyId);
                             }
 
                             else
@@ -407,6 +416,7 @@ namespace TaxComputationSoftware.Services
                                 };
                                 _notificationRepository.SaveArchivedCapitaLAllowance(capitalAllowance, capitalAllowance.Channel);
                                 _notificationRepository.UpdateCapitalAllowanceByFixedAssetOrBalancingAdjustemnt(capitalAllowance);
+                                SaveCapitalAllowanceSummary(capitalAllowance.AssetId,capitalAllowance.CompanyId);
                             }
                         }
 
@@ -445,6 +455,7 @@ namespace TaxComputationSoftware.Services
                                 };
                                 _notificationRepository.SaveArchivedCapitaLAllowance(capitalAllowance, capitalAllowance.Channel);
                                 _notificationRepository.UpdateCapitalAllowanceByFixedAssetOrBalancingAdjustemnt(capitalAllowance);
+                                SaveCapitalAllowanceSummary(capitalAllowance.AssetId,capitalAllowance.CompanyId);
                             }
 
                             else
@@ -470,6 +481,7 @@ namespace TaxComputationSoftware.Services
                                 };
                                 _notificationRepository.SaveArchivedCapitaLAllowance(capitalAllowance, capitalAllowance.Channel);
                                 _notificationRepository.UpdateCapitalAllowanceByFixedAssetOrBalancingAdjustemnt(capitalAllowance);
+                                SaveCapitalAllowanceSummary(capitalAllowance.AssetId,capitalAllowance.CompanyId);
                             }
 
 
@@ -513,6 +525,7 @@ namespace TaxComputationSoftware.Services
                                 };
                                 _notificationRepository.SaveArchivedCapitaLAllowance(capitalAllowance, capitalAllowance.Channel);
                                 _notificationRepository.UpdateCapitalAllowanceByFixedAssetOrBalancingAdjustemnt(capitalAllowance);
+                                SaveCapitalAllowanceSummary(capitalAllowance.AssetId,capitalAllowance.CompanyId);
                             }
 
                             else
@@ -538,6 +551,7 @@ namespace TaxComputationSoftware.Services
                                 };
                                 _notificationRepository.SaveArchivedCapitaLAllowance(capitalAllowance, capitalAllowance.Channel);
                                 _notificationRepository.UpdateCapitalAllowanceByFixedAssetOrBalancingAdjustemnt(capitalAllowance);
+                                SaveCapitalAllowanceSummary(capitalAllowance.AssetId,capitalAllowance.CompanyId);
                             }
 
 
@@ -560,9 +574,55 @@ namespace TaxComputationSoftware.Services
                         
             var companyDetails=await _notificationRepository.GetCompanyAsync(companyId);
             string text=$"This is to alert you that {companyDetails.CompanyName} annual calculation for the  end of financial year has been computed";
-          _emailService.Send("jookoyoski@gmail.com","bomana.ogoni@gmail.com","End of Financial Year Calculation",text.ToString(),"");
+         // _emailService.Send("jookoyoski@gmail.com","bomana.ogoni@gmail.com","End of Financial Year Calculation",text.ToString(),"");
 
         }
+
+
+
+        private async Task SaveCapitalAllowanceSummary(int assetId, int companyId)
+        {
+            decimal openingResidue = 0;
+            decimal addition = 0;
+            decimal initial = 0;
+            decimal annual = 0;
+            decimal total = 0;
+            decimal closingResidue = 0;
+            decimal disposal = 0;
+            var value = await _notificationRepository.GetCapitalAllowance(assetId, companyId);
+            if (value.Count() > 0)
+            {
+
+                foreach (var v in value)
+                {
+                    openingResidue += v.OpeningResidue;
+                    addition += v.Addition;
+                    initial += v.Initial;
+                    annual += v.Annual;
+                    total += v.Total;
+                    closingResidue += v.ClosingResidue;
+                    disposal += v.Disposal;
+                }
+
+                _notificationRepository.SaveCapitaLAllowanceSummary(new CapitalAllowanceSummary
+                {
+
+                    OpeningResidue = openingResidue,
+                    Addition = addition,
+                    Initial = initial,
+                    Annual = annual,
+                    Total = total,
+                    ClosingResidue = closingResidue,
+                    Disposal = disposal,
+                    AssetId = assetId,
+                    CompanyId = companyId
+
+
+                });
+            }
+
+        }
+
 
 
         private string ChannelType(object channel)

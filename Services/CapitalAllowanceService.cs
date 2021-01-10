@@ -245,7 +245,7 @@ namespace TaxComputationAPI.Services
                     var newClosingResidue = newadditionValue - newTotalValue;  // addition-total
                     var newRemainingyears = newtotalNoOfYears - 1;   //years to go
 
-                    if (int.Parse(previousRecord.YearId) - 1 == 0)
+                    if (previousRecord.YearsToGo - 1 == 0)
                     {
                         var capitalAllowanceRecord = new CapitalAllowance
                         {

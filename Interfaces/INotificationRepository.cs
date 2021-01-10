@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using TaxComputationAPI.Models;
 using TaxComputationSoftware.Model;
+using TaxComputationSoftware.Models;
 
 namespace TaxComputationSoftware.Interfaces
 {
@@ -14,6 +15,8 @@ namespace TaxComputationSoftware.Interfaces
         Task<int> UpdateCapitalAllowanceForChannel(string channel, int Id);
         Task<List<PreNotification>> GetPreNotification();
         Task InsertPreNotification(PreNotification preNotification);
+
+        Task<int> SaveCapitaLAllowanceSummary(CapitalAllowanceSummary capitalAllowance);
 
         Task<int> UpdateDeferredTaxfById(int companyId); //background job
 

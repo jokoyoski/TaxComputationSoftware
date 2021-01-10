@@ -150,6 +150,39 @@ namespace TaxComputationSoftware.Repositories
            
         }
 
+
+        public async Task<int> SaveCapitaLAllowanceSummary(CapitalAllowanceSummary capitalAllowance)
+        {
+            try
+            {
+                int rowAffected = 0;
+                using (IDbConnection con = await _databaseManager.DatabaseConnection())
+                {
+                    if (con.State == ConnectionState.Closed)
+                        con.Open();
+
+                    DynamicParameters parameters = new DynamicParameters();
+                    parameters.Add("@OpeningResidue", capitalAllowance.OpeningResidue);
+                    parameters.Add("@Addition", capitalAllowance.Addition);
+                    parameters.Add("@Disposal", capitalAllowance.Disposal);
+                    parameters.Add("@Initial", capitalAllowance.Initial);
+                    parameters.Add("@Annual", capitalAllowance.Annual);
+                    parameters.Add("@Total", capitalAllowance.Total);
+                    parameters.Add("@ClosingResidue", capitalAllowance.ClosingResidue);
+                    parameters.Add("@CompanyId", capitalAllowance.CompanyId);
+                    parameters.Add("@AssetId", capitalAllowance.AssetId);
+                    rowAffected = con.Execute("[dbo].[usp_Insert_Capital_Allowance_Summary]", parameters, commandType: CommandType.StoredProcedure);
+                }
+
+                return rowAffected;
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return 0;
+        }
+
         public async Task<IEnumerable<CapitalAllowance>> GetCapitalAllowance(int assetId, int companyId)
         {
 

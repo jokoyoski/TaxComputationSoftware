@@ -1,6 +1,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -25,25 +26,33 @@ namespace TaxComputationAPI.Controllers
 
         private readonly IUtilitiesService _utilitiesService;
         private readonly IMemoryCache _memoryCache;
-        public DeferredTaxController(IDeferredTaxService deferredTaxService, IMemoryCache memoryCache, IUtilitiesService utilitiesService,ITrialBalanceService trialBalanceService, ILogger<DeferredTaxController> logger)
+        public DeferredTaxController(IDeferredTaxService deferredTaxService, IMemoryCache memoryCache, IUtilitiesService utilitiesService, ITrialBalanceService trialBalanceService, ILogger<DeferredTaxController> logger)
         {
             _deferredTaxService = deferredTaxService;
             _logger = logger;
             _trialBalanceService = trialBalanceService;
             _memoryCache = memoryCache;
-            _utilitiesService=utilitiesService;
+            _utilitiesService = utilitiesService;
         }
 
 
         [HttpGet]
-          [Authorize]
-        public async Task<IActionResult> GetDeferredTax(int companyId, string year,bool IsBringDeferredTaxFoward)
+        [Authorize]
+        public async Task<IActionResult> GetDeferredTax(int companyId, string year, bool IsBringDeferredTaxFoward)
         {
 
             try
             {
-             
-                var value = await _deferredTaxService.GetDeferredTax(companyId, int.Parse(year),IsBringDeferredTaxFoward);
+                var details = await _utilitiesService.GetFinancialYearAsync();
+                if (details.FirstOrDefault().Id == int.Parse(year))
+                {
+                    return StatusCode(400, new { errors = new[] { "Invalid Year selected" } });
+                }
+                if (IsBringDeferredTaxFoward && details.LastOrDefault().Id != int.Parse(year))
+                {
+                    return StatusCode(400, new { errors = new[] { "Please move the current Deferred tax and not previous deferred tax" } });
+                }
+                var value = await _deferredTaxService.GetDeferredTax(companyId, int.Parse(year), IsBringDeferredTaxFoward);
 
                 return Ok(value);
 
@@ -66,15 +75,11 @@ namespace TaxComputationAPI.Controllers
 
             try
             {
-               
+
                 var details = await _utilitiesService.GetFinancialYearAsync(createDeferredTax.YearId);
-                var startDate = _memoryCache.Get<DateTime>(Constants.OpeningDate);
-                var endDate = _memoryCache.Get<DateTime>(Constants.ClosingDate);
-                var isValid = Utilities.ValidateDate(startDate, endDate, details.OpeningDate, details.ClosingDate);
-                if (!isValid)
-                {
-                    return StatusCode(400, new { errors = new[] { "The year selected has to be within the financial year!!" } });
-                }
+                var companyDetails = await _utilitiesService.GetPreNotificationsAsync();
+                var companyDate = companyDetails.FirstOrDefault(x => x.CompanyId == createDeferredTax.CompanyId);
+                var isValid = Utilities.ValidateDate(companyDate.OpeningDate, companyDate.ClosingDate, details.OpeningDate, details.ClosingDate);
                 foreach (var j in createDeferredTax.TrialBalanceList)
                 {
                     if (j.TrialBalanceId != 0)
@@ -88,7 +93,7 @@ namespace TaxComputationAPI.Controllers
 
                 }
 
-              //  var broughtFowardInfo = await _deferredTaxService.GetBroughtFoward(createDeferredTax.CompanyId);
+                //  var broughtFowardInfo = await _deferredTaxService.GetBroughtFoward(createDeferredTax.CompanyId);
 
                 _deferredTaxService.SaveDeferredTax(createDeferredTax);
                 return Ok("Saved Successfully!!!");

@@ -284,5 +284,5 @@ CREATE procedure [dbo].[usp_Get_BalancingAdjustmentYearBought](
 )
 AS
 
-SELECT Id,AssestId,Cost,InitialAllowance,AnnualAllowance,SalesProceed,Residue,BalancingAllowance,BalancingCharge,DateCreated,YearBought,BalancingAdjustmentId from [dbo].[BalancingAdjustmentYearBought] WHERE Id = @Id
+SELECT Id,AssestId,Cost,InitialAllowance,AnnualAllowance,SalesProceed,Residue,BalancingAllowance,BalancingCharge,DateCreated,YearBought,BalancingAdjustmentId,YearId from [dbo].[BalancingAdjustmentYearBought] WHERE Id = @Id
 GO

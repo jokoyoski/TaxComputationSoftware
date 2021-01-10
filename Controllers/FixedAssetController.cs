@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -38,12 +39,12 @@ namespace TaxComputationAPI.Controllers
         }
 
         [HttpPost]
-      //  [Authorize]
+        //  [Authorize]
         public async Task<IActionResult> AddFixedAsset(CreateFixedAssetDto createFixed)
         {
             try
             {
-             
+
                 foreach (var j in createFixed.TriBalanceId)
                 {
                     var trialBalanceRecord = await _trialBalanceService.GetTrialBalanceById(j);
@@ -54,9 +55,9 @@ namespace TaxComputationAPI.Controllers
                 }
 
                 var details = await _utilitiesService.GetFinancialYearAsync(createFixed.YearId);
-                var startDate = _memoryCache.Get<DateTime>(Constants.OpeningDate);
-                var endDate = _memoryCache.Get<DateTime>(Constants.ClosingDate);
-                var isValid = Utilities.ValidateDate(startDate, endDate, details.OpeningDate, details.ClosingDate);
+                var companyDetails = await _utilitiesService.GetPreNotificationsAsync();
+                var companyDate = companyDetails.FirstOrDefault(x => x.CompanyId == createFixed.CompanyId);
+                var isValid = Utilities.ValidateDate(companyDate.OpeningDate, companyDate.ClosingDate, details.OpeningDate, details.ClosingDate);
                 if (!isValid)
                 {
                     return StatusCode(400, new { errors = new[] { "The year selected has to be within the financial year!!" } });
@@ -155,19 +156,28 @@ namespace TaxComputationAPI.Controllers
         [Authorize]
         public async Task<IActionResult> DeleteFixedAsset(int id)
         {
-            // await _fixedAssetService.DeleteFixedAsset(id);
             await _utilitiesService.UnmapValue(id);
             return Ok("Item Unmapped");
         }
 
 
+        [HttpDelete("delete-fixed-asset/{id}")]
+        [Authorize]
+        public async Task<IActionResult> FixedAsset(int id)
+        {
+            await _fixedAssetService.DeleteFixedAssetById(id);
+            return Ok("Item Unmapped");
+        }
+
+
+
         [HttpGet("{companyId}/{yearId}")]
-       [Authorize]
+        [Authorize]
         public async Task<IActionResult> GetFixedAsset(int companyId, int yearId)
         {
             try
             {
-               
+
                 if (yearId == 0)
                 {
                     return StatusCode(400, new { errors = new[] { "Please select a Valid year" } });

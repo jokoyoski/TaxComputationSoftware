@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -27,27 +28,36 @@ namespace TaxComputationSoftware.Controllers
 
         private readonly IUtilitiesService _utilitiesService;
 
-        public IncomeTaxController(ILogger<IncomeTaxController> logger, IMemoryCache memoryCache, IUtilitiesService utilitiesService,ITrialBalanceService trialBalanceService, IIncomeTaxService incomeTaxService)
+        public IncomeTaxController(ILogger<IncomeTaxController> logger, IMemoryCache memoryCache, IUtilitiesService utilitiesService, ITrialBalanceService trialBalanceService, IIncomeTaxService incomeTaxService)
         {
             _logger = logger;
             _incomeTaxService = incomeTaxService;
             _trialBalanceService = trialBalanceService;
-            _utilitiesService=utilitiesService;
+            _utilitiesService = utilitiesService;
             _memoryCache = memoryCache;
         }
 
         [HttpGet("{companyId}/{yearId}/{IsItLevyView}")]
-       [Authorize]
+        [Authorize]
         public async Task<IActionResult> GetIncometax(int companyId, int yearId, bool IsItLevyView, bool isBringLossFoward)
         {
-            
+            var details = await _utilitiesService.GetFinancialYearAsync();
+            if (details.FirstOrDefault().Id == yearId)
+            {
+                return StatusCode(400, new { errors = new[] { "Invalid Year selected" } });
+            }
+            if (isBringLossFoward && details.LastOrDefault().Id != yearId)
+            {
+                return StatusCode(400, new { errors = new[] { "Please move the current Loss/unRelived and not previous UnRelieved/losses" } });
+            }
+
             if (yearId == 0)
             {
                 return StatusCode(400, new { errors = new[] { "Please select a Valid year" } });
             }
             try
             {
-                var value = await _incomeTaxService.GetIncomeTax(companyId, yearId, IsItLevyView,isBringLossFoward);
+                var value = await _incomeTaxService.GetIncomeTax(companyId, yearId, IsItLevyView, isBringLossFoward);
                 return Ok(value);
 
             }
@@ -63,12 +73,12 @@ namespace TaxComputationSoftware.Controllers
 
 
         [HttpPost("add-income-tax")]
-       [Authorize]
+        [Authorize]
         public async Task<IActionResult> AddIncomeTax(CreateIncomeTaxDto createIncomeTaxDto)
         {
             try
             {
-              
+
                 if (createIncomeTaxDto.TypeId == 0)
                 {
                     foreach (var j in createIncomeTaxDto.IncomeList)
@@ -109,9 +119,9 @@ namespace TaxComputationSoftware.Controllers
                 }
 
                 var details = await _utilitiesService.GetFinancialYearAsync(createIncomeTaxDto.YearId);
-                var startDate = _memoryCache.Get<DateTime>(Constants.OpeningDate);
-                var endDate = _memoryCache.Get<DateTime>(Constants.ClosingDate);
-                var isValid = Utilities.ValidateDate(startDate, endDate, details.OpeningDate, details.ClosingDate);
+                var companyDetails = await _utilitiesService.GetPreNotificationsAsync();
+                var companyDate = companyDetails.FirstOrDefault(x => x.CompanyId == createIncomeTaxDto.CompanyId);
+                var isValid = Utilities.ValidateDate(companyDate.OpeningDate, companyDate.ClosingDate, details.OpeningDate, details.ClosingDate);
                 if (!isValid)
                 {
                     return StatusCode(400, new { errors = new[] { "The year selected has to be within the financial year!!" } });
@@ -135,7 +145,7 @@ namespace TaxComputationSoftware.Controllers
 
 
         [HttpDelete("remove-allowable/disallowable/{id}")]
-       [Authorize]
+        [Authorize]
         public async Task<IActionResult> RemoveItem(int id)
         {
             try

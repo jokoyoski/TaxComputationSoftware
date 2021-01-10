@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using TaxComputationAPI.Dtos;
 using TaxComputationAPI.Helpers;
@@ -21,10 +22,14 @@ namespace TaxComputationAPI.Controllers
         private readonly ICompaniesService _companiesService;
         private readonly IMapper _mapper;
         private readonly ILogger<CompaniesController> _logger;
-        public CompaniesController(ICompaniesService companiesService, IMapper mapper, ILogger<CompaniesController> logger)
+         private readonly IMemoryCache _cache;
+        private readonly IUtilitiesService _utilitiesService;
+        public CompaniesController(ICompaniesService companiesService,IMemoryCache memoryCache,IUtilitiesService utilitiesService ,IMapper mapper, ILogger<CompaniesController> logger)
         {
             _logger = logger;
             _companiesService = companiesService;
+            _utilitiesService=utilitiesService;
+            _cache=memoryCache;
             _mapper = mapper;
         }
 
@@ -55,6 +60,7 @@ namespace TaxComputationAPI.Controllers
         {
             try
             {
+           
                 var companies = await _companiesService.GetCompaniesAsync(pagination);
                 var companiesToReturn = _mapper.Map<IEnumerable<CompanyForListDto>>(companies);
                 Response.AddPagination(companies.CurrentPage, companies.PageSize,
