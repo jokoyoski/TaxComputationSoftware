@@ -10,6 +10,7 @@ import { useCompany } from "../../store/CompanyStore";
 const FinancialYear = ({ showFinancialYear, setShowFinancialYear, setShowSettings }) => {
   const { errors, control } = useForm();
   const [{ companyId }] = useCompany();
+  const [selectedValue, setSelectedValue] = React.useState();
   const [
     { financialYears, selectedFinancialYear },
     { onFinancialYear, onSelectedFinancialYear }
@@ -19,6 +20,14 @@ const FinancialYear = ({ showFinancialYear, setShowFinancialYear, setShowSetting
     utils.fetchCompanyFinancialYear({ companyId }, onFinancialYear, null);
   }, [companyId, onFinancialYear]);
 
+  React.useEffect(() => {
+    if (selectedFinancialYear === selectedValue) {
+      setShowFinancialYear(false);
+      if (setShowSettings) setShowSettings(false);
+      window.location.reload();
+    }
+  }, [selectedFinancialYear, selectedValue, setShowFinancialYear, setShowSettings]);
+
   return (
     <div className="p-d-flex p-jc-center p-ai-center overlay">
       <Dialog
@@ -27,8 +36,8 @@ const FinancialYear = ({ showFinancialYear, setShowFinancialYear, setShowSetting
         visible={showFinancialYear}
         blockScroll
         focusOnShow={false}
-        closeOnEscape
-        closable
+        closeOnEscape={selectedFinancialYear}
+        closable={selectedFinancialYear}
         onHide={() => {
           setShowFinancialYear(false);
           if (setShowSettings) setShowSettings(false);
@@ -37,12 +46,10 @@ const FinancialYear = ({ showFinancialYear, setShowFinancialYear, setShowSetting
           <Button
             type="button"
             label="Select"
-            disabled={!selectedFinancialYear}
+            disabled={!selectedValue}
             onClick={() => {
-              sessionStorage.setItem("year", selectedFinancialYear);
-              setShowFinancialYear(false);
-              if (setShowSettings) setShowSettings(false);
-              window.location.reload();
+              onSelectedFinancialYear(selectedValue);
+              sessionStorage.setItem("year", selectedValue);
             }}
           />
         }>
@@ -54,7 +61,7 @@ const FinancialYear = ({ showFinancialYear, setShowFinancialYear, setShowSetting
               errors={errors}
               controllerName="financialYear"
               dropdownOptions={financialYears}
-              onChangeCallback={onSelectedFinancialYear}
+              onChangeCallback={setSelectedValue}
               width="100%"
               label="Select default financial year"
             />
