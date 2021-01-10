@@ -4,8 +4,9 @@ import { useCompany } from "../../store/CompanyStore";
 import Loader from "../common/Loader";
 import { capitalAllowanceSummaryData } from "../../apis/CapitalAllowance";
 import ViewModeDataTable from "../common/ViewModeDataTable";
+import utils from "../../utils";
 
-const CapitalAllowanceSummary = () => {
+const CapitalAllowanceSummary = ({ toast }) => {
   const isMounted = React.useRef(false);
   const [{ companyId }] = useCompany();
   const [loading, setLoading] = React.useState();
@@ -43,10 +44,8 @@ const CapitalAllowanceSummary = () => {
             return newState;
           });
       } catch (error) {
-        if (isMounted.current) {
-          if (error.response) setError(error.response.data.errors[0]);
-          else setError(error.message);
-        }
+        let errorString = utils.apiErrorHandling(error, toast);
+        setError(errorString);
       } finally {
         if (isMounted.current) setLoading(false);
       }
@@ -54,7 +53,7 @@ const CapitalAllowanceSummary = () => {
     fetchCapitalAllowanceSummaryData();
 
     return () => (isMounted.current = false);
-  }, [companyId]);
+  }, [companyId, toast]);
 
   if (error) return <p style={{ color: "#f00" }}>{error}</p>;
 

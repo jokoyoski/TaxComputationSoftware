@@ -3,11 +3,13 @@ import { Link } from "react-resource-router";
 import constants from "../../constants";
 import { useAuth } from "../../store/AuthStore";
 import { useCompany } from "../../store/CompanyStore";
+import { useResources } from "../../store/ResourcesStore";
 import utils from "../../utils";
 
 const Sidebar = ({ selectedTitle, isActive }) => {
   const [{ firstName, lastName, email }, { onLogout }] = useAuth();
   const [{ companyId }, { resetCompany }] = useCompany();
+  const [, { resetResources }] = useResources();
   const menuItems = [
     { title: "Dashboard", href: constants.routes.dashboard },
     {
@@ -95,7 +97,7 @@ const Sidebar = ({ selectedTitle, isActive }) => {
           <p
             style={{ margin: 0, cursor: "pointer" }}
             onClick={() => {
-              onLogout(resetCompany);
+              onLogout(resetCompany, resetResources);
             }}>
             Logout
           </p>

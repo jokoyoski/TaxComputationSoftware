@@ -78,7 +78,7 @@ const ProfitAndLoss = () => {
             ),
             view: (
               <ViewMode title={title} year={year}>
-                <ProfitAndLossView year={year} />
+                <ProfitAndLossView year={year} toast={toast.current} />
               </ViewMode>
             )
           }[mode]

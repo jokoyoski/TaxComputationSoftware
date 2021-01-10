@@ -78,7 +78,7 @@ const FixedAsset = () => {
             ),
             view: (
               <ViewMode title={title} year={year}>
-                <FixedAssetView year={year} />
+                <FixedAssetView year={year} toast={toast.current} />
               </ViewMode>
             )
           }[mode]

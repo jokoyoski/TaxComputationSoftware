@@ -10,6 +10,7 @@ import IncomeTax from "../pages/IncomeTax";
 import InvestmentAllowance from "../pages/InvestmentAllowance";
 import ITLevy from "../pages/ITLevy";
 import Login from "../pages/Login";
+import Logout from "../pages/Logout";
 import MinimumTax from "../pages/MinimumTax";
 import NotFound from "../pages/NotFound";
 import ProfitAndLoss from "../pages/ProfitAndLoss";
@@ -118,6 +119,12 @@ export const routes = [
     exact: true,
     component: RouteGuard(BalancingAdjustment),
     resources: [fixedAssetModuleClassResource]
+  },
+  {
+    path: constants.routes.logout,
+    name: "LOGOUT",
+    exact: true,
+    component: RouteGuard(Logout)
   },
   {
     path: "*",
