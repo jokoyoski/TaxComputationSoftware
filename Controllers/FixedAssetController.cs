@@ -177,6 +177,10 @@ namespace TaxComputationAPI.Controllers
         {
             try
             {
+                var details = await _utilitiesService.GetFinancialYearAsync(yearId);
+                var companyDetails = await _utilitiesService.GetPreNotificationsAsync();
+                var companyDate = companyDetails.FirstOrDefault(x => x.CompanyId == companyId);
+                var isValid = Utilities.ValidateDate(companyDate.OpeningDate, companyDate.ClosingDate, details.OpeningDate, details.ClosingDate);
 
                 if (yearId == 0)
                 {
@@ -186,6 +190,10 @@ namespace TaxComputationAPI.Controllers
                 if (fixedAsset == null)
                 {
                     return StatusCode(404, new { errors = new[] { "Record not found at this time please try again later" } });
+                }
+                if (isValid)
+                {
+                    fixedAsset.CanDelete = true;
                 }
                 return Ok(fixedAsset);
 

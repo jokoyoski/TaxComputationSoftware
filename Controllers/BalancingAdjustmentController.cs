@@ -33,8 +33,18 @@ namespace TaxComputationAPI.Controllers
         [HttpGet]
         public async Task<IActionResult> GetBalancingAdjustment(int companyId, string year)
         {
+            var yearBought = await _balancingAdjustmentService.GetBalancingAdjustmentYearBoughtById(int.Parse(year));
+            var details = await _utilitiesService.GetFinancialYearAsync(int.Parse(yearBought.YearId.ToString()));
+            var companyDetails = await _utilitiesService.GetPreNotificationsAsync();
+            var companyDate = companyDetails.FirstOrDefault(x => x.CompanyId == details.CompanyId);
+            var isValid = Utilities.ValidateDate(companyDate.OpeningDate, companyDate.ClosingDate, details.OpeningDate, details.ClosingDate);
+
 
             var response = await _balancingAdjustmentService.DisplayBalancingAdjustment(companyId, year);
+            if (isValid)
+            {
+                response.Values.CanDelete = true;
+            }
             return Ok(response);
         }
 
