@@ -51,7 +51,7 @@ const IncomeTaxView = ({ year, toast, showITLevy, isBringLossFoward }) => {
                             fetchIncomeTaxViewData();
                           }
                         } catch (error) {
-                          console.log(error);
+                          utils.apiErrorHandling(error, toast);
                         }
                       }}></i>
                   )}

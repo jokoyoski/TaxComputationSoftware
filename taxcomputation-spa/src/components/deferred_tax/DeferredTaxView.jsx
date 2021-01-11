@@ -46,7 +46,7 @@ const DeferredTaxView = ({ year, toast, isBringDeferredTaxFoward }) => {
                             fetchDeferredTaxViewData();
                           }
                         } catch (error) {
-                          console.log(error);
+                          utils.apiErrorHandling(error, toast);
                         }
                       }}></i>
                   )}

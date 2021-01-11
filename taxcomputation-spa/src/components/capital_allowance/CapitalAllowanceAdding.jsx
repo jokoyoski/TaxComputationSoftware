@@ -6,11 +6,13 @@ import utils from "../../utils";
 import { capitalAllowanceAdding } from "../../apis/CapitalAllowance";
 import DropdownController from "../controllers/DropdownController";
 import InputController from "../controllers/InputController";
+import { useResources } from "../../store/ResourcesStore";
 
-const CapitalAllowanceAdding = ({ yearSelectItems, assetClassSelectItems, toast }) => {
+const CapitalAllowanceAdding = ({ assetClassSelectItems, toast }) => {
   const { errors, handleSubmit, control } = useForm();
   const [{ companyId }] = useCompany();
   const [loading, setLoading] = React.useState(false);
+  const [{ financialYears }] = useResources();
 
   const onSubmit = async data => {
     if (loading) return;
@@ -71,7 +73,7 @@ const CapitalAllowanceAdding = ({ yearSelectItems, assetClassSelectItems, toast 
             controllerName="taxYear"
             label="Tax Year"
             required
-            dropdownOptions={yearSelectItems}
+            dropdownOptions={financialYears}
             errorMessage="Tax Year is required"
           />
         </div>
