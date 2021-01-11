@@ -104,8 +104,9 @@ namespace TaxComputationSoftware.Services
                         string subject = "Annual Preparation";
 
                         await _emailService.Send(toEmail, fromEmail, subject, message, null);
-
-                        await _utilitiesRepository.AddFinancialYearAsync(new FinancialYear { Name = $"{mail.OpeningDate.ToString("dd/yy")} - {mail.ClosingDate.ToString("dd/yy")}", CompanyId = company.Id, OpeningDate = mail.OpeningDate, ClosingDate = mail.ClosingDate });                        
+                        int month=mail.OpeningDate.Month;
+                        int year=mail.OpeningDate.Year;
+                        await _utilitiesRepository.AddFinancialYearAsync(new FinancialYear { Name = $"{month/year}", CompanyId = company.Id, OpeningDate = mail.OpeningDate, ClosingDate = mail.ClosingDate });                        
 
                     }
 

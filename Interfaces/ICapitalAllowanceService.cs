@@ -10,6 +10,7 @@ namespace TaxComputationAPI.Interfaces
     public interface ICapitalAllowanceService
     {
         Task SaveCapitalAllowance(CapitalAllowance capitalAllowance);
+        Task SaveCapitalAllowanceSummary(int assetId, int companyId);
 
         Task DeleteCapitalAllowanceById(int TrialBalanceId);
 
@@ -29,9 +30,9 @@ namespace TaxComputationAPI.Interfaces
 
         Task<decimal> GetCapitalAllowanceSummaryForDeferredTax(int companyId);
 
-         Task<int> UpdateCapitalAllowanceForChannel(string channel, int Id);
+        Task<int> UpdateCapitalAllowanceForChannel(string channel, int Id);
 
-         Task<int> UpdateArchivedCapitalAllowanceForChannel(string channel, int companyId, string taxYear, int assetId);
+        Task<int> UpdateArchivedCapitalAllowanceForChannel(string channel, int companyId, string taxYear, int assetId);
 
     }
 }

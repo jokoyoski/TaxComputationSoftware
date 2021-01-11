@@ -68,7 +68,7 @@ namespace TaxComputationAPI.Repositories
 
 
 
-        public async Task<BalancingAdjustmentYearBought> GetBalancingAdjustmentYearBoughtByAssetIdYearIdYearBought(int yearId,int assetId, int yearBought)
+        public async Task<BalancingAdjustmentYearBought> GetBalancingAdjustmentYearBoughtByAssetIdYearIdYearBought(int yearId, int assetId, int yearBought)
         {
 
 
@@ -294,6 +294,8 @@ namespace TaxComputationAPI.Repositories
 
                     DynamicParameters parameters = new DynamicParameters();
 
+
+                    parameters.Add("@CompanyId", balancingAdjustmentYearBought.CompanyId);
                     parameters.Add("@Id", balancingAdjustmentYearBought.Id);
                     parameters.Add("@AssestId", balancingAdjustmentYearBought.AssestId);
                     parameters.Add("@Cost", balancingAdjustmentYearBought.Cost);

@@ -11,12 +11,18 @@ CREATE procedure usp_Get_Fixed_Asset_By_CompanyId_And_YearId(
 )
 AS
 
-select [dbo].[FixedAsset].Id,[dbo].[Company].CompanyName AS CompanyName,[dbo].[FinancialYear].Name AS Year,[dbo].[AssetMapping].AssetName As FixedAssetName,OpeningCost,CostAddition,CostDisposal,OpeningDepreciation,DepreciationAddition,DepreciationDisposal,TransferCost,TransferDepreciation,IsTransferCostRemoved,IsTransferDepreciationRemoved  from [dbo].[FixedAsset] inner join [dbo].[FinancialYear] on [dbo].[FixedAsset].YearId=[dbo].[FinancialYear].Id
+select [dbo].[FixedAsset].Id,[dbo].[Company].CompanyName AS CompanyName,[dbo].[FinancialYear].Name AS YearName,[dbo].[AssetMapping].AssetName As FixedAssetName,OpeningCost,CostAddition,CostDisposal,OpeningDepreciation,DepreciationAddition,DepreciationDisposal,TransferCost,TransferDepreciation,IsTransferCostRemoved,IsTransferDepreciationRemoved  from [dbo].[FixedAsset] inner join [dbo].[FinancialYear] on [dbo].[FixedAsset].YearId=[dbo].[FinancialYear].Id
 inner join [dbo].[AssetMapping] on [dbo].[FixedAsset].AssetId=[dbo].[AssetMapping].Id
 inner join [dbo].[Company] on [dbo].[FixedAsset].CompanyId= [dbo].[Company].Id
 where [dbo].[FixedAsset].CompanyId=@CompanyId and [dbo].[FixedAsset].YearId=@YearId
 order by Id
 GO
+
+
+
+
+--------------------------------------- STORED PROCEDURE TO  GET FIXED ASSET BY ID-----------------------------------------
+
 
 
 
@@ -38,7 +44,8 @@ select * from   [dbo].[FixedAsset] where CompanyId=@CompanyId and AssetId=@Asset
 GO
 
 
---------------------------------------- STORED PROCEDURE TO  DELETE FIXED ASSET BY COMPANYID-----------------------------------------
+--------------------------------------- STORED PROCEDURE TO  DELETE FIXED ASSET BY ID-----------------------------------------
+
 
 
 IF OBJECT_ID('[dbo].[usp_Delete_Fixed_Asset_By_Id]') IS nOT NULL
@@ -50,12 +57,18 @@ CREATE procedure usp_Delete_Fixed_Asset_By_Id(
 @Id int
 )
 AS
-
+declare @companyId as int
+declare @assetId as int
+declare @yearId as int
+select @yearId=YearId ,@assetId=AssetId ,@companyId=CompanyId from [dbo].[FixedAsset] where Id=@Id
+delete from [dbo].[BalancingAdjustmentYearBought] where CompanyId=@companyId and YearBought=@yearId and AssestId=@assetId
+delete from [dbo].[CapitalAllowance] where CompanyId=@companyId and TaxYear=@yearId and AssetId=@assetId
+delete from [dbo].[CapitalAllowanceSummary] where CompanyId=@companyId  and AssetId=@assetId
+delete from [dbo].[ArchivedCapitalAllowance] where CompanyId=@companyId and TaxYear=@yearId and AssetId=@assetId
 delete from   [dbo].[FixedAsset] where Id=@Id
-UPDATE [dbo].[TrialBalance] SET MappedTo = null,IsCheck=false,IsRemoved=false WHERE Id IN (SELECT TrialBalanceId FROM [dbo].[TrialBalanceMapping] where ModuleId=@Id);
+UPDATE [dbo].[TrialBalance] SET MappedTo = null,IsCheck=0,IsRemoved=0 WHERE Id IN (SELECT TrialBalanceId FROM [dbo].[TrialBalanceMapping] where ModuleId=@Id);
 delete from[dbo].[TrialBalanceMapping] where ModuleId=@Id
 GO
-
 
 
 
@@ -186,3 +199,22 @@ values(
 )
 end
 end
+
+
+
+-------------------------------------- STORED PROCEDURE TO  GET FIXED ASSET BY ID-----------------------------------------
+
+IF OBJECT_ID('[dbo].[usp_Get_Fixed_Asset_By_Id]') IS nOT NULL
+BEGIN
+DROP procedure [dbo].[usp_Get_Fixed_Asset_By_Id]
+END
+GO
+CREATE procedure usp_Get_Fixed_Asset_By_Id(
+@Id int
+)
+AS
+
+select  * from [dbo].[FixedAsset]
+where Id=@Id
+order by Id
+GO

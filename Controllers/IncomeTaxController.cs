@@ -46,6 +46,7 @@ namespace TaxComputationSoftware.Controllers
             {
                 return StatusCode(400, new { errors = new[] { "Invalid Year selected" } });
             }
+               var x=details.LastOrDefault();
             if (isBringLossFoward && details.LastOrDefault().Id != yearId)
             {
                 return StatusCode(400, new { errors = new[] { "Please move the current Loss/unRelived and not previous UnRelieved/losses" } });

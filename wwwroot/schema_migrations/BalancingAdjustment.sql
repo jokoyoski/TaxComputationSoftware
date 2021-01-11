@@ -37,6 +37,7 @@ BEGIN
         [Id] [int] IDENTITY(1,1) NOT NULL,
         [AssestId] [int] NOT NULL,
         [Cost] [decimal](18, 2) NOT NULL,
+        [CompanyId] int not null,
         [InitialAllowance] [decimal](18, 2) NOT NULL,
         [AnnualAllowance] [decimal](18, 2) NOT NULL,
         [SalesProceed] [decimal](18, 2) NOT NULL,
@@ -46,12 +47,8 @@ BEGIN
         [DateCreated] [datetime2](7) NOT NULL,
         [YearBought] [nvarchar](max) NULL,
         [YearId] int NOT NULL,
-        [BalancingAdjustmentId] [int] NOT NULL,
-        CONSTRAINT [PK_BalancingAdjustmentYearBought] PRIMARY KEY CLUSTERED
-(
-    [Id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-    ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+        [BalancingAdjustmentId] [int] NOT NULL)
+     
 END
 GO
 
@@ -167,6 +164,7 @@ CREATE PROCEDURE [dbo].[usp_Insert_Balance_Adjustment_YearBought](
     @AssestId int,
     @Cost decimal(18, 2),
     @YearId int,
+    @CompanyId int,
     @InitialAllowance decimal(18, 2),
     @AnnualAllowance decimal(18, 2),
     @SalesProceed decimal(18, 2),
@@ -189,6 +187,7 @@ INSERT [dbo].[BalancingAdjustmentYearBought]
 (
     AssestId,
     Cost,
+    CompanyId,
     InitialAllowance,
     AnnualAllowance,
     SalesProceed,
@@ -204,6 +203,7 @@ VALUES
 (
     @AssestId,
     @Cost,
+    @CompanyId,
     @InitialAllowance,
     @AnnualAllowance,
     @SalesProceed,
@@ -286,3 +286,4 @@ AS
 
 SELECT Id,AssestId,Cost,InitialAllowance,AnnualAllowance,SalesProceed,Residue,BalancingAllowance,BalancingCharge,DateCreated,YearBought,BalancingAdjustmentId,YearId from [dbo].[BalancingAdjustmentYearBought] WHERE Id = @Id
 GO
+

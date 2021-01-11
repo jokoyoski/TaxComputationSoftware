@@ -12,6 +12,7 @@ namespace TaxComputationAPI.Models
         public decimal InitialAllowance { get; set; }
         public decimal AnnualAllowance { get; set; }
         public decimal SalesProceed { get; set; }
+        public int CompanyId {get;set;}
         public decimal Residue { get; set; }
         public decimal BalancingAllowance { get; set; }
         public decimal BalancingCharge { get; set; }

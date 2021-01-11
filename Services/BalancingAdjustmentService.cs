@@ -268,7 +268,8 @@ namespace TaxComputationAPI.Services
                         BalancingAdjustmentId = assetBalancing == null ? b1.Id : assetBalancing.Id,
                         YearBought = addBalanceAdjustmentDto.YearBought,
                         DateCreated = DateTime.Now,
-                        YearId = addBalanceAdjustmentDto.Year
+                        YearId = addBalanceAdjustmentDto.Year,
+                        CompanyId=addBalanceAdjustmentDto.CompanyId
                     };
 
                     if (balancingAdjustment.Item1 == BalancingAdjustment.BalancingAllowance) bb1.BalancingAllowance = balancingAdjustment.Item2;
@@ -317,7 +318,8 @@ namespace TaxComputationAPI.Services
                         BalancingAdjustmentId = assetBalancing == null ? b2.Id : assetBalancing.Id,
                         YearBought = addBalanceAdjustmentDto.YearBought,
                         DateCreated = DateTime.UtcNow,
-                        YearId = addBalanceAdjustmentDto.Year
+                        YearId = addBalanceAdjustmentDto.Year,
+                        CompanyId=addBalanceAdjustmentDto.CompanyId
                     };
 
                     if (balancingAdjustment.Item1 == BalancingAdjustment.BalancingAllowance) bb2.BalancingAllowance = balancingAdjustment.Item2;
@@ -368,7 +370,8 @@ namespace TaxComputationAPI.Services
                     BalancingAdjustmentId = assetBalancing == null ? b3.Id : assetBalancing.Id,
                     YearBought = addBalanceAdjustmentDto.YearBought,
                     DateCreated = DateTime.Now,
-                    YearId = addBalanceAdjustmentDto.Year
+                    YearId = addBalanceAdjustmentDto.Year,
+                    CompanyId=addBalanceAdjustmentDto.CompanyId
                 };
 
                 if (balancingAdjustment.Item1 == BalancingAdjustment.BalancingAllowance) bb3.BalancingAllowance = balancingAdjustment.Item2;

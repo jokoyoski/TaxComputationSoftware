@@ -14,6 +14,8 @@ namespace TaxComputationAPI.Response
     {
         public string Company { get; set; }
         public string BalancingAdjustmentYear { get; set; }
+
+        public bool CanDelete {get;set;}
         public List<BalancingAdjustment> BalancingAdjustments { get; set; }
     }
 

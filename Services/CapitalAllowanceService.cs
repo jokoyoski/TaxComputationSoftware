@@ -101,8 +101,8 @@ namespace TaxComputationAPI.Services
                 annualValue1 = addition - Initial;
                 annualValue2 = annualValue1 / totalNoOfYears;
                 annualValue3 = annualValue2 * companyDetails.MonthOfOperation / 12;
-                value = addition - Initial;         //  
-                annual = annualValue3;   //addition-initial* %annualpercenatgerate  
+                //value = addition - Initial;         //  
+                annual = Math.Round(annualValue3, 2);   //addition-initial* %annualpercenatgerate  
                 total = Initial + annual;         //total=addition-initial+total;
                 closingResidue = addition - total;      //closingresidue=addition-total
                 remianingYears = totalNoOfYears - 1;    //remainingyears-1
@@ -240,7 +240,7 @@ namespace TaxComputationAPI.Services
                     decimal newAnnualValue = newadditionValue - newInitialValue; // addition-initial * annual percentage
                     annualValue2 = newAnnualValue / newtotalNoOfYears;
                     annualValue3 = annualValue2 * companyDetails.MonthOfOperation / 12;
-                    newAnnualValue = annualValue3;
+                    newAnnualValue = Math.Round(annualValue3, 2);;
                     var newTotalValue = newAnnualValue + newInitialValue;   // initial+total
                     var newClosingResidue = newadditionValue - newTotalValue;  // addition-total
                     var newRemainingyears = newtotalNoOfYears - 1;   //years to go
@@ -430,7 +430,7 @@ namespace TaxComputationAPI.Services
         }
 
 
-        private async Task SaveCapitalAllowanceSummary(int assetId, int companyId)
+        public async Task SaveCapitalAllowanceSummary(int assetId, int companyId)
         {
             decimal openingResidue = 0;
             decimal addition = 0;

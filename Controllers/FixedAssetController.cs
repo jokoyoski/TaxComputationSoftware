@@ -172,7 +172,7 @@ namespace TaxComputationAPI.Controllers
 
 
         [HttpGet("{companyId}/{yearId}")]
-        [Authorize]
+        //[Authorize]
         public async Task<IActionResult> GetFixedAsset(int companyId, int yearId)
         {
             try

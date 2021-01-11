@@ -64,7 +64,7 @@ namespace TaxComputationSoftware.Services
             var financialYear = await _utilitiesRepository.GetFinancialCompanyAsync(companyId);
             var financialYearRecord = financialYear.Where(x => x.Id < yearId).FirstOrDefault();
             var record = await _deferredTaxRepository.GetDeferredTaxFowarByCompanyId(companyId);
-            var broughtFoward = record.ToList().Where(x => x.YearId == financialYearRecord.Id).FirstOrDefault();
+            var broughtFoward = record.ToList().Where(x => x.YearId == financialYearRecord.Id).OrderByDescending(x=>x.Id).FirstOrDefault();
             var netbookValue = await _fixedAssetService.GetFixedAssetsByCompanyForDeferredTax(companyId, yearId);
             var capitalAllowanceSummary = await _capitalAllowanceService.GetCapitalAllowanceSummaryForDeferredTax(companyId);
             var unrelievedCapitalAllowanceCf = await _incomeTaxService.GetIncomeTaxForDeferred(companyId,yearId);

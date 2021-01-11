@@ -466,7 +466,9 @@ namespace TaxComputationSoftware.Services
             decimal capitalAllowanceOfTheYear = 0;
             var value = await _balancingAdjustmentService.GetBalancingAdjustmentForIncomeTax(companyId, yearId.ToString());
             var financialYear = await _utilitiesRepository.GetFinancialCompanyAsync(companyId);
-            var financialYearRecord = financialYear.Where(x => x.Id < yearId).FirstOrDefault();
+            var financialYearRecords = financialYear.Where(x => x.Id < yearId);
+            var financialYearRecord=financialYearRecords.OrderByDescending(x=>x.Id).FirstOrDefault();
+         //   var financialYearRecord = financialYear.Where(x => x.Id < yearId).FirstOrDefault();
             var record = await _incomeTaxRepository.GetBroughtFowardByCompanyId(companyId);
             var broughtFoward = record.ToList().Where(x => x.YearId == financialYearRecord.Id).FirstOrDefault();
             var incomeListDto = new List<IncomeTaxDto>();

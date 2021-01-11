@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using TaxComputationAPI.Dtos;
+using TaxComputationAPI.Models;
 using TaxComputationAPI.ResponseModel;
 
 namespace TaxComputationAPI.Interfaces
@@ -12,7 +13,6 @@ namespace TaxComputationAPI.Interfaces
         Task DeleteFixedAsset(int fixedAssetId);
 
         Task DeleteFixedAssetById(int Id);
-
         Task<decimal> GetFixedAssetsByCompanyForDeferredTax(int companyId, int yearId);
 
         Task<decimal> GetAmount(List<int> trialBalances, bool isCost);

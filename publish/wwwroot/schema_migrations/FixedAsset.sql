@@ -50,7 +50,10 @@ CREATE procedure usp_Delete_Fixed_Asset_By_Id(
 @Id int
 )
 AS
-select * from   [dbo].[FixedAsset] where Id=@Id
+
+delete from   [dbo].[FixedAsset] where Id=@Id
+UPDATE [dbo].[TrialBalance] SET MappedTo = null,IsCheck=false,IsRemoved=false WHERE Id IN (SELECT TrialBalanceId FROM [dbo].[TrialBalanceMapping] where ModuleId=@Id);
+delete from[dbo].[TrialBalanceMapping] where ModuleId=@Id
 GO
 
 

@@ -18,12 +18,15 @@ namespace TaxComputationAPI.Services
         private readonly ITrialBalanceRepository _trialBalanceRepository;
         private readonly IUtilitiesRepository _utilitiesRepository;
         private readonly ICapitalAllowanceService _capitalAllowanceService;
-        public FixedAssetService(IFixedAssetRepository fixedAssetRepository, ICapitalAllowanceService capitalAllowanceService, IUtilitiesRepository utilitiesRepository, ITrialBalanceRepository trialBalanceRepository)
+
+        private readonly ICapitalAllowanceRepository _capitalAllowanceRepository;
+        public FixedAssetService(IFixedAssetRepository fixedAssetRepository, ICapitalAllowanceRepository capitalAllowanceRepository, ICapitalAllowanceService capitalAllowanceService, IUtilitiesRepository utilitiesRepository, ITrialBalanceRepository trialBalanceRepository)
         {
             _fixedAssetRepository = fixedAssetRepository;
             _trialBalanceRepository = trialBalanceRepository;
             _utilitiesRepository = utilitiesRepository;
             _capitalAllowanceService = capitalAllowanceService;
+            _capitalAllowanceRepository = capitalAllowanceRepository;
         }
 
         public async Task<decimal> GetFixedAssetsByCompanyForDeferredTax(int companyId, int yearId)
@@ -312,10 +315,19 @@ namespace TaxComputationAPI.Services
             await _utilitiesRepository.DeleteTrialBalancingMapping(trialbalanceId);
         }
 
-        public Task DeleteFixedAssetById(int Id)
+        public async Task DeleteFixedAssetById(int Id)
         {
-            return _fixedAssetRepository.DeleteFixedAssetById(Id);
+        var fixedAsset = await _fixedAssetRepository.GetFixedAssetsById(Id);
+        _fixedAssetRepository.DeleteFixedAssetById(Id);
+        if (fixedAsset != null)
+        {
+                var result = _capitalAllowanceRepository.DeleteCapitalAllowanceSummaryById(fixedAsset.AssetId, fixedAsset.CompanyId);
+                _capitalAllowanceService.GetCapitalAllowanceSummaryByCompanyId(fixedAsset.CompanyId);
         }
+
+        }
+
+
     }
 }
 
