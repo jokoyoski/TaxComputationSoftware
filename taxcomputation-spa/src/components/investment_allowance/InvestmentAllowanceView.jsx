@@ -49,7 +49,7 @@ const InvestmentAllowanceView = ({ year, toast }) => {
                             fetchInvestmentAllowanceViewData();
                           }
                         } catch (error) {
-                          console.log(error);
+                          utils.apiErrorHandling(error, toast);
                         }
                       }}></i>
                   </div>
