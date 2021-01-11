@@ -57,7 +57,7 @@ const CapitalAllowanceView = ({ assetId, toast }) => {
                             fetchCapitalAllowanceViewData();
                           }
                         } catch (error) {
-                          console.log(error);
+                          utils.apiErrorHandling(error, toast);
                         }
                       }}></i>
                   </div>
