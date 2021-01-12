@@ -200,7 +200,7 @@ values(
 end
 end
 
-
+GO
 
 -------------------------------------- STORED PROCEDURE TO  GET FIXED ASSET BY ID-----------------------------------------
 
