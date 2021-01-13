@@ -53,13 +53,20 @@ namespace TaxComputationAPI.Services
             var opening = companyDetails.OpeningYear;
             var closing = companyDetails.OpeningYear.AddDays(364);
 
-            var previousOpening = opening.AddYears(-1);
-            var previousClosing = closing.AddYears(-1);
-            await _utilitiesRepository.AddFinancialYearAsync(new FinancialYear { Name = $"{previousOpening.Month}/{previousOpening.Year}", OpeningDate = previousOpening, ClosingDate = previousClosing, CompanyId = companyDetails.Id });
+            int i = -9;
 
+            while(i < 0)
+            {
+                var previousOpening = opening.AddYears(i);
+                var previousClosing = closing.AddYears(i);
+                await _utilitiesRepository.AddFinancialYearAsync(new FinancialYear { Name = $"{previousOpening.Month}/{previousOpening.Year}", OpeningDate = previousOpening, ClosingDate = previousClosing, CompanyId = companyDetails.Id });
+                i++;
+            }
+
+            
             var companyFinancialYearList = await _utilitiesRepository.GetFinancialCompanyAsync(companyDetails.Id);
 
-            _deferredTaxRepository.CreateDeferredTaxBroughtFoward(companyDetails.Id, company.DeferredTaxBroughtFoward, companyFinancialYearList[0].Id);
+            _deferredTaxRepository.CreateDeferredTaxBroughtFoward(companyDetails.Id, company.DeferredTaxBroughtFoward, companyFinancialYearList[8].Id);
             _incomeTaxTaxRepository.CreateBalanceBroughtFoward(new BroughtFoward
             {
                 UnRelievedCf = company.UnRelievedCf,
@@ -70,8 +77,9 @@ namespace TaxComputationAPI.Services
 
             _notificationRepository.InsertPreNotification(new PreNotification{ CompanyId = companyDetails.Id, OpeningDate = opening, ClosingDate= closing});
 
-            _utilitiesRepository.AddFinancialYearAsync(new FinancialYear { Name = $"{opening.Month}/{opening.Year}", OpeningDate = opening, ClosingDate = closing, CompanyId = companyDetails.Id});
-        }
+            await _utilitiesRepository.AddFinancialYearAsync(new FinancialYear { Name = $"{opening.Month}/{opening.Year}", OpeningDate = opening, ClosingDate = closing, CompanyId = companyDetails.Id});
+
+         }
      
         public async Task<Company> GetCompanyByTinAsync(string tinNumber)
         {

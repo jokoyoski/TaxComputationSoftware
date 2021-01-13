@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Quartz;
 using TaxComputationAPI.Interfaces;
@@ -13,8 +15,7 @@ using TaxComputationSoftware.Model;
 namespace TaxComputationSoftware.Services
 {
 
-     [DisallowConcurrentExecution]
-    public class AnnualEmailNotificationJob : IJob
+    public class AnnualEmailNotificationJob : IHostedService, IDisposable
     {
         private readonly INotificationRepository _notificationRepository;
         private readonly IUtilitiesRepository _utilitiesRepository;
@@ -24,7 +25,8 @@ namespace TaxComputationSoftware.Services
         public const int AnnualJob = 48;
         public const int EmailDay = 2;
         public static string AdminEmail = "bomana.ogoni@gmail.com";
-        public static string LogEmail = "bomana.ogoni@hotmail.com";
+        public static string LogEmail = "azibaalpha@gmail.com";
+        private Timer _timer;
 
         public AnnualEmailNotificationJob(INotificationRepository notificationRepository, IUtilitiesRepository utilitiesRepository, ICompaniesRepository companyRepository, IEmailService emailService, ILogger<AnnualEmailNotificationJob> logger)
         {
@@ -36,17 +38,26 @@ namespace TaxComputationSoftware.Services
 
         }
 
-        public async Task Execute(IJobExecutionContext context)
+        public Task StartAsync(CancellationToken cancellationToken)
         {
-            
-            _logger.LogWarning("Testing Job");
+            _logger.LogInformation("Timed Hosted Service running.");
 
-            await PreFinancialYearNotification();
+            _timer = new Timer(PreFinancialYearNotification, null, TimeSpan.Zero, 
+                TimeSpan.FromHours(2));
 
-            await Task.CompletedTask;
+            return Task.CompletedTask;
         }
 
-        private async Task PreFinancialYearNotification()
+        public Task StopAsync(CancellationToken cancellationToken)
+        {
+            _logger.LogInformation("Timed Hosted Service is stopping.");
+
+            _timer?.Change(Timeout.Infinite, 0);
+
+            return Task.CompletedTask;
+        }
+
+        private async void PreFinancialYearNotification(object state)
         {
 
             var pre = await _notificationRepository.GetPreNotification();
@@ -97,7 +108,7 @@ namespace TaxComputationSoftware.Services
 
                         var message = mg.ToString();
 
-                        string toEmail = "bomana.ogoni@hotmail.com";
+                        string toEmail = "azibaalpha@gmail.com";
 
                         string fromEmail = "bomana.ogoni@gmail.com";
 
@@ -119,5 +130,11 @@ namespace TaxComputationSoftware.Services
                 }
             }
         }
+
+        public void Dispose()
+        {
+            _timer?.Dispose();
+        }
+
     }
 }

@@ -16,9 +16,7 @@ GO
 
 
 
---------------------------------------- STORED PROCEDURE TO  GET
-ALLOWABLE AND DISALLOWABLE BY COMPANY ID, YEAR,
-ALLOWABLE-----------------------------------------
+--------------------------------------- STORED PROCEDURE TO  GETALLOWABLE AND DISALLOWABLE BY COMPANY ID, YEAR,ALLOWABLE-----------------------------------------
 IF OBJECT_ID('[dbo].[usp_Get_Allowable_DisAllowable_By_CompanyId_YearId_Allowable]')
 IS nOT NULL
 BEGIN
@@ -45,9 +43,7 @@ IsAllowable=@IsAllowable
 GO
 
 
---------------------------------------- STORED PROCEDURE TO  GET
-ALLOWABLE AND DISALLOWABLE BY
-ID-----------------------------------------
+--------------------------------------- STORED PROCEDURE TO  GET ALLOWABLE AND DISALLOWABLE BY ID-----------------------------------------
 IF OBJECT_ID('[dbo].[usp_Get_Allowable_DisAllowable_By_Id]') IS nOT NULL
 BEGIN
 DROP procedure [dbo].[usp_Get_Allowable_DisAllowable_By_Id]
@@ -65,9 +61,7 @@ GO
 
 
 
---------------------------------------- STORED PROCEDURE TO  GET
-ALLOWABLE AND DISALLOWABLE BY
-TRIALBALANCEID-----------------------------------------
+--------------------------------------- STORED PROCEDURE TO  GET ALLOWABLE AND DISALLOWABLE BY TRIALBALANCEID-----------------------------------------
 IF OBJECT_ID('[dbo].[usp_Get_Allowable_DisAllowable_By_TrialBalanceId]')
 IS nOT NULL
 BEGIN
@@ -86,9 +80,7 @@ GO
 
 
 
---------------------------------------- STORED PROCEDURE TO  GET
-ALLOWABLE AND DISALLOWABLE BY COMPANYID AND
-YEARID-----------------------------------------
+--------------------------------------- STORED PROCEDURE TO  GET ALLOWABLE AND DISALLOWABLE BY COMPANYID AND YEARID-----------------------------------------
 IF OBJECT_ID('[dbo].[usp_Get_Allowable_DisAllowable_By_CompanyId_YearId]')
 IS nOT NULL
 BEGIN
@@ -111,8 +103,7 @@ GO
 
 
 
---------------------------------------- STORED PROCEDURE TO  DELETE
-ALLOWABLE DISALLOWABLE BY ID-----------------------------------------
+--------------------------------------- STORED PROCEDURE TO  DELETE ALLOWABLE DISALLOWABLE BY ID-----------------------------------------
 IF OBJECT_ID('[dbo].[Delete_Allowable_DisAllowable_By_Id]') IS nOT NULL
 BEGIN
 DROP procedure [dbo].[Delete_Allowable_DisAllowable_By_Id]
@@ -132,8 +123,7 @@ GO
 
 
 
---------------------------------------- STORED PROCEDURE TO  INSERT
-INTO ALLOWABLE DISALLOWABLE-----------------------------------------
+--------------------------------------- STORED PROCEDURE TO  INSERT INTO ALLOWABLE DISALLOWABLE-----------------------------------------
 IF OBJECT_ID('[dbo].[Insert_Into_Allowable_DisAllowable]') IS nOT NULL
 BEGIN
 DROP procedure [dbo].[Insert_Into_Allowable_DisAllowable]
@@ -173,8 +163,7 @@ GO
 
 
 
---------------------------------------- STORED PROCEDURE TO  GET
-BROUGHT FOWARD BY COMPANYID-----------------------------------------
+--------------------------------------- STORED PROCEDURE TO  GET BROUGHT FOWARD BY COMPANYID-----------------------------------------
 IF OBJECT_ID('[dbo].[usp_Get_Income_Tax_Brought_Foward_By_CompanyId]')
 IS nOT NULL
 BEGIN
@@ -197,8 +186,7 @@ GO
 
 
 
---------------------------------------- STORED PROCEDURE TO  INSERT
-INTO BROUGHT FOWARD TABLE-----------------------------------------
+--------------------------------------- STORED PROCEDURE TO  INSERT INTO BROUGHT FOWARD TABLE-----------------------------------------
 IF OBJECT_ID('[dbo].[usp_Insert_Into_Income_Tax_Brought_Foward]') IS NOT NULL
 BEGIN
 DROP procedure [dbo].[usp_Insert_Into_Income_Tax_Brought_Foward]
