@@ -12,7 +12,10 @@ const Main = ({
   setYear,
   showITLevy,
   setShowITLevy,
-  yearSelectItems,
+  isBringLossFoward,
+  setIsBringLossFoward,
+  isBringDeferredTaxFoward,
+  setIsBringDeferredTaxFoward,
   assetId,
   setAssetId,
   assetClassSelectItems,
@@ -31,9 +34,12 @@ const Main = ({
           setYear={setYear}
           showITLevy={showITLevy}
           setShowITLevy={setShowITLevy}
+          isBringLossFoward={isBringLossFoward}
+          setIsBringLossFoward={setIsBringLossFoward}
+          isBringDeferredTaxFoward={isBringDeferredTaxFoward}
+          setIsBringDeferredTaxFoward={setIsBringDeferredTaxFoward}
           assetId={assetId}
           setAssetId={setAssetId}
-          yearSelectItems={yearSelectItems}
           assetClassSelectItems={assetClassSelectItems}
         />
       }

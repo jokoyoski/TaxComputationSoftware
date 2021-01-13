@@ -6,7 +6,7 @@ import utils from "../../utils";
 import { incomeTaxDelete, incomeTaxViewData } from "../../apis/IncomeTax";
 import ViewModeDataTable from "../common/ViewModeDataTable";
 
-const IncomeTaxView = ({ year, toast, showITLevy }) => {
+const IncomeTaxView = ({ year, toast, showITLevy, isBringLossFoward }) => {
   const isMounted = React.useRef(false);
   const [{ companyId }] = useCompany();
   const [loading, setLoading] = React.useState();
@@ -21,7 +21,12 @@ const IncomeTaxView = ({ year, toast, showITLevy }) => {
       try {
         setError(null);
         setLoading(true);
-        const data = await incomeTaxViewData({ companyId, year, isItLevyView: showITLevy });
+        const data = await incomeTaxViewData({
+          companyId,
+          year,
+          isItLevyView: showITLevy,
+          isBringLossFoward
+        });
         if (isMounted.current) {
           setIncomeTaxData(
             data.map(item => ({
@@ -46,7 +51,7 @@ const IncomeTaxView = ({ year, toast, showITLevy }) => {
                             fetchIncomeTaxViewData();
                           }
                         } catch (error) {
-                          console.log(error);
+                          utils.apiErrorHandling(error, toast);
                         }
                       }}></i>
                   )}
@@ -58,10 +63,8 @@ const IncomeTaxView = ({ year, toast, showITLevy }) => {
           );
         }
       } catch (error) {
-        if (isMounted.current) {
-          if (error.response) setError(error.response.data.errors[0]);
-          else setError(error.message);
-        }
+        let errorString = utils.apiErrorHandling(error, toast);
+        setError(errorString);
       } finally {
         if (isMounted.current) setLoading(false);
       }
@@ -69,7 +72,7 @@ const IncomeTaxView = ({ year, toast, showITLevy }) => {
     fetchIncomeTaxViewData();
 
     return () => (isMounted.current = false);
-  }, [companyId, showITLevy, toast, year]);
+  }, [companyId, isBringLossFoward, showITLevy, toast, year]);
 
   if (error) return <p style={{ color: "#f00" }}>{error}</p>;
 

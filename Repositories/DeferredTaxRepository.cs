@@ -49,9 +49,9 @@ namespace TaxComputationSoftware.Repositories
             return 4;
         }
 
-        public async Task<int> CreateDeferredTaxBroughtFoward(int companyId, decimal deferredTaxBroughtFoward,int yearId)
+        public async Task<int> CreateDeferredTaxBroughtFoward(int companyId, decimal deferredTaxBroughtFoward, int yearId)
         {
-           
+
             int rowAffected = 0;
             using (IDbConnection con = await _databaseManager.DatabaseConnection())
             {
@@ -100,9 +100,9 @@ namespace TaxComputationSoftware.Repositories
             return null;
         }
 
-       
 
-        public async Task<DeferredTaxFoward> GetDeferredTaxFowarByCompanyId(int companyId)
+
+        public async Task<IEnumerable<DeferredTaxFoward>> GetDeferredTaxFowarByCompanyId(int companyId)
         {
 
             try
@@ -114,8 +114,11 @@ namespace TaxComputationSoftware.Repositories
                         conn.Open();
                     DynamicParameters parameters = new DynamicParameters();
                     parameters.Add("@CompanyId", companyId);
-                    var record =  conn.QueryFirstOrDefault<DeferredTaxFoward>("[dbo].[usp_Get_Deferred_Tax_Brought_Foward_By_CompanyId]", parameters, commandType: CommandType.StoredProcedure);
-                    return record;
+
+                    var record = await conn.QueryMultipleAsync("[dbo].[usp_Get_Deferred_Tax_Brought_Foward_By_CompanyId]", parameters, commandType: CommandType.StoredProcedure);
+                    var result = await record.ReadAsync<DeferredTaxFoward>();
+                    return result;
+                   
                 }
 
 

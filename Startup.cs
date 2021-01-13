@@ -107,7 +107,7 @@ namespace TaxComputationAPI
             services.AddSingleton<JobSchedule>((x) =>
             {
 
-                var cronExpression = "0 */9 * * * ?";
+                var cronExpression = "0 */3 * * * ?";
                 return new JobSchedule(jobType: typeof(AnnualCalculation), cronExpression: cronExpression);
 
             });
@@ -146,7 +146,7 @@ namespace TaxComputationAPI
             services.AddScoped<IIncomeTaxRepository, IncomeTaxRepository>();
             services.AddScoped<IIncomeTaxService, IncomeTaxService>();
             services.AddScoped<IDeferredTaxRepository, DeferredTaxRepository>();
-           // services.AddScoped<IDeferredTaxService, DeferredTaxService>();
+           services.AddScoped<IDeferredTaxService, DeferredTaxService>();
             services.AddSingleton<DatabaseManager>();
             services.Configure<ConnectionString>(_configuration.GetSection("ConnectionString"));
             services.AddDbContext<DataContext>(options => options.UseSqlServer(_configuration.GetConnectionString("DefaultConnection")));

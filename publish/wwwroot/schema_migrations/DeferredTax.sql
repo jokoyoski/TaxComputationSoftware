@@ -134,6 +134,13 @@ CREATE procedure [usp_Insert_Into_DeferredTax_Brought_Foward](
 AS
 
 
+if exists(select * from DeferredTaxBroughtFoward where CompanyId=@CompanyId and YearId=@YearId)
+BEGIN
+UPDATE [dbo].[DeferredTaxBroughtFoward]
+SET CompanyId = @CompanyId, YearId = @YearId,DeferredTaxCarriedFoward=@DeferredTaxCarriedFoward
+WHERE CompanyId=@CompanyId and YearId=@YearId
+end
+else
 INSERT [dbo].[DeferredTaxBroughtFoward](
 CompanyId,
 DeferredTaxCarriedFoward,

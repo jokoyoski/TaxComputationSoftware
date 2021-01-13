@@ -6,7 +6,7 @@ import utils from "../../utils";
 import { minimumTaxViewData } from "../../apis/MinimumTax";
 import ViewModeDataTable from "../common/ViewModeDataTable";
 
-const MinimumTaxView = ({ year }) => {
+const MinimumTaxView = ({ year, toast }) => {
   const isMounted = React.useRef(false);
   const [{ companyId }] = useCompany();
   const [loading, setLoading] = React.useState();
@@ -42,10 +42,8 @@ const MinimumTaxView = ({ year }) => {
           });
         }
       } catch (error) {
-        if (isMounted.current) {
-          if (error.response) setError(error.response.data.errors[0]);
-          else setError(error.message);
-        }
+        let errorString = utils.apiErrorHandling(error, toast);
+        setError(errorString);
       } finally {
         if (isMounted.current) setLoading(false);
       }
@@ -53,7 +51,7 @@ const MinimumTaxView = ({ year }) => {
     fetchMinimumTaxViewData();
 
     return () => (isMounted.current = false);
-  }, [companyId, year]);
+  }, [companyId, toast, year]);
 
   if (error) return <p style={{ color: "#f00" }}>{error}</p>;
 

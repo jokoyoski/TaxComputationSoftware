@@ -10,7 +10,9 @@ namespace TaxComputationAPI.Interfaces
         Task<AddBalancingAdjustmentResponse> AddBalanceAdjustment(AddBalanceAdjustmentDto addBalanceAdjustmentDto);
         Task<AddBalancingAdjustmentResponse> DisplayBalancingAdjustment(int companyId, string year);
         Task<BalancingAdjustmentYearBoughtResponse> DeleteBalancingAdjustmentYearBoughtAsync(int balancingAdjustmentYearBoughtId);
-        Task<(decimal,decimal)> GetBalancingAdjustmentForIncomeTax(int companyId, string year);
+        Task<(decimal, decimal)> GetBalancingAdjustmentForIncomeTax(int companyId, string year);
+        Task<BalancingAdjustmentYearBought> GetBalancingAdjustmentYearBoughtById(int Id);
+        Task<BalancingAdjustmentYearBought> GetBalancingAdjustmentYearBoughtByAssetIdYearIdYearBought(int yearId, int assetId, int yearBought);
 
 
     }

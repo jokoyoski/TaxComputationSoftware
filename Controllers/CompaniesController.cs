@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using TaxComputationAPI.Dtos;
 using TaxComputationAPI.Helpers;
@@ -21,15 +22,19 @@ namespace TaxComputationAPI.Controllers
         private readonly ICompaniesService _companiesService;
         private readonly IMapper _mapper;
         private readonly ILogger<CompaniesController> _logger;
-        public CompaniesController(ICompaniesService companiesService, IMapper mapper, ILogger<CompaniesController> logger)
+         private readonly IMemoryCache _cache;
+        private readonly IUtilitiesService _utilitiesService;
+        public CompaniesController(ICompaniesService companiesService,IMemoryCache memoryCache,IUtilitiesService utilitiesService ,IMapper mapper, ILogger<CompaniesController> logger)
         {
             _logger = logger;
             _companiesService = companiesService;
+            _utilitiesService=utilitiesService;
+            _cache=memoryCache;
             _mapper = mapper;
         }
 
         [HttpGet("get-company/{id}", Name = "GetCompany")]
-        [Authorize]
+      [Authorize]
 
         public async Task<IActionResult> GetCompany(int id)
         {
@@ -49,12 +54,13 @@ namespace TaxComputationAPI.Controllers
 
         // [Authorize(Policy = "SystemAdmin")]   
         [HttpGet("get-companies")]
-        [Authorize]
+       [Authorize]
 
         public async Task<IActionResult> GetCompanies([FromQuery] PaginationParams pagination)
         {
             try
             {
+           
                 var companies = await _companiesService.GetCompaniesAsync(pagination);
                 var companiesToReturn = _mapper.Map<IEnumerable<CompanyForListDto>>(companies);
                 Response.AddPagination(companies.CurrentPage, companies.PageSize,
@@ -72,7 +78,7 @@ namespace TaxComputationAPI.Controllers
         }
 
         [HttpPost("add-company")]
-        //[Authorize]
+        [Authorize]
 
         // [Authorize(Roles = Constants.SYS+ "," + Constants.User)]
         public async Task<IActionResult> AddCompany(CompanyForRegisterDto companyForRegisterDto)

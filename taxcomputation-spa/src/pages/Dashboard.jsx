@@ -12,6 +12,8 @@ import Error from "../components/common/Error";
 import { useCompany } from "../store/CompanyStore";
 import { Toast } from "primereact/toast";
 import { useResources } from "../store/ResourcesStore";
+import utils from "../utils";
+import FinancialYear from "../components/common/FinancialYear";
 
 const Dashboard = () => {
   const title = constants.modules.dashboard;
@@ -20,9 +22,24 @@ const Dashboard = () => {
   const [showCompanyPicker, setShowCompanyPicker] = React.useState(true);
   const [showAddCompany, setShowAddCompany] = React.useState(false);
   const [companySelectItems, setCompanySelectItems] = React.useState(null);
+  const [showFinancialYear, setShowFinancialYear] = React.useState(false);
+  const [loading, setLoading] = React.useState(false);
   const [refreshTrialBalanceTable, setRefreshTrialBalanceTable] = React.useState(true);
   const [company, { onSelectCompany }] = useCompany();
-  const [resources, { onCompanies }] = useResources();
+  const [resources, { onCompanies, onFinancialYear }] = useResources();
+
+  React.useEffect(() => {
+    if (resources.financialYears.length < 1 && company.companyId) {
+      setLoading(true);
+      utils.fetchCompanyFinancialYear(company, onFinancialYear, toast);
+    } else {
+      setLoading(false);
+    }
+  }, [company, onFinancialYear, resources.financialYears]);
+
+  React.useEffect(() => {
+    if (resources.financialYears.length > 0) setShowFinancialYear(true);
+  }, [resources.financialYears]);
 
   React.useEffect(() => {
     if (!showAddCompany) {
@@ -50,7 +67,7 @@ const Dashboard = () => {
 
   if (error) return <Error title={title} error={error} refresh={refresh} />;
 
-  if (!resources.companies) return <PageLoader title={title} />;
+  if (!resources.companies || loading) return <PageLoader title={title} activeSidebar={!loading} />;
 
   return (
     <Layout title={title}>
@@ -62,6 +79,7 @@ const Dashboard = () => {
       {company.companyId && (
         <TrialBalanceTable
           company={company}
+          toast={toast}
           refreshTrialBalanceTable={refreshTrialBalanceTable}
           setRefreshTrialBalanceTable={setRefreshTrialBalanceTable}
         />
@@ -81,6 +99,12 @@ const Dashboard = () => {
           onSelectCompany={onSelectCompany}
           companySelectItems={companySelectItems}
           setRefreshTrialBalanceTable={setRefreshTrialBalanceTable}
+        />
+      )}
+      {showFinancialYear && !sessionStorage.getItem("year") && (
+        <FinancialYear
+          showFinancialYear={showFinancialYear}
+          setShowFinancialYear={setShowFinancialYear}
         />
       )}
       <Toast baseZIndex={1000} ref={el => (toast.current = el)} />

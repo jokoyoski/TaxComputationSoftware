@@ -25,10 +25,6 @@ const CapitalAllowance = () => {
   const [year, setYear] = React.useState(utils.currentYear());
   const [assetId, setAssetId] = React.useState();
   const [assetClassSelectItems, setAssetClassSelectItems] = React.useState([]);
-  const yearSelectItems = utils.getYears(year => ({
-    label: year.toString(),
-    value: year.toString()
-  }));
 
   React.useEffect(() => {
     if (assetClass) onFixedAssetModuleItems(assetClass);
@@ -59,7 +55,6 @@ const CapitalAllowance = () => {
         setMode={setMode}
         year={year}
         setYear={setYear}
-        yearSelectItems={yearSelectItems}
         assetId={assetId}
         setAssetId={setAssetId}
         assetClassSelectItems={assetClassSelectItems}>
@@ -67,7 +62,6 @@ const CapitalAllowance = () => {
           {
             adding: (
               <CapitalAllowanceAdding
-                yearSelectItems={yearSelectItems}
                 assetClassSelectItems={assetClassSelectItems}
                 toast={toast.current}
               />
@@ -79,7 +73,7 @@ const CapitalAllowance = () => {
             ),
             summary: (
               <ViewMode title={title} year={year}>
-                <CapitalAllowanceSummary />
+                <CapitalAllowanceSummary toast={toast.current} />
               </ViewMode>
             )
           }[mode]

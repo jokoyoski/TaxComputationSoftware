@@ -25,7 +25,7 @@ const BalancingAdjustmentView = ({ year, toast }) => {
         setError(null);
         setLoading(true);
         const data = await balancingAdjustmentViewData({ companyId, year });
-        if (isMounted.current) {
+        if (isMounted.current && data) {
           setBalancingAdjustmentData(() => {
             const tableData = [];
             data.values.balancingAdjustments.forEach((balancingAdjustment, index) => {
@@ -47,25 +47,27 @@ const BalancingAdjustmentView = ({ year, toast }) => {
                 costRow.category = (
                   <div className="p-d-flex p-jc-between p-ai-center">
                     <p>{`Cost up to ${assetYear.yearBought} YOA`}</p>
-                    <i
-                      className="pi pi-times-circle delete"
-                      style={{ fontSize: 14, marginTop: 2 }}
-                      onClick={async () => {
-                        try {
-                          const data = await balancingAdjustmentDelete(assetYear.id);
-                          if (data) {
-                            toast.show(
-                              utils.toastCallback({
-                                severity: "success",
-                                detail: data.responseDescription
-                              })
-                            );
-                            fetchBalancingAdjustmentViewData();
+                    {data.values.canDelete && (
+                      <i
+                        className="pi pi-times-circle delete"
+                        style={{ fontSize: 14, marginTop: 2 }}
+                        onClick={async () => {
+                          try {
+                            const data = await balancingAdjustmentDelete(assetYear.id);
+                            if (data) {
+                              toast.show(
+                                utils.toastCallback({
+                                  severity: "success",
+                                  detail: data.responseDescription
+                                })
+                              );
+                              fetchBalancingAdjustmentViewData();
+                            }
+                          } catch (error) {
+                            utils.apiErrorHandling(error, toast);
                           }
-                        } catch (error) {
-                          console.log(error);
-                        }
-                      }}></i>
+                        }}></i>
+                    )}
                   </div>
                 );
                 costRow.credit = utils.currencyFormatter(assetYear.cost);
@@ -112,10 +114,8 @@ const BalancingAdjustmentView = ({ year, toast }) => {
           });
         }
       } catch (error) {
-        if (isMounted.current) {
-          if (error.response) setError(error.response.data.errors[0]);
-          else setError(error.message);
-        }
+        let errorString = utils.apiErrorHandling(error, toast);
+        setError(errorString);
       } finally {
         if (isMounted.current) setLoading(false);
       }

@@ -35,12 +35,12 @@ namespace TaxComputationAPI.Controllers
 
 
         [HttpPost()]
-        [Authorize]
+        //  [Authorize]
         public async Task<IActionResult> CreateProfitandLoss(CreateProfitAndLoss profitAndLoss)
         {
             try
             {
-               profitAndLoss.YearId=14;
+
                 foreach (var j in profitAndLoss.TrialBalanceList)
                 {
                     var trialBalanceRecord = await _trialBalanceService.GetTrialBalanceById(j.TrialBalanceId);
@@ -50,9 +50,10 @@ namespace TaxComputationAPI.Controllers
                     }
                 }
                 var details = await _utilitiesServices.GetFinancialYearAsync(profitAndLoss.YearId);
-                var startDate = _memoryCache.Get<DateTime>(Constants.OpeningDate);
-                var endDate = _memoryCache.Get<DateTime>(Constants.ClosingDate);
-                var isValid = Utilities.ValidateDate(startDate, endDate, details.OpeningDate, details.ClosingDate);
+                var companyDetails = await _utilitiesServices.GetPreNotificationsAsync();
+                var companyDate = companyDetails.FirstOrDefault(x => x.CompanyId == profitAndLoss.CompanyId);
+                var isValid = Utilities.ValidateDate(companyDate.OpeningDate, companyDate.ClosingDate, details.OpeningDate, details.ClosingDate);
+
                 if (!isValid)
                 {
                     return StatusCode(400, new { errors = new[] { "The year selected has to be within the financial year!!" } });
@@ -78,7 +79,7 @@ namespace TaxComputationAPI.Controllers
         [Authorize]
         public async Task<IActionResult> GetProftAndLoss(int companyId, int yearId)
         {
-            yearId=14;
+
             if (yearId == 0)
             {
                 return StatusCode(400, new { errors = new[] { "Please select a Valid year" } });

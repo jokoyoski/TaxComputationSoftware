@@ -29,10 +29,6 @@ const ProfitAndLoss = () => {
   const [year, setYear] = React.useState(utils.currentYear());
   const [assetClassSelectItems, setAssetClassSelectItems] = React.useState([]);
   const [resources, { onTrialBalance, onProfitAndLossModuleItems }] = useResources();
-  const yearSelectItems = utils.getYears(year => ({
-    label: year.toString(),
-    value: year.toString()
-  }));
 
   React.useEffect(() => {
     if (assetClass) onProfitAndLossModuleItems(assetClass);
@@ -68,20 +64,11 @@ const ProfitAndLoss = () => {
 
   return (
     <Layout title={title}>
-      <Main
-        title={title}
-        mode={mode}
-        setMode={setMode}
-        year={year}
-        setYear={setYear}
-        yearSelectItems={yearSelectItems}>
+      <Main title={title} mode={mode} setMode={setMode} year={year} setYear={setYear}>
         {
           {
             mapping: (
               <ProfitAndLossMapping
-                year={year}
-                setYear={setYear}
-                yearSelectItems={yearSelectItems}
                 assetClassSelectItems={assetClassSelectItems}
                 tbData={tbData}
                 onTrialBalance={onTrialBalance}
@@ -91,7 +78,7 @@ const ProfitAndLoss = () => {
             ),
             view: (
               <ViewMode title={title} year={year}>
-                <ProfitAndLossView year={year} />
+                <ProfitAndLossView year={year} toast={toast.current} />
               </ViewMode>
             )
           }[mode]

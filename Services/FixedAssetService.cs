@@ -18,30 +18,27 @@ namespace TaxComputationAPI.Services
         private readonly ITrialBalanceRepository _trialBalanceRepository;
         private readonly IUtilitiesRepository _utilitiesRepository;
         private readonly ICapitalAllowanceService _capitalAllowanceService;
-        public FixedAssetService(IFixedAssetRepository fixedAssetRepository, ICapitalAllowanceService capitalAllowanceService, IUtilitiesRepository utilitiesRepository, ITrialBalanceRepository trialBalanceRepository)
+
+        private readonly ICapitalAllowanceRepository _capitalAllowanceRepository;
+        public FixedAssetService(IFixedAssetRepository fixedAssetRepository, ICapitalAllowanceRepository capitalAllowanceRepository, ICapitalAllowanceService capitalAllowanceService, IUtilitiesRepository utilitiesRepository, ITrialBalanceRepository trialBalanceRepository)
         {
             _fixedAssetRepository = fixedAssetRepository;
             _trialBalanceRepository = trialBalanceRepository;
             _utilitiesRepository = utilitiesRepository;
             _capitalAllowanceService = capitalAllowanceService;
+            _capitalAllowanceRepository = capitalAllowanceRepository;
         }
 
         public async Task<decimal> GetFixedAssetsByCompanyForDeferredTax(int companyId, int yearId)
         {
-
-
             decimal netBookValue = 0;
             List<Total> totals = new List<Total>();
             List<NetBookValue> netBookValues = new List<NetBookValue>();
-
-
             var result = await _fixedAssetRepository.GetFixedAssetsByCompany(companyId, yearId);
             if (result.FixedAssetData.Count <= 0)
             {
                 return 0;
             }
-
-
             foreach (var x in result.FixedAssetData)
             {
                 decimal costValue = await _utilitiesRepository.GetAmount(x.Id, "cost");
@@ -318,11 +315,17 @@ namespace TaxComputationAPI.Services
             await _utilitiesRepository.DeleteTrialBalancingMapping(trialbalanceId);
         }
 
+        public async Task DeleteFixedAssetById(int Id)
+        {
+        var fixedAsset = await _fixedAssetRepository.GetFixedAssetsById(Id);
+        _fixedAssetRepository.DeleteFixedAssetById(Id);
+        if (fixedAsset != null)
+        {
+                var result = _capitalAllowanceRepository.DeleteCapitalAllowanceSummaryById(fixedAsset.AssetId, fixedAsset.CompanyId);
+                _capitalAllowanceService.GetCapitalAllowanceSummaryByCompanyId(fixedAsset.CompanyId);
+        }
 
-
-
-
-
+        }
 
 
     }

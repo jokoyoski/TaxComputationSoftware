@@ -55,7 +55,7 @@ namespace TaxComputationAPI.Services
 
             var previousOpening = opening.AddYears(-1);
             var previousClosing = closing.AddYears(-1);
-            await _utilitiesRepository.AddFinancialYearAsync(new FinancialYear { Name = $"{previousOpening.ToString("dddd, dd MMMM yyyy")} - {previousClosing.ToString("dddd, dd MMMM yyyy")}", OpeningDate = previousOpening, ClosingDate = previousClosing, CompanyId = companyDetails.Id });
+            await _utilitiesRepository.AddFinancialYearAsync(new FinancialYear { Name = $"{previousOpening.Month}/{previousOpening.Year}", OpeningDate = previousOpening, ClosingDate = previousClosing, CompanyId = companyDetails.Id });
 
             var companyFinancialYearList = await _utilitiesRepository.GetFinancialCompanyAsync(companyDetails.Id);
 
@@ -70,9 +70,9 @@ namespace TaxComputationAPI.Services
 
             _notificationRepository.InsertPreNotification(new PreNotification{ CompanyId = companyDetails.Id, OpeningDate = opening, ClosingDate= closing});
 
-            _utilitiesRepository.AddFinancialYearAsync(new FinancialYear { Name = $"{opening.ToString("dddd, dd MMMM yyyy")} - {closing.ToString("dddd, dd MMMM yyyy")}", OpeningDate = opening, ClosingDate = closing, CompanyId = companyDetails.Id});
+            _utilitiesRepository.AddFinancialYearAsync(new FinancialYear { Name = $"{opening.Month}/{opening.Year}", OpeningDate = opening, ClosingDate = closing, CompanyId = companyDetails.Id});
         }
-
+     
         public async Task<Company> GetCompanyByTinAsync(string tinNumber)
         {
             return await _companiesRepository.GetCompanyByTinAsync(tinNumber);

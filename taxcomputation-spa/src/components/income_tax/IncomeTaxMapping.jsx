@@ -3,21 +3,16 @@ import { Button } from "primereact/button";
 import { Controller, useForm } from "react-hook-form";
 import TrialBalanceMappingTable from "../common/TrialBalanceMappingTable";
 import utils from "../../utils";
-import InputController from "../controllers/InputController";
 import DropdownController from "../controllers/DropdownController";
 import { incomeTaxMapping } from "../../apis/IncomeTax";
 import constants from "../../constants";
 import { useCompany } from "../../store/CompanyStore";
+import { useResources } from "../../store/ResourcesStore";
 
-const IncomeTaxMapping = ({
-  tbData,
-  yearSelectItems,
-  onTrialBalance,
-  trialBalanceRefresh,
-  toast
-}) => {
+const IncomeTaxMapping = ({ tbData, onTrialBalance, trialBalanceRefresh, toast }) => {
   const { errors, handleSubmit, control } = useForm();
   const [{ companyId }] = useCompany();
+  const [{ financialYears }] = useResources();
   const [loading, setLoading] = React.useState(false);
   const [init, setInit] = React.useState(true);
   const [selectedAccounts, setSelectedAccounts] = React.useState([]);
@@ -39,30 +34,7 @@ const IncomeTaxMapping = ({
 
   const onSubmit = async data => {
     if (loading) return;
-    const { typeId, yearId, lossBroughtFoward, unrelievedCapitalAllowanceBroughtFoward } = data;
-
-    if (lossBroughtFoward !== "" && isNaN(lossBroughtFoward)) {
-      toast.show(
-        utils.toastCallback({
-          severity: "error",
-          detail: "Loss B/F is not a numeric value"
-        })
-      );
-      return;
-    }
-
-    if (
-      unrelievedCapitalAllowanceBroughtFoward !== "" &&
-      isNaN(unrelievedCapitalAllowanceBroughtFoward)
-    ) {
-      toast.show(
-        utils.toastCallback({
-          severity: "error",
-          detail: "Unrelieved Cap Alw B/F is not a numeric value"
-        })
-      );
-      return;
-    }
+    const { typeId, yearId } = data;
 
     if (selectedAccounts.length === 0) {
       toast.show(
@@ -80,11 +52,6 @@ const IncomeTaxMapping = ({
       const response = await incomeTaxMapping({
         typeId,
         yearId,
-        lossBroughtFoward: lossBroughtFoward === "" ? 0 : lossBroughtFoward,
-        unrelievedCapitalAllowanceBroughtFoward:
-          unrelievedCapitalAllowanceBroughtFoward === ""
-            ? 0
-            : unrelievedCapitalAllowanceBroughtFoward,
         incomeList: selectedAccounts,
         companyId
       });
@@ -117,7 +84,7 @@ const IncomeTaxMapping = ({
             required
             dropdownOptions={typeItems}
             errorMessage="Type is required"
-            width={200}
+            width={250}
           />
           <DropdownController
             Controller={Controller}
@@ -126,37 +93,19 @@ const IncomeTaxMapping = ({
             controllerName="yearId"
             label="Year"
             required
-            dropdownOptions={yearSelectItems}
+            dropdownOptions={financialYears}
             errorMessage="Year is required"
-            width={200}
+            width={250}
           />
-          <InputController
-            Controller={Controller}
-            control={control}
-            errors={errors}
-            controllerName="lossBroughtFoward"
-            label="Loss B/F"
-            required={false}
-            width={200}
-          />
-          <InputController
-            Controller={Controller}
-            control={control}
-            errors={errors}
-            controllerName="unrelievedCapitalAllowanceBroughtFoward"
-            label="Unrelieved Cap Alw B/F"
-            required={false}
-            width={200}
-          />
-        </div>
-        <div>
-          <p style={{ color: "transparent", marginTop: 0, marginBottom: 5 }}>Submit</p>
-          <Button
-            type="submit"
-            label={!loading ? "Submit" : null}
-            icon={loading ? "pi pi-spin pi-spinner" : null}
-            style={{ width: 200 }}
-          />
+          <div>
+            <p style={{ color: "transparent", marginTop: 0, marginBottom: 5 }}>Submit</p>
+            <Button
+              type="submit"
+              label={!loading ? "Submit" : null}
+              icon={loading ? "pi pi-spin pi-spinner" : null}
+              style={{ width: 250 }}
+            />
+          </div>
         </div>
       </form>
       <TrialBalanceMappingTable

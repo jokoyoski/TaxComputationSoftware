@@ -28,7 +28,8 @@ export default {
     it_levy: "/it_levy",
     capital_allowance: "/capital_allowance",
     investment_allowance: "/investment_allowance",
-    balancing_adjustment: "/balancing_adjustment"
+    balancing_adjustment: "/balancing_adjustment",
+    logout: "/logout"
   },
   nonMappedModules: ["Minimum Tax", "I.T Levy"],
   mappingCode: {

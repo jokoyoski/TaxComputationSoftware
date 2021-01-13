@@ -50,13 +50,7 @@ const BalancingAdjustment = () => {
 
   return (
     <Layout title={title}>
-      <Main
-        title={title}
-        mode={mode}
-        setMode={setMode}
-        year={year}
-        setYear={setYear}
-        yearSelectItems={yearSelectItems}>
+      <Main title={title} mode={mode} setMode={setMode} year={year} setYear={setYear}>
         {
           {
             adding: (

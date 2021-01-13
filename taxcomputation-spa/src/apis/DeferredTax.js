@@ -2,7 +2,6 @@ import axios from "axios";
 
 export const deferredTaxMapping = async ({
   fairValueGainId,
-  deferredTaxBroughtFoward,
   trialBalanceList,
   companyId,
   yearId
@@ -10,7 +9,6 @@ export const deferredTaxMapping = async ({
   try {
     return await axios.post("/api/DeferredTax", {
       fairValueGainId,
-      deferredTaxBroughtFoward,
       trialBalanceList,
       companyId,
       yearId
@@ -20,9 +18,11 @@ export const deferredTaxMapping = async ({
   }
 };
 
-export const deferredTaxViewData = async ({ companyId, year }) => {
+export const deferredTaxViewData = async ({ companyId, year, isBringDeferredTaxFoward }) => {
   try {
-    const { data } = await axios.get(`/api/DeferredTax?companyId=${companyId}&year=${year}`);
+    const { data } = await axios.get(
+      `/api/DeferredTax?companyId=${companyId}&year=${year}&isBringDeferredTaxFoward=${isBringDeferredTaxFoward}`
+    );
     return data;
   } catch (error) {
     throw error;

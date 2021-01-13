@@ -1,4 +1,5 @@
-/*using System.Collections.Generic;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using TaxComputationAPI.Dtos;
 using TaxComputationAPI.Helpers;
@@ -12,22 +13,20 @@ namespace TaxComputationSoftware.Services
     public class DeferredTaxService : IDeferredTaxService
     {
 
-        private readonly IIncomeTaxRepository _incomeTaxRepository;
+        private readonly IIncomeTaxService _incomeTaxService;
 
         private readonly IDeferredTaxRepository _deferredTaxRepository;
 
         private readonly ICapitalAllowanceService _capitalAllowanceService;
-
         private readonly ITrialBalanceRepository _trialBalanceRepository;
-
         private readonly IUtilitiesRepository _utilitiesRepository;
         private readonly IFixedAssetService _fixedAssetService;
 
 
 
-        public DeferredTaxService(IIncomeTaxRepository incomeTaxRepository, ICapitalAllowanceService capitalAllowanceService, ITrialBalanceRepository trialBalanceRepository, IFixedAssetService fixedAssetService, IDeferredTaxRepository deferredTaxRepository, IUtilitiesRepository utilitiesRepository)
+        public DeferredTaxService(IIncomeTaxService incomeTaxService, ICapitalAllowanceService capitalAllowanceService, ITrialBalanceRepository trialBalanceRepository, IFixedAssetService fixedAssetService, IDeferredTaxRepository deferredTaxRepository, IUtilitiesRepository utilitiesRepository)
         {
-            _incomeTaxRepository = incomeTaxRepository;
+            _incomeTaxService = incomeTaxService;
             _fixedAssetService = fixedAssetService;
             _deferredTaxRepository = deferredTaxRepository;
             _utilitiesRepository = utilitiesRepository;
@@ -45,27 +44,31 @@ namespace TaxComputationSoftware.Services
                 fairValueGain.TrialBalanceId = item.TrialBalanceId;
                 fairValueGain.CompanyId = deferredTax.CompanyId;
 
-                string trialBalanceValue = $"MAPPED TO [DEFERRED TAX] Allowable Income";
+                string trialBalanceValue = $"MAPPED TO [DEFERRED TAX] Fair Value Gain";
                 await _trialBalanceRepository.UpdateTrialBalance(item.TrialBalanceId, trialBalanceValue, false);
                 await _deferredTaxRepository.CreateFairValueGain(fairValueGain);
 
             }
-           // if (!deferredTax.IsStarted)
-          //  {
-              //  _deferredTaxRepository.CreateDeferredTaxBroughtFoward(deferredTax.CompanyId, deferredTax.DeferredTaxBroughtFoward);
+            // if (!deferredTax.IsStarted)
+            //  {
+            //  _deferredTaxRepository.CreateDeferredTaxBroughtFoward(deferredTax.CompanyId, deferredTax.DeferredTaxBroughtFoward);
 
-           // }
+            // }
 
 
         }
 
         public async Task<List<DeferredTaxDto>> GetDeferredTax(int companyId, int yearId, bool IsBringDeferredTaxFoward)
         {
+
+            var financialYear = await _utilitiesRepository.GetFinancialCompanyAsync(companyId);
+            var financialYearRecord = financialYear.Where(x => x.Id < yearId).FirstOrDefault();
+            var record = await _deferredTaxRepository.GetDeferredTaxFowarByCompanyId(companyId);
+            var broughtFoward = record.ToList().Where(x => x.YearId == financialYearRecord.Id).OrderByDescending(x=>x.Id).FirstOrDefault();
             var netbookValue = await _fixedAssetService.GetFixedAssetsByCompanyForDeferredTax(companyId, yearId);
             var capitalAllowanceSummary = await _capitalAllowanceService.GetCapitalAllowanceSummaryForDeferredTax(companyId);
-            var unrelievedCapitalAllowanceCf = await _incomeTaxRepository.GetBroughtFowardByCompanyId(companyId);
+            var unrelievedCapitalAllowanceCf = await _incomeTaxService.GetIncomeTaxForDeferred(companyId,yearId);
             var fairValueGains = await _deferredTaxRepository.GetFairValueGainByCompanyIdAndYear(companyId, yearId);
-            var broughtFoward = await _deferredTaxRepository.GetDeferredTaxFowarByCompanyId(companyId);
             decimal deferredTaxCf = 0;
             decimal lessTotal = 0;
             if (broughtFoward == null)
@@ -84,7 +87,7 @@ namespace TaxComputationSoftware.Services
             decimal taxLiabilityAsset = 0;
             decimal lossCf = 0;
             bool isTaxable = false;
-           
+
             var deferredTaxDto = new List<DeferredTaxDto>();
             deferredTaxDto.Add(new DeferredTaxDto
             {
@@ -124,14 +127,14 @@ namespace TaxComputationSoftware.Services
             deferredTaxDto.Add(new DeferredTaxDto
             {
                 Description = "Unutilised Capital Allowances c/f",
-                ColumnOne = $"₦{Utilities.FormatAmount(unrelievedCapitalAllowanceCf.UnRelievedCf)}",
+                ColumnOne = $"₦{Utilities.FormatAmount(unrelievedCapitalAllowanceCf.Item2)}",
                 ColumnTwo = "",
                 CanBolden = true
 
             });
 
-            lossCf = unrelievedCapitalAllowanceCf.LossCf < 0 ? unrelievedCapitalAllowanceCf.LossCf : 0;
-            lessTotal = lossCf + unrelievedCapitalAllowanceCf.UnRelievedCf + capitalAllowanceSummary;
+            lossCf = unrelievedCapitalAllowanceCf.Item1 < 0 ? unrelievedCapitalAllowanceCf.Item1 : 0;
+            lessTotal = lossCf + unrelievedCapitalAllowanceCf.Item2 + capitalAllowanceSummary;
 
             deferredTaxDto.Add(new DeferredTaxDto
             {
@@ -262,7 +265,7 @@ namespace TaxComputationSoftware.Services
             {
                 Description = "Deferred Tax B/F",
                 ColumnOne = "",
-                ColumnTwo = $"₦{Utilities.FormatAmount(broughtFoward.DeferredTaxBroughtFoward)}",
+                ColumnTwo = $"₦{Utilities.FormatAmount(broughtFoward.DeferredTaxCarriedFoward)}",
                 CanBolden = true
 
             });
@@ -271,22 +274,20 @@ namespace TaxComputationSoftware.Services
             {
                 Description = "Deferred Tax Movement",
                 ColumnOne = "",
-                ColumnTwo = $"₦{Utilities.FormatAmount(deferredTaxCf - broughtFoward.DeferredTaxBroughtFoward)}",
+                ColumnTwo = $"₦{Utilities.FormatAmount(deferredTaxCf - broughtFoward.DeferredTaxCarriedFoward)}",
                 CanBolden = true
 
-            }); await _deferredTaxRepository.UpdateDeferredTaxBroughtFowardByDeferredTax(companyId, deferredTaxCf);
+            }); 
+            if(IsBringDeferredTaxFoward){
+                _deferredTaxRepository.CreateDeferredTaxBroughtFoward(companyId,deferredTaxCf,yearId);
+            }
+            //await _deferredTaxRepository.UpdateDeferredTaxBroughtFowardByDeferredTax(companyId, deferredTaxCf);
 
             return deferredTaxDto;
 
 
         }
-        public async Task<DeferredTaxFoward> GetBroughtFoward(int companyId)
-        {
-
-            return await _deferredTaxRepository.GetDeferredTaxFowarByCompanyId(companyId);
-
-        }
-
+       
 
         public int GetSelectionType(TrialBalanceValue incomeTax)
         {
@@ -306,4 +307,4 @@ namespace TaxComputationSoftware.Services
 
         }
     }
-} */
+}

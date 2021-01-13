@@ -31,7 +31,7 @@ namespace TaxComputationAPI.Controllers
         [Authorize]
         public async Task<IActionResult> GetMinimumTax(int companyId, int yearId)
         {
-         yearId=14;
+        
             if (yearId == 0)
             {
                 return StatusCode(400, new { errors = new[] { "Please select a Valid year" } });
@@ -44,7 +44,7 @@ namespace TaxComputationAPI.Controllers
                 {
                     var turnOver = decimal.Parse(value.Revenue) + decimal.Parse(value.OtherIncome);
                     var percent = percentage * turnOver;
-                    return Ok(new { turnOver = turnOver, fivePercentTurnOver = percent });
+                    return Ok(new { turnOver = $"₦{Utilities.FormatAmount(turnOver)}", fivePercentTurnOver =  $"₦{Utilities.FormatAmount(percent)}" });
                 }
                 else
                 {

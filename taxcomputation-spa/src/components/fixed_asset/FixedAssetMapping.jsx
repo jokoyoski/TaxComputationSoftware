@@ -8,11 +8,9 @@ import { fixedAssetMapping } from "../../apis/FixedAsset";
 import TrialBalanceMappingTable from "../common/TrialBalanceMappingTable";
 import DropdownController from "../controllers/DropdownController";
 import InputController from "../controllers/InputController";
+import { useResources } from "../../store/ResourcesStore";
 
 const FixedAssetMapping = ({
-  year,
-  setYear,
-  yearSelectItems,
   assetClassSelectItems,
   tbData,
   onTrialBalance,
@@ -23,6 +21,7 @@ const FixedAssetMapping = ({
   const depreciation = "depreciation";
   const { errors, handleSubmit, control } = useForm();
   const [{ companyId }] = useCompany();
+  const [{ financialYears }] = useResources();
   const [closingBalance, setClosingBalance] = React.useState();
   const [loading, setLoading] = React.useState(false);
   const [init, setInit] = React.useState(true);
@@ -176,10 +175,8 @@ const FixedAssetMapping = ({
             controllerName="year"
             label="Year"
             required
-            dropdownOptions={yearSelectItems}
-            onChangeCallback={setYear}
+            dropdownOptions={financialYears}
             errorMessage="Year is required"
-            defaultValue={year}
           />
           <InputController
             Controller={Controller}
