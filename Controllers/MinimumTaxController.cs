@@ -44,7 +44,7 @@ namespace TaxComputationAPI.Controllers
                 {
                     var turnOver = decimal.Parse(value.Revenue) + decimal.Parse(value.OtherIncome);
                     var percent = percentage * turnOver;
-                    return Ok(new { turnOver = $"₦{Utilities.FormatAmount(turnOver)}", fivePercentTurnOver =  $"₦{Utilities.FormatAmount(percent)}" });
+                    return Ok(new { turnOver = turnOver, fivePercentTurnOver =  percent });
                 }
                 else
                 {
