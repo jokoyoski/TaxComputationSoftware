@@ -706,7 +706,7 @@ namespace TaxComputationSoftware.Services
                 isAssessibleProfit = true;
                 incomeListDto.Add(new IncomeTaxDto
                 {
-                    Description = "Accessible Gain",
+                    Description = "Asessable Gain",
                     ColumnOne = "",
                     ColumnTwo = $"₦{Utilities.FormatAmount(accessibleType)}",
                     CanBolden = true,
