@@ -294,6 +294,7 @@ select  TaxYear,OpeningResidue,Addition,Disposal,Initial,Annual,Total,ClosingRes
 GO
 
 --------------------------------------- STORED PROCEDURE TO  DELETE CAPITALALLOWANCE BY ASSETID YEARID COMPANYID-----------------------------------------
+--------------------------------------- STORED PROCEDURE TO  DELETE CAPITALALLOWANCE BY ASSETID YEARID COMPANYID-----------------------------------------
 IF OBJECT_ID('[dbo].[usp_Delete_Capital_Allowance_By_Company_Id_YearId_Asset_Id]') IS nOT NULL
 BEGIN
 DROP procedure [dbo].[usp_Delete_Capital_Allowance_By_Company_Id_YearId_Asset_Id]
@@ -305,10 +306,15 @@ CREATE procedure [dbo].[usp_Delete_Capital_Allowance_By_Company_Id_YearId_Asset_
 @CompanyId int
 )
 AS
+declare @FixedAssetId as int
+select @FixedAssetId=Id from [dbo].[FixedAsset] where AssetId=@AssetId and YearId=@Year and CompanyId=@CompanyId
+UPDATE [dbo].[TrialBalance] SET MappedTo = null,IsCheck=0,IsRemoved=0 WHERE Id IN (SELECT TrialBalanceId FROM [dbo].[TrialBalanceMapping] where ModuleId=@FixedAssetId);
+delete from [dbo].[TrialBalanceMapping] where ModuleId=@FixedAssetId
+Delete from [dbo].[BalancingAdjustmentYearBought] where AssestId=@AssetId and YearBought=@Year and CompanyId=@CompanyId
 Delete from [dbo].[ArchivedCapitalAllowance] where AssetId=@AssetId and TaxYear=@Year and CompanyId=@CompanyId
-Delete from [dbo].CapitalAllowance where AssetId=@AssetId and TaxYear=@Year and CompanyId=@CompanyId
+Delete from [dbo].[CapitalAllowance] where AssetId=@AssetId and TaxYear=@Year and CompanyId=@CompanyId
+Delete from [dbo].[FixedAsset] where AssetId=@AssetId and YearId=@Year and CompanyId=@CompanyId
 GO
-
 
 --------------------------------------- STORED PROCEDURE TO  CREATE CAPITAL ALLOWANCE SUMMARY-----------------------------------------
 

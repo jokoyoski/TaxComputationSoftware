@@ -38,7 +38,7 @@ namespace TaxComputationSoftware.Services
 
         public async Task<(decimal, decimal)> GetIncomeTaxForDeferred(int companyId, int yearId)
         {
-            decimal totalAllowable = 0;
+             decimal totalAllowable = 0;
             decimal totalDisallowable = 0;
             // decimal profitAndLossPerAccount = 0;
             decimal capitalAllowanceClaimed = 0;
@@ -50,16 +50,25 @@ namespace TaxComputationSoftware.Services
             decimal capitalAllowanceOfTheYear = 0;
             var value = await _balancingAdjustmentService.GetBalancingAdjustmentForIncomeTax(companyId, yearId.ToString());
             var financialYear = await _utilitiesRepository.GetFinancialCompanyAsync(companyId);
-            var financialYearRecord = financialYear.Where(x => x.Id < yearId).FirstOrDefault();
+            var financialYearRecords = financialYear.Where(x => x.Id < yearId);
+            var financialYearRecord=financialYearRecords.OrderByDescending(x=>x.Id).FirstOrDefault();
+         //   var financialYearRecord = financialYear.Where(x => x.Id < yearId).FirstOrDefault();
             var record = await _incomeTaxRepository.GetBroughtFowardByCompanyId(companyId);
             var broughtFoward = record.ToList().Where(x => x.YearId == financialYearRecord.Id).FirstOrDefault();
             var incomeListDto = new List<IncomeTaxDto>();
             var profitOrLoss = await _profitAndLossService.GetProfitAndLossForIncomeTax(companyId, yearId);
             decimal unrelievedCf = 0;
+            //  profitAndLossPerAccount = profitOrLoss;
+            decimal taxableProfit = 0;
+            decimal incomeTaxPayablePercent = (decimal)30 / 100;
+            decimal educationTaxAssesibleProfit = (decimal)2 / 100;
+            decimal percentage = (decimal)1 / 100;     //annual percentage rate
             decimal twothird = (decimal)662 / 3;
             twothird = Math.Round(twothird, 1);
             bool isAssessibleProfit = false;
             decimal compareLoss = 0;
+            decimal iTLevy = 0;
+
             var allowableDisAllowable = await _incomeTaxRepository.GetAllowableDisAllowableByCompanyIdYearIdAllowable(companyId, yearId, 0);
             int i = 0;
             foreach (var item in allowableDisAllowable)
