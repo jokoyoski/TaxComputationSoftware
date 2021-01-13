@@ -1,17 +1,17 @@
 import React from "react";
 import { Column } from "primereact/column";
 import { useCompany } from "../../store/CompanyStore";
-import Loader from "../common/Loader";
 import { capitalAllowanceSummaryData } from "../../apis/CapitalAllowance";
 import ViewModeDataTable from "../common/ViewModeDataTable";
 import utils from "../../utils";
+import ViewLoader from "../common/ViewLoader";
 
 const CapitalAllowanceSummary = ({ toast }) => {
   const isMounted = React.useRef(false);
   const [{ companyId }] = useCompany();
   const [loading, setLoading] = React.useState();
   const [error, setError] = React.useState();
-  const [capitalAllowanceSummary, setCapitalAllowanceSummary] = React.useState([]);
+  const [capitalAllowanceSummary, setCapitalAllowanceSummary] = React.useState();
 
   React.useEffect(() => {
     if (!companyId) return;
@@ -57,33 +57,36 @@ const CapitalAllowanceSummary = ({ toast }) => {
 
   if (error) return <p style={{ color: "#f00" }}>{error}</p>;
 
-  if (loading) return <Loader />;
-
-  if (capitalAllowanceSummary.length === 0)
+  if (capitalAllowanceSummary?.length === 0)
     return (
       <p style={{ color: "#f00" }}>Currently, no data for the selected year for this company</p>
     );
 
   return (
-    <ViewModeDataTable value={capitalAllowanceSummary} width={1200} scrollable>
-      <Column field="description" header="Description" headerStyle={{ width: "10em" }}></Column>
-      <Column
-        field="openingResidue"
-        header="Opening Residue"
-        headerStyle={{ width: "10em" }}></Column>
-      <Column field="addition" header="Addition" headerStyle={{ width: "10em" }}></Column>
-      <Column
-        field="disposalOrTransfer"
-        header="Disposal/Transfer"
-        headerStyle={{ width: "10em" }}></Column>
-      <Column field="initial" header="Initial" headerStyle={{ width: "10em" }}></Column>
-      <Column field="annual" header="Annual" headerStyle={{ width: "10em" }}></Column>
-      <Column field="total" header="Total" headerStyle={{ width: "10em" }}></Column>
-      <Column
-        field="closingResidue"
-        header="Closing Residue"
-        headerStyle={{ width: "10em" }}></Column>
-    </ViewModeDataTable>
+    <>
+      {capitalAllowanceSummary && (
+        <ViewModeDataTable value={capitalAllowanceSummary} width={1200} scrollable>
+          <Column field="description" header="Description" headerStyle={{ width: "10em" }}></Column>
+          <Column
+            field="openingResidue"
+            header="Opening Residue"
+            headerStyle={{ width: "10em" }}></Column>
+          <Column field="addition" header="Addition" headerStyle={{ width: "10em" }}></Column>
+          <Column
+            field="disposalOrTransfer"
+            header="Disposal/Transfer"
+            headerStyle={{ width: "10em" }}></Column>
+          <Column field="initial" header="Initial" headerStyle={{ width: "10em" }}></Column>
+          <Column field="annual" header="Annual" headerStyle={{ width: "10em" }}></Column>
+          <Column field="total" header="Total" headerStyle={{ width: "10em" }}></Column>
+          <Column
+            field="closingResidue"
+            header="Closing Residue"
+            headerStyle={{ width: "10em" }}></Column>
+        </ViewModeDataTable>
+      )}
+      {loading && <ViewLoader />}
+    </>
   );
 };
 

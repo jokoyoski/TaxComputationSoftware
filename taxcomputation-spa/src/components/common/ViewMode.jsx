@@ -25,7 +25,7 @@ const ViewMode = ({ title, year, children }) => {
   };
 
   return (
-    <>
+    <div id="view-container" style={{ position: "relative" }}>
       <div style={{ textAlign: "left", marginBottom: 20 }}>
         <Button
           type="button"
@@ -51,7 +51,7 @@ const ViewMode = ({ title, year, children }) => {
         />
         {children}
       </div>
-    </>
+    </div>
   );
 };
 

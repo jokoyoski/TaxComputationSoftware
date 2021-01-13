@@ -6,15 +6,15 @@ import {
   balancingAdjustmentViewData
 } from "../../apis/BalancingAdjustment";
 import utils from "../../utils";
-import Loader from "../common/Loader";
 import ViewModeDataTable from "../common/ViewModeDataTable";
+import ViewLoader from "../common/ViewLoader";
 
 const BalancingAdjustmentView = ({ year, toast }) => {
   const isMounted = React.useRef(false);
   const [{ companyId }] = useCompany();
   const [loading, setLoading] = React.useState();
   const [error, setError] = React.useState();
-  const [balancingAdjustmentData, setBalancingAdjustmentData] = React.useState([]);
+  const [balancingAdjustmentData, setBalancingAdjustmentData] = React.useState();
 
   React.useEffect(() => {
     if (!companyId) return;
@@ -53,6 +53,7 @@ const BalancingAdjustmentView = ({ year, toast }) => {
                         style={{ fontSize: 14, marginTop: 2 }}
                         onClick={async () => {
                           try {
+                            setLoading(true);
                             const data = await balancingAdjustmentDelete(assetYear.id);
                             if (data) {
                               toast.show(
@@ -65,6 +66,8 @@ const BalancingAdjustmentView = ({ year, toast }) => {
                             }
                           } catch (error) {
                             utils.apiErrorHandling(error, toast);
+                          } finally {
+                            setLoading(false);
                           }
                         }}></i>
                     )}
@@ -127,23 +130,26 @@ const BalancingAdjustmentView = ({ year, toast }) => {
 
   if (error) return <p style={{ color: "#f00" }}>{error}</p>;
 
-  if (loading) return <Loader />;
-
-  if (balancingAdjustmentData?.length === 0 || balancingAdjustmentData === undefined)
+  if (balancingAdjustmentData?.length === 0)
     return (
       <p style={{ color: "#f00" }}>Currently, no data for the selected year for this company</p>
     );
 
   return (
-    <ViewModeDataTable value={balancingAdjustmentData}>
-      <Column field="category" header=""></Column>
-      <Column field="credit" header=""></Column>
-      <Column field="balancingAllowance" header="Balancing Allowance"></Column>
-      <Column field="balancingCharge" header="Balancing Charge"></Column>
-      <Column field="cost" header="Cost"></Column>
-      <Column field="salesProceed" header="Sales Proceed"></Column>
-      <Column field="twdv" header="TWDV"></Column>
-    </ViewModeDataTable>
+    <>
+      {balancingAdjustmentData && (
+        <ViewModeDataTable value={balancingAdjustmentData}>
+          <Column field="category" header=""></Column>
+          <Column field="credit" header=""></Column>
+          <Column field="balancingAllowance" header="Balancing Allowance"></Column>
+          <Column field="balancingCharge" header="Balancing Charge"></Column>
+          <Column field="cost" header="Cost"></Column>
+          <Column field="salesProceed" header="Sales Proceed"></Column>
+          <Column field="twdv" header="TWDV"></Column>
+        </ViewModeDataTable>
+      )}
+      {loading && <ViewLoader />}
+    </>
   );
 };
 

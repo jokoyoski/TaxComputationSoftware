@@ -1,17 +1,17 @@
 import React from "react";
 import { Column } from "primereact/column";
 import { useCompany } from "../../store/CompanyStore";
-import Loader from "../common/Loader";
 import { deferredTaxViewData, deferredTaxDelete } from "../../apis/DeferredTax";
 import utils from "../../utils";
 import ViewModeDataTable from "../common/ViewModeDataTable";
+import ViewLoader from "../common/ViewLoader";
 
 const DeferredTaxView = ({ year, toast, isBringDeferredTaxFoward }) => {
   const isMounted = React.useRef(false);
   const [{ companyId }] = useCompany();
   const [loading, setLoading] = React.useState();
   const [error, setError] = React.useState();
-  const [deferredTaxData, setDeferredTaxData] = React.useState([]);
+  const [deferredTaxData, setDeferredTaxData] = React.useState();
 
   React.useEffect(() => {
     if (!companyId) return;
@@ -35,6 +35,7 @@ const DeferredTaxView = ({ year, toast, isBringDeferredTaxFoward }) => {
                       style={{ fontSize: 14, marginTop: 2 }}
                       onClick={async () => {
                         try {
+                          setLoading(true);
                           const data = await deferredTaxDelete(item.id);
                           if (data) {
                             toast.show(
@@ -47,6 +48,8 @@ const DeferredTaxView = ({ year, toast, isBringDeferredTaxFoward }) => {
                           }
                         } catch (error) {
                           utils.apiErrorHandling(error, toast);
+                        } finally {
+                          setLoading(false);
                         }
                       }}></i>
                   )}
@@ -71,14 +74,17 @@ const DeferredTaxView = ({ year, toast, isBringDeferredTaxFoward }) => {
 
   if (error) return <p style={{ color: "#f00" }}>{error}</p>;
 
-  if (loading) return <Loader />;
-
   return (
-    <ViewModeDataTable value={deferredTaxData}>
-      <Column field="description" header="Description"></Column>
-      <Column field="columnOne" header="₦"></Column>
-      <Column field="columnTwo" header="₦"></Column>
-    </ViewModeDataTable>
+    <>
+      {deferredTaxData && (
+        <ViewModeDataTable value={deferredTaxData}>
+          <Column field="description" header="Description"></Column>
+          <Column field="columnOne" header="₦"></Column>
+          <Column field="columnTwo" header="₦"></Column>
+        </ViewModeDataTable>
+      )}
+      {loading && <ViewLoader />}
+    </>
   );
 };
 

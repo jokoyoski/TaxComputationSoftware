@@ -1,17 +1,17 @@
 import React from "react";
 import { Column } from "primereact/column";
 import { useCompany } from "../../store/CompanyStore";
-import Loader from "../common/Loader";
 import utils from "../../utils";
 import { minimumTaxViewData } from "../../apis/MinimumTax";
 import ViewModeDataTable from "../common/ViewModeDataTable";
+import ViewLoader from "../common/ViewLoader";
 
 const MinimumTaxView = ({ year, toast }) => {
   const isMounted = React.useRef(false);
   const [{ companyId }] = useCompany();
   const [loading, setLoading] = React.useState();
   const [error, setError] = React.useState();
-  const [minimumTaxData, setMinimumTaxData] = React.useState([]);
+  const [minimumTaxData, setMinimumTaxData] = React.useState();
 
   React.useEffect(() => {
     if (!companyId) return;
@@ -55,13 +55,16 @@ const MinimumTaxView = ({ year, toast }) => {
 
   if (error) return <p style={{ color: "#f00" }}>{error}</p>;
 
-  if (loading) return <Loader />;
-
   return (
-    <ViewModeDataTable value={minimumTaxData}>
-      <Column field="category" header=""></Column>
-      <Column field="credit" header="₦"></Column>
-    </ViewModeDataTable>
+    <>
+      {minimumTaxData && (
+        <ViewModeDataTable value={minimumTaxData}>
+          <Column field="category" header=""></Column>
+          <Column field="credit" header="₦"></Column>
+        </ViewModeDataTable>
+      )}
+      {loading && <ViewLoader />}
+    </>
   );
 };
 

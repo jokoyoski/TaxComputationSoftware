@@ -2,9 +2,9 @@ import React from "react";
 import { Column } from "primereact/column";
 import { fixedAssetDelete, fixedAssetViewData } from "../../apis/FixedAsset";
 import { useCompany } from "../../store/CompanyStore";
-import Loader from "../common/Loader";
 import ViewModeDataTable from "../common/ViewModeDataTable";
 import utils from "../../utils";
+import ViewLoader from "../common/ViewLoader";
 
 const FixedAssetView = ({ year, toast }) => {
   const isMounted = React.useRef(false);
@@ -83,7 +83,6 @@ const FixedAssetView = ({ year, toast }) => {
         setFixedAssetApiData(data);
         setFixedAssetData(state => {
           const newState = Array.from(state);
-          console.log(1, data);
           data.fixedAssetData.forEach((d, index) => {
             newState.forEach(s => {
               switch (s.key) {
@@ -145,7 +144,7 @@ const FixedAssetView = ({ year, toast }) => {
       let errorString = utils.apiErrorHandling(error, toast);
       setError(errorString);
     } finally {
-      if (isMounted.current) setLoading(false);
+      // if (isMounted.current) setLoading(false);
     }
   }, [companyId, toast, year]);
 
@@ -161,46 +160,52 @@ const FixedAssetView = ({ year, toast }) => {
 
   if (error) return <p style={{ color: "#f00" }}>{error}</p>;
 
-  if (loading) return <Loader />;
-
   return (
-    <ViewModeDataTable value={fixedAssetData}>
-      <Column field="category" header=""></Column>
-      {fixedAssetApiData &&
-        fixedAssetApiData.fixedAssetData.map(d => (
-          <Column
-            key={d.fixedAssetName}
-            field={d.fixedAssetName}
-            header={
-              <div className="p-d-flex p-jc-between p-ai-center">
-                <p>{`${d.fixedAssetName}`}</p>
-                {fixedAssetApiData.canDelete && (
-                  <i
-                    className="pi pi-times-circle delete"
-                    style={{ fontSize: 14, marginTop: 2 }}
-                    onClick={async () => {
-                      try {
-                        const data = await fixedAssetDelete(d.id);
-                        if (data) {
-                          toast.show(
-                            utils.toastCallback({
-                              severity: "success",
-                              detail: data.responseDescription
-                            })
-                          );
-                          fetchFixedAssetViewData();
-                        }
-                      } catch (error) {
-                        utils.apiErrorHandling(error, toast);
-                      }
-                    }}></i>
-                )}
-              </div>
-            }
-          />
-        ))}
-      <Column field="total" header="Total"></Column>
-    </ViewModeDataTable>
+    <>
+      {fixedAssetApiData && (
+        <ViewModeDataTable value={fixedAssetData}>
+          <Column field="category" header=""></Column>
+          {fixedAssetApiData &&
+            fixedAssetApiData.fixedAssetData.map(d => (
+              <Column
+                key={d.fixedAssetName}
+                field={d.fixedAssetName}
+                header={
+                  <div className="p-d-flex p-jc-between p-ai-center">
+                    <p>{`${d.fixedAssetName}`}</p>
+                    {fixedAssetApiData.canDelete && (
+                      <i
+                        className="pi pi-times-circle delete"
+                        style={{ fontSize: 14, marginTop: 2 }}
+                        onClick={async () => {
+                          try {
+                            setLoading(true);
+                            const data = await fixedAssetDelete(d.id);
+                            if (data) {
+                              toast.show(
+                                utils.toastCallback({
+                                  severity: "success",
+                                  detail: data
+                                })
+                              );
+                              fetchFixedAssetViewData();
+                            }
+                          } catch (error) {
+                            utils.apiErrorHandling(error, toast);
+                          } finally {
+                            setLoading(false);
+                          }
+                        }}></i>
+                    )}
+                  </div>
+                }
+              />
+            ))}
+          <Column field="total" header="Total"></Column>
+        </ViewModeDataTable>
+      )}
+      {loading && <ViewLoader />}
+    </>
   );
 };
 
