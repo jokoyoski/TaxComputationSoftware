@@ -112,6 +112,8 @@ namespace TaxComputationAPI
 
             });
 
+            services.AddHostedService<TimedHostedService>();
+
             services.AddHostedService<BackgroundJobService>();
 
             services.AddScoped<IUsersRepository, UsersRepository>();

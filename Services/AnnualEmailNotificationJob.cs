@@ -36,14 +36,14 @@ namespace TaxComputationSoftware.Services
 
         }
 
-        public Task Execute(IJobExecutionContext context)
+        public async Task Execute(IJobExecutionContext context)
         {
             
             _logger.LogWarning("Testing Job");
 
-            PreFinancialYearNotification();
+            await PreFinancialYearNotification();
 
-            return Task.CompletedTask;
+            await Task.CompletedTask;
         }
 
         private async Task PreFinancialYearNotification()
