@@ -64,10 +64,10 @@ namespace TaxComputationSoftware.Services
             var financialYear = await _utilitiesRepository.GetFinancialCompanyAsync(companyId);
             var financialYearRecord = financialYear.Where(x => x.Id < yearId).FirstOrDefault();
             var record = await _deferredTaxRepository.GetDeferredTaxFowarByCompanyId(companyId);
-            var broughtFoward = record.ToList().Where(x => x.YearId == financialYearRecord.Id).OrderByDescending(x=>x.Id).FirstOrDefault();
+            var broughtFoward = record.ToList().Where(x => x.YearId == financialYearRecord.Id).OrderByDescending(x => x.Id).FirstOrDefault();
             var netbookValue = await _fixedAssetService.GetFixedAssetsByCompanyForDeferredTax(companyId, yearId);
             var capitalAllowanceSummary = await _capitalAllowanceService.GetCapitalAllowanceSummaryForDeferredTax(companyId);
-            var unrelievedCapitalAllowanceCf = await _incomeTaxService.GetIncomeTaxForDeferred(companyId,yearId);
+            var unrelievedCapitalAllowanceCf = await _incomeTaxService.GetIncomeTaxForDeferred(companyId, yearId);
             var fairValueGains = await _deferredTaxRepository.GetFairValueGainByCompanyIdAndYear(companyId, yearId);
             decimal deferredTaxCf = 0;
             decimal lessTotal = 0;
@@ -132,8 +132,16 @@ namespace TaxComputationSoftware.Services
                 CanBolden = true
 
             });
+            // if(unrelievedCapitalAllowanceCf.Item1!=0)
+            //  {
+            //   lossCf+=-unrelievedCapitalAllowanceCf.Item1;
+            //  }
+            if (unrelievedCapitalAllowanceCf.Item1 != 0)
+            {
+                lossCf = unrelievedCapitalAllowanceCf.Item1 > 0 ? unrelievedCapitalAllowanceCf.Item1 : -unrelievedCapitalAllowanceCf.Item1;
 
-            lossCf = unrelievedCapitalAllowanceCf.Item1 < 0 ? unrelievedCapitalAllowanceCf.Item1 : 0;
+
+            }
             lessTotal = lossCf + unrelievedCapitalAllowanceCf.Item2 + capitalAllowanceSummary;
 
             deferredTaxDto.Add(new DeferredTaxDto
@@ -167,8 +175,8 @@ namespace TaxComputationSoftware.Services
                 ColumnTwo = "",
 
             });
-
-            if (netbookValue > lessTotal)
+            temporaryDifference = netbookValue - lessTotal;
+            if (temporaryDifference > 0)
             {
                 isTaxable = true;
                 deferredTaxDto.Add(new DeferredTaxDto
@@ -277,9 +285,10 @@ namespace TaxComputationSoftware.Services
                 ColumnTwo = $"₦{Utilities.FormatAmount(deferredTaxCf - broughtFoward.DeferredTaxCarriedFoward)}",
                 CanBolden = true
 
-            }); 
-            if(IsBringDeferredTaxFoward){
-                _deferredTaxRepository.CreateDeferredTaxBroughtFoward(companyId,deferredTaxCf,yearId);
+            });
+            if (IsBringDeferredTaxFoward)
+            {
+                _deferredTaxRepository.CreateDeferredTaxBroughtFoward(companyId, deferredTaxCf, yearId);
             }
             //await _deferredTaxRepository.UpdateDeferredTaxBroughtFowardByDeferredTax(companyId, deferredTaxCf);
 
@@ -287,7 +296,7 @@ namespace TaxComputationSoftware.Services
 
 
         }
-       
+
 
         public int GetSelectionType(TrialBalanceValue incomeTax)
         {
