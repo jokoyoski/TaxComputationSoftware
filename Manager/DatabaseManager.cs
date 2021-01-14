@@ -39,7 +39,7 @@ namespace TaxComputationAPI.Manager
         public List<string> DatabaseScriptList() {
             return new List<string>
             {
-                "InvestmentAllowance","CapitalAllowance","FixedAsset","TrialBalance","BalancingAdjustment","Utilities","Company", "PreNotification"
+                "InvestmentAllowance", "CapitalAllowance", "FixedAsset", "TrialBalance", "BalancingAdjustment", "Utilities", "Company", "PreNotification", "DeferredTax", "IncomeTax", "ProfitAndLoss", "Users"
             };
         }
 
@@ -50,9 +50,12 @@ namespace TaxComputationAPI.Manager
             SqlConnection conn = new SqlConnection(_connectionString.ConnString);
             try
             {
+                _logger.LogInformation("Start running stored procedure scripts");
                 conn.Open();
                 foreach (var j in DatabaseScriptList())
                 {
+
+                    _logger.LogInformation("Running {0} script", j);
 
                     string path = $"/schema_migrations/{j}.sql";
                     string first_script = File.ReadAllText(_webHostEnvironment.WebRootPath +path );
@@ -61,6 +64,8 @@ namespace TaxComputationAPI.Manager
                     {
                         if (commandString.Trim() != "")
                         {
+
+                            
                             new SqlCommand(commandString, conn).ExecuteNonQuery();
                         }
                         
@@ -72,11 +77,12 @@ namespace TaxComputationAPI.Manager
             catch (SqlException er)
             {
                 _logger.LogError("Could not Connect to Database", er);
-                _emailService.Send(AnnualEmailNotificationJob.LogEmail, AnnualEmailNotificationJob.AdminEmail, "Application Exception", er.Message, null);
+                _emailService.Send(AnnualEmailNotificationBackgroundService.LogEmail, AnnualEmailNotificationBackgroundService.AdminEmail, "Application Exception", er.Message, null);
             }
             finally
             {
                 conn.Close();
+                _logger.LogInformation("Finish running stored procedure scripts");
             }
         }
 

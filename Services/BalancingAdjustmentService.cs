@@ -15,14 +15,16 @@ namespace TaxComputationAPI.Services
     public class BalancingAdjustmentService : IBalancingAdjustmentService
     {
         private readonly IUtilitiesService _utilitiesService;
+        private readonly IUtilitiesRepository _utilitiesRepository;
         private readonly IBalancingAdjustmentRepository _balancingAdjustmentRepository;
         private readonly ICompaniesRepository _companies;
         private readonly ICapitalAllowanceService _capitalAllowanceService;
         private readonly IMapper _mapper;
 
-        public BalancingAdjustmentService(IUtilitiesService utilitiesService, ICapitalAllowanceService capitalAllowanceService, IBalancingAdjustmentRepository balancingAdjustmentRepository, ICompaniesRepository companies, IMapper mapper)
+        public BalancingAdjustmentService(IUtilitiesService utilitiesService, IUtilitiesRepository utilitiesRepository, ICapitalAllowanceService capitalAllowanceService, IBalancingAdjustmentRepository balancingAdjustmentRepository, ICompaniesRepository companies, IMapper mapper)
         {
             _utilitiesService = utilitiesService;
+            _utilitiesRepository = utilitiesRepository;
             _balancingAdjustmentRepository = balancingAdjustmentRepository;
             _companies = companies;
             _capitalAllowanceService = capitalAllowanceService;
@@ -228,10 +230,16 @@ namespace TaxComputationAPI.Services
 
                 int assetLifeSpan = (int)100 / annualRatio;
 
+                
+
                 int.TryParse(addBalanceAdjustmentDto.Year, out int year);
                 int.TryParse(addBalanceAdjustmentDto.YearBought, out int assetYear);
 
-                int assetLifeCycle = (year - assetYear);
+                //TODO:
+                var finYear = await _utilitiesRepository.GetFinancialYearAsync(year);
+                var assetFinYear = await _utilitiesRepository.GetFinancialYearAsync(assetYear);
+
+                var assetLifeCycle = (int)(finYear.OpeningDate.Subtract(assetFinYear.OpeningDate).TotalDays)/365;
 
                 decimal residue = 0;
 

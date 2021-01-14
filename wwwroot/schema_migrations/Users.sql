@@ -59,10 +59,10 @@ GO
 
 IF OBJECT_ID('[dbo].[usp_Get_Users') IS NOT NULL
 BEGIN
-DROP procedure [dbo].[usp_Get_User_By_Email]
+DROP procedure [dbo].[usp_Get_Users]
 END
 GO
-CREATE procedure [dbo].[usp_Get_User_By_Email]
+CREATE procedure [dbo].[usp_Get_Users]
 AS
 
 SELECT Email,PasswordHash,PhoneNumber,FirstName,LastName,DateCreated,IsActive from [dbo].[Users]

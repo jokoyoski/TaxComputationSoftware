@@ -380,7 +380,7 @@ namespace TaxComputationSoftware.Repositories
 
                 parameters.Add("@Id", preNotification.Id);
                 parameters.Add("@OpeningDate", preNotification.OpeningDate);
-                parameters.Add("@ClosingingDate", preNotification.OpeningDate);
+                parameters.Add("@ClosingDate", preNotification.OpeningDate);
                 parameters.Add("@JobDate", preNotification.JobDate);
 
                 try

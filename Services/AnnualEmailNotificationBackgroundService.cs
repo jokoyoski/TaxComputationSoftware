@@ -15,20 +15,20 @@ using TaxComputationSoftware.Model;
 namespace TaxComputationSoftware.Services
 {
 
-    public class AnnualEmailNotificationJob : IHostedService, IDisposable
+    public class AnnualEmailNotificationBackgroundService : IHostedService, IDisposable
     {
         private readonly INotificationRepository _notificationRepository;
         private readonly IUtilitiesRepository _utilitiesRepository;
         private readonly ICompaniesRepository _companyRepository;
         private readonly IEmailService _emailService;
-        private readonly ILogger<AnnualEmailNotificationJob> _logger;
+        private readonly ILogger<AnnualEmailNotificationBackgroundService> _logger;
         public const int AnnualJob = 48;
         public const int EmailDay = 2;
         public static string AdminEmail = "bomana.ogoni@gmail.com";
         public static string LogEmail = "azibaalpha@gmail.com";
         private Timer _timer;
 
-        public AnnualEmailNotificationJob(INotificationRepository notificationRepository, IUtilitiesRepository utilitiesRepository, ICompaniesRepository companyRepository, IEmailService emailService, ILogger<AnnualEmailNotificationJob> logger)
+        public AnnualEmailNotificationBackgroundService(INotificationRepository notificationRepository, IUtilitiesRepository utilitiesRepository, ICompaniesRepository companyRepository, IEmailService emailService, ILogger<AnnualEmailNotificationBackgroundService> logger)
         {
             _notificationRepository = notificationRepository;
             _utilitiesRepository = utilitiesRepository;
@@ -43,7 +43,7 @@ namespace TaxComputationSoftware.Services
             _logger.LogInformation("Timed Hosted Service running.");
 
             _timer = new Timer(PreFinancialYearNotification, null, TimeSpan.Zero, 
-                TimeSpan.FromHours(2));
+                TimeSpan.FromMinutes(1));
 
             return Task.CompletedTask;
         }

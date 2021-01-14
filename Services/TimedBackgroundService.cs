@@ -6,6 +6,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using TaxComputationSoftware.Interfaces;
 
+//Sample of time background service
 public class TimedHostedService : IHostedService, IDisposable
 {
     private int executionCount = 0;
