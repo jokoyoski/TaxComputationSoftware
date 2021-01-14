@@ -54,7 +54,7 @@ const FinancialYear = ({ showFinancialYear, setShowFinancialYear, setShowSetting
           />
         }>
         <div className="p-d-flex p-flex-column">
-          <div style={{ marginBottom: 200 }}>
+          <div>
             <DropdownController
               Controller={Controller}
               control={control}
@@ -65,6 +65,17 @@ const FinancialYear = ({ showFinancialYear, setShowFinancialYear, setShowSetting
               width="100%"
               label="Select default financial year"
             />
+          </div>
+          <div
+            className="p-d-flex p-ai-center"
+            style={{ fontSize: 14, marginTop: 15, marginBottom: 200 }}>
+            <i
+              className="pi pi-info-circle"
+              style={{ marginRight: 10, color: "#01a4e4", fontSize: 20 }}></i>
+            <span>
+              This will be used as the default financial year when viewing any module during this
+              session
+            </span>
           </div>
         </div>
       </Dialog>

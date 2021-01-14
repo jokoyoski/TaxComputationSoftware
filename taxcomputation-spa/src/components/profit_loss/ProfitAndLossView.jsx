@@ -1,17 +1,17 @@
 import React from "react";
 import { Column } from "primereact/column";
 import { useCompany } from "../../store/CompanyStore";
-import Loader from "../common/Loader";
 import { profitAndLossViewData } from "../../apis/ProfitAndLoss";
 import ViewModeDataTable from "../common/ViewModeDataTable";
 import utils from "../../utils";
+import ViewLoader from "../common/ViewLoader";
 
 const ProfitAndLossView = ({ year, toast }) => {
   const isMounted = React.useRef(false);
   const [{ companyId }] = useCompany();
   const [loading, setLoading] = React.useState();
   const [error, setError] = React.useState();
-  const [profitAndLossApiData, setProfitAndLossApiData] = React.useState([]);
+  const [profitAndLossApiData, setProfitAndLossApiData] = React.useState();
 
   React.useEffect(() => {
     if (!companyId) return;
@@ -39,13 +39,16 @@ const ProfitAndLossView = ({ year, toast }) => {
 
   if (error) return <p style={{ color: "#f00" }}>{error}</p>;
 
-  if (loading) return <Loader />;
-
   return (
-    <ViewModeDataTable value={profitAndLossApiData}>
-      <Column field="category" header=""></Column>
-      <Column field="total" header="Total"></Column>
-    </ViewModeDataTable>
+    <>
+      {profitAndLossApiData && (
+        <ViewModeDataTable value={profitAndLossApiData}>
+          <Column field="category" header=""></Column>
+          <Column field="total" header="Total"></Column>
+        </ViewModeDataTable>
+      )}
+      {loading && <ViewLoader />}
+    </>
   );
 };
 

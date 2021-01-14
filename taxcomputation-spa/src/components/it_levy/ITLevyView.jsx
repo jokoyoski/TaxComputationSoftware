@@ -1,17 +1,17 @@
 import React from "react";
 import { Column } from "primereact/column";
 import { useCompany } from "../../store/CompanyStore";
-import Loader from "../common/Loader";
 import { itLevyViewData } from "../../apis/ITLevy";
 import utils from "../../utils";
 import ViewModeDataTable from "../common/ViewModeDataTable";
+import ViewLoader from "../common/ViewLoader";
 
 const ITLevyView = ({ year, toast }) => {
   const isMounted = React.useRef(false);
   const [{ companyId }] = useCompany();
   const [loading, setLoading] = React.useState();
   const [error, setError] = React.useState();
-  const [itLevyData, setITLevyData] = React.useState([]);
+  const [itLevyData, setITLevyData] = React.useState();
 
   React.useEffect(() => {
     if (!companyId) return;
@@ -51,13 +51,16 @@ const ITLevyView = ({ year, toast }) => {
 
   if (error) return <p style={{ color: "#f00" }}>{error}</p>;
 
-  if (loading) return <Loader />;
-
   return (
-    <ViewModeDataTable value={itLevyData}>
-      <Column field="category" header=""></Column>
-      <Column field="credit" header="₦"></Column>
-    </ViewModeDataTable>
+    <>
+      {itLevyData && (
+        <ViewModeDataTable value={itLevyData}>
+          <Column field="category" header=""></Column>
+          <Column field="credit" header="₦"></Column>
+        </ViewModeDataTable>
+      )}
+      {loading && <ViewLoader />}
+    </>
   );
 };
 

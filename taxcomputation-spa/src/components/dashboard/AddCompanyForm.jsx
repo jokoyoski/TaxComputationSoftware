@@ -230,7 +230,7 @@ const AddCompanyForm = ({ showAddCompany, setShowAddCompany, toast, refresh }) =
         </div>
         <div className="p-d-flex p-flex-column" style={{ marginBottom: 15 }}>
           <label htmlFor="openingYearInput" style={{ marginBottom: 10 }}>
-            Last Opening Financial Year
+            Opening Financial Year
           </label>
           <Controller
             name="openingYear"
@@ -247,9 +247,7 @@ const AddCompanyForm = ({ showAddCompany, setShowAddCompany, toast, refresh }) =
             )}
           />
           {errors.openingYear && (
-            <span style={{ fontSize: 12, color: "red" }}>
-              Last Opening Financial Year is required
-            </span>
+            <span style={{ fontSize: 12, color: "red" }}>Opening Financial Year is required</span>
           )}
         </div>
         <div className="p-d-flex p-flex-column" style={{ marginBottom: 15 }}>

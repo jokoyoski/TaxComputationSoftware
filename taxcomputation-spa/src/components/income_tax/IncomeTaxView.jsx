@@ -1,17 +1,17 @@
 import React from "react";
 import { Column } from "primereact/column";
 import { useCompany } from "../../store/CompanyStore";
-import Loader from "../common/Loader";
 import utils from "../../utils";
 import { incomeTaxDelete, incomeTaxViewData } from "../../apis/IncomeTax";
 import ViewModeDataTable from "../common/ViewModeDataTable";
+import ViewLoader from "../common/ViewLoader";
 
 const IncomeTaxView = ({ year, toast, showITLevy, isBringLossFoward }) => {
   const isMounted = React.useRef(false);
   const [{ companyId }] = useCompany();
   const [loading, setLoading] = React.useState();
   const [error, setError] = React.useState();
-  const [incomeTaxData, setIncomeTaxData] = React.useState([]);
+  const [incomeTaxData, setIncomeTaxData] = React.useState();
 
   React.useEffect(() => {
     if (!companyId) return;
@@ -40,6 +40,7 @@ const IncomeTaxView = ({ year, toast, showITLevy, isBringLossFoward }) => {
                       style={{ fontSize: 14, marginTop: 2 }}
                       onClick={async () => {
                         try {
+                          setLoading(true);
                           const data = await incomeTaxDelete(item.id);
                           if (data) {
                             toast.show(
@@ -52,6 +53,8 @@ const IncomeTaxView = ({ year, toast, showITLevy, isBringLossFoward }) => {
                           }
                         } catch (error) {
                           utils.apiErrorHandling(error, toast);
+                        } finally {
+                          setLoading(false);
                         }
                       }}></i>
                   )}
@@ -76,14 +79,17 @@ const IncomeTaxView = ({ year, toast, showITLevy, isBringLossFoward }) => {
 
   if (error) return <p style={{ color: "#f00" }}>{error}</p>;
 
-  if (loading) return <Loader />;
-
   return (
-    <ViewModeDataTable value={incomeTaxData}>
-      <Column field="description" header="Description"></Column>
-      <Column field="columnOne" header="₦"></Column>
-      <Column field="columnTwo" header="₦"></Column>
-    </ViewModeDataTable>
+    <>
+      {incomeTaxData && (
+        <ViewModeDataTable value={incomeTaxData}>
+          <Column field="description" header="Description"></Column>
+          <Column field="columnOne" header="₦"></Column>
+          <Column field="columnTwo" header="₦"></Column>
+        </ViewModeDataTable>
+      )}
+      {loading && <ViewLoader />}
+    </>
   );
 };
 

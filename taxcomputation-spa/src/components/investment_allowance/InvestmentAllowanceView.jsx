@@ -1,6 +1,5 @@
 import React from "react";
 import { Column } from "primereact/column";
-import Loader from "../common/Loader";
 import { useCompany } from "../../store/CompanyStore";
 import {
   investmentAllowanceDelete,
@@ -8,13 +7,14 @@ import {
 } from "../../apis/InvestmentAllowance";
 import utils from "../../utils";
 import ViewModeDataTable from "../common/ViewModeDataTable";
+import ViewLoader from "../common/ViewLoader";
 
 const InvestmentAllowanceView = ({ year, toast }) => {
   const isMounted = React.useRef(false);
   const [{ companyId }] = useCompany();
   const [loading, setLoading] = React.useState();
   const [error, setError] = React.useState();
-  const [investmentAllowanceData, setInvestmentAllowanceData] = React.useState([]);
+  const [investmentAllowanceData, setInvestmentAllowanceData] = React.useState();
 
   React.useEffect(() => {
     if (!companyId) return;
@@ -38,6 +38,7 @@ const InvestmentAllowanceView = ({ year, toast }) => {
                       style={{ fontSize: 14, marginTop: 2 }}
                       onClick={async () => {
                         try {
+                          setLoading(true);
                           const data = await investmentAllowanceDelete(item.id);
                           if (data) {
                             toast.show(
@@ -50,6 +51,8 @@ const InvestmentAllowanceView = ({ year, toast }) => {
                           }
                         } catch (error) {
                           utils.apiErrorHandling(error, toast);
+                        } finally {
+                          setLoading(false);
                         }
                       }}></i>
                   </div>
@@ -77,13 +80,16 @@ const InvestmentAllowanceView = ({ year, toast }) => {
 
   if (error) return <p style={{ color: "#f00" }}>{error}</p>;
 
-  if (loading) return <Loader />;
-
   return (
-    <ViewModeDataTable value={investmentAllowanceData}>
-      <Column field="name" header="Additions to:"></Column>
-      <Column field="amount" header="Amount"></Column>
-    </ViewModeDataTable>
+    <>
+      {investmentAllowanceData && (
+        <ViewModeDataTable value={investmentAllowanceData}>
+          <Column field="name" header="Additions to:"></Column>
+          <Column field="amount" header="Amount"></Column>
+        </ViewModeDataTable>
+      )}
+      {loading && <ViewLoader />}
+    </>
   );
 };
 

@@ -25,6 +25,7 @@ const Header = ({ title, loading }) => {
     setShowSettings(false);
     resetCompany();
     resetResources();
+    sessionStorage.removeItem("year");
     replace(constants.routes.home);
   };
 
