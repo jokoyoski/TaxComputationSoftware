@@ -11,6 +11,7 @@ using TaxComputationAPI.Helpers.Response;
 using TaxComputationAPI.Interfaces;
 using TaxComputationAPI.Manager;
 using TaxComputationAPI.Models;
+using TaxComputationSoftware.Model;
 using TaxComputationSoftware.Models;
 
 namespace TaxComputationAPI.Repositories
@@ -66,6 +67,9 @@ namespace TaxComputationAPI.Repositories
                     DynamicParameters parameters = new DynamicParameters();
 
                     parameters.Add("@Name", financialYear.Name);
+                    parameters.Add("@CompanyId", financialYear.CompanyId);
+                    parameters.Add("@OpeningDate", financialYear.OpeningDate);
+                    parameters.Add("@ClosingDate", financialYear.ClosingDate);
 
                     try
                     {
@@ -117,6 +121,36 @@ namespace TaxComputationAPI.Repositories
             }
         }
 
+        public async Task<List<FinancialYear>> GetFinancialCompanyAsync(int companyId)
+        {
+            if (companyId <= 0) throw new ArgumentNullException(nameof(companyId));
+
+            var result = default(IEnumerable<FinancialYear>);
+
+            using (IDbConnection conn = await _databaseManager.DatabaseConnection())
+            {
+                if (conn.State == ConnectionState.Closed) conn.Open();
+
+                DynamicParameters parameters = new DynamicParameters();
+
+                parameters.Add("@CompanyId", companyId);
+
+                try
+                {
+                    result = await conn.QueryAsync<FinancialYear>("[dbo].[usp_Get_Financial_Year_By_CompanyId]", parameters, commandType: CommandType.StoredProcedure);
+                    conn.Close();
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError($"{e.Message}");
+
+                    throw e;
+                }
+
+                return result.ToList();
+            }
+        }
+
         public async Task<List<AssetMapping>> GetAssetMappingAsync()
         {
             var result = default(IEnumerable<AssetMapping>);
@@ -142,6 +176,30 @@ namespace TaxComputationAPI.Repositories
                 return result.ToList();
             }
         }
+
+
+         public async Task<List<PreNotification>> GetPreNotification()
+        {
+            using (IDbConnection conn = await _databaseManager.DatabaseConnection())
+            {
+                if (conn.State == ConnectionState.Closed) conn.Open();
+
+                try
+                {
+                    var record = await conn.QueryMultipleAsync("[dbo].[usp_Get_All_PreNotification]", null, commandType: CommandType.StoredProcedure);
+                    var result = await record.ReadAsync<PreNotification>();
+                    conn.Close();
+                    return result.ToList();
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError($"{e.Message}");
+                    throw e;
+                }
+            }
+
+        }
+
 
         public async Task<AssetMapping> GetAssetMappingAsync(string Name)
         {
@@ -173,7 +231,77 @@ namespace TaxComputationAPI.Repositories
             }
         }
 
-         public async Task AddCompanyCode(CompanyCode companyCode)
+          public async Task<AllowableDisAllowable> GetAllowableDisAllowableByTrialBalanceId(int Id)
+        {
+
+
+            using (IDbConnection conn = await _databaseManager.DatabaseConnection())
+            {
+
+                if (conn.State == ConnectionState.Closed)
+                    conn.Open();
+
+                DynamicParameters parameters = new DynamicParameters();
+
+                parameters.Add("@TrialBalanceId", Id);
+
+                var record = conn.QueryFirstOrDefault<AllowableDisAllowable>("[dbo].[usp_Get_Allowable_DisAllowable_By_TrialBalanceId]", parameters, commandType: CommandType.StoredProcedure);
+                return record;
+            }
+
+
+            return null;
+        }
+
+         public async Task DeleteFairGainByTrialBalanceId(int Id)
+        {
+            using (IDbConnection conn = await _databaseManager.DatabaseConnection())
+            {
+                if (conn.State == ConnectionState.Closed) conn.Open();
+
+                DynamicParameters parameters = new DynamicParameters();
+                parameters.Add("@TrialBalanceId", Id);
+                try
+                {
+                    conn.Execute("[dbo].[Delete_Fair_Gain_By_TrialBalanceId]", parameters, commandType: CommandType.StoredProcedure);
+                    conn.Close();
+                }
+                catch (Exception e)
+                {
+
+                    throw e;
+                }
+            }
+        }
+
+
+
+
+        public async Task<AllowableDisAllowable> GetAllowableDisAllowableById(int Id)
+        {
+
+
+            using (IDbConnection conn = await _databaseManager.DatabaseConnection())
+            {
+
+                if (conn.State == ConnectionState.Closed)
+                    conn.Open();
+
+                DynamicParameters parameters = new DynamicParameters();
+
+                parameters.Add("@Id", Id);
+
+                var record = conn.QueryFirstOrDefault<AllowableDisAllowable>("[dbo].[usp_Get_Allowable_DisAllowable_By_Id]", parameters, commandType: CommandType.StoredProcedure);
+                return record;
+            }
+
+
+            return null;
+        }
+
+
+
+        public async Task AddCompanyCode(CompanyCode companyCode)
         {
             if (companyCode == null) throw new ArgumentNullException(nameof(companyCode));
 
@@ -214,9 +342,9 @@ namespace TaxComputationAPI.Repositories
 
 
 
-         public async Task<CompanyCode> GetCompanyCodeByCodeId(int companyId)
+        public async Task<CompanyCode> GetCompanyCodeByCodeId(int companyId)
         {
-            if (companyId==0) throw new ArgumentNullException(nameof(companyId));
+            if (companyId == 0) throw new ArgumentNullException(nameof(companyId));
 
             var result = default(CompanyCode);
 
@@ -359,7 +487,7 @@ namespace TaxComputationAPI.Repositories
         public async Task DeleteAssetMappingAsync(int id)
         {
 
-            if (id <0) throw new ArgumentNullException(nameof(id));
+            if (id < 0) throw new ArgumentNullException(nameof(id));
 
             try
             {
@@ -491,7 +619,7 @@ namespace TaxComputationAPI.Repositories
 
         public async Task AddTrialBalanceMapping(int trialBalanceId, int moduleId, string moduleCode, string additionalInfo)
         {
-            
+
             if (trialBalanceId <= 0) throw new ArgumentNullException(nameof(trialBalanceId));
 
             try
@@ -531,6 +659,31 @@ namespace TaxComputationAPI.Repositories
             }
 
         }
+
+        public async Task DeleteAllowableDisAllowableById(int Id)
+        {
+            using (IDbConnection conn = await _databaseManager.DatabaseConnection())
+            {
+                if (conn.State == ConnectionState.Closed) conn.Open();
+
+                DynamicParameters parameters = new DynamicParameters();
+                parameters.Add("@Id", Id);
+                try
+                {
+                    conn.Execute("[dbo].[Delete_Allowable_DisAllowable_By_Id]", parameters, commandType: CommandType.StoredProcedure);
+                    conn.Close();
+                }
+                catch (Exception e)
+                {
+
+                    throw e;
+                }
+            }
+        }
+
+
+
+
 
         public async Task DeleteTrialBalancingMapping(int trialBalanceId)
         {

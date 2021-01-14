@@ -6,9 +6,11 @@ import constants from "../constants";
 import utils from "../utils";
 import Main from "../components/layout/Main";
 import { usePathParam } from "react-resource-router";
+import { Toast } from "primereact/toast";
 
 const MinimumTax = () => {
   const title = constants.modules.minimumTax;
+  const toast = React.useRef();
   const [mode, setMode] = usePathParam("mode");
   const [year, setYear] = React.useState(utils.currentYear());
   const yearSelectItems = utils.getYears(year => ({
@@ -26,9 +28,10 @@ const MinimumTax = () => {
         setYear={setYear}
         yearSelectItems={yearSelectItems}>
         <ViewMode title={title} year={year}>
-          <MinimumTaxView year={year} />
+          <MinimumTaxView year={year} toast={toast.current} />
         </ViewMode>
       </Main>
+      <Toast baseZIndex={1000} ref={el => (toast.current = el)} />
     </Layout>
   );
 };

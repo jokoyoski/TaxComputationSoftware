@@ -32,7 +32,7 @@ namespace TaxComputationAPI.Controllers
         [Authorize]
         public async Task<IActionResult> GetITLevy(int companyId, int yearId)
         {
-
+          
             if (yearId == 0)
             {
                 return StatusCode(400, new { errors = new[] { "Please select a Valid year" } });

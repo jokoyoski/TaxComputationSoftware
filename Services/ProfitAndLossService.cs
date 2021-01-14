@@ -725,7 +725,7 @@ namespace TaxComputationAPI.Services
         }
 
         private async Task<string> GetBackUpOtherOperatingIcome(int companyId ,int yearId){
-           var otherOperatingIncomeCreditTotal="";
+           var otherOperatingIncomeCreditTotal="0";
               var items = await _profitAndLossRepository.GetProfitsAndLossByType("OtherOperatingIncome", companyId, yearId);
               if (items.Count > 0)
                {

@@ -1,12 +1,15 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using TaxComputationAPI.Dtos;
+using TaxComputationAPI.Helpers;
 using TaxComputationAPI.Interfaces;
 
 namespace TaxComputationAPI.Controllers
@@ -18,30 +21,48 @@ namespace TaxComputationAPI.Controllers
     {
         private readonly IMapper _mapper;
         private readonly IFixedAssetService _fixedAssetService;
+
+        private readonly ITrialBalanceService _trialBalanceService;
         private readonly IUtilitiesService _utilitiesService;
         private readonly ILogger<FixedAssetController> _logger;
 
-        public FixedAssetController(IMapper mapper, IFixedAssetService fixedAssetService, IUtilitiesService utilitiesService, ILogger<FixedAssetController> logger)
+        private readonly IMemoryCache _memoryCache;
+
+        public FixedAssetController(IMapper mapper, IFixedAssetService fixedAssetService, IMemoryCache memoryCache, ITrialBalanceService trialBalanceService, IUtilitiesService utilitiesService, ILogger<FixedAssetController> logger)
         {
             _logger = logger;
             _mapper = mapper;
             _fixedAssetService = fixedAssetService;
             _utilitiesService = utilitiesService;
+            _memoryCache = memoryCache;
+            _trialBalanceService = trialBalanceService;
         }
 
         [HttpPost]
-        [Authorize]
-
+        //  [Authorize]
         public async Task<IActionResult> AddFixedAsset(CreateFixedAssetDto createFixed)
         {
             try
             {
 
-
-                if (createFixed.YearId < DateTime.Now.Year)
+                foreach (var j in createFixed.TriBalanceId)
                 {
-                    return StatusCode(400, new { errors = new[] { "Fixed Asset fro Previous Year is not Alllowed!" } });
+                    var trialBalanceRecord = await _trialBalanceService.GetTrialBalanceById(j);
+                    if (trialBalanceRecord.IsCheck)
+                    {
+                        return StatusCode(400, new { errors = new[] { "One of the item selected has already been mapped, please reload" } });
+                    }
                 }
+
+                var details = await _utilitiesService.GetFinancialYearAsync(createFixed.YearId);
+                var companyDetails = await _utilitiesService.GetPreNotificationsAsync();
+                var companyDate = companyDetails.FirstOrDefault(x => x.CompanyId == createFixed.CompanyId);
+                var isValid = Utilities.ValidateDate(companyDate.OpeningDate, companyDate.ClosingDate, details.OpeningDate, details.ClosingDate);
+                if (!isValid)
+                {
+                    return StatusCode(400, new { errors = new[] { "The year selected has to be within the financial year!!" } });
+                }
+
                 bool status = createFixed.IsCost ? true : false;
                 var value = await _fixedAssetService.GetAmount(createFixed.TriBalanceId, status);
 
@@ -117,7 +138,6 @@ namespace TaxComputationAPI.Controllers
 
                 }
 
-
                 await _fixedAssetService.SaveFixedAsset(createFixed);
 
                 return Ok("saved successfully");
@@ -136,18 +156,31 @@ namespace TaxComputationAPI.Controllers
         [Authorize]
         public async Task<IActionResult> DeleteFixedAsset(int id)
         {
-            // await _fixedAssetService.DeleteFixedAsset(id);
             await _utilitiesService.UnmapValue(id);
             return Ok("Item Unmapped");
         }
 
 
-        [HttpGet("{companyId}/{yearId}")]
+        [HttpDelete("delete-fixed-asset/{id}")]
         [Authorize]
+        public async Task<IActionResult> FixedAsset(int id)
+        {
+            await _fixedAssetService.DeleteFixedAssetById(id);
+            return Ok("Item Unmapped");
+        }
+
+
+
+        [HttpGet("{companyId}/{yearId}")]
+        //[Authorize]
         public async Task<IActionResult> GetFixedAsset(int companyId, int yearId)
         {
             try
             {
+                var details = await _utilitiesService.GetFinancialYearAsync(yearId);
+                var companyDetails = await _utilitiesService.GetPreNotificationsAsync();
+                var companyDate = companyDetails.FirstOrDefault(x => x.CompanyId == companyId);
+                var isValid = Utilities.ValidateDate(companyDate.OpeningDate, companyDate.ClosingDate, details.OpeningDate, details.ClosingDate);
                 if (yearId == 0)
                 {
                     return StatusCode(400, new { errors = new[] { "Please select a Valid year" } });
@@ -156,6 +189,10 @@ namespace TaxComputationAPI.Controllers
                 if (fixedAsset == null)
                 {
                     return StatusCode(404, new { errors = new[] { "Record not found at this time please try again later" } });
+                }
+                if (isValid)
+                {
+                    fixedAsset.CanDelete = true;
                 }
                 return Ok(fixedAsset);
 

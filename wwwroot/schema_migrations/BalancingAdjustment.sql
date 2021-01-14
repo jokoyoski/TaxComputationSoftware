@@ -37,6 +37,7 @@ BEGIN
         [Id] [int] IDENTITY(1,1) NOT NULL,
         [AssestId] [int] NOT NULL,
         [Cost] [decimal](18, 2) NOT NULL,
+        [CompanyId] int not null,
         [InitialAllowance] [decimal](18, 2) NOT NULL,
         [AnnualAllowance] [decimal](18, 2) NOT NULL,
         [SalesProceed] [decimal](18, 2) NOT NULL,
@@ -45,12 +46,9 @@ BEGIN
         [BalancingCharge] [decimal](18, 2) NOT NULL,
         [DateCreated] [datetime2](7) NOT NULL,
         [YearBought] [nvarchar](max) NULL,
-        [BalancingAdjustmentId] [int] NOT NULL,
-        CONSTRAINT [PK_BalancingAdjustmentYearBought] PRIMARY KEY CLUSTERED
-(
-    [Id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-    ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+        [YearId] int NOT NULL,
+        [BalancingAdjustmentId] [int] NOT NULL)
+     
 END
 GO
 
@@ -77,7 +75,6 @@ GO
 PRINT('============================================Creating balancing adjustment by companyId and year=====================================================')
 
 ------------------------------------------------STORED PROCEDURE TO  GET TRACK TRIAL BALANCE BY COMPANYID AND YEARID---------------------------------------------
-
 IF OBJECT_ID('[dbo].[usp_GetBalancingAdjustment_BalancingAdjustmentId_AssetId]') IS NOT NULL
 BEGIN
 DROP PROCEDURE [dbo].[usp_GetBalancingAdjustment_BalancingAdjustmentId_AssetId]
@@ -88,9 +85,9 @@ CREATE PROCEDURE [dbo].[usp_GetBalancingAdjustment_BalancingAdjustmentId_AssetId
     @BalancingAdjustmentId int
 )
 AS
-SELECT *
+SELECT [dbo].[BalancingAdjustmentYearBought].Id,AssestId,Cost,InitialAllowance,AnnualAllowance,SalesProceed,Residue,BalancingAllowance,BalancingCharge,DateCreated,[dbo].[FinancialYear].Name As YearBought,BalancingAdjustmentId
 FROM [dbo].[BalancingAdjustmentYearBought]
-WHERE AssestId=@AssetId AND BalancingAdjustmentId=@BalancingAdjustmentId
+ inner join [dbo].[FinancialYear]on [dbo].[BalancingAdjustmentYearBought].YearBought=[FinancialYear].Id  WHERE AssestId=@AssetId AND BalancingAdjustmentId=@BalancingAdjustmentId
 GO
 
 
@@ -108,8 +105,9 @@ CREATE PROCEDURE [dbo].[usp_GetBalancingAdjustment_YearBought_AssetId](
     @YearBought int
 )
 AS
-SELECT *
+SELECT AssestId,Cost,InitialAllowance,AnnualAllowance,SalesProceed,Residue,BalancingAllowance,BalancingCharge,DateCreated,[dbo].[FinancialYear].Name As YearBought,BalancingAdjustmentId
 FROM [dbo].[BalancingAdjustmentYearBought]
+inner join [dbo].[FinancialYear] on [dbo].[BalancingAdjustmentYearBought].YearBought=[FinancialYear].Id
 WHERE AssestId=@AssetId AND YearBought=@YearBought
 GO
 
@@ -165,6 +163,8 @@ GO
 CREATE PROCEDURE [dbo].[usp_Insert_Balance_Adjustment_YearBought](
     @AssestId int,
     @Cost decimal(18, 2),
+    @YearId int,
+    @CompanyId int,
     @InitialAllowance decimal(18, 2),
     @AnnualAllowance decimal(18, 2),
     @SalesProceed decimal(18, 2),
@@ -177,11 +177,17 @@ CREATE PROCEDURE [dbo].[usp_Insert_Balance_Adjustment_YearBought](
     @Id int OUTPUT
 )
 AS
-
+if exists (select * from BalancingAdjustmentYearBought where AssestId=@AssestId and YearBought=@YearBought and YearId=@YearId)
+begin
+UPDATE  [dbo].[BalancingAdjustmentYearBought] set AssestId=@AssestId,Cost=@Cost , InitialAllowance=@InitialAllowance,SalesProceed=@SalesProceed,YearId=@YearId,
+Residue=@Residue,BalancingCharge=@BalancingCharge,BalancingAllowance=@BalancingAllowance,DateCreated=@DateCreated,Yearbought=@Yearbought,BalancingAdjustmentId=@BalancingAdjustmentId
+end
+else
 INSERT [dbo].[BalancingAdjustmentYearBought]
 (
     AssestId,
     Cost,
+    CompanyId,
     InitialAllowance,
     AnnualAllowance,
     SalesProceed,
@@ -190,12 +196,14 @@ INSERT [dbo].[BalancingAdjustmentYearBought]
     BalancingCharge,
     DateCreated,
     YearBought,
+    YearId,
     BalancingAdjustmentId
 )
 VALUES
 (
     @AssestId,
     @Cost,
+    @CompanyId,
     @InitialAllowance,
     @AnnualAllowance,
     @SalesProceed,
@@ -204,6 +212,7 @@ VALUES
     @BalancingCharge,
     @DateCreated,
     @YearBought,
+    @YearId,
     @BalancingAdjustmentId
 )
 SET @Id = SCOPE_IDENTITY()
@@ -225,6 +234,24 @@ AS
 SELECT *
 FROM [dbo].[BalancingAdjustment]
 WHERE Id=@Id
+GO
+
+
+
+
+-------------------------------------- STORED PROCEDURE TO  GET BALANCING ADJUSTMENT BOUGHT BY YEARID YEARBOUGHT AND ASSETID-----------------------------------------
+IF OBJECT_ID('[dbo].[usp_GetBalancingAdjustmentBought_By_Year_Asset_YearBought]') IS NOT NULL
+BEGIN
+DROP PROCEDURE [dbo].usp_GetBalancingAdjustmentBought_By_Year_Asset_YearBought
+END
+GO
+CREATE PROCEDURE [dbo].usp_GetBalancingAdjustmentBought_By_Year_Asset_YearBought(
+    @YearId int,@YearBought int,@AssetId int)
+   
+AS
+SELECT *
+FROM [dbo].[BalancingAdjustmentYearBought]
+WHERE YearId=@YearId and AssestId=@AssetId and YearBought=@YearBought
 GO
 
 
@@ -257,5 +284,6 @@ CREATE procedure [dbo].[usp_Get_BalancingAdjustmentYearBought](
 )
 AS
 
-SELECT Id,AssestId,Cost,InitialAllowance,AnnualAllowance,SalesProceed,Residue,BalancingAllowance,BalancingCharge,DateCreated,YearBought,BalancingAdjustmentId from [dbo].[BalancingAdjustmentYearBought] WHERE Id = @Id
+SELECT Id,AssestId,Cost,InitialAllowance,AnnualAllowance,SalesProceed,Residue,BalancingAllowance,BalancingCharge,DateCreated,YearBought,BalancingAdjustmentId,YearId from [dbo].[BalancingAdjustmentYearBought] WHERE Id = @Id
 GO
+

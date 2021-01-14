@@ -4,13 +4,13 @@ import { Button } from "primereact/button";
 import { Dropdown } from "primereact/dropdown";
 import utils from "../../utils";
 import { uploadTrialBalance } from "../../apis/TrialBalance";
-import constants from "../../constants";
+import { useResources } from "../../store/ResourcesStore";
 
 const FileUploader = ({ company: { companyId }, toast, setRefreshTrialBalanceTable }) => {
   const [file, setFile] = React.useState();
   const [year, setYear] = React.useState();
-  const [yearSelectItems] = React.useState(utils.getYears());
   const [loading, setLoading] = React.useState(false);
+  const [{ financialYears }] = useResources();
 
   const onUpload = async () => {
     if (loading) return;
@@ -39,23 +39,7 @@ const FileUploader = ({ company: { companyId }, toast, setRefreshTrialBalanceTab
         toast.show(utils.toastCallback({ severity: "success", detail: response.data }));
       }
     } catch (error) {
-      if (error.response) {
-        toast.show(
-          utils.toastCallback({
-            severity: "error",
-            summary: "Error",
-            detail: "An error occurred, kindly contact your admin"
-          })
-        );
-      } else {
-        // network errors
-        toast.show(
-          utils.toastCallback({
-            summary: "Network Error",
-            detail: constants.networkErrorMessage
-          })
-        );
-      }
+      utils.apiErrorHandling(error, toast);
     } finally {
       setLoading(false);
     }
@@ -71,7 +55,7 @@ const FileUploader = ({ company: { companyId }, toast, setRefreshTrialBalanceTab
               <Dropdown
                 style={{ marginRight: 20, width: 110 }}
                 value={year}
-                options={yearSelectItems}
+                options={financialYears}
                 onChange={e => {
                   setYear(e.value);
                 }}

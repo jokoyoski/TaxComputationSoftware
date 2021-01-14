@@ -1,24 +1,23 @@
 import axios from "axios";
 
-export const incomeTaxMapping = async ({
-  lossBroughtFoward,
-  unrelievedCapitalAllowanceBroughtFoward,
-  trialBalanceId
-}) => {
+export const incomeTaxMapping = async ({ typeId, yearId, incomeList, companyId }) => {
   try {
     return await axios.post("/api/IncomeTax/add-income-tax", {
-      lossBroughtFoward,
-      unrelievedCapitalAllowanceBroughtFoward,
-      trialBalanceId
+      typeId,
+      yearId,
+      incomeList,
+      companyId
     });
   } catch (error) {
     throw error;
   }
 };
 
-export const incomeTaxViewData = async ({ companyId, year }) => {
+export const incomeTaxViewData = async ({ companyId, year, isItLevyView, isBringLossFoward }) => {
   try {
-    const { data } = await axios.get(`/api/incomeTax/${companyId}/${year}`);
+    const { data } = await axios.get(
+      `/api/incomeTax/${companyId}/${year}/${isItLevyView}?isBringLossFoward=${isBringLossFoward}`
+    );
     return data;
   } catch (error) {
     throw error;
@@ -27,7 +26,7 @@ export const incomeTaxViewData = async ({ companyId, year }) => {
 
 export const incomeTaxDelete = async id => {
   try {
-    const { data } = await axios.delete(`/api/InvestmentAllowance/investment-allowance/${id}`);
+    const { data } = await axios.delete(`/api/IncomeTax/remove-allowable/disallowable/${id}`);
     return data;
   } catch (error) {
     throw error;

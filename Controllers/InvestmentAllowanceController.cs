@@ -7,8 +7,10 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using TaxComputationAPI.Dtos;
+using TaxComputationAPI.Helpers;
 using TaxComputationAPI.Interfaces;
 using TaxComputationAPI.Models;
 
@@ -21,24 +23,39 @@ namespace TaxComputationAPI.Controllers
         private readonly ILogger<InvestmentAllowanceController> _logger;
         private readonly IMapper _mapper;
         private readonly IInvestmentAllowanceService _investmentAllowanceService;
-        public InvestmentAllowanceController(ILogger<InvestmentAllowanceController> logger, IMapper mapper, IInvestmentAllowanceService investmentAllowanceService)
+
+        private readonly IUtilitiesService _utilitiesService;
+
+        private readonly IMemoryCache _memoryCache;
+        public InvestmentAllowanceController(ILogger<InvestmentAllowanceController> logger, IUtilitiesService utilitiesService, IMemoryCache memoryCache, IMapper mapper, IInvestmentAllowanceService investmentAllowanceService)
         {
             _logger = logger;
             _mapper = mapper;
             _investmentAllowanceService = investmentAllowanceService;
+            _utilitiesService = utilitiesService;
+            _memoryCache = memoryCache;
         }
 
         [HttpPost("investment-allowance")]
+        [Authorize]
         public async Task<IActionResult> AddInvestmentAllowance(InvestmentAllowanceDto investmentAllowanceDto)
         {
             try
             {
-                
+
+                var details = await _utilitiesService.GetFinancialYearAsync(investmentAllowanceDto.YearId);
+                var companyDetails = await _utilitiesService.GetPreNotificationsAsync();
+                var companyDate = companyDetails.FirstOrDefault(x => x.CompanyId == investmentAllowanceDto.CompanyId);
+                var isValid = Utilities.ValidateDate(companyDate.OpeningDate, companyDate.ClosingDate, details.OpeningDate, details.ClosingDate);
+                if (!isValid)
+                {
+                    return StatusCode(400, new { errors = new[] { "The year selected has to be within the financial year!!" } });
+                }
+
                 var investmentAllowanceToAdd = _mapper.Map<InvestmentAllowance>(investmentAllowanceDto);
                 investmentAllowanceToAdd.AssetId = investmentAllowanceDto.AssetId;
                 investmentAllowanceToAdd.CompanyId = investmentAllowanceDto.CompanyId;
                 investmentAllowanceToAdd.YearId = investmentAllowanceDto.YearId;
-
                 await _investmentAllowanceService.AddInvestmentAllowanceAsync(investmentAllowanceToAdd);
 
                 return Ok("Investment Allowance added successfully !!");
@@ -52,12 +69,11 @@ namespace TaxComputationAPI.Controllers
         }
 
         [HttpDelete("investment-allowance/{Id}")]
-        //[Authorize]
+        [Authorize]
         public async Task<IActionResult> DeleteInvestmentAllowance(int Id)
         {
             try
             {
-               
 
                 await _investmentAllowanceService.DeleteInvestmentAllowanceAsync(Id);
 
@@ -81,13 +97,13 @@ namespace TaxComputationAPI.Controllers
             }
             try
             {
-                
+
                 var investment = await _investmentAllowanceService.GetInvestmentAllowances(companyId, yearId);
-                if (investment!=null)
+                if (investment != null)
                 {
-                    
-                        return Ok(new { investment });
-                    
+
+                    return Ok(new { investment });
+
                 }
                 return StatusCode(404, new { errors = new[] { "Record not found at this time please try again later" } });
 

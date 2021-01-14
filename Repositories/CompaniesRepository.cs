@@ -15,11 +15,9 @@ namespace TaxComputationAPI.Repositories
 {
     public class CompaniesRepository : ICompaniesRepository
     {
-        private readonly DataContext _context;
         private readonly DatabaseManager _databaseManager;
-        public CompaniesRepository(DataContext context,  DatabaseManager databaseManager)
+        public CompaniesRepository(DatabaseManager databaseManager)
         {
-            _context = context;
             _databaseManager = databaseManager;
 
         }
@@ -36,12 +34,12 @@ namespace TaxComputationAPI.Repositories
                 DynamicParameters parameters = new DynamicParameters();
 
                 parameters.Add("@Id", id);
-               
+
                 var record = await conn.QueryFirstAsync<Company>("[dbo].[usp_Get_Company_By_Id]", parameters, commandType: CommandType.StoredProcedure);
                 return record;
             }
 
-           
+
         }
 
         public async Task<Company> GetCompanyByTinAsync(string tinNumber)
@@ -57,11 +55,12 @@ namespace TaxComputationAPI.Repositories
 
                     parameters.Add("@TinNumber", tinNumber);
 
-                    var record =  conn.QueryFirstOrDefault<Company>("[dbo].[usp_Get_Company_By_Tin]", parameters, commandType: CommandType.StoredProcedure);
+                    var record = conn.QueryFirstOrDefault<Company>("[dbo].[usp_Get_Company_By_Tin]", parameters, commandType: CommandType.StoredProcedure);
                     return record;
                 }
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
 
 
             }
@@ -69,29 +68,38 @@ namespace TaxComputationAPI.Repositories
             return null;
         }
 
-     
-      
-        public async Task AddCompanyAsync(Company company) {
 
-            int rowAffected = 0;
-            using (IDbConnection con = await _databaseManager.DatabaseConnection())
+
+        public async Task AddCompanyAsync(Company company)
+        {
+            try
             {
-                if (con.State == ConnectionState.Closed)
-                    con.Open();
+                int rowAffected = 0;
+                using (IDbConnection con = await _databaseManager.DatabaseConnection())
+                {
+                    if (con.State == ConnectionState.Closed)
+                        con.Open();
 
-                DynamicParameters parameters = new DynamicParameters();
-                parameters.Add("@CompanyName", company.CompanyName);
-                parameters.Add("@CompanyDescription", company.CompanyDescription);
-                parameters.Add("@CacNumber", company.CompanyDescription);
-                parameters.Add("@TinNumber", company.TinNumber);
-                parameters.Add("@DateCreated", company.DateCreated);
-                parameters.Add("@OpeningYear", company.OpeningYear);
-                parameters.Add("@ClosingYear", company.ClosingYear);
-                parameters.Add("@IsActive", company.IsActive);
-                rowAffected = con.Execute("[dbo].[usp_Insert_Company]", parameters, commandType: CommandType.StoredProcedure);
+                    DynamicParameters parameters = new DynamicParameters();
+                    parameters.Add("@CompanyName", company.CompanyName);
+                    parameters.Add("@CompanyDescription", company.CompanyDescription);
+                    parameters.Add("@CacNumber", company.CompanyDescription);
+                    parameters.Add("@TinNumber", company.TinNumber);
+                    parameters.Add("@DateCreated", company.DateCreated);
+                    parameters.Add("@OpeningYear", company.OpeningYear);
+                    parameters.Add("@ClosingYear", DateTime.Today);
+                    parameters.Add("@IsActive", company.IsActive);
+                    parameters.Add("@MonthOfOperation", company.MonthOfOperation);
+                    rowAffected = con.Execute("[dbo].[usp_Insert_Company]", parameters, commandType: CommandType.StoredProcedure);
+                }
+
             }
+            catch (Exception ex)
+            {
 
-           
+            }
+      
+
         }
 
 
@@ -110,7 +118,7 @@ namespace TaxComputationAPI.Repositories
                 var result = await record.ReadAsync<Company>();
                 return await PagedList<Company>.CreateAsync(result, pagination.PageNumber, pagination.PageSIze);
             }
-          
+
         }
     }
 }

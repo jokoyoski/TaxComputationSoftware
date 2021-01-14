@@ -58,3 +58,12 @@ export const fixedAssetUnmapping = async ({ id }) => {
     throw error;
   }
 };
+
+export const fixedAssetDelete = async id => {
+  try {
+    const { data } = await axios.delete(`/api/FixedAsset/delete-fixed-asset/${id}`);
+    return data;
+  } catch (error) {
+    throw error;
+  }
+};

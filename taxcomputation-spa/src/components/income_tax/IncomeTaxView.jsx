@@ -1,12 +1,12 @@
 import React from "react";
-import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { useCompany } from "../../store/CompanyStore";
 import Loader from "../common/Loader";
 import utils from "../../utils";
 import { incomeTaxDelete, incomeTaxViewData } from "../../apis/IncomeTax";
+import ViewModeDataTable from "../common/ViewModeDataTable";
 
-const IncomeTaxView = ({ year, toast }) => {
+const IncomeTaxView = ({ year, toast, showITLevy, isBringLossFoward }) => {
   const isMounted = React.useRef(false);
   const [{ companyId }] = useCompany();
   const [loading, setLoading] = React.useState();
@@ -21,14 +21,19 @@ const IncomeTaxView = ({ year, toast }) => {
       try {
         setError(null);
         setLoading(true);
-        const data = await incomeTaxViewData({ companyId, year });
+        const data = await incomeTaxViewData({
+          companyId,
+          year,
+          isItLevyView: showITLevy,
+          isBringLossFoward
+        });
         if (isMounted.current) {
           setIncomeTaxData(
             data.map(item => ({
               ...item,
               description: (
                 <div className="p-d-flex p-jc-between p-ai-center">
-                  <p>{item.description}</p>
+                  <p>{item.canBolden ? <strong>{item.description}</strong> : item.description}</p>
                   {item.canDelete && (
                     <i
                       className="pi pi-times-circle delete"
@@ -46,20 +51,20 @@ const IncomeTaxView = ({ year, toast }) => {
                             fetchIncomeTaxViewData();
                           }
                         } catch (error) {
-                          console.log(error);
+                          utils.apiErrorHandling(error, toast);
                         }
                       }}></i>
                   )}
                 </div>
-              )
+              ),
+              columnOne: item.canBolden ? <strong>{item.columnOne}</strong> : item.columnOne,
+              columnTwo: item.canBolden ? <strong>{item.columnTwo}</strong> : item.columnTwo
             }))
           );
         }
       } catch (error) {
-        if (isMounted.current) {
-          if (error.response) setError(error.response.data.errors[0]);
-          else setError(error.message);
-        }
+        let errorString = utils.apiErrorHandling(error, toast);
+        setError(errorString);
       } finally {
         if (isMounted.current) setLoading(false);
       }
@@ -67,18 +72,18 @@ const IncomeTaxView = ({ year, toast }) => {
     fetchIncomeTaxViewData();
 
     return () => (isMounted.current = false);
-  }, [companyId, toast, year]);
+  }, [companyId, isBringLossFoward, showITLevy, toast, year]);
 
   if (error) return <p style={{ color: "#f00" }}>{error}</p>;
 
   if (loading) return <Loader />;
 
   return (
-    <DataTable className="p-datatable-gridlines" value={incomeTaxData} style={{ marginTop: 40 }}>
-      <Column field="description" header=""></Column>
+    <ViewModeDataTable value={incomeTaxData}>
+      <Column field="description" header="Description"></Column>
       <Column field="columnOne" header="₦"></Column>
       <Column field="columnTwo" header="₦"></Column>
-    </DataTable>
+    </ViewModeDataTable>
   );
 };
 

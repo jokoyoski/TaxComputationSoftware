@@ -25,13 +25,13 @@ namespace TaxComputationAPI.Controllers
 
 
         [HttpPost]
-        [Authorize]
+       [Authorize]
 
         public async Task<IActionResult> SaveCapitalAllowance(CapitalAllowance capitalAllowance)
         {
             try
             {
-                capitalAllowance.NumberOfYearsAvailable = 8;
+              
                 if (capitalAllowance.Initial > 0)
                 {
                     return BadRequest(new { errors = new[] { "Asset cannot have Initial Item" } });
@@ -61,7 +61,7 @@ namespace TaxComputationAPI.Controllers
 
 
         [HttpGet("{companyId}/{assetId}")]
-        [Authorize]
+      //  [Authorize]
         public async Task<IActionResult> GetCapitalAllowance(int companyId, int assetId)
         {
             try
@@ -76,6 +76,7 @@ namespace TaxComputationAPI.Controllers
                 {
                     return NotFound(new { errors = new[] { "Record not found!!!" } });
                 }
+                 record.capitalAllowances=record.capitalAllowances.OrderByDescending(x=>x.TaxYear).ToList();
                 return Ok(record);
 
             }
@@ -90,7 +91,7 @@ namespace TaxComputationAPI.Controllers
 
 
         [HttpDelete("{id}")]
-        [Authorize]
+       // [Authorize]
         public async Task<IActionResult> DeleteCapitalAllowance(int id)
         {
             var value = _capitalAllowanceService.DeleteCapitalAllowanceById(id);

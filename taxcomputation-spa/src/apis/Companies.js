@@ -6,7 +6,10 @@ export const addCompany = async ({
   cacNumber,
   tinNumber,
   openingYear,
-  closingYear
+  monthOfOperation,
+  unRelievedCf,
+  lossCf,
+  deferredTaxBroughtFoward
 }) => {
   try {
     return await axios.post("/api/Companies/add-company", {
@@ -15,7 +18,10 @@ export const addCompany = async ({
       cacNumber,
       tinNumber,
       openingYear,
-      closingYear
+      monthOfOperation,
+      unRelievedCf,
+      lossCf,
+      deferredTaxBroughtFoward
     });
   } catch (error) {
     throw error;

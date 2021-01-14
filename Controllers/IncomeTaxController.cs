@@ -1,11 +1,16 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
+using TaxComputationAPI.Helpers;
+using TaxComputationAPI.Interfaces;
 using TaxComputationSoftware.Dtos;
+using TaxComputationSoftware.Interfaces;
 
 namespace TaxComputationSoftware.Controllers
 {
@@ -16,15 +21,36 @@ namespace TaxComputationSoftware.Controllers
     public class IncomeTaxController : ControllerBase
     {
         private readonly ILogger<IncomeTaxController> _logger;
-        public IncomeTaxController(ILogger<IncomeTaxController> logger)
+
+        private readonly ITrialBalanceService _trialBalanceService;
+        private readonly IIncomeTaxService _incomeTaxService;
+        private readonly IMemoryCache _memoryCache;
+
+        private readonly IUtilitiesService _utilitiesService;
+
+        public IncomeTaxController(ILogger<IncomeTaxController> logger, IMemoryCache memoryCache, IUtilitiesService utilitiesService, ITrialBalanceService trialBalanceService, IIncomeTaxService incomeTaxService)
         {
             _logger = logger;
+            _incomeTaxService = incomeTaxService;
+            _trialBalanceService = trialBalanceService;
+            _utilitiesService = utilitiesService;
+            _memoryCache = memoryCache;
         }
 
         [HttpGet("{companyId}/{yearId}/{IsItLevyView}")]
         [Authorize]
-        public async Task<IActionResult> GetIncometax(int companyId, int yearId, bool IsItLevyView)
+        public async Task<IActionResult> GetIncometax(int companyId, int yearId, bool IsItLevyView, bool isBringLossFoward)
         {
+            var details = await _utilitiesService.GetFinancialYearAsync();
+            if (details.FirstOrDefault().Id == yearId)
+            {
+                return StatusCode(400, new { errors = new[] { "Invalid Year selected" } });
+            }
+               var x=details.LastOrDefault();
+            if (isBringLossFoward && details.LastOrDefault().Id != yearId)
+            {
+                return StatusCode(400, new { errors = new[] { "Please move the current Loss/unRelived and not previous UnRelieved/losses" } });
+            }
 
             if (yearId == 0)
             {
@@ -32,273 +58,8 @@ namespace TaxComputationSoftware.Controllers
             }
             try
             {
-
-                var incomeListDto = new List<IncomeTaxDto>();
-
-                incomeListDto.Add(new IncomeTaxDto
-                {
-                    Description = "Profits/Loss per accounts",
-                    ColumnOne = "",
-                    ColumnTwo = "₦(48,765,894)",
-                    Id=70
-                });
-
-                incomeListDto.Add(new IncomeTaxDto
-                {
-                    Description = "",
-                    ColumnOne = "",
-                    ColumnTwo = ""
-                });
-
-
-                incomeListDto.Add(new IncomeTaxDto
-                {
-                    Description = "Add: Disallowable Expenses",
-                    ColumnOne = "",
-                    ColumnTwo = ""
-                });
-
-                incomeListDto.Add(new IncomeTaxDto
-                {
-                    Description = "Depreciation",
-                    ColumnOne = "₦3,256,182",
-                    ColumnTwo = "",
-                    CanDelete = true,
-                    Id=8,
-                });
-                incomeListDto.Add(new IncomeTaxDto
-                {
-                    Description = "Fines and Penalties",
-                    ColumnOne = "₦3,256,182",
-                    ColumnTwo = "",
-                    CanDelete = true,
-                    Id=7,
-                });
-
-                incomeListDto.Add(new IncomeTaxDto
-                {
-                    Description = "Promotion",
-                    ColumnOne = "₦3,256,182",
-                    ColumnTwo = "₦490,003",
-                    CanDelete = true,
-                    Id=6
-                });
-
-                incomeListDto.Add(new IncomeTaxDto
-                {
-                    Description = "Allowable Income",
-                    ColumnOne = "",
-                    ColumnTwo = ""
-                });
-
-
-                incomeListDto.Add(new IncomeTaxDto
-                {
-                    Description = "Gain on disposal assets",
-                    ColumnOne = "₦3,256,182",
-                    ColumnTwo = "₦490,003",
-                    CanDelete = true,
-                    Id=4,
-                });
-
-                incomeListDto.Add(new IncomeTaxDto
-                {
-                    Description = "",
-                    ColumnOne = "",
-                    ColumnTwo = ""
-                });
-
-
-                incomeListDto.Add(new IncomeTaxDto
-                {
-                    Description = "",
-                    ColumnOne = "",
-                    ColumnTwo = ""
-                });
-
-
-                incomeListDto.Add(new IncomeTaxDto
-                {
-                    Description = "",
-                    ColumnOne = "",
-                    ColumnTwo = ""
-                });
-
-                incomeListDto.Add(new IncomeTaxDto
-                {
-                    Description = "Asessable Loss",
-                    ColumnOne = "",
-                    ColumnTwo = "₦(48,765,894)"
-                });
-
-                incomeListDto.Add(new IncomeTaxDto
-                {
-                    Description = "",
-                    ColumnOne = "",
-                    ColumnTwo = ""
-                });
-
-                incomeListDto.Add(new IncomeTaxDto
-                {
-                    Description = "Balancing Charge",
-                    ColumnOne = "",
-                    ColumnTwo = "₦(48,765,894)"
-                });
-
-
-                incomeListDto.Add(new IncomeTaxDto
-                {
-                    Description = "",
-                    ColumnOne = "",
-                    ColumnTwo = ""
-                });
-
-                incomeListDto.Add(new IncomeTaxDto
-                {
-                    Description = "Loss b/f",
-                    ColumnOne = "",
-                    ColumnTwo = "₦(48,765,894)"
-                });
-                incomeListDto.Add(new IncomeTaxDto
-                {
-                    Description = "Loss c/f",
-                    ColumnOne = "",
-                    ColumnTwo = "₦(48,765,894)"
-                });
-
-                incomeListDto.Add(new IncomeTaxDto
-                {
-                    Description = "",
-                    ColumnOne = "",
-                    ColumnTwo = ""
-                });
-                incomeListDto.Add(new IncomeTaxDto
-                {
-                    Description = "",
-                    ColumnOne = "",
-                    ColumnTwo = ""
-                });
-                incomeListDto.Add(new IncomeTaxDto
-                {
-                    Description = "Less Capital Allowances",
-                    ColumnOne = "",
-                    ColumnTwo = ""
-
-                });
-
-                incomeListDto.Add(new IncomeTaxDto
-                {
-                    Description = "Unrelieved Capital allowance b/f",
-                    ColumnOne = "₦(48,765,894)",
-                    ColumnTwo = ""
-                });
-                incomeListDto.Add(new IncomeTaxDto
-                {
-                    Description = "Claims of the year",
-                    ColumnOne = "₦(48,765,894)",
-                    ColumnTwo = ""
-                });
-
-                incomeListDto.Add(new IncomeTaxDto
-                {
-                    Description = "Balancing Allowance",
-                    ColumnOne = "₦(48,765,894)",
-                    ColumnTwo = ""
-                });
-                incomeListDto.Add(new IncomeTaxDto
-                {
-                    Description = "Investment Allowance",
-                    ColumnOne = "₦(48,765,894)",
-                    ColumnTwo = ""
-                }); incomeListDto.Add(new IncomeTaxDto
-                {
-                    Description = "Capital Allowance of the year",
-                    ColumnOne = "₦34,000",
-                    ColumnTwo = ""
-                });
-
-                incomeListDto.Add(new IncomeTaxDto
-                {
-                    Description = "Capital Allowance Claimed",
-                    ColumnOne = "-",
-                    ColumnTwo = "-"
-                });
-
-
-                incomeListDto.Add(new IncomeTaxDto
-                {
-                    Description = "Unreleived Capital Allowance c/f",
-                    ColumnOne = "₦34,000",
-                    ColumnTwo = ""
-                });
-
-                incomeListDto.Add(new IncomeTaxDto
-                {
-                    Description = "",
-                    ColumnOne = "",
-                    ColumnTwo = ""
-                }); incomeListDto.Add(new IncomeTaxDto
-                {
-                    Description = "Total Profit",
-                    ColumnOne = "",
-                    ColumnTwo = "NIL"
-                });
-
-                incomeListDto.Add(new IncomeTaxDto
-                {
-                    Description = "",
-                    ColumnOne = "",
-                    ColumnTwo = ""
-                });
-                incomeListDto.Add(new IncomeTaxDto
-                {
-                    Description = "",
-                    ColumnOne = "",
-                    ColumnTwo = ""
-                });
-
-                incomeListDto.Add(new IncomeTaxDto
-                {
-                    Description = "Income Tax thereon on total profit at 30%",
-                    ColumnOne = "",
-                    ColumnTwo = "NIL"
-                });
-
-                incomeListDto.Add(new IncomeTaxDto
-                {
-                    Description = "",
-                    ColumnOne = "",
-                    ColumnTwo = ""
-                });
-                incomeListDto.Add(new IncomeTaxDto
-                {
-                    Description = "",
-                    ColumnOne = "",
-                    ColumnTwo = ""
-                });
-                incomeListDto.Add(new IncomeTaxDto
-                {
-                    Description = "Education Tax @ 2% of Assessable profit",
-                    ColumnOne = "",
-                    ColumnTwo = "NIL"
-                });
-
-                incomeListDto.Add(new IncomeTaxDto
-                {
-                    Description = "",
-                    ColumnOne = "",
-                    ColumnTwo = ""
-                });
-                incomeListDto.Add(new IncomeTaxDto
-                {
-                    Description = "Minimum Tax Payable",
-                    ColumnOne = "",
-                    ColumnTwo = "NIL"
-                });
-
-
-
-                return Ok(incomeListDto);
+                var value = await _incomeTaxService.GetIncomeTax(companyId, yearId, IsItLevyView, isBringLossFoward);
+                return Ok(value);
 
             }
             catch (Exception ex)
@@ -310,12 +71,65 @@ namespace TaxComputationSoftware.Controllers
             }
         }
 
+
+
         [HttpPost("add-income-tax")]
         [Authorize]
         public async Task<IActionResult> AddIncomeTax(CreateIncomeTaxDto createIncomeTaxDto)
         {
             try
             {
+
+                if (createIncomeTaxDto.TypeId == 0)
+                {
+                    foreach (var j in createIncomeTaxDto.IncomeList)
+                    {
+
+                        if (j.IsCredit && !j.IsBoth && !j.IsDebit)
+                        {
+                            return StatusCode(400, new { errors = new[] { "Debit Values only are required for DisAlllowable" } });
+                        }
+                    }
+
+                }
+
+                if (createIncomeTaxDto.TypeId == 1)
+                {
+                    foreach (var j in createIncomeTaxDto.IncomeList)
+                    {
+
+                        if (!j.IsCredit && !j.IsBoth && j.IsDebit)
+                        {
+                            return StatusCode(400, new { errors = new[] { "Credit Values only are required for Allowable" } });
+                        }
+                    }
+                };
+
+                foreach (var j in createIncomeTaxDto.IncomeList)
+                {
+                    if (j.TrialBalanceId > 0)
+                    {
+                        var trialBalanceRecord = await _trialBalanceService.GetTrialBalanceById(j.TrialBalanceId);
+                        if (trialBalanceRecord.IsCheck)
+                        {
+                            return StatusCode(400, new { errors = new[] { "One of the item selected has already been mapped, please reload" } });
+                        }
+                    }
+
+
+                }
+
+                var details = await _utilitiesService.GetFinancialYearAsync(createIncomeTaxDto.YearId);
+                var companyDetails = await _utilitiesService.GetPreNotificationsAsync();
+                var companyDate = companyDetails.FirstOrDefault(x => x.CompanyId == createIncomeTaxDto.CompanyId);
+                var isValid = Utilities.ValidateDate(companyDate.OpeningDate, companyDate.ClosingDate, details.OpeningDate, details.ClosingDate);
+                if (!isValid)
+                {
+                    return StatusCode(400, new { errors = new[] { "The year selected has to be within the financial year!!" } });
+                }
+
+
+                _incomeTaxService.SaveAllowableDisAllowable(createIncomeTaxDto);
                 return Ok("Income tax created successfully");
 
             }
@@ -337,6 +151,8 @@ namespace TaxComputationSoftware.Controllers
         {
             try
             {
+
+                _incomeTaxService.DeleteAllowableDisAllowable(id);
                 return Ok("Income tax deleted successfully");
 
             }
@@ -351,4 +167,3 @@ namespace TaxComputationSoftware.Controllers
 
     }
 }
-

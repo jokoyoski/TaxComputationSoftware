@@ -8,13 +8,12 @@ import { fixedAssetMapping } from "../../apis/FixedAsset";
 import TrialBalanceMappingTable from "../common/TrialBalanceMappingTable";
 import DropdownController from "../controllers/DropdownController";
 import InputController from "../controllers/InputController";
+import { useResources } from "../../store/ResourcesStore";
 
 const FixedAssetMapping = ({
-  year,
-  setYear,
-  yearSelectItems,
   assetClassSelectItems,
   tbData,
+  onTrialBalance,
   trialBalanceRefresh,
   toast
 }) => {
@@ -22,8 +21,10 @@ const FixedAssetMapping = ({
   const depreciation = "depreciation";
   const { errors, handleSubmit, control } = useForm();
   const [{ companyId }] = useCompany();
+  const [{ financialYears }] = useResources();
   const [closingBalance, setClosingBalance] = React.useState();
   const [loading, setLoading] = React.useState(false);
+  const [init, setInit] = React.useState(true);
   const [closingBalanceAmt, setClosingBalanceAmt] = React.useState(utils.currencyFormatter(0));
   const [selectedAccounts, setSelectedAccounts] = React.useState([]);
   const [selectedAssetType, setSelectedAssetType] = React.useState();
@@ -48,6 +49,11 @@ const FixedAssetMapping = ({
       setClosingBalanceAmt(utils.currencyFormatter(value));
     }
   }, [selectedAccounts, selectedAssetType]);
+
+  React.useEffect(() => {
+    if (tbData.length > 0 && init) trialBalanceRefresh();
+    setInit(false);
+  }, [init, tbData, trialBalanceRefresh]);
 
   const onSubmit = async data => {
     if (loading) return;
@@ -122,8 +128,12 @@ const FixedAssetMapping = ({
         depreciationClosing: assetType !== cost ? Number(closingBalance) : 0
       });
       if (response.status === 200) {
-        toast.show(
-          utils.toastCallback({ severity: "success", detail: "Fixed asset mapped successfully" })
+        utils.onMappingSuccess(
+          toast,
+          "Fixed asset mapped successfully",
+          onTrialBalance,
+          trialBalanceRefresh,
+          setSelectedAccounts
         );
       }
     } catch (error) {
@@ -165,10 +175,8 @@ const FixedAssetMapping = ({
             controllerName="year"
             label="Year"
             required
-            dropdownOptions={yearSelectItems}
-            onChangeCallback={setYear}
+            dropdownOptions={financialYears}
             errorMessage="Year is required"
-            defaultValue={year}
           />
           <InputController
             Controller={Controller}

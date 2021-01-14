@@ -31,7 +31,7 @@ namespace TaxComputationAPI.Controllers
         [Authorize]
         public async Task<IActionResult> GetMinimumTax(int companyId, int yearId)
         {
-
+        
             if (yearId == 0)
             {
                 return StatusCode(400, new { errors = new[] { "Please select a Valid year" } });
@@ -39,15 +39,16 @@ namespace TaxComputationAPI.Controllers
             try
             {
                 var value = await _profitAndLossService.GetMinimumTax(companyId, yearId);
-                 decimal percentage = (decimal)1/ 100;     //annual percentage rate
-                if (value.OtherIncome != null)
+                decimal percentage = (decimal)1 / 100;     //annual percentage rate
+                if (value!= null)
                 {
                     var turnOver = decimal.Parse(value.Revenue) + decimal.Parse(value.OtherIncome);
-                    var percent=percentage *turnOver;
-                    return Ok(new { turnOver = turnOver, fivePercentTurnOver=percent});
+                    var percent = percentage * turnOver;
+                    return Ok(new { turnOver = turnOver, fivePercentTurnOver =  percent });
                 }
-                else{
-                     return StatusCode(404, new { errors = new[] { "Record not found at this time please try again later" } });
+                else
+                {
+                    return StatusCode(404, new { errors = new[] { "Record not found at this time please try again later" } });
 
                 }
 

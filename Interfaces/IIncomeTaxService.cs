@@ -9,7 +9,8 @@ namespace TaxComputationSoftware.Interfaces
     {
         Task SaveAllowableDisAllowable(CreateIncomeTaxDto incomeTax);
 
-        Task<List<IncomeTaxDto>> GetIncomeTax(int companyId, int yearId);
+        Task<List<IncomeTaxDto>> GetIncomeTax(int companyId, int yearId,bool isITlevy, bool isBringLossFoward);
+        Task<(decimal, decimal)> GetIncomeTaxForDeferred(int companyId, int yearId);
 
         Task DeleteAllowableDisAllowable(int allowableDisAllowableId);
         Task<BroughtFoward> GetBroughtFoward(int companyId);

@@ -50,7 +50,7 @@ const TrialBalanceMappingTable = ({
           </>
         )
       }>
-      {title === constants.modules.profit_loss && (
+      {(title === constants.modules.profit_loss || title === constants.modules.incomeTax) && (
         <Column
           field="isDebitChecked"
           header="Debit"
@@ -131,7 +131,7 @@ const TrialBalanceMappingTable = ({
           }}
         />
       )}
-      {title === constants.modules.profit_loss && (
+      {(title === constants.modules.profit_loss || title === constants.modules.incomeTax) && (
         <Column
           field="isCreditChecked"
           header="Credit"
@@ -212,7 +212,7 @@ const TrialBalanceMappingTable = ({
           }}
         />
       )}
-      {title !== constants.modules.profit_loss && (
+      {title !== constants.modules.profit_loss && title !== constants.modules.incomeTax && (
         <Column selectionMode="multiple" style={{ width: "3.5em", textAlign: "center" }} />
       )}
       <Column field="accountId" header="Account ID"></Column>

@@ -59,10 +59,10 @@ GO
 
 IF OBJECT_ID('[dbo].[usp_Get_Users') IS NOT NULL
 BEGIN
-DROP procedure [dbo].[usp_Get_User_By_Email]
+DROP procedure [dbo].[usp_Get_Users]
 END
 GO
-CREATE procedure [dbo].[usp_Get_User_By_Email]
+CREATE procedure [dbo].[usp_Get_Users]
 AS
 
 SELECT Email,PasswordHash,PhoneNumber,FirstName,LastName,DateCreated,IsActive from [dbo].[Users]
@@ -90,7 +90,7 @@ BEGIN
 CREATE TABLE UserCodes(
 Id int identity(1,1) NOT NULL,
 Email varchar(50),
-Code varchar(4)
+Code varchar(4),
 DateCreated datetime,
 )
 END
@@ -112,11 +112,19 @@ GO
 
 --------------------------------------- STORED PROCEDURE TO  UPDATE PASSWORD -----------------------------------------
 
-IF EXISTS(SELECT FROM Users where Email=@Email)
+IF OBJECT_ID('[dbo].[Update_Password]') IS NOT NULL
 BEGIN
-UPDATE [dbo].[Users](
-@PasswordHash varchar(max)
+DROP procedure [dbo].[Update_Password]
+END
+GO
+CREATE PROCEDURE [dbo].[Update_Password](
+@Email VARCHAR(50),
+@PasswordHash varchar(MAX)
 )
-SET PasswordHash = @PasswordHash
-WHERE Email=@Email
+AS
+IF EXISTS(SELECT * FROM [dbo].[Users] where Email=@Email)
+BEGIN
+    UPDATE [dbo].[Users]
+    SET PasswordHash = @PasswordHash
+    WHERE Email=@Email
 END

@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using TaxComputationAPI.Dtos;
+using TaxComputationAPI.Helpers;
 using TaxComputationAPI.Interfaces;
 
 namespace TaxComputationAPI.Controllers
@@ -18,20 +20,44 @@ namespace TaxComputationAPI.Controllers
     {
         private readonly ILogger<ProfitAndLossController> _logger;
         private readonly IProfitAndLossService _profitAndLossService;
-        public ProfitAndLossController(IProfitAndLossService profitAndLossService, ILogger<ProfitAndLossController> logger)
+        private readonly ITrialBalanceService _trialBalanceService;
+        private readonly IMemoryCache _memoryCache;
+        private IUtilitiesService _utilitiesServices;
+        public ProfitAndLossController(IProfitAndLossService profitAndLossService, IUtilitiesService utilitiesServices, ITrialBalanceService trialBalanceService, IMemoryCache memoryCache, ILogger<ProfitAndLossController> logger)
         {
             _profitAndLossService = profitAndLossService;
+            _trialBalanceService = trialBalanceService;
             _logger = logger;
+            _memoryCache = memoryCache;
+            _utilitiesServices = utilitiesServices;
         }
 
 
 
         [HttpPost()]
-        [Authorize]
+        //  [Authorize]
         public async Task<IActionResult> CreateProfitandLoss(CreateProfitAndLoss profitAndLoss)
         {
             try
             {
+
+                foreach (var j in profitAndLoss.TrialBalanceList)
+                {
+                    var trialBalanceRecord = await _trialBalanceService.GetTrialBalanceById(j.TrialBalanceId);
+                    if (trialBalanceRecord.IsCheck)
+                    {
+                        return StatusCode(400, new { errors = new[] { "One of the item selected has already been mapped, please reload" } });
+                    }
+                }
+                var details = await _utilitiesServices.GetFinancialYearAsync(profitAndLoss.YearId);
+                var companyDetails = await _utilitiesServices.GetPreNotificationsAsync();
+                var companyDate = companyDetails.FirstOrDefault(x => x.CompanyId == profitAndLoss.CompanyId);
+                var isValid = Utilities.ValidateDate(companyDate.OpeningDate, companyDate.ClosingDate, details.OpeningDate, details.ClosingDate);
+
+                if (!isValid)
+                {
+                    return StatusCode(400, new { errors = new[] { "The year selected has to be within the financial year!!" } });
+                }
 
                 await _profitAndLossService.SaveProfitsAndLoss(profitAndLoss);
                 return Ok("saved successfully");
@@ -61,9 +87,9 @@ namespace TaxComputationAPI.Controllers
             try
             {
                 var profitAndLoss = await _profitAndLossService.GetProfitAndLossByCompanyIdAndYear(companyId, yearId);
-                if (profitAndLoss.Count <=0)
+                if (profitAndLoss.Count <= 0)
                 {
-                    return StatusCode (404, new { errors = new []{"Record not found at this time please try again later"} });
+                    return StatusCode(404, new { errors = new[] { "Record not found at this time please try again later" } });
                 }
                 return Ok(profitAndLoss);
 

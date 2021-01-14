@@ -139,6 +139,45 @@ namespace TaxComputationAPI.Repositories
         }
 
 
+        public async Task<int> UpdateCapitalAllowanceForChannel(string channel, int Id)
+        {
+            int rowAffected = 0;
+            using (IDbConnection con = await _databaseManager.DatabaseConnection())
+            {
+                if (con.State == ConnectionState.Closed)
+                    con.Open();
+
+                DynamicParameters parameters = new DynamicParameters();
+
+                parameters.Add("@Channel", channel);
+                parameters.Add("@Id", Id);
+                rowAffected = con.Execute("[dbo].[Update_Capital_Allowance_By_Channel]", parameters, commandType: CommandType.StoredProcedure);
+            }
+
+            return rowAffected;
+        }
+
+
+        public async Task<int> UpdateArchivedCapitalAllowanceForChannel(string channel, int companyId, string taxYear, int assetId)
+        {
+            int rowAffected = 0;
+            using (IDbConnection con = await _databaseManager.DatabaseConnection())
+            {
+                if (con.State == ConnectionState.Closed)
+                    con.Open();
+
+                DynamicParameters parameters = new DynamicParameters();
+
+                parameters.Add("@Channel", channel);
+                parameters.Add("@CompanyId", companyId);
+                parameters.Add("@TaxYear", taxYear);
+                parameters.Add("@AssetId", assetId);
+                rowAffected = con.Execute("[dbo].[Update_Archived_Capital_Allowance_By_Channel]", parameters, commandType: CommandType.StoredProcedure);
+            }
+
+            return rowAffected;
+        }
+
 
 
 
@@ -245,17 +284,19 @@ namespace TaxComputationAPI.Repositories
             }
             return 0;
         }
-        public async Task DeleteCapitalAllowanceById(int Id)
+        public async Task DeleteCapitalAllowanceByAssetIdCompanyIdYearId(int companyId, int yearId, int assetId)
         {
             using (IDbConnection conn = await _databaseManager.DatabaseConnection())
             {
                 if (conn.State == ConnectionState.Closed) conn.Open();
 
                 DynamicParameters parameters = new DynamicParameters();
-                parameters.Add("@Id", Id);
+                parameters.Add("@CompanyId", companyId);
+                parameters.Add("@Year", yearId);
+                parameters.Add("@AssetId", assetId);
                 try
                 {
-                    conn.Execute("[dbo].[usp_Delete_Capital_Allowance_By_Id]", parameters, commandType: CommandType.StoredProcedure);
+                    conn.Execute("[dbo].[usp_Delete_Capital_Allowance_By_Company_Id_YearId_Asset_Id]", parameters, commandType: CommandType.StoredProcedure);
                     conn.Close();
                 }
                 catch (Exception e)
@@ -289,7 +330,7 @@ namespace TaxComputationAPI.Repositories
             }
         }
 
-
+     
 
 
 

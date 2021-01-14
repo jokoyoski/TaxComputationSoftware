@@ -6,10 +6,12 @@ import { useCompany } from "../../store/CompanyStore";
 import utils from "../../utils";
 import DropdownController from "../controllers/DropdownController";
 import InputController from "../controllers/InputController";
+import { useResources } from "../../store/ResourcesStore";
 
 const BalancingAdjustmentAdding = ({ yearSelectItems, assetClassSelectItems, toast }) => {
   const { errors, handleSubmit, control } = useForm();
   const [{ companyId }] = useCompany();
+  const [{ financialYears }] = useResources();
   const [loading, setLoading] = React.useState(false);
 
   const onSubmit = async data => {
@@ -52,7 +54,7 @@ const BalancingAdjustmentAdding = ({ yearSelectItems, assetClassSelectItems, toa
           controllerName="year"
           label="Year"
           required
-          dropdownOptions={yearSelectItems}
+          dropdownOptions={financialYears}
           errorMessage="Year is required"
           labelWidth={120}
           className="p-d-flex p-ai-center"
@@ -106,7 +108,7 @@ const BalancingAdjustmentAdding = ({ yearSelectItems, assetClassSelectItems, toa
           controllerName="yearBought"
           label="Year Bought"
           required
-          dropdownOptions={yearSelectItems}
+          dropdownOptions={financialYears}
           errorMessage="Year Bought is required"
           labelWidth={120}
           className="p-d-flex p-ai-center"

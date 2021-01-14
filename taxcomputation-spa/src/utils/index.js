@@ -1,7 +1,8 @@
+import { getCompanyFinancialYear } from "../apis/Utilities";
 import constants from "../constants";
 
 /** get current year */
-const currentYear = () => new Date().getFullYear();
+const currentYear = () => Number(sessionStorage.getItem("year"));
 
 /** get years from start year to current year */
 const getYears = () => {
@@ -87,22 +88,69 @@ const onTbData = (resources, setTbData) => {
 
 /** api error handling */
 const apiErrorHandling = (error, toast) => {
-  if (error.response.data.errors) {
-    toast.show(
-      toastCallback({
-        severity: "error",
-        detail: error.response.data.errors[0]
-      })
-    );
+  let errorString = "";
+
+  if (error?.response?.data?.errors) {
+    errorString = error.response.data.errors[0];
+    if (toast) {
+      toast.show(
+        toastCallback({
+          severity: "error",
+          detail: errorString
+        })
+      );
+    }
   } else {
-    toast.show(
-      toastCallback({
-        severity: "error",
-        summary: "Network Error",
-        detail: constants.networkErrorMessage
-      })
-    );
+    errorString = constants.networkErrorMessage;
+    if (toast) {
+      toast.show(
+        toastCallback({
+          severity: "error",
+          summary: "Network Error",
+          detail: errorString
+        })
+      );
+    }
   }
+
+  return errorString;
+};
+
+/** mapping successful callback */
+const onMappingSuccess = (
+  toast,
+  detail,
+  onTrialBalance,
+  trialBalanceRefresh,
+  setSelectedAccounts
+) => {
+  toast.show(
+    toastCallback({
+      severity: "success",
+      detail
+    })
+  );
+  setTimeout(() => {
+    onTrialBalance(null);
+    trialBalanceRefresh();
+    setSelectedAccounts([]);
+  }, 2000);
+};
+
+/** fetch company financial year */
+const fetchCompanyFinancialYear = (company, onFinancialYear, toast) => {
+  const fetcher = async () => {
+    if (!company.companyId) return;
+
+    try {
+      const data = await getCompanyFinancialYear(company.companyId);
+      if (data) onFinancialYear(data.map(item => ({ label: item.name, value: item.id })));
+    } catch (error) {
+      if (toast) apiErrorHandling(error, toast);
+      else console.log(error);
+    }
+  };
+  fetcher();
 };
 
 export default {
@@ -114,5 +162,7 @@ export default {
   currencyFormatter,
   toastCallback,
   onTbData,
-  apiErrorHandling
+  apiErrorHandling,
+  onMappingSuccess,
+  fetchCompanyFinancialYear
 };

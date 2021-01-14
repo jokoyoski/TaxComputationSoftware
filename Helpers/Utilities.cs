@@ -7,6 +7,7 @@ namespace TaxComputationAPI.Helpers
     public static class Utilities
     {
 
+
         public static string FormatAmount(object amount, short decimalDigits = 2)
         {
 
@@ -18,13 +19,26 @@ namespace TaxComputationAPI.Helpers
             return $"{value}";
         }
 
+        public static bool ValidateDate(DateTime openingDate, DateTime closingDate, DateTime currentOpenDate, DateTime currentClosingDate)
+        {
+            if (currentOpenDate < openingDate)
+            {
+                return false;
+            }
+            if (currentOpenDate > closingDate)
+            {
+                return false;
+            }
+            return true;
+        }
+
 
         public static string AreaMapped(string mappedTo)
         {
             string areaMapped = "";
             bool isReady = false;
 
-            for(int i = 0; i < mappedTo.Length; i++)
+            for (int i = 0; i < mappedTo.Length; i++)
             {
                 if (mappedTo[i] == ']')
                 {
@@ -42,11 +56,11 @@ namespace TaxComputationAPI.Helpers
             }
 
             return areaMapped;
-         
+
 
         }
 
-      
+
         private static Random random = new Random();
         public static string RandomString()
         {

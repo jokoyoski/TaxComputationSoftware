@@ -109,12 +109,8 @@ CREATE procedure [dbo].[usp_Get_Capital_Allowance_By_CompanyId_And_AssetId](
 )
 AS
 
-select  Id,TaxYear,OpeningResidue,Addition,Disposal,Initial,Annual,Total,ClosingResidue,YearsToGo,NumberOfYearsAvailable,CompanyCode,Channel,CompanyId,AssetId from [dbo].[CapitalAllowance] where CompanyId=@CompanyId AND AssetId=@AssetId
+select  [dbo].[CapitalAllowance].Id,[dbo].[FinancialYear].Name As TaxYear,[dbo].[FinancialYear].Id As YearId,OpeningResidue,Addition,Disposal,Initial,Annual,Total,ClosingResidue,YearsToGo,NumberOfYearsAvailable,CompanyCode,Channel,[dbo].[CapitalAllowance].CompanyId,AssetId from [dbo].[CapitalAllowance] inner join [dbo].[FinancialYear]on [dbo].[CapitalAllowance].TaxYear=[FinancialYear].Id  where [dbo].[CapitalAllowance].CompanyId=@CompanyId AND AssetId=@AssetId
 GO
-
-
-
-
 
 
 --------------------------------------- STORED PROCEDURE TO  GET CAPITAL aALLOWANCE BY ASSET ,COMPANY AND YEAR-----------------------------------------
@@ -297,24 +293,28 @@ AS
 select  TaxYear,OpeningResidue,Addition,Disposal,Initial,Annual,Total,ClosingResidue,YearsToGo,NumberOfYearsAvailable,CompanyCode,Channel,CompanyId,AssetId from [dbo].[ArchivedCapitalAllowance] where CompanyId=@CompanyId AND AssetId=@AssetId AND TaxYear=@Year
 GO
 
---------------------------------------- STORED PROCEDURE TO  DELETE CAPITALALLOWANCE BY ID-----------------------------------------
-IF OBJECT_ID('[dbo].[usp_Delete_Capital_Allowance_By_Id]') IS nOT NULL
+--------------------------------------- STORED PROCEDURE TO  DELETE CAPITALALLOWANCE BY ASSETID YEARID COMPANYID-----------------------------------------
+--------------------------------------- STORED PROCEDURE TO  DELETE CAPITALALLOWANCE BY ASSETID YEARID COMPANYID-----------------------------------------
+IF OBJECT_ID('[dbo].[usp_Delete_Capital_Allowance_By_Company_Id_YearId_Asset_Id]') IS nOT NULL
 BEGIN
-DROP procedure [dbo].[usp_Delete_Capital_Allowance_By_Id]
+DROP procedure [dbo].[usp_Delete_Capital_Allowance_By_Company_Id_YearId_Asset_Id]
 END
 GO
-CREATE procedure [dbo].[usp_Delete_Capital_Allowance_By_Id](
-@Id varchar(20)
+CREATE procedure [dbo].[usp_Delete_Capital_Allowance_By_Company_Id_YearId_Asset_Id](
+@AssetId int,
+@Year int,
+@CompanyId int
 )
 AS
-declare  @AssetId int
-declare  @Year int
-declare  @CompanyId int
-select @AssetId=AssetId,@Year=TaxYear, @CompanyId=CompanyId   from [dbo].[CapitalAllowance] where Id=Id
+declare @FixedAssetId as int
+select @FixedAssetId=Id from [dbo].[FixedAsset] where AssetId=@AssetId and YearId=@Year and CompanyId=@CompanyId
+UPDATE [dbo].[TrialBalance] SET MappedTo = null,IsCheck=0,IsRemoved=0 WHERE Id IN (SELECT TrialBalanceId FROM [dbo].[TrialBalanceMapping] where ModuleId=@FixedAssetId);
+delete from [dbo].[TrialBalanceMapping] where ModuleId=@FixedAssetId
+Delete from [dbo].[BalancingAdjustmentYearBought] where AssestId=@AssetId and YearBought=@Year and CompanyId=@CompanyId
 Delete from [dbo].[ArchivedCapitalAllowance] where AssetId=@AssetId and TaxYear=@Year and CompanyId=@CompanyId
-Delete from [dbo].CapitalAllowance where AssetId=@AssetId and TaxYear=@Year and CompanyId=@CompanyId
+Delete from [dbo].[CapitalAllowance] where AssetId=@AssetId and TaxYear=@Year and CompanyId=@CompanyId
+Delete from [dbo].[FixedAsset] where AssetId=@AssetId and YearId=@Year and CompanyId=@CompanyId
 GO
-
 
 --------------------------------------- STORED PROCEDURE TO  CREATE CAPITAL ALLOWANCE SUMMARY-----------------------------------------
 
@@ -439,4 +439,54 @@ AS
 
 Delete from [dbo].[CapitalAllowanceSummary] where AssetId=@AssetId and CompanyId=@CompanyId
 GO
+
+
+
+
+
+--------------------------------------- STORED PROCEDURE TO  GET UPDATE CAPITAL ALLOWANCE BY CHANNEL-----------------------------------------
+
+IF OBJECT_ID('[dbo].[Update_Capital_Allowance_By_Channel]') IS nOT NULL
+BEGIN
+DROP procedure [dbo].[Update_Capital_Allowance_By_Channel]
+END
+GO
+CREATE procedure [dbo].[Update_Capital_Allowance_By_Channel](
+@Id int,
+@Channel varchar(10)
+)
+AS
+
+UPDATE [dbo].[CapitalAllowance]
+set Channel=@Channel  WHERE Id=@Id
+
+GO
+
+
+
+
+
+
+
+--------------------------------------- STORED PROCEDURE TO  GET UPDATE  ARCHIVED CAPITAL ALLOWANCE BY COMPANYID, ASSETID,TAXYEAR  FRO CHANNEL-----------------------------------------
+
+IF OBJECT_ID('[dbo].[Update_Archived_Capital_Allowance_By_Channel]') IS nOT NULL
+BEGIN
+DROP procedure [dbo].[Update_Archived_Capital_Allowance_By_Channel]
+END
+GO
+CREATE procedure [dbo].[Update_Archived_Capital_Allowance_By_Channel](
+@CompanyId int,
+@AssetId int,
+@Channel varchar(10),
+@TaxYear varchar (6)
+)
+AS
+
+UPDATE [dbo].[ArchivedCapitalAllowance]
+set Channel=@Channel  WHERE CompanyId=@CompanyId  and AssetId=@AssetId and  TaxYear=@TaxYear
+GO
+
+
+
 

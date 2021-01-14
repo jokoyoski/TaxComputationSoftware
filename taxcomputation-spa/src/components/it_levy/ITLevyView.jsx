@@ -1,12 +1,12 @@
 import React from "react";
-import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { useCompany } from "../../store/CompanyStore";
 import Loader from "../common/Loader";
 import { itLevyViewData } from "../../apis/ITLevy";
 import utils from "../../utils";
+import ViewModeDataTable from "../common/ViewModeDataTable";
 
-const ITLevyView = ({ year }) => {
+const ITLevyView = ({ year, toast }) => {
   const isMounted = React.useRef(false);
   const [{ companyId }] = useCompany();
   const [loading, setLoading] = React.useState();
@@ -38,10 +38,8 @@ const ITLevyView = ({ year }) => {
           });
         }
       } catch (error) {
-        if (isMounted.current) {
-          if (error.response) setError(error.response.data.errors[0]);
-          else setError(error.message);
-        }
+        let errorString = utils.apiErrorHandling(error, toast);
+        setError(errorString);
       } finally {
         if (isMounted.current) setLoading(false);
       }
@@ -49,17 +47,17 @@ const ITLevyView = ({ year }) => {
     fetchITLevyViewData();
 
     return () => (isMounted.current = false);
-  }, [companyId, year]);
+  }, [companyId, toast, year]);
 
   if (error) return <p style={{ color: "#f00" }}>{error}</p>;
 
   if (loading) return <Loader />;
 
   return (
-    <DataTable className="p-datatable-gridlines" value={itLevyData} style={{ marginTop: 40 }}>
+    <ViewModeDataTable value={itLevyData}>
       <Column field="category" header=""></Column>
       <Column field="credit" header="₦"></Column>
-    </DataTable>
+    </ViewModeDataTable>
   );
 };
 

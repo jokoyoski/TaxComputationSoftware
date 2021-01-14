@@ -75,5 +75,42 @@ namespace TaxComputationAPI.Services
 
           
         }
+
+
+
+
+          public async Task<decimal> GetInvestmentAllowanceForIncomeTax(int companyId, int yearId)
+         {
+           
+            var investmentList = new InvestmentAllowanceListDto();
+            investmentList.Investments= new List<Investment>();
+            decimal totalAddition = 0;
+            decimal percentage = (decimal)10 / 100;     //annual percentage rate
+            decimal percent=0;
+            var values = await _investmentAllowanceRepository.GetInvestmentAlowanceByCompanyIdYearId(companyId, yearId);
+            if(values.Count==0){
+                return 0;
+            }
+           foreach (var value in values)
+            {
+                 var investment = new Investment();
+                var addition = await _fixedAssetRepository.GetFixedAssetsByCompanyYearIdAssetId(value.CompanyId, value.YearId, value.AssetId);
+                 
+                if (addition != null)
+                {
+                    var assetValue = await _utilitiesService.GetAssetMappingById(addition.AssetId);
+                    totalAddition += addition.CostAddition;
+                    investment.Name = assetValue.AssetName;
+                    investment.Id=value.Id;
+                    investmentList.Investments.Add(investment);
+                }
+
+                 percent = totalAddition * percentage;
+                
+            }
+              return percent;
+
+          
+         }
     }
 }
