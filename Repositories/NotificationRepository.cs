@@ -28,7 +28,6 @@ namespace TaxComputationSoftware.Repositories
             _logger = logger;
         }
 
-
         public async Task<int> UpdateLossBfById(int companyId)
         {
             int rowAffected = 0;
@@ -44,7 +43,6 @@ namespace TaxComputationSoftware.Repositories
 
             return rowAffected;
         }
-
 
         public async Task<int> UpdateCapitalAllowanceForChannel(string channel, int Id)
         {
@@ -63,7 +61,6 @@ namespace TaxComputationSoftware.Repositories
 
             return rowAffected;
         }
-
 
         public async Task<int> UpdateArchivedCapitalAllowanceForChannel(string channel, int companyId, string taxYear, int assetId)
         {
@@ -85,8 +82,7 @@ namespace TaxComputationSoftware.Repositories
             return rowAffected;
         }
 
-
-         public async Task<int> UpdateDeferredTaxfById(int companyId)  //background job
+        public async Task<int> UpdateDeferredTaxfById(int companyId)  //background job
         {
             int rowAffected = 0;
             using (IDbConnection con = await _databaseManager.DatabaseConnection())
@@ -101,8 +97,6 @@ namespace TaxComputationSoftware.Repositories
 
             return rowAffected;
         }
-
-
 
         public async Task<List<AssetMapping>> GetAssetMappingAsync()
         {
@@ -130,7 +124,7 @@ namespace TaxComputationSoftware.Repositories
             }
         }
 
-         public async Task<Company> GetCompanyAsync(int id)
+        public async Task<Company> GetCompanyAsync(int id)
         {
 
 
@@ -149,7 +143,6 @@ namespace TaxComputationSoftware.Repositories
 
            
         }
-
 
         public async Task<int> SaveCapitaLAllowanceSummary(CapitalAllowanceSummary capitalAllowance)
         {
@@ -203,8 +196,6 @@ namespace TaxComputationSoftware.Repositories
             return null;
         }
 
-
-
         public async Task<List<PreNotification>> GetPreNotification()
         {
             using (IDbConnection conn = await _databaseManager.DatabaseConnection())
@@ -226,7 +217,6 @@ namespace TaxComputationSoftware.Repositories
             }
 
         }
-
 
         public async Task<int> UpdateCapitalAllowanceByFixedAssetOrBalancingAdjustemnt(CapitalAllowance capitalAllowance)
         {
@@ -256,8 +246,6 @@ namespace TaxComputationSoftware.Repositories
 
             return rowAffected;
         }
-
-
 
          public async Task<int> SaveArchivedCapitaLAllowance(CapitalAllowance capitalAllowance, string channel)
         {
@@ -296,7 +284,6 @@ namespace TaxComputationSoftware.Repositories
             return 0;
         }
 
-
         public async Task<int> SaveCapitaLAllowance(CapitalAllowance capitalAllowance, string channel)
         {
             try
@@ -334,9 +321,6 @@ namespace TaxComputationSoftware.Repositories
             return 0;
         }
 
-
-
-
         public async Task InsertPreNotification(PreNotification preNotification)
         {
             if (preNotification == null) throw new ArgumentNullException(nameof(preNotification));
@@ -367,7 +351,6 @@ namespace TaxComputationSoftware.Repositories
             }
         }
 
-
         public async Task UpdatePreNotification(PreNotification preNotification)
         {
             if (preNotification == null) throw new ArgumentNullException(nameof(preNotification));
@@ -396,7 +379,6 @@ namespace TaxComputationSoftware.Repositories
             }
         }
 
-
         public async Task UpdateJobDate(PreNotification preNotification)
         {
             if (preNotification == null) throw new ArgumentNullException(nameof(preNotification));
@@ -421,7 +403,6 @@ namespace TaxComputationSoftware.Repositories
                 }
             }
         }
-
 
         public async Task Lock(PreNotification preNotification)
         {
