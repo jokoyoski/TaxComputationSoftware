@@ -69,7 +69,7 @@ const MinimumTaxView = ({ year, toast, percentageTurnOver, setPercentageTurnOver
     fetchMinimumTaxViewData();
 
     return () => (isMounted.current = false);
-  }, [companyId, percentageTurnOver, toast, year]);
+  }, [companyId, percentageTurnOver, setPercentageTurnOver, toast, year]);
 
   if (error) return <p style={{ color: "#f00" }}>{error}</p>;
 
