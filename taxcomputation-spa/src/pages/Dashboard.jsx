@@ -29,16 +29,14 @@ const Dashboard = () => {
   const [resources, { onCompanies, onFinancialYear }] = useResources();
 
   React.useEffect(() => {
-    if (resources.financialYears.length < 1 && company.companyId) {
-      setLoading(true);
-      utils.fetchCompanyFinancialYear(company, onFinancialYear, toast);
-    } else {
-      setLoading(false);
+    if (!resources.financialYears && company.companyId) {
+      onFinancialYear([]);
+      utils.fetchCompanyFinancialYear(company, onFinancialYear, toast, setLoading);
     }
   }, [company, onFinancialYear, resources.financialYears]);
 
   React.useEffect(() => {
-    if (resources.financialYears.length > 0) setShowFinancialYear(true);
+    if (resources.financialYears?.length > 0) setShowFinancialYear(true);
   }, [resources.financialYears]);
 
   React.useEffect(() => {

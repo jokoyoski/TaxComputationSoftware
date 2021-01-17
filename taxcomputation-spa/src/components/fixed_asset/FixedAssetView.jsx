@@ -144,7 +144,7 @@ const FixedAssetView = ({ year, toast }) => {
       let errorString = utils.apiErrorHandling(error, toast);
       setError(errorString);
     } finally {
-      // if (isMounted.current) setLoading(false);
+      if (isMounted.current) setLoading(false);
     }
   }, [companyId, toast, year]);
 

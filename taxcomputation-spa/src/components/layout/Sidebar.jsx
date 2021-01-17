@@ -97,7 +97,8 @@ const Sidebar = ({ selectedTitle, isActive }) => {
           <p
             style={{ margin: 0, cursor: "pointer" }}
             onClick={() => {
-              onLogout(resetCompany, resetResources);
+              const removeYear = () => sessionStorage.removeItem("year");
+              onLogout(resetCompany, resetResources, removeYear);
             }}>
             Logout
           </p>

@@ -11,7 +11,7 @@ const AssetItem = ({
   const [isDeleting, setIsDeleting] = React.useState(false);
 
   return (
-    <div className="p-d-flex p-jc-between p-ai-center">
+    <div className="p-d-flex p-jc-between p-ai-center asset-item">
       <p style={{ marginTop: 10, marginBottom: 10 }}>{assetData.assetName}</p>
       <div>
         <i
