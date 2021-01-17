@@ -9,6 +9,8 @@ import { useResources } from "../../store/ResourcesStore";
 import CreateAsset from "../common/CreateAsset";
 import AssetList from "../common/AssetList";
 import FinancialYear from "../common/FinancialYear";
+import CompanyList from "../common/CompanyList";
+import CompanyDetails from "../common/CompanyDetails";
 
 const Header = ({ title, loading }) => {
   const { replace } = useRouterActions();
@@ -17,9 +19,14 @@ const Header = ({ title, loading }) => {
   const [showCreateUser, setShowCreateUser] = React.useState();
   const [showCreateAsset, setShowCreateAsset] = React.useState();
   const [showAssetList, setShowAssetList] = React.useState();
+  const [showCompanyList, setShowCompanyList] = React.useState();
+  const [showCompanyDetails, setShowCompanyDetails] = React.useState();
   const [showFinancialYear, setShowFinancialYear] = React.useState(false);
   const [{ companyName }, { resetCompany }] = useCompany();
-  const [{ financialYears, selectedFinancialYear }, { resetResources }] = useResources();
+  const [
+    { financialYears, selectedFinancialYear, selectedCompany },
+    { resetResources }
+  ] = useResources();
 
   const onSwitchCompany = () => {
     setShowSettings(false);
@@ -28,6 +35,11 @@ const Header = ({ title, loading }) => {
     sessionStorage.removeItem("year");
     replace(constants.routes.home);
   };
+
+  const selectedFinancialYearLabel = React.useMemo(
+    () => financialYears?.find(year => year.value === selectedFinancialYear)?.label,
+    [financialYears, selectedFinancialYear]
+  );
 
   return (
     <>
@@ -47,8 +59,7 @@ const Header = ({ title, loading }) => {
           <div className="p-d-flex p-ai-center">
             {selectedFinancialYear && (
               <p style={{ marginRight: 20 }}>
-                {`Year:
-              ${financialYears.find(year => year.value === selectedFinancialYear)?.label}`}
+                {selectedFinancialYearLabel && `Year: ${selectedFinancialYearLabel}`}
               </p>
             )}
             {companyName && <p style={{ marginRight: 10 }}>{`Company: ${companyName}`}</p>}
@@ -87,6 +98,14 @@ const Header = ({ title, loading }) => {
                   <p
                     className="settings-item"
                     onClick={() => {
+                      setShowCompanyList(!showCompanyList);
+                      setShowSettings(false);
+                    }}>
+                    Company List
+                  </p>
+                  <p
+                    className="settings-item"
+                    onClick={() => {
                       setShowFinancialYear(true);
                       setShowSettings(false);
                     }}>
@@ -119,6 +138,21 @@ const Header = ({ title, loading }) => {
           showAssetList={showAssetList}
           setShowAssetList={setShowAssetList}
           setShowCreateAsset={setShowCreateAsset}
+        />
+      )}
+      {showCompanyList && (
+        <CompanyList
+          showCompanyList={showCompanyList}
+          setShowCompanyList={setShowCompanyList}
+          setShowCompanyDetails={setShowCompanyDetails}
+        />
+      )}
+      {showCompanyDetails && selectedCompany && (
+        <CompanyDetails
+          companyId={selectedCompany}
+          showCompanyDetails={showCompanyDetails}
+          setShowCompanyDetails={setShowCompanyDetails}
+          setShowCompanyList={setShowCompanyList}
         />
       )}
       {showFinancialYear && (

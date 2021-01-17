@@ -13,6 +13,10 @@ const MinimumTax = () => {
   const toast = React.useRef();
   const [mode, setMode] = usePathParam("mode");
   const [year, setYear] = React.useState(utils.currentYear());
+  const [percentageTurnOver, setPercentageTurnOver] = React.useState({
+    value: "",
+    canQuery: false
+  });
   const yearSelectItems = utils.getYears(year => ({
     label: year.toString(),
     value: year.toString()
@@ -26,9 +30,16 @@ const MinimumTax = () => {
         setMode={setMode}
         year={year}
         setYear={setYear}
+        percentageTurnOver={percentageTurnOver}
+        setPercentageTurnOver={setPercentageTurnOver}
         yearSelectItems={yearSelectItems}>
         <ViewMode title={title} year={year}>
-          <MinimumTaxView year={year} toast={toast.current} />
+          <MinimumTaxView
+            year={year}
+            toast={toast.current}
+            percentageTurnOver={percentageTurnOver}
+            setPercentageTurnOver={setPercentageTurnOver}
+          />
         </ViewMode>
       </Main>
       <Toast baseZIndex={1000} ref={el => (toast.current = el)} />

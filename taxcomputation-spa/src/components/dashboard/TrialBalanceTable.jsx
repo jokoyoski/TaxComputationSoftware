@@ -17,7 +17,7 @@ const TrialBalanceTable = ({
   const [year, setYear] = React.useState(null);
   const [tbData, setTbData] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
-  const [{ financialYears }] = useResources();
+  const [{ financialYears, selectedFinancialYear }] = useResources();
 
   React.useEffect(() => {
     isMounted.current = true;
@@ -50,13 +50,17 @@ const TrialBalanceTable = ({
         if (isMounted.current) setLoading(false);
       }
     };
-    if (refreshTrialBalanceTable) {
+    if (refreshTrialBalanceTable && year) {
       fetchTrialBalance();
       if (isMounted.current) setRefreshTrialBalanceTable(false);
     }
 
     return () => (isMounted.current = false);
   }, [companyId, year, refreshTrialBalanceTable, setRefreshTrialBalanceTable, toast]);
+
+  React.useEffect(() => {
+    setYear(selectedFinancialYear);
+  }, [selectedFinancialYear]);
 
   return (
     <Card style={{ width: "100%" }}>

@@ -40,3 +40,12 @@ export const getCompanies = async (pageNumber = 1, pageSize = 1000) => {
     throw error;
   }
 };
+
+export const getCompany = async id => {
+  try {
+    const { data } = await axios.get(`/api/Companies/get-company/${id}`);
+    return data;
+  } catch (error) {
+    throw error;
+  }
+};

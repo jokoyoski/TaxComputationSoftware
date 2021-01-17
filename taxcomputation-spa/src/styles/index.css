@@ -90,14 +90,29 @@ body {
     0 1px 3px 0 rgba(0, 0, 0, 0.12);
 }
 
+.asset-item {
+  padding-left: 10px;
+}
+
+.company-item {
+  padding-left: 10px;
+}
+
 .settings-item {
   cursor: pointer;
   padding: 5px;
   margin: 0px;
   text-align: right;
-  transition: background-color 0.3s;
 }
 
+.asset-item:hover,
+.company-item:hover,
+.settings-item:hover {
+  transition: background-color 0.2s ease-in;
+}
+
+.asset-item:hover,
+.company-item:hover,
 .settings-item:hover {
   background-color: #eee;
 }
@@ -128,4 +143,8 @@ body {
   align-items: center;
   width: 100vw;
   height: 100vh;
+}
+
+.company-details {
+  margin: 10px;
 }

@@ -138,16 +138,19 @@ const onMappingSuccess = (
 };
 
 /** fetch company financial year */
-const fetchCompanyFinancialYear = (company, onFinancialYear, toast) => {
+const fetchCompanyFinancialYear = (company, onFinancialYear, toast, setLoading) => {
   const fetcher = async () => {
-    if (!company.companyId) return;
+    if (!company.companyId || !setLoading) return;
 
     try {
+      setLoading(true);
       const data = await getCompanyFinancialYear(company.companyId);
       if (data) onFinancialYear(data.map(item => ({ label: item.name, value: item.id })));
     } catch (error) {
       if (toast) apiErrorHandling(error, toast);
       else console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
   fetcher();

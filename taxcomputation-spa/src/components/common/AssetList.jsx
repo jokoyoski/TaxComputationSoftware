@@ -12,7 +12,7 @@ const AssetList = ({ showAssetList, setShowAssetList, setShowCreateAsset }) => {
   const [{ assetList }, { onAssetList, onSelectedAsset }] = useResources();
 
   React.useEffect(() => {
-    const fetchAsset = async () => {
+    const fetchAssets = async () => {
       if (!assetList) {
         try {
           setLoading(true);
@@ -26,7 +26,7 @@ const AssetList = ({ showAssetList, setShowAssetList, setShowCreateAsset }) => {
         }
       }
     };
-    fetchAsset();
+    fetchAssets();
   }, [assetList, onAssetList]);
 
   return (
