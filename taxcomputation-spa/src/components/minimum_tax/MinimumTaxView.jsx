@@ -6,7 +6,7 @@ import { minimumTaxViewData } from "../../apis/MinimumTax";
 import ViewModeDataTable from "../common/ViewModeDataTable";
 import ViewLoader from "../common/ViewLoader";
 
-const MinimumTaxView = ({ year, toast, percentageTurnOver }) => {
+const MinimumTaxView = ({ year, toast, percentageTurnOver, setPercentageTurnOver }) => {
   const isMounted = React.useRef(false);
   const [{ companyId }] = useCompany();
   const [loading, setLoading] = React.useState();
@@ -31,6 +31,7 @@ const MinimumTaxView = ({ year, toast, percentageTurnOver }) => {
       try {
         setError(null);
         setLoading(true);
+        setPercentageTurnOver(state => ({ ...state, canQuery: null }));
         const data = await minimumTaxViewData({
           companyId,
           year,
@@ -59,7 +60,10 @@ const MinimumTaxView = ({ year, toast, percentageTurnOver }) => {
         let errorString = utils.apiErrorHandling(error, toast);
         setError(errorString);
       } finally {
-        if (isMounted.current) setLoading(false);
+        if (isMounted.current) {
+          setLoading(false);
+          setPercentageTurnOver(state => ({ ...state, canQuery: false }));
+        }
       }
     };
     fetchMinimumTaxViewData();

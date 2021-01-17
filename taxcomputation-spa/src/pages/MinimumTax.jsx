@@ -38,6 +38,7 @@ const MinimumTax = () => {
             year={year}
             toast={toast.current}
             percentageTurnOver={percentageTurnOver}
+            setPercentageTurnOver={setPercentageTurnOver}
           />
         </ViewMode>
       </Main>

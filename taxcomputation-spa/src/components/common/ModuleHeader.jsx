@@ -75,6 +75,7 @@ const ModuleHeader = ({
               <InputText
                 style={{ marginLeft: 10 }}
                 placeholder="Percentage Turn Over"
+                disabled={percentageTurnOver.canQuery === null}
                 value={percentageTurnOver.value}
                 onChange={e => setPercentageTurnOver({ value: e.target.value, canQuery: false })}
                 onBlur={canQueryPercentageTurnOver}
