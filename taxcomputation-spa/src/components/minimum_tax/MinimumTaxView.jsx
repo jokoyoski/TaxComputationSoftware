@@ -6,7 +6,7 @@ import { minimumTaxViewData } from "../../apis/MinimumTax";
 import ViewModeDataTable from "../common/ViewModeDataTable";
 import ViewLoader from "../common/ViewLoader";
 
-const MinimumTaxView = ({ year, toast }) => {
+const MinimumTaxView = ({ year, toast, percentageTurnOver }) => {
   const isMounted = React.useRef(false);
   const [{ companyId }] = useCompany();
   const [loading, setLoading] = React.useState();
@@ -18,16 +18,30 @@ const MinimumTaxView = ({ year, toast }) => {
 
     isMounted.current = true;
     const fetchMinimumTaxViewData = async () => {
+      if (!percentageTurnOver.canQuery) return;
+      else if (isNaN(percentageTurnOver.value)) {
+        toast.show(
+          utils.toastCallback({
+            severity: "error",
+            detail: "Percentage Turn Over is not a number"
+          })
+        );
+      }
+
       try {
         setError(null);
         setLoading(true);
-        const data = await minimumTaxViewData({ companyId, year });
+        const data = await minimumTaxViewData({
+          companyId,
+          year,
+          percentageTurnOver: Number(percentageTurnOver.value)
+        });
         if (isMounted.current) {
           setMinimumTaxData(() => {
             let newState = [];
             return newState.concat([
               {
-                category: "0.5% OF TURNOVER",
+                category: `${percentageTurnOver.value}% OF TURNOVER`,
                 credit: utils.currencyFormatter(data.fivePercentTurnOver)
               },
               {
@@ -51,7 +65,7 @@ const MinimumTaxView = ({ year, toast }) => {
     fetchMinimumTaxViewData();
 
     return () => (isMounted.current = false);
-  }, [companyId, toast, year]);
+  }, [companyId, percentageTurnOver, toast, year]);
 
   if (error) return <p style={{ color: "#f00" }}>{error}</p>;
 

@@ -1,6 +1,7 @@
 import React from "react";
 import { Dropdown } from "primereact/dropdown";
 import { InputSwitch } from "primereact/inputswitch";
+import { InputText } from "primereact/inputtext";
 import constants from "../../constants";
 import { useResources } from "../../store/ResourcesStore";
 
@@ -14,6 +15,8 @@ const ModuleHeader = ({
   setShowITLevy,
   isBringLossFoward,
   setIsBringLossFoward,
+  percentageTurnOver,
+  setPercentageTurnOver,
   isBringDeferredTaxFoward,
   setIsBringDeferredTaxFoward,
   assetId,
@@ -35,6 +38,13 @@ const ModuleHeader = ({
       : { label: "Mapping - Mode", value: "mapping" },
     { label: "View - Mode", value: "view" }
   ]);
+
+  const canQueryPercentageTurnOver = () =>
+    setPercentageTurnOver(state => {
+      const newState = { ...state };
+      newState.canQuery = true;
+      return newState;
+    });
 
   React.useEffect(() => {
     setModeSelectItems(state =>
@@ -59,6 +69,19 @@ const ModuleHeader = ({
           }
         </p>
         <div className="p-d-flex p-ai-center">
+          {mode === "view" && title === constants.modules.minimumTax && (
+            <div className="p-d-flex p-ai-center">
+              <span>% Turn Over</span>
+              <InputText
+                style={{ marginLeft: 10 }}
+                placeholder="Percentage Turn Over"
+                value={percentageTurnOver.value}
+                onChange={e => setPercentageTurnOver({ value: e.target.value, canQuery: false })}
+                onBlur={canQueryPercentageTurnOver}
+                onKeyDown={e => e.key === "Enter" && canQueryPercentageTurnOver()}
+              />
+            </div>
+          )}
           {mode === "view" && title === constants.modules.incomeTax && (
             <>
               <div className="p-d-flex p-ai-center">

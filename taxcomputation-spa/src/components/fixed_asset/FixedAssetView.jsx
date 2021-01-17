@@ -33,7 +33,7 @@ const FixedAssetView = ({ year, toast }) => {
       key: "transferCost"
     },
     {
-      category: <strong>As at 31/12/{year - 1}</strong>,
+      category: <strong>Closing Balance</strong>,
       key: "costClosing"
     },
     {
@@ -59,7 +59,7 @@ const FixedAssetView = ({ year, toast }) => {
       key: "transferDepreciation"
     },
     {
-      category: <strong>As at 31/12/{year - 1}</strong>,
+      category: <strong>Closing Balance</strong>,
       key: "depreciationClosing"
     },
     {
@@ -69,7 +69,7 @@ const FixedAssetView = ({ year, toast }) => {
       category: <strong>Net Book Value</strong>
     },
     {
-      category: <strong>As at 31/12/{year - 1}</strong>,
+      category: <strong>Closing Balance</strong>,
       key: "netValue"
     }
   ]);

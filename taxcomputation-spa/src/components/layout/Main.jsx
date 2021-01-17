@@ -14,6 +14,8 @@ const Main = ({
   setShowITLevy,
   isBringLossFoward,
   setIsBringLossFoward,
+  percentageTurnOver,
+  setPercentageTurnOver,
   isBringDeferredTaxFoward,
   setIsBringDeferredTaxFoward,
   assetId,
@@ -35,6 +37,8 @@ const Main = ({
           showITLevy={showITLevy}
           setShowITLevy={setShowITLevy}
           isBringLossFoward={isBringLossFoward}
+          percentageTurnOver={percentageTurnOver}
+          setPercentageTurnOver={setPercentageTurnOver}
           setIsBringLossFoward={setIsBringLossFoward}
           isBringDeferredTaxFoward={isBringDeferredTaxFoward}
           setIsBringDeferredTaxFoward={setIsBringDeferredTaxFoward}
