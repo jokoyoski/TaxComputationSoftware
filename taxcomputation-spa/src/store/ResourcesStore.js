@@ -6,8 +6,10 @@ const initialState = {
   profitAndLossModuleItems: null,
   trialBalance: null,
   assetList: null,
+  companyList: null,
   selectedAsset: null,
-  financialYears: [],
+  selectedCompany: null,
+  financialYears: null,
   selectedFinancialYear: null
 };
 
@@ -22,7 +24,9 @@ const ResourcesStore = createStore({
       setState({ profitAndLossModuleItems }),
     onTrialBalance: trialBalance => ({ setState }) => setState({ trialBalance }),
     onAssetList: assetList => ({ setState }) => setState({ assetList }),
+    onCompanyList: companyList => ({ setState }) => setState({ companyList }),
     onSelectedAsset: selectedAsset => ({ setState }) => setState({ selectedAsset }),
+    onSelectedCompany: selectedCompany => ({ setState }) => setState({ selectedCompany }),
     onFinancialYear: financialYears => ({ setState }) => setState({ financialYears }),
     onSelectedFinancialYear: selectedFinancialYear => ({ setState }) =>
       setState({ selectedFinancialYear }),
