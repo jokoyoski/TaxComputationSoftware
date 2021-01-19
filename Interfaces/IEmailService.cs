@@ -1,13 +1,18 @@
-
-
+using System;
 using System.Threading.Tasks;
+using SendGrid;
+
 
 namespace TaxComputationSoftware.Interfaces
 {
     public interface IEmailService
     {
-        Task Send(string toEmail, string fromEmail,
-                               string subject, string plainMessage, 
-                               string htmlMessage, string toName = "", string fromName = "");
+        Task<Response> ExceptionEmail(string method, string errorMessage);
+        Task<Response> OpeningDateEmail(string companyName, DateTime openingDate);
+        Task<Response> ClosingDateEmail(string companyName, DateTime closingDate);
+        Task<Response> PreNotificationEmail(string companyName, DateTime preNotificationDate);
+        Task<Response> PostNotificationEmail(string companyName, DateTime postNotificationDate);
     }
+    
+    
 }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -11,6 +12,7 @@ using TaxComputationAPI.Interfaces;
 using TaxComputationAPI.Models;
 using TaxComputationSoftware.Interfaces;
 using TaxComputationSoftware.Model;
+using static TaxComputationSoftware.Services.EmailService;
 
 namespace TaxComputationSoftware.Services
 {
@@ -42,7 +44,7 @@ namespace TaxComputationSoftware.Services
         {
             _logger.LogInformation("Timed Hosted Service running.");
 
-            _timer = new Timer(PreFinancialYearNotification, null, TimeSpan.Zero, 
+            _timer = new Timer(PreFinancialYearNotification, null, TimeSpan.Zero,
                 TimeSpan.FromMinutes(1));
 
             return Task.CompletedTask;
@@ -59,40 +61,41 @@ namespace TaxComputationSoftware.Services
 
         private async void PreFinancialYearNotification(object state)
         {
-
-            var pre = await _notificationRepository.GetPreNotification();
-
-            var emailList = new List<PreNotification>();
-
-            foreach (var item in pre)
+            try
             {
 
-                PreNotification email = default(PreNotification);
+                var pre = await _notificationRepository.GetPreNotification();
 
-                var companyDate = item.ClosingDate.AddDays(EmailDay + 1).Date;
-                var emailDate = DateTime.Now.Date;
-                
+                var emailList = new List<PreNotification>();
 
-                if (companyDate == emailDate) 
+                foreach (var item in pre)
                 {
-                    item.JobDate = item.OpeningDate.AddDays(AnnualJob);
 
-                    email = new PreNotification { Id = item.Id, CompanyId = item.CompanyId, OpeningDate = item.OpeningDate, JobDate = item.JobDate };
+                    PreNotification email = default(PreNotification);
+
+                    var companyDate = item.ClosingDate.AddDays(EmailDay + 1).Date;
+                    var emailDate = DateTime.Now.Date;
+
+
+                    if (companyDate == emailDate)
+                    {
+                        item.JobDate = item.OpeningDate.AddDays(AnnualJob);
+
+                        email = new PreNotification { Id = item.Id, CompanyId = item.CompanyId, OpeningDate = item.OpeningDate, JobDate = item.JobDate };
+                    }
+
+                    if (email != null) emailList.Add(email);
                 }
 
-                if (email != null) emailList.Add(email);
-            }
-
-            if (emailList != null && emailList.Any() && emailList.Count() > 0)
-            {
-                try
+                if (emailList != null && emailList.Any() && emailList.Count() > 0)
                 {
+
 
                     foreach (var mail in emailList)
                     {
 
-                        mail.OpeningDate = mail.OpeningDate.AddYears(1); 
-                        mail.ClosingDate = mail.ClosingDate.AddYears(1); 
+                        mail.OpeningDate = mail.OpeningDate.AddYears(1);
+                        mail.ClosingDate = mail.ClosingDate.AddYears(1);
 
                         await _notificationRepository.UpdatePreNotification(mail);
 
@@ -102,32 +105,25 @@ namespace TaxComputationSoftware.Services
 
                         var company = await _companyRepository.GetCompanyAsync(mail.CompanyId);
 
-                        var date = mail.ClosingDate.AddDays(AnnualJob + 1).ToString("dddd, dd MMMM yyyy"); 
+                        var date = mail.ClosingDate.AddDays(AnnualJob + 1);
 
-                        string mg = $"Hello as you all know that {company.CompanyName} financial year has started , you are required to have done the necessary adjustment on or before {date}.";
+                        _toEmail = "Aziba Alpha";
+                        _toName = "azibaalpha@gmail.com";
 
-                        var message = mg.ToString();
+                        await _emailService.PreNotificationEmail(company.CompanyName, date);
+                        
+                        int month = mail.OpeningDate.Month;
+                        int year = mail.OpeningDate.Year;
 
-                        string toEmail = "azibaalpha@gmail.com";
-
-                        string fromEmail = "bomana.ogoni@gmail.com";
-
-                        string subject = "Annual Preparation";
-
-                        await _emailService.Send(toEmail, fromEmail, subject, message, null);
-                        int month=mail.OpeningDate.Month;
-                        int year=mail.OpeningDate.Year;
-                        await _utilitiesRepository.AddFinancialYearAsync(new FinancialYear { Name = $"{month/year}", CompanyId = company.Id, OpeningDate = mail.OpeningDate, ClosingDate = mail.ClosingDate });                        
+                        await _utilitiesRepository.AddFinancialYearAsync(new FinancialYear { Name = $"{month / year}", CompanyId = company.Id, OpeningDate = mail.OpeningDate, ClosingDate = mail.ClosingDate });
 
                     }
-
                 }
-                catch (Exception e)
-                {
-                    _logger.LogError(e.Message);
-                    await _emailService.Send(LogEmail, AdminEmail, "Application Exception", e.Message, null);
-
-                }
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e.Message);
+                await _emailService.ExceptionEmail(MethodBase.GetCurrentMethod().DeclaringType.Name, e.Message);
             }
         }
 

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
+using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
@@ -77,7 +78,7 @@ namespace TaxComputationAPI.Manager
             catch (SqlException er)
             {
                 _logger.LogError("Could not Connect to Database", er);
-                _emailService.Send(AnnualEmailNotificationBackgroundService.LogEmail, AnnualEmailNotificationBackgroundService.AdminEmail, "Application Exception", er.Message, null);
+                _emailService.ExceptionEmail(MethodBase.GetCurrentMethod().DeclaringType.Name, er.Message);
             }
             finally
             {
