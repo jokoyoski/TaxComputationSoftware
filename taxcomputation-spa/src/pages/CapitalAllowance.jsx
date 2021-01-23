@@ -40,7 +40,7 @@ const CapitalAllowance = () => {
       );
       setAssetId(resources.fixedAssetModuleItems[0].id);
     }
-  }, [resources.fixedAssetModuleItems]);
+  }, [resources.fixedAssetModuleItems, setAssetId]);
 
   if (assetClassError)
     return <Error title={title} error={assetClassError} refresh={assetClassRefresh} />;
