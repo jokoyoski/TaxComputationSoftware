@@ -4,7 +4,7 @@ import IncomeTaxView from "../components/income_tax/IncomeTaxView";
 import ViewMode from "../components/common/ViewMode";
 import utils from "../utils";
 import Main from "../components/layout/Main";
-import { usePathParam, useResource } from "react-resource-router";
+import { usePathParam, useQueryParam, useResource } from "react-resource-router";
 import constants from "../constants";
 import { Toast } from "primereact/toast";
 import IncomeTaxMapping from "../components/income_tax/IncomeTaxMapping";
@@ -22,8 +22,8 @@ const IncomeTax = () => {
     refresh: trialBalanceRefresh
   } = useResource(trialBalanceResource);
   const [tbData, setTbData] = React.useState([]);
-  const [showITLevy, setShowITLevy] = React.useState(false);
-  const [isBringLossFoward, setIsBringLossFoward] = React.useState(false);
+  const [showITLevy, setShowITLevy] = useQueryParam("showITLevy");
+  const [isBringLossFoward, setIsBringLossFoward] = useQueryParam("isBringLossFoward");
   const [mode, setMode] = usePathParam("mode");
   const [year, setYear] = React.useState(utils.currentYear());
   const [resources, { onTrialBalance }] = useResources();
@@ -49,9 +49,9 @@ const IncomeTax = () => {
         setMode={setMode}
         year={year}
         setYear={setYear}
-        showITLevy={showITLevy}
+        showITLevy={JSON.parse(showITLevy || false)}
         setShowITLevy={setShowITLevy}
-        isBringLossFoward={isBringLossFoward}
+        isBringLossFoward={JSON.parse(isBringLossFoward || false)}
         setIsBringLossFoward={setIsBringLossFoward}>
         {
           {
@@ -68,8 +68,8 @@ const IncomeTax = () => {
                 <IncomeTaxView
                   year={year}
                   toast={toast.current}
-                  showITLevy={showITLevy}
-                  isBringLossFoward={isBringLossFoward}
+                  showITLevy={JSON.parse(showITLevy || false)}
+                  isBringLossFoward={JSON.parse(isBringLossFoward || false)}
                 />
               </ViewMode>
             )

@@ -5,7 +5,7 @@ import constants from "../constants";
 import ViewMode from "../components/common/ViewMode";
 import Main from "../components/layout/Main";
 import utils from "../utils";
-import { usePathParam, useResource } from "react-resource-router";
+import { usePathParam, useQueryParam, useResource } from "react-resource-router";
 import DeferredTaxMapping from "../components/deferred_tax/DeferredTaxMapping";
 import { trialBalanceResource } from "../routes/resources";
 import { useResources } from "../store/ResourcesStore";
@@ -22,7 +22,9 @@ const DeferredTax = () => {
     refresh: trialBalanceRefresh
   } = useResource(trialBalanceResource);
   const [tbData, setTbData] = React.useState([]);
-  const [isBringDeferredTaxFoward, setIsBringDeferredTaxFoward] = React.useState(false);
+  const [isBringDeferredTaxFoward, setIsBringDeferredTaxFoward] = useQueryParam(
+    "isBringDeferredTaxFoward"
+  );
   const [mode, setMode] = usePathParam("mode");
   const [year, setYear] = React.useState(utils.currentYear());
   const [resources, { onTrialBalance }] = useResources();
@@ -48,7 +50,7 @@ const DeferredTax = () => {
         setMode={setMode}
         year={year}
         setYear={setYear}
-        isBringDeferredTaxFoward={isBringDeferredTaxFoward}
+        isBringDeferredTaxFoward={JSON.parse(isBringDeferredTaxFoward || false)}
         setIsBringDeferredTaxFoward={setIsBringDeferredTaxFoward}>
         {
           {
@@ -65,7 +67,7 @@ const DeferredTax = () => {
                 <DeferredTaxView
                   year={year}
                   toast={toast.current}
-                  isBringDeferredTaxFoward={isBringDeferredTaxFoward}
+                  isBringDeferredTaxFoward={JSON.parse(isBringDeferredTaxFoward || false)}
                 />
               </ViewMode>
             )
