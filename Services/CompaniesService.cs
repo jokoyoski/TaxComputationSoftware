@@ -52,6 +52,7 @@ namespace TaxComputationAPI.Services
 
             var opening = companyDetails.OpeningYear;
             var closing = companyDetails.OpeningYear.AddDays(364);
+            var tax = closing.AddYears(1);
 
             int i = -9;
 
@@ -59,7 +60,10 @@ namespace TaxComputationAPI.Services
             {
                 var previousOpening = opening.AddYears(i);
                 var previousClosing = closing.AddYears(i);
-                await _utilitiesRepository.AddFinancialYearAsync(new FinancialYear { Name = $"{previousOpening.Month}/{previousOpening.Year}", OpeningDate = previousOpening, ClosingDate = previousClosing, CompanyId = companyDetails.Id });
+                var previousTax = tax.AddYears(i);
+
+                await _utilitiesRepository.AddFinancialYearAsync(new FinancialYear { Name = previousTax.Year.ToString(), OpeningDate = previousOpening, ClosingDate = previousClosing, CompanyId = companyDetails.Id });
+
                 i++;
             }
 
