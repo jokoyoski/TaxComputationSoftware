@@ -9,7 +9,7 @@ import CapitalAllowanceAdding from "../components/capital_allowance/CapitalAllow
 import { Toast } from "primereact/toast";
 import { fixedAssetModuleClassResource } from "../routes/resources";
 import { useResources } from "../store/ResourcesStore";
-import { usePathParam, useResource } from "react-resource-router";
+import { usePathParam, useQueryParam, useResource } from "react-resource-router";
 import PageLoader from "../components/common/PageLoader";
 import Error from "../components/common/Error";
 import CapitalAllowanceSummary from "../components/capital_allowance/CapitalAllowanceSummary";
@@ -23,7 +23,7 @@ const CapitalAllowance = () => {
   const [resources, { onFixedAssetModuleItems }] = useResources();
   const [mode, setMode] = usePathParam("mode");
   const [year, setYear] = React.useState(utils.currentYear());
-  const [assetId, setAssetId] = React.useState();
+  const [assetId, setAssetId] = useQueryParam("assetId");
   const [assetClassSelectItems, setAssetClassSelectItems] = React.useState([]);
 
   React.useEffect(() => {
@@ -40,7 +40,7 @@ const CapitalAllowance = () => {
       );
       setAssetId(resources.fixedAssetModuleItems[0].id);
     }
-  }, [resources.fixedAssetModuleItems]);
+  }, [resources.fixedAssetModuleItems, setAssetId]);
 
   if (assetClassError)
     return <Error title={title} error={assetClassError} refresh={assetClassRefresh} />;
@@ -55,7 +55,7 @@ const CapitalAllowance = () => {
         setMode={setMode}
         year={year}
         setYear={setYear}
-        assetId={assetId}
+        assetId={Number(assetId)}
         setAssetId={setAssetId}
         assetClassSelectItems={assetClassSelectItems}>
         {
@@ -68,7 +68,7 @@ const CapitalAllowance = () => {
             ),
             view: (
               <ViewMode title={title} year={year}>
-                <CapitalAllowanceView assetId={assetId} toast={toast.current} />
+                <CapitalAllowanceView assetId={Number(assetId)} toast={toast.current} />
               </ViewMode>
             ),
             summary: (

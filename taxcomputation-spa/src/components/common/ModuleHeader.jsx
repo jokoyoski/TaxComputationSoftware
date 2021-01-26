@@ -118,7 +118,7 @@ const ModuleHeader = ({
               <Dropdown
                 style={{ width: 180, marginLeft: 20 }}
                 placeholder="Select year"
-                value={year}
+                value={parseInt(year)}
                 options={financialYears}
                 onChange={e => {
                   setYear(e.value);

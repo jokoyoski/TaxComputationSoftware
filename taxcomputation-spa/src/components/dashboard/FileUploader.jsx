@@ -74,9 +74,7 @@ const FileUploader = ({ company: { companyId }, toast, setRefreshTrialBalanceTab
       }
       style={{ width: "100%", marginBottom: 20 }}>
       <div className="p-d-flex">
-        <div
-          className="p-d-flex p-ai-center p-jc-center"
-          style={{ background: "#f5f6f8", width: "100%", height: 100, position: "relative" }}>
+        <div className="p-d-flex p-ai-center p-jc-center file-uploader-container">
           <p className="accent-color" style={{ fontSize: 20 }}>
             {file && file.item(0).name
               ? `"${file.item(0).name}" ready for upload`

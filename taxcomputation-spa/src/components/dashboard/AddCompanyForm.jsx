@@ -1,6 +1,7 @@
 import React from "react";
 import { Dialog } from "primereact/dialog";
 import { InputText } from "primereact/inputtext";
+import { Calendar } from "primereact/calendar";
 import { Button } from "primereact/button";
 import { useForm, Controller } from "react-hook-form";
 import { addCompany } from "../../apis/Companies";
@@ -54,20 +55,29 @@ const AddCompanyForm = ({ showAddCompany, setShowAddCompany, toast, refresh }) =
         const {
           data: { errors }
         } = error.response;
-        // display main error as toast notification
-        if (!errors?.error?.companyError && !errors?.error?.CompanyDescription) {
-          errors.map(err =>
-            toast.show(utils.toastCallback({ severity: "error", summary: "Error", detail: err }))
-          );
-          return;
-        }
         // display all errors as toast notification
-        errors?.error?.companyError &&
+        errors?.companyError &&
           errors.error.companyError.map(err =>
             toast.show(utils.toastCallback({ severity: "error", summary: "Error", detail: err }))
           );
-        errors?.error?.CompanyDescription &&
-          errors.error.CompanyDescription.map(err =>
+        errors?.CompanyDescription &&
+          errors.CompanyDescription.map(err =>
+            toast.show(utils.toastCallback({ severity: "error", summary: "Error", detail: err }))
+          );
+        errors?.deferredTaxBroughtFoward &&
+          errors.deferredTaxBroughtFoward.map(err =>
+            toast.show(utils.toastCallback({ severity: "error", summary: "Error", detail: err }))
+          );
+        errors?.lossCf &&
+          errors.lossCf.map(err =>
+            toast.show(utils.toastCallback({ severity: "error", summary: "Error", detail: err }))
+          );
+        errors?.unRelievedCf &&
+          errors.unRelievedCf.map(err =>
+            toast.show(utils.toastCallback({ severity: "error", summary: "Error", detail: err }))
+          );
+        errors?.monthOfOperation &&
+          errors.monthOfOperation.map(err =>
             toast.show(utils.toastCallback({ severity: "error", summary: "Error", detail: err }))
           );
       } else {
@@ -86,10 +96,10 @@ const AddCompanyForm = ({ showAddCompany, setShowAddCompany, toast, refresh }) =
     <Dialog
       header="Add Company"
       visible={showAddCompany}
-      style={{ width: 400 }}
+      style={{ width: 450 }}
       focusOnShow={false}
       onHide={() => setShowAddCompany(false)}>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={handleSubmit(onSubmit)} className="p-d-flex p-flex-column p-jc-center">
         <div className="p-d-flex p-flex-column" style={{ marginBottom: 15 }}>
           <label htmlFor="companyNameInput" style={{ marginBottom: 10 }}>
             Company Name
@@ -238,9 +248,10 @@ const AddCompanyForm = ({ showAddCompany, setShowAddCompany, toast, refresh }) =
             rules={{ required: true }}
             defaultValue=""
             render={props => (
-              <InputText
+              <Calendar
                 style={{ marginBottom: 5, width: "100%" }}
                 id="openingYearInput"
+                dateFormat="yy/mm/dd"
                 value={props.value}
                 onChange={e => props.onChange(e.target.value)}
               />

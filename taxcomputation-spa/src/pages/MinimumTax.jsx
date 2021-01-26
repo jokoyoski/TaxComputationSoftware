@@ -5,7 +5,7 @@ import ViewMode from "../components/common/ViewMode";
 import constants from "../constants";
 import utils from "../utils";
 import Main from "../components/layout/Main";
-import { usePathParam } from "react-resource-router";
+import { usePathParam, useQueryParam } from "react-resource-router";
 import { Toast } from "primereact/toast";
 
 const MinimumTax = () => {
@@ -13,14 +13,20 @@ const MinimumTax = () => {
   const toast = React.useRef();
   const [mode, setMode] = usePathParam("mode");
   const [year, setYear] = React.useState(utils.currentYear());
+  const [percentageTurnOverValue, setPercentageTurnOverValue] = useQueryParam("percentageTurnOver");
   const [percentageTurnOver, setPercentageTurnOver] = React.useState({
-    value: "",
+    value: percentageTurnOverValue || "",
     canQuery: false
   });
   const yearSelectItems = utils.getYears(year => ({
     label: year.toString(),
     value: year.toString()
   }));
+
+  React.useEffect(() => {
+    if (percentageTurnOver.value === "") setPercentageTurnOverValue(undefined);
+    else setPercentageTurnOverValue(percentageTurnOver.value);
+  }, [percentageTurnOver.value, setPercentageTurnOverValue]);
 
   return (
     <Layout title={title}>

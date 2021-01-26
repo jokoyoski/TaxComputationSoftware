@@ -60,63 +60,52 @@ export const routes = [
   {
     path: `${constants.routes.fixed_asset}${modePathParam}`,
     name: "FIXED_ASSET",
-    exact: true,
     component: RouteGuard(FixedAsset),
     resources: [fixedAssetModuleClassResource, trialBalanceResource]
   },
   {
     path: `${constants.routes.profit_loss}${modePathParam}`,
     name: "PROFIT_LOSS",
-    exact: true,
     component: RouteGuard(ProfitAndLoss),
     resources: [profitandlossModuleClassResource, trialBalanceResource]
   },
   {
     path: `${constants.routes.income_tax}${modePathParam}`,
     name: "INCOME_TAX",
-    exact: true,
     component: RouteGuard(IncomeTax),
     resources: [trialBalanceResource]
   },
   {
     path: `${constants.routes.deferred_tax}${modePathParam}`,
     name: "DEFERRED_TAX",
-    exact: true,
     component: RouteGuard(DeferredTax),
     resources: [trialBalanceResource]
   },
   {
     path: `${constants.routes.minimum_tax}${modePathParam}`,
     name: "MINIMUM_TAX",
-    exact: true,
     component: RouteGuard(MinimumTax)
-    //resources: [aboutResource],
   },
   {
     path: `${constants.routes.it_levy}${modePathParam}`,
     name: "IT_LEVY",
-    exact: true,
     component: RouteGuard(ITLevy)
-    //resources: [aboutResource],
   },
   {
     path: `${constants.routes.capital_allowance}${modePathParam}`,
     name: "CAPITAL_ALLOWANCE",
-    exact: true,
     component: RouteGuard(CapitalAllowance),
     resources: [fixedAssetModuleClassResource]
   },
   {
     path: `${constants.routes.investment_allowance}${modePathParam}`,
     name: "INVESTMENT_ALLOWANCE",
-    exact: true,
     component: RouteGuard(InvestmentAllowance),
     resources: [fixedAssetModuleClassResource]
   },
   {
     path: `${constants.routes.balancing_adjustment}${modePathParam}`,
     name: "BALANCING_ADJUSTMENT",
-    exact: true,
     component: RouteGuard(BalancingAdjustment),
     resources: [fixedAssetModuleClassResource]
   },
