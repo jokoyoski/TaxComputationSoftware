@@ -239,6 +239,28 @@ const AddCompanyForm = ({ showAddCompany, setShowAddCompany, toast, refresh }) =
           )}
         </div>
         <div className="p-d-flex p-flex-column" style={{ marginBottom: 15 }}>
+          <label htmlFor="monthOfOperationInput" style={{ marginBottom: 10 }}>
+            Month of Operation
+          </label>
+          <Controller
+            name="monthOfOperation"
+            control={control}
+            rules={{ required: true }}
+            defaultValue=""
+            render={props => (
+              <InputText
+                style={{ marginBottom: 5, width: "100%" }}
+                id="monthOfOperationInput"
+                value={props.value}
+                onChange={e => props.onChange(e.target.value)}
+              />
+            )}
+          />
+          {errors.monthOfOperation && (
+            <span style={{ fontSize: 12, color: "red" }}>Month of Operation is required</span>
+          )}
+        </div>
+        <div className="p-d-flex p-flex-column" style={{ marginBottom: 15 }}>
           <label htmlFor="openingYearInput" style={{ marginBottom: 10 }}>
             Opening Financial Year
           </label>
@@ -259,28 +281,6 @@ const AddCompanyForm = ({ showAddCompany, setShowAddCompany, toast, refresh }) =
           />
           {errors.openingYear && (
             <span style={{ fontSize: 12, color: "red" }}>Opening Financial Year is required</span>
-          )}
-        </div>
-        <div className="p-d-flex p-flex-column" style={{ marginBottom: 15 }}>
-          <label htmlFor="monthOfOperationInput" style={{ marginBottom: 10 }}>
-            Month of Operation
-          </label>
-          <Controller
-            name="monthOfOperation"
-            control={control}
-            rules={{ required: true }}
-            defaultValue=""
-            render={props => (
-              <InputText
-                style={{ marginBottom: 5, width: "100%" }}
-                id="monthOfOperationInput"
-                value={props.value}
-                onChange={e => props.onChange(e.target.value)}
-              />
-            )}
-          />
-          {errors.monthOfOperation && (
-            <span style={{ fontSize: 12, color: "red" }}>Month of Operation is required</span>
           )}
         </div>
         <div className="p-d-flex p-flex-column" style={{ marginBottom: 15 }}>
