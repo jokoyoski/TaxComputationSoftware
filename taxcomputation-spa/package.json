@@ -11,7 +11,7 @@
     "prettier": "^2.1.2",
     "primeflex": "^2.0.0",
     "primeicons": "^4.0.0",
-    "primereact": "^5.0.2",
+    "primereact": "^6.0.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-hook-form": "^6.9.2",
