@@ -63,7 +63,7 @@ const FinancialYear = ({ showFinancialYear, setShowFinancialYear, setShowSetting
               dropdownOptions={financialYears}
               onChangeCallback={setSelectedValue}
               width="100%"
-              label="Select default financial year"
+              label="Select default tax year"
             />
           </div>
           <div
