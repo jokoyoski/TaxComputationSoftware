@@ -171,7 +171,7 @@ const AddCompanyForm = ({ showAddCompany, setShowAddCompany, toast, refresh }) =
         <div className="p-d-flex">
           <div className="p-d-flex p-flex-column" style={{ marginBottom: 15, marginRight: 10 }}>
             <label htmlFor="unRelievedCfInput" style={{ marginBottom: 10 }}>
-              Unrelieved C/f
+              Unrelieved CA C/f
             </label>
             <Controller
               name="unRelievedCf"
@@ -188,7 +188,7 @@ const AddCompanyForm = ({ showAddCompany, setShowAddCompany, toast, refresh }) =
               )}
             />
             {errors.unRelievedCf && (
-              <span style={{ fontSize: 12, color: "red" }}>Unrelieved C/f is required</span>
+              <span style={{ fontSize: 12, color: "red" }}>Unrelieved CA C/f is required</span>
             )}
           </div>
           <div className="p-d-flex p-flex-column" style={{ marginBottom: 15, marginLeft: 10 }}>
