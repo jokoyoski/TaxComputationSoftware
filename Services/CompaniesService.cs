@@ -41,7 +41,7 @@ namespace TaxComputationAPI.Services
         public async Task AddCompanyAsync(Company company)
         {
 
-            if (company != null)
+            if (company == null)
             {
                 throw new ArgumentNullException(nameof(company));
             }

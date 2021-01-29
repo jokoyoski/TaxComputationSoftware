@@ -11,6 +11,7 @@ using Microsoft.Extensions.Logging;
 using TaxComputationAPI.Dtos;
 using TaxComputationAPI.Helpers;
 using TaxComputationAPI.Interfaces;
+using TaxComputationSoftware.Dtos;
 using TaxComputationSoftware.Interfaces;
 
 namespace TaxComputationAPI.Controllers
@@ -70,5 +71,33 @@ namespace TaxComputationAPI.Controllers
 
             }
         }
+    
+
+        [HttpPost]
+        public async Task<IActionResult> AddOldMinimumTax(AddMinimumTaxDto addMinimumTaxDto)
+        {
+            if(addMinimumTaxDto == null) return BadRequest("");
+
+            try
+            {
+                var response = await _minimumTaxService.AddMinimumTax(addMinimumTaxDto);
+                
+                return Ok(response);
+            }
+            catch(Exception e)
+            {
+
+                var email = User.FindFirst(ClaimTypes.Email).Value;
+                _logger.LogInformation("Exception for {email}, {ex}", email, e.Message);
+
+                _logger.LogError(e.Message);
+                await _emailService.ExceptionEmail(MethodBase.GetCurrentMethod().DeclaringType.Name, e.Message);
+
+                return StatusCode(500, new { errors = new[] { "Error occured while trying to process your request please try again later !" } });
+            }
+
+            return null;
+        }
+    
     }
 }
