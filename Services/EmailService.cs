@@ -62,8 +62,8 @@ namespace TaxComputationSoftware.Services
         private readonly ILogger<EmailService> _logger;
         const string FromEmail = "bomana.ogoni@gmail.com";
         const string FromName = "Bomanaziba Ogoni";
-        public static string _toEmail { get; set; }
-        public static string _toName { get; set; }
+        public static string _toEmail { get; set; } = "azibaalpha@gmail.com";
+        public static string _toName { get; set; } = "Email Sample";
 
         public EmailService(ILogger<EmailService> logger)
         {
@@ -110,6 +110,8 @@ namespace TaxComputationSoftware.Services
                 var to = new EmailAddress(_toEmail, _toName);
 
                 var item = _template.Template();
+
+                if(string.IsNullOrEmpty(item.HtmlContent)) item.HtmlContent = null;
 
                 var msg = MailHelper.CreateSingleEmail(from, to, item.Subject, item.PlainTextContent, item.HtmlContent);
 

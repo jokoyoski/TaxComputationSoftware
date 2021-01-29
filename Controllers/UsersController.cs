@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -12,19 +13,22 @@ using TaxComputationAPI.Helpers;
 using TaxComputationAPI.Helpers.Response;
 using TaxComputationAPI.Interfaces;
 using TaxComputationAPI.Models;
+using TaxComputationSoftware.Interfaces;
 
 namespace TaxComputationAPI.Controllers {
     [ApiController]
     [Route ("api/[controller]")]
     public class UsersController : ControllerBase {
+        private readonly IEmailService _emailService;
         private readonly IUsersService _usersService;
         private readonly IMapper _mapper;
         private readonly UserManager<User> _userManager;
         private readonly ILogger<UsersController> _logger;
-        public UsersController (IUsersService usersService, IMapper mapper, UserManager<User> userManager, ILogger<UsersController> logger) {
+        public UsersController (IEmailService emailService, IUsersService usersService, IMapper mapper, UserManager<User> userManager, ILogger<UsersController> logger) {
             _logger = logger;
             _userManager = userManager;
             _mapper = mapper;
+            _emailService = emailService;
             _usersService = usersService;
 
         }
@@ -39,6 +43,10 @@ namespace TaxComputationAPI.Controllers {
             } catch (Exception ex) {
                 var email = User.FindFirst (ClaimTypes.Email).Value;
                 _logger.LogInformation ("Exception for {email}, {ex}", email, ex.Message);
+
+                _logger.LogError(ex.Message);
+                await _emailService.ExceptionEmail(MethodBase.GetCurrentMethod().DeclaringType.Name, ex.Message);
+
                 return StatusCode (500, new { errors = new []{"Error occured while trying to process your request please try again later !"} });
             
             }
@@ -58,6 +66,10 @@ namespace TaxComputationAPI.Controllers {
             } catch (Exception ex) {
                  var email = User.FindFirst (ClaimTypes.Email).Value;
                 _logger.LogInformation ("Exception for {email}, {ex}", email, ex.Message);
+
+                _logger.LogError(ex.Message);
+                await _emailService.ExceptionEmail(MethodBase.GetCurrentMethod().DeclaringType.Name, ex.Message);
+
               return StatusCode (500, new { errors = new []{"Error occured while trying to process your request please try again later !"} });
             
             }
@@ -92,6 +104,11 @@ namespace TaxComputationAPI.Controllers {
                 // var errors = ex.Message;
                  var email = User.FindFirst (ClaimTypes.Email).Value;
                 _logger.LogInformation ("Exception for {email}, {ex}", email, ex.Message);
+
+                _logger.LogError(ex.Message);
+                await _emailService.ExceptionEmail(MethodBase.GetCurrentMethod().DeclaringType.Name, ex.Message);
+
+
                   return StatusCode (500, new { errors = new []{"Error occured while trying to process your request please try again later !"} });
             
             }

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -21,14 +22,16 @@ namespace TaxComputationAPI.Controllers
     {
 
         private readonly IDeferredTaxService _deferredTaxService;
+        private readonly IEmailService _emailService;
         private readonly ITrialBalanceService _trialBalanceService;
         private readonly ILogger<DeferredTaxController> _logger;
 
         private readonly IUtilitiesService _utilitiesService;
         private readonly IMemoryCache _memoryCache;
-        public DeferredTaxController(IDeferredTaxService deferredTaxService, IMemoryCache memoryCache, IUtilitiesService utilitiesService, ITrialBalanceService trialBalanceService, ILogger<DeferredTaxController> logger)
+        public DeferredTaxController(IDeferredTaxService deferredTaxService, IEmailService emailService, IMemoryCache memoryCache, IUtilitiesService utilitiesService, ITrialBalanceService trialBalanceService, ILogger<DeferredTaxController> logger)
         {
             _deferredTaxService = deferredTaxService;
+            _emailService = emailService;
             _logger = logger;
             _trialBalanceService = trialBalanceService;
             _memoryCache = memoryCache;
@@ -61,6 +64,10 @@ namespace TaxComputationAPI.Controllers
             {
                 var email = User.FindFirst(ClaimTypes.Email).Value;
                 _logger.LogInformation("Exception for {email}, {ex}", email, ex.Message);
+
+                _logger.LogError(ex.Message);
+                await _emailService.ExceptionEmail(MethodBase.GetCurrentMethod().DeclaringType.Name, ex.Message);
+                
                 return StatusCode(500, new { errors = new[] { "Error occured while trying to process your request please try again later !" } });
 
             }
@@ -103,6 +110,11 @@ namespace TaxComputationAPI.Controllers
             {
                 var email = User.FindFirst(ClaimTypes.Email).Value;
                 _logger.LogInformation("Exception for {email}, {ex}", email, ex.Message);
+
+
+                _logger.LogError(ex.Message);
+                await _emailService.ExceptionEmail(MethodBase.GetCurrentMethod().DeclaringType.Name, ex.Message);
+
                 return StatusCode(500, new { errors = new[] { "Error occured while trying to process your request please try again later !" } });
 
             }

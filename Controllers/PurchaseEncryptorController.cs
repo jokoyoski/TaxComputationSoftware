@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using TaxComputationAPI.Manager;
+using TaxComputationSoftware.Interfaces;
 
 namespace TaxComputationAPI.Controllers
 {
@@ -9,8 +12,13 @@ namespace TaxComputationAPI.Controllers
     [ApiController]
     public class PurchaseEncryptorController :ControllerBase
     {
-        public PurchaseEncryptorController()
+        private readonly IEmailService _emailService;
+        private readonly ILogger<PurchaseEncryptorController> _logger;
+
+        public PurchaseEncryptorController(IEmailService emailService, ILogger<PurchaseEncryptorController> logger)
         {
+            _emailService = emailService;
+            _logger = logger;
         }
 
 
@@ -28,6 +36,10 @@ namespace TaxComputationAPI.Controllers
                 return Ok(new { value = value });
             }
             catch (Exception ex){
+
+                _logger.LogError(ex.Message);
+                await _emailService.ExceptionEmail(MethodBase.GetCurrentMethod().DeclaringType.Name, ex.Message);
+
                 return BadRequest("Could not encrypt with the payload provided");
             }
               

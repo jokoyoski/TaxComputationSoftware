@@ -17,6 +17,8 @@ using TaxComputationAPI.Models;
 using TaxComputationAPI.Dtos;
 using TaxComputationAPI.Helpers;
 using TaxComputationAPI.Interfaces;
+using TaxComputationSoftware.Interfaces;
+using System.Reflection;
 
 namespace TaxComputationAPI.Controllers
 {
@@ -24,19 +26,21 @@ namespace TaxComputationAPI.Controllers
     [Route("api/[controller]")]
     public class AuthenticationController : ControllerBase
     {
+        private readonly IEmailService _emailService;
         private readonly IConfiguration _config;
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
         private readonly IMapper _mapper;
         private readonly ILogger<AuthenticationController> _logger;
         private readonly IAuthenticationService _authService;
-        public AuthenticationController(IConfiguration config, UserManager<User> userManager, SignInManager<User> signInManager, IMapper mapper, ILogger<AuthenticationController> logger, IAuthenticationService authService)
+        public AuthenticationController(IEmailService emailService, IConfiguration config, UserManager<User> userManager, SignInManager<User> signInManager, IMapper mapper, ILogger<AuthenticationController> logger, IAuthenticationService authService)
         {
             _authService = authService;
             _logger = logger;
             _mapper = mapper;
             _signInManager = signInManager;
             _userManager = userManager;
+            _emailService = emailService;
             _config = config;
 
         }
@@ -72,6 +76,10 @@ namespace TaxComputationAPI.Controllers
                 var user = await _userManager.FindByNameAsync(userForLoginDto.Email);
                 var email = user.Email;
                 _logger.LogInformation ("Exception for {email}, {ex}", email, ex.Message);
+
+                _logger.LogError(ex.Message);
+                await _emailService.ExceptionEmail(MethodBase.GetCurrentMethod().DeclaringType.Name, ex.Message);
+                
              return StatusCode (500, new { errors = new []{"Error occured while trying to process your request please try again later !"} });
             
             }
@@ -108,6 +116,10 @@ namespace TaxComputationAPI.Controllers
                 var email = User.FindFirst(ClaimTypes.Email).Value;
                 _logger.LogInformation("Exception for {email}, {ex}", email, ex.Message);
                 var error = new[] { "Error Occured please try again later,please try again later..." };
+
+                _logger.LogError(ex.Message);
+                await _emailService.ExceptionEmail(MethodBase.GetCurrentMethod().DeclaringType.Name, ex.Message);
+
                 return StatusCode(500, new { errors = new { error } });
             }
         }
@@ -141,6 +153,10 @@ namespace TaxComputationAPI.Controllers
             {
                 _logger.LogInformation("Exception for {email}, {ex}", email, ex.Message);
                 var error = new[] { "Error Occured please try again later,please try again later..." };
+
+                _logger.LogError(ex.Message);
+                await _emailService.ExceptionEmail(MethodBase.GetCurrentMethod().DeclaringType.Name, ex.Message);
+
                 return StatusCode(500, new { errors = new { error } });
             }
 
@@ -175,6 +191,10 @@ namespace TaxComputationAPI.Controllers
                 var userCode = await _authService.GetUserCodeByCode(resetPasswordDto.Token);
                 _logger.LogInformation("Exception for {email}, {ex}", userCode.Email, ex.Message);
                 var error = new[] { "Error Occured please try again later,please try again later..." };
+
+                _logger.LogError(ex.Message);
+                await _emailService.ExceptionEmail(MethodBase.GetCurrentMethod().DeclaringType.Name, ex.Message);
+                
                 return StatusCode(500, new { errors = new { error } });
             }
         }

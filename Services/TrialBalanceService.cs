@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
+using System.Reflection;
 using System.Threading.Tasks;
 using Aspose.Cells;
 using Microsoft.AspNetCore.Http;
@@ -9,6 +10,7 @@ using Microsoft.Extensions.Logging;
 using TaxComputationAPI.Dtos;
 using TaxComputationAPI.Interfaces;
 using TaxComputationAPI.Models;
+using TaxComputationSoftware.Interfaces;
 using TrialBalance = TaxComputationAPI.Models.TrialBalance;
 //using TaxComputationAPI.Dtos;
 
@@ -19,12 +21,14 @@ namespace TaxComputationAPI.Services
         private readonly ITrialBalanceRepository _trialBalancerepository;
         private readonly ILogger<TrialBalanceService> _logger;
         private readonly IUtilitiesRepository _utilitiesRepository;
+        private readonly IEmailService _emailService;
 
-        public TrialBalanceService(ITrialBalanceRepository trialBalanceRepository, IUtilitiesRepository utilitiesRepository, ILogger<TrialBalanceService> logger)
+        public TrialBalanceService(ITrialBalanceRepository trialBalanceRepository, IUtilitiesRepository utilitiesRepository, IEmailService emailService, ILogger<TrialBalanceService> logger)
         {
             _trialBalancerepository = trialBalanceRepository;
             _logger = logger;
             _utilitiesRepository = utilitiesRepository;
+            _emailService = emailService;
         }
         public async Task UpdateTrialBalance(int trialBalanceId, string mappedTo, bool isDelete)
         {
@@ -180,6 +184,8 @@ namespace TaxComputationAPI.Services
             catch (Exception e)
             {
                 _logger.LogError(e.Message);
+
+                await _emailService.ExceptionEmail(MethodBase.GetCurrentMethod().DeclaringType.Name, e.Message);
             }
 
             return dataTable;

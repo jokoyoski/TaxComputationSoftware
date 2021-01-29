@@ -4,21 +4,25 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using TaxComputationAPI.Interfaces;
 using TaxComputationAPI.Manager;
 using TaxComputationAPI.Models;
+using TaxComputationSoftware.Interfaces;
 
 namespace TaxComputationAPI.Repositories
 {
     public class InvestmentAllowanceRepository : IInvestmentAllowanceRepository
     {
         private readonly DatabaseManager _databaseManager;
+        private readonly IEmailService _emailService;
         private readonly ILogger<UtilitiesRepository> _logger;
 
-        public InvestmentAllowanceRepository(DatabaseManager databaseManager, ILogger<UtilitiesRepository> logger)
+        public InvestmentAllowanceRepository(DatabaseManager databaseManager, IEmailService emailService, ILogger<UtilitiesRepository> logger)
         {
             _databaseManager = databaseManager;
+            _emailService = emailService;
             _logger = logger;
         }
         public async Task AddInvestmentAllowanceAsync(InvestmentAllowance investmentAllowance)
@@ -49,7 +53,9 @@ namespace TaxComputationAPI.Repositories
                     catch (Exception e)
                     {
 
-                        _logger.LogError($"{e.Message}");
+
+                        _logger.LogError(e.Message);
+                        await _emailService.ExceptionEmail(MethodBase.GetCurrentMethod().DeclaringType.Name, e.Message);
 
                         throw e;
                     }
@@ -86,7 +92,8 @@ namespace TaxComputationAPI.Repositories
                     catch (Exception e)
                     {
 
-                        _logger.LogError($"{e.Message}");
+                        _logger.LogError(e.Message);
+                        await _emailService.ExceptionEmail(MethodBase.GetCurrentMethod().DeclaringType.Name, e.Message);
 
                         throw e;
                     }
@@ -118,7 +125,9 @@ namespace TaxComputationAPI.Repositories
                 }
                 catch (Exception e)
                 {
-                    _logger.LogError($"{e.Message}");
+                    
+                    _logger.LogError(e.Message);
+                    await _emailService.ExceptionEmail(MethodBase.GetCurrentMethod().DeclaringType.Name, e.Message);
 
                     throw e;
                 }

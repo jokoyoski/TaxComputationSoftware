@@ -77,9 +77,9 @@ namespace TaxComputationSoftware.Factory
 
         public EmailTemplateResponse Template()
         {
-            string subject = "Pre-Notification for Opening Date";
+            string subject = "Prepare for Opening Date";
 
-            string plateMessage = "";
+            string plateMessage = $"Hello as you all know that {_companyName} financial year has started , you are required to have done the necessary balancing adjustment on or before {_prenotificationDate.ToString("dddd, dd MMMM yyyy")}";
             string htmlMessage = "";
 
             return new EmailTemplateResponse 
@@ -104,7 +104,7 @@ namespace TaxComputationSoftware.Factory
 
         public EmailTemplateResponse Template()
         {
-            string subject = "Post-Notification for Opening Date";
+            string subject = "Post Opening Date Preparation";
 
             string plateMessage = "";
             string htmlMessage = "";
@@ -133,7 +133,7 @@ namespace TaxComputationSoftware.Factory
         {
             string subject = "Exception Occurred";
 
-            string plateMessage = "";
+            string plateMessage = $"{_method}: {_errorMessage}";
             string htmlMessage = "";
 
             return new EmailTemplateResponse 

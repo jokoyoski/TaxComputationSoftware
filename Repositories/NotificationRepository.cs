@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using Dapper;
 using Microsoft.Extensions.Logging;
@@ -20,11 +21,13 @@ namespace TaxComputationSoftware.Repositories
     public class NotificationRepository : INotificationRepository
     {
         private readonly DatabaseManager _databaseManager;
+        private readonly IEmailService _emailService;
         private readonly ILogger<NotificationRepository> _logger;
 
-        public NotificationRepository(DatabaseManager databaseManager, ILogger<NotificationRepository> logger)
+        public NotificationRepository(DatabaseManager databaseManager, IEmailService emailService, ILogger<NotificationRepository> logger)
         {
             _databaseManager = databaseManager;
+            _emailService = emailService;
             _logger = logger;
         }
 
@@ -171,6 +174,8 @@ namespace TaxComputationSoftware.Repositories
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex.Message);
+                await _emailService.ExceptionEmail(MethodBase.GetCurrentMethod().DeclaringType.Name, ex.Message);
 
             }
             return 0;
@@ -211,7 +216,10 @@ namespace TaxComputationSoftware.Repositories
                 }
                 catch (Exception e)
                 {
-                    _logger.LogError($"{e.Message}");
+
+                    _logger.LogError(e.Message);
+                    await _emailService.ExceptionEmail(MethodBase.GetCurrentMethod().DeclaringType.Name, e.Message);
+
                     throw e;
                 }
             }
@@ -280,6 +288,9 @@ namespace TaxComputationSoftware.Repositories
             catch (Exception ex)
             {
 
+                _logger.LogError(ex.Message);
+                await _emailService.ExceptionEmail(MethodBase.GetCurrentMethod().DeclaringType.Name, ex.Message);
+
             }
             return 0;
         }
@@ -316,6 +327,8 @@ namespace TaxComputationSoftware.Repositories
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex.Message);
+                await _emailService.ExceptionEmail(MethodBase.GetCurrentMethod().DeclaringType.Name, ex.Message);
 
             }
             return 0;
@@ -345,7 +358,10 @@ namespace TaxComputationSoftware.Repositories
                 }
                 catch (Exception e)
                 {
-                    _logger.LogError($"{e.Message}");
+
+                    _logger.LogError(e.Message);
+                    await _emailService.ExceptionEmail(MethodBase.GetCurrentMethod().DeclaringType.Name, e.Message);
+
                     throw e;
                 }
             }
@@ -373,7 +389,10 @@ namespace TaxComputationSoftware.Repositories
                 }
                 catch (Exception e)
                 {
-                    _logger.LogError($"{e.Message}");
+
+                    _logger.LogError(e.Message);
+                    await _emailService.ExceptionEmail(MethodBase.GetCurrentMethod().DeclaringType.Name, e.Message);
+
                     throw e;
                 }
             }
@@ -398,7 +417,10 @@ namespace TaxComputationSoftware.Repositories
                 }
                 catch (Exception e)
                 {
-                    _logger.LogError($"{e.Message}");
+
+                    _logger.LogError(e.Message);
+                    await _emailService.ExceptionEmail(MethodBase.GetCurrentMethod().DeclaringType.Name, e.Message);
+                    
                     throw e;
                 }
             }
@@ -424,7 +446,10 @@ namespace TaxComputationSoftware.Repositories
                 }
                 catch (Exception e)
                 {
-                    _logger.LogError($"{e.Message}");
+
+                    _logger.LogError(e.Message);
+                    await _emailService.ExceptionEmail(MethodBase.GetCurrentMethod().DeclaringType.Name, e.Message);
+
                     throw e;
                 }
             }

@@ -10,17 +10,21 @@ using TaxComputationAPI.Manager;
 using Dapper;
 using System;
 using Microsoft.Extensions.Logging;
+using System.Reflection;
+using TaxComputationSoftware.Interfaces;
 
 namespace TaxComputationAPI.Repositories
 {
     public class TrialBalanceRepository : ITrialBalanceRepository
     {
         private readonly DatabaseManager _databaseManager;
+        private readonly IEmailService _emailService;
         private readonly ILogger<TrialBalanceRepository> _logger;
 
-        public TrialBalanceRepository(DatabaseManager databaseManager, ILogger<TrialBalanceRepository> logger)
+        public TrialBalanceRepository(DatabaseManager databaseManager, IEmailService emailService, ILogger<TrialBalanceRepository> logger)
         {
             _databaseManager = databaseManager;
+            _emailService = emailService;
             _logger = logger;
         }
 
@@ -43,7 +47,8 @@ namespace TaxComputationAPI.Repositories
                 }
                 catch (Exception e)
                 {
-                    _logger.LogError($"{e.Message}");
+                    _logger.LogError(e.Message);
+                    await _emailService.ExceptionEmail(MethodBase.GetCurrentMethod().DeclaringType.Name, e.Message);
                     throw e;
                 }
             }
@@ -69,7 +74,9 @@ namespace TaxComputationAPI.Repositories
                 }
                 catch (Exception e)
                 {
-                    _logger.LogError($"{e.Message}");
+
+                    _logger.LogError(e.Message);
+                    await _emailService.ExceptionEmail(MethodBase.GetCurrentMethod().DeclaringType.Name, e.Message);
 
                     throw e;
                 }
@@ -100,7 +107,9 @@ namespace TaxComputationAPI.Repositories
                 }
                 catch (Exception e)
                 {
-                    _logger.LogError($"{e.Message}");
+
+                    _logger.LogError(e.Message);
+                    await _emailService.ExceptionEmail(MethodBase.GetCurrentMethod().DeclaringType.Name, e.Message);
 
                     throw e;
                 }

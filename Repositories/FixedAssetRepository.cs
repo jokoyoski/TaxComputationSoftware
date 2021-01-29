@@ -13,6 +13,9 @@ using FixedAssetData = TaxComputationAPI.ResponseModel.FixedAssetData;
 using System.Data;
 using TaxComputationAPI.Manager;
 using Dapper;
+using TaxComputationSoftware.Interfaces;
+using Microsoft.Extensions.Logging;
+using System.Reflection;
 
 namespace TaxComputationAPI.Repositories
 {
@@ -21,11 +24,16 @@ namespace TaxComputationAPI.Repositories
 
         private readonly IMapper _mapper;
         private readonly DatabaseManager _databaseManager;
-        public FixedAssetRepository(IMapper mapper, DatabaseManager databaseManager)
+        private readonly IEmailService _emailService;
+        private readonly ILogger<FixedAssetRepository> _logger;
+
+        public FixedAssetRepository(IMapper mapper, DatabaseManager databaseManager, IEmailService emailService, ILogger<FixedAssetRepository> logger)
         {
 
             _mapper = mapper;
             _databaseManager = databaseManager;
+            _emailService = emailService;
+            _logger = logger;
         }
 
 
@@ -105,6 +113,8 @@ namespace TaxComputationAPI.Repositories
             catch (Exception ex)
             {
 
+                _logger.LogError(ex.Message);
+                await _emailService.ExceptionEmail(MethodBase.GetCurrentMethod().DeclaringType.Name, ex.Message);
             }
             return null;
 
@@ -126,6 +136,9 @@ namespace TaxComputationAPI.Repositories
                 catch (Exception e)
                 {
 
+                    _logger.LogError(e.Message);
+                    await _emailService.ExceptionEmail(MethodBase.GetCurrentMethod().DeclaringType.Name, e.Message);
+                    
                     throw e;
                 }
             }

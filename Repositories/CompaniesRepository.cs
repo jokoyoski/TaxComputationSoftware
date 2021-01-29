@@ -1,25 +1,32 @@
 ﻿using Dapper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using TaxComputationAPI.Data;
 using TaxComputationAPI.Helpers;
 using TaxComputationAPI.Interfaces;
 using TaxComputationAPI.Manager;
 using TaxComputationAPI.Models;
+using TaxComputationSoftware.Interfaces;
 
 namespace TaxComputationAPI.Repositories
 {
     public class CompaniesRepository : ICompaniesRepository
     {
         private readonly DatabaseManager _databaseManager;
-        public CompaniesRepository(DatabaseManager databaseManager)
+        private readonly IEmailService _emailService;
+        private readonly ILogger<CompaniesRepository> _logger;
+
+        public CompaniesRepository(DatabaseManager databaseManager, IEmailService emailService, ILogger<CompaniesRepository> logger)
         {
             _databaseManager = databaseManager;
-
+            _emailService = emailService;
+            _logger = logger;
         }
 
         public async Task<Company> GetCompanyAsync(int id)
@@ -61,8 +68,8 @@ namespace TaxComputationAPI.Repositories
             }
             catch (Exception ex)
             {
-
-
+                _logger.LogError(ex.Message);
+                await _emailService.ExceptionEmail(MethodBase.GetCurrentMethod().DeclaringType.Name, ex.Message);
             }
 
             return null;
@@ -97,6 +104,8 @@ namespace TaxComputationAPI.Repositories
             catch (Exception ex)
             {
 
+                _logger.LogError(ex.Message);
+                await _emailService.ExceptionEmail(MethodBase.GetCurrentMethod().DeclaringType.Name, ex.Message);
             }
       
 

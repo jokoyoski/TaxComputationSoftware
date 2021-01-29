@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -11,6 +12,7 @@ using Microsoft.Extensions.Logging;
 using TaxComputationAPI.Dtos;
 using TaxComputationAPI.Helpers;
 using TaxComputationAPI.Interfaces;
+using TaxComputationSoftware.Interfaces;
 
 namespace TaxComputationAPI.Controllers
 {
@@ -20,6 +22,7 @@ namespace TaxComputationAPI.Controllers
     public class FixedAssetController : ControllerBase
     {
         private readonly IMapper _mapper;
+        private readonly IEmailService _emailService;
         private readonly IFixedAssetService _fixedAssetService;
 
         private readonly ITrialBalanceService _trialBalanceService;
@@ -28,10 +31,11 @@ namespace TaxComputationAPI.Controllers
 
         private readonly IMemoryCache _memoryCache;
 
-        public FixedAssetController(IMapper mapper, IFixedAssetService fixedAssetService, IMemoryCache memoryCache, ITrialBalanceService trialBalanceService, IUtilitiesService utilitiesService, ILogger<FixedAssetController> logger)
+        public FixedAssetController(IMapper mapper, IEmailService emailService, IFixedAssetService fixedAssetService, IMemoryCache memoryCache, ITrialBalanceService trialBalanceService, IUtilitiesService utilitiesService, ILogger<FixedAssetController> logger)
         {
             _logger = logger;
             _mapper = mapper;
+            _emailService = emailService;
             _fixedAssetService = fixedAssetService;
             _utilitiesService = utilitiesService;
             _memoryCache = memoryCache;
@@ -148,6 +152,10 @@ namespace TaxComputationAPI.Controllers
                 var email = User.FindFirst(ClaimTypes.Email).Value;
                 _logger.LogInformation("Exception for {email}, {ex}", email, ex.Message);
 
+                _logger.LogError(ex.Message);
+                await _emailService.ExceptionEmail(MethodBase.GetCurrentMethod().DeclaringType.Name, ex.Message);
+
+
                 return StatusCode(500, new { errors = new[] { "Error Occured please try again later,please try again later..." } });
             }
         }
@@ -201,6 +209,10 @@ namespace TaxComputationAPI.Controllers
             {
                 var email = User.FindFirst(ClaimTypes.Email).Value;
                 _logger.LogInformation("Exception for {email}, {ex}", email, ex.Message);
+
+                _logger.LogError(ex.Message);
+                await _emailService.ExceptionEmail(MethodBase.GetCurrentMethod().DeclaringType.Name, ex.Message);
+
                 return StatusCode(500, new { errors = new[] { "Error occured while trying to process your request please try again later !" } });
 
             }

@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Quartz;
 using TaxComputationAPI.Dtos;
 using TaxComputationAPI.Helpers;
@@ -19,9 +21,13 @@ namespace TaxComputationSoftware.Services
         private readonly INotificationRepository _notificationRepository;
 
         private readonly IEmailService _emailService;
-        public AnnualService(INotificationRepository notificationRepository)
-        {
+        private readonly ILogger<AnnualService> _logger;
 
+        public AnnualService(INotificationRepository notificationRepository, IEmailService emailService, 
+                            ILogger<AnnualService> logger)
+        {
+            _emailService = emailService;
+            _logger = logger;
             _notificationRepository = notificationRepository;
         }
 
@@ -41,6 +47,9 @@ namespace TaxComputationSoftware.Services
             catch (Exception ex)
             {
                 var v = ex.Message;
+
+                _logger.LogError(ex.Message);
+                await _emailService.ExceptionEmail(MethodBase.GetCurrentMethod().DeclaringType.Name, ex.Message);
             }
 
 
@@ -86,6 +95,8 @@ namespace TaxComputationSoftware.Services
             catch (Exception ex)
             {
 
+                _logger.LogError(ex.Message);
+                await _emailService.ExceptionEmail(MethodBase.GetCurrentMethod().DeclaringType.Name, ex.Message);
             }
 
 

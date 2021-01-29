@@ -9,6 +9,9 @@ using TaxComputationAPI.Interfaces;
 using TaxComputationAPI.Repositories;
 using System.Linq;
 using TaxComputationAPI.Models;
+using Microsoft.Extensions.Logging;
+using System.Reflection;
+using TaxComputationSoftware.Interfaces;
 
 namespace TaxComputationAPI.Services
 {
@@ -20,8 +23,12 @@ namespace TaxComputationAPI.Services
         private readonly ICompaniesRepository _companies;
         private readonly ICapitalAllowanceService _capitalAllowanceService;
         private readonly IMapper _mapper;
+        private readonly IEmailService _emailService;
+        private readonly ILogger<BalancingAdjustmentService> _logger;
 
-        public BalancingAdjustmentService(IUtilitiesService utilitiesService, IUtilitiesRepository utilitiesRepository, ICapitalAllowanceService capitalAllowanceService, IBalancingAdjustmentRepository balancingAdjustmentRepository, ICompaniesRepository companies, IMapper mapper)
+        public BalancingAdjustmentService(IUtilitiesService utilitiesService, IUtilitiesRepository utilitiesRepository, ICapitalAllowanceService capitalAllowanceService, 
+                                            IBalancingAdjustmentRepository balancingAdjustmentRepository, ICompaniesRepository companies, IMapper mapper,
+                                            IEmailService emailService, ILogger<BalancingAdjustmentService> logger)
         {
             _utilitiesService = utilitiesService;
             _utilitiesRepository = utilitiesRepository;
@@ -29,6 +36,8 @@ namespace TaxComputationAPI.Services
             _companies = companies;
             _capitalAllowanceService = capitalAllowanceService;
             _mapper = mapper;
+            _emailService = emailService;
+            _logger = logger;
         }
 
 
@@ -83,6 +92,11 @@ namespace TaxComputationAPI.Services
             }
             catch (Exception e)
             {
+
+
+                _logger.LogError(e.Message);
+                await _emailService.ExceptionEmail(MethodBase.GetCurrentMethod().DeclaringType.Name, e.Message);
+                
                 result.ResponseCode = HttpStatusCode.ExpectationFailed;
                 result.Code = "11";
                 result.ResponseDescription = $"AN EXCEPTION OCCURRED: {e.Message}";
@@ -169,6 +183,11 @@ namespace TaxComputationAPI.Services
             }
             catch (Exception e)
             {
+
+
+                _logger.LogError(e.Message);
+                await _emailService.ExceptionEmail(MethodBase.GetCurrentMethod().DeclaringType.Name, e.Message);
+
                 result.ResponseCode = HttpStatusCode.ExpectationFailed;
                 result.Code = "11";
                 result.ResponseDescription = $"AN EXCEPTION OCCURRED: {e.Message}";
@@ -399,6 +418,10 @@ namespace TaxComputationAPI.Services
             }
             catch (Exception e)
             {
+                _logger.LogError(e.Message);
+
+                await _emailService.ExceptionEmail(MethodBase.GetCurrentMethod().DeclaringType.Name, e.Message);
+
                 return new AddBalancingAdjustmentResponse
                 {
                     ResponseCode = HttpStatusCode.ExpectationFailed,
@@ -485,6 +508,10 @@ namespace TaxComputationAPI.Services
             }
             catch (Exception e)
             {
+
+                _logger.LogError(e.Message);
+                await _emailService.ExceptionEmail(MethodBase.GetCurrentMethod().DeclaringType.Name, e.Message);
+
                 return new BalancingAdjustmentYearBoughtResponse
                 {
                     ResponseCode = HttpStatusCode.ExpectationFailed,

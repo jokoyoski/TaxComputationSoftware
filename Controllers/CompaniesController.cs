@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -12,6 +13,7 @@ using TaxComputationAPI.Dtos;
 using TaxComputationAPI.Helpers;
 using TaxComputationAPI.Interfaces;
 using TaxComputationAPI.Models;
+using TaxComputationSoftware.Interfaces;
 
 namespace TaxComputationAPI.Controllers
 {
@@ -21,16 +23,19 @@ namespace TaxComputationAPI.Controllers
     {
         private readonly ICompaniesService _companiesService;
         private readonly IMapper _mapper;
+        private readonly IEmailService _emailService;
         private readonly ILogger<CompaniesController> _logger;
          private readonly IMemoryCache _cache;
         private readonly IUtilitiesService _utilitiesService;
-        public CompaniesController(ICompaniesService companiesService,IMemoryCache memoryCache,IUtilitiesService utilitiesService ,IMapper mapper, ILogger<CompaniesController> logger)
+        public CompaniesController(ICompaniesService companiesService, IMemoryCache memoryCache, IUtilitiesService utilitiesService, 
+                                    IMapper mapper, IEmailService emailService, ILogger<CompaniesController> logger)
         {
             _logger = logger;
             _companiesService = companiesService;
             _utilitiesService=utilitiesService;
             _cache=memoryCache;
             _mapper = mapper;
+            _emailService = emailService;
         }
 
         [HttpGet("get-company/{id}", Name = "GetCompany")]
@@ -47,6 +52,10 @@ namespace TaxComputationAPI.Controllers
             {
                 var email = User.FindFirst(ClaimTypes.Email).Value;
                 _logger.LogInformation("Exception for {email}, {ex}", email, ex.Message);
+
+                _logger.LogError(ex.Message);
+                await _emailService.ExceptionEmail(MethodBase.GetCurrentMethod().DeclaringType.Name, ex.Message);
+                
                 return StatusCode(500, new { errors = new[] { "Error occured while trying to process your request please try again later !" } });
 
             }
@@ -71,6 +80,10 @@ namespace TaxComputationAPI.Controllers
             {
                 var email = User.FindFirst(ClaimTypes.Email).Value;
                 _logger.LogInformation("Exception for {email}, {ex}", email, ex.Message);
+
+                _logger.LogError(ex.Message);
+                await _emailService.ExceptionEmail(MethodBase.GetCurrentMethod().DeclaringType.Name, ex.Message);
+
                 return StatusCode(500, new { errors = new[] { "Error occured while trying to process your request please try again later !" } });
 
             }
@@ -114,8 +127,13 @@ namespace TaxComputationAPI.Controllers
             }
             catch (Exception ex)
             {
-                var email = User.FindFirst(ClaimTypes.Email).Value;
-                _logger.LogInformation("Exception for {email}, {ex}", email, ex.Message);
+                // var email = User.FindFirst(ClaimTypes.Email).Value;
+                // _logger.LogInformation("Exception for {email}, {ex}", email, ex.Message);
+
+
+                _logger.LogError(ex.Message);
+                await _emailService.ExceptionEmail(MethodBase.GetCurrentMethod().DeclaringType.Name, ex.Message);
+
                 return StatusCode(500, new { errors = new[] { "Error occured while trying to process your request please try again later !" } });
 
             }

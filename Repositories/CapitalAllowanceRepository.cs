@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Reflection;
 using System.Threading.Tasks;
 using Dapper;
+using Microsoft.Extensions.Logging;
 using TaxComputationAPI.Helpers;
 using TaxComputationAPI.Interfaces;
 using TaxComputationAPI.Manager;
 using TaxComputationAPI.Models;
+using TaxComputationSoftware.Interfaces;
 using TaxComputationSoftware.Models;
 
 namespace TaxComputationAPI.Repositories
@@ -14,9 +17,14 @@ namespace TaxComputationAPI.Repositories
     public class CapitalAllowanceRepository : ICapitalAllowanceRepository
     {
         private readonly DatabaseManager _databaseManager;
-        public CapitalAllowanceRepository(DatabaseManager databaseManager)
+        private readonly IEmailService _emailService;
+        private readonly ILogger<CapitalAllowanceRepository> _logger;
+
+        public CapitalAllowanceRepository(DatabaseManager databaseManager, IEmailService emailService, ILogger<CapitalAllowanceRepository> logger)
         {
             _databaseManager = databaseManager;
+            _emailService = emailService;
+            _logger = logger;
         }
 
         public async Task<IEnumerable<CapitalAllowance>> GetCapitalAllowance(int assetId, int companyId)
@@ -240,7 +248,8 @@ namespace TaxComputationAPI.Repositories
             }
             catch (Exception ex)
             {
-
+                _logger.LogError(ex.Message);
+                await _emailService.ExceptionEmail(MethodBase.GetCurrentMethod().DeclaringType.Name, ex.Message);
             }
             return 0;
         }
@@ -280,7 +289,8 @@ namespace TaxComputationAPI.Repositories
             }
             catch (Exception ex)
             {
-
+                _logger.LogError(ex.Message);
+                await _emailService.ExceptionEmail(MethodBase.GetCurrentMethod().DeclaringType.Name, ex.Message);
             }
             return 0;
         }
@@ -301,6 +311,9 @@ namespace TaxComputationAPI.Repositories
                 }
                 catch (Exception e)
                 {
+
+                    _logger.LogError(e.Message);
+                    await _emailService.ExceptionEmail(MethodBase.GetCurrentMethod().DeclaringType.Name, e.Message);
 
                     throw e;
                 }
@@ -324,6 +337,9 @@ namespace TaxComputationAPI.Repositories
                 }
                 catch (Exception e)
                 {
+
+                    _logger.LogError(e.Message);
+                    await _emailService.ExceptionEmail(MethodBase.GetCurrentMethod().DeclaringType.Name, e.Message);
 
                     throw e;
                 }
@@ -367,6 +383,8 @@ namespace TaxComputationAPI.Repositories
             catch (Exception ex)
             {
 
+                _logger.LogError(ex.Message);
+                await _emailService.ExceptionEmail(MethodBase.GetCurrentMethod().DeclaringType.Name, ex.Message);
             }
             return 0;
         }

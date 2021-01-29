@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -11,6 +12,7 @@ using Microsoft.Extensions.Logging;
 using TaxComputationAPI.Dtos;
 using TaxComputationAPI.Helpers;
 using TaxComputationAPI.Interfaces;
+using TaxComputationSoftware.Interfaces;
 
 namespace TaxComputationAPI.Controllers
 {
@@ -19,10 +21,12 @@ namespace TaxComputationAPI.Controllers
     public class ITLevyController : ControllerBase
     {
         private readonly ILogger<ITLevyController> _logger;
+        private readonly IEmailService _emailService;
         private readonly IProfitAndLossService _profitAndLossService;
         private readonly IITLevyService _itLevyService;
-        public ITLevyController(IProfitAndLossService profitAndLossService, IITLevyService itLevyService, ILogger<ITLevyController> logger)
+        public ITLevyController(IEmailService emailService, IProfitAndLossService profitAndLossService, IITLevyService itLevyService, ILogger<ITLevyController> logger)
         {
+            _emailService = emailService;
             _profitAndLossService = profitAndLossService;
             _itLevyService = itLevyService;
             _logger = logger;
@@ -60,6 +64,10 @@ namespace TaxComputationAPI.Controllers
             {
                 var email = User.FindFirst(ClaimTypes.Email).Value;
                 _logger.LogInformation("Exception for {email}, {ex}", email, ex.Message);
+
+                _logger.LogError(ex.Message);
+                await _emailService.ExceptionEmail(MethodBase.GetCurrentMethod().DeclaringType.Name, ex.Message);
+
                 return StatusCode(500, new { errors = new[] { "Error occured while trying to process your request please try again later !" } });
 
             }
