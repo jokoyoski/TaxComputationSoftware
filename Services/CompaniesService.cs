@@ -80,9 +80,6 @@ namespace TaxComputationAPI.Services
             });
 
             _notificationRepository.InsertPreNotification(new PreNotification{ CompanyId = companyDetails.Id, OpeningDate = opening, ClosingDate= closing});
-
-            await _utilitiesRepository.AddFinancialYearAsync(new FinancialYear { Name = $"{opening.Month}/{opening.Year}", OpeningDate = opening, ClosingDate = closing, CompanyId = companyDetails.Id});
-
          }
      
         public async Task<Company> GetCompanyByTinAsync(string tinNumber)

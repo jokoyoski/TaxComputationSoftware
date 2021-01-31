@@ -5,12 +5,12 @@ using TaxComputationAPI.Helpers.Response;
 
 namespace TaxComputationSoftware.Respoonse
 {
-    public class MinimumTaxResponse :  Response<List<MinimumTax>>
+    public class MinimumTaxResponse :  Response<List<MinimumTaxDisplay>>
     {
 
     }
 
-    public class MinimumTax
+    public class MinimumTaxDisplay
     {
         public string Name { get; set; }
         public string Value1 { get; set; }

@@ -61,50 +61,53 @@ namespace TaxComputationAPI.Services
                 decimal _0_25_of_Turnover = (decimal)((0.25 / 100) * ((double)addMinimumTaxDto.TurnOver));
 
                 decimal _0_125_Turnover_Execess_500000 = 0;
+                decimal _maxTaxValue = 0;
+
+                _maxTaxValue = (_0_5_of_Gross_Profit < _0_5_of_Net_Assets) ? (_0_5_of_Net_Assets < _0_25_of_Share_Capital) ?_0_25_of_Share_Capital :_0_5_of_Net_Assets : _0_5_of_Gross_Profit ;
 
                 if (addMinimumTaxDto.GrossProft > addMinimumTaxDto.TurnOver) _0_125_Turnover_Execess_500000 = (decimal)((0.125 / 100) * ((double)(addMinimumTaxDto.GrossProft - addMinimumTaxDto.TurnOver)));
 
-                decimal _minimumTaxPayable = _0_5_of_Net_Assets + _0_125_Turnover_Execess_500000;
+                decimal _minimumTaxPayable = _maxTaxValue + _0_125_Turnover_Execess_500000;
 
-                var data = new List<MinimumTax>();
+                var data = new List<MinimumTaxDisplay>();
 
                 //First Row
-                var singleDate = new MinimumTax();
+                var singleDate = new MinimumTaxDisplay();
                 singleDate.Name = $"0.5% of Gross Profit {addMinimumTaxDto.GrossProft}";
                 singleDate.Value1 = $"{_0_5_of_Gross_Profit}";
-                singleDate.Value2 = $"{0}";
+                singleDate.Value2 = $"{_maxTaxValue}";
                 data.Add(singleDate);
 
                 //Second Row
-                singleDate = new MinimumTax();
+                singleDate = new MinimumTaxDisplay();
                 singleDate.Name = $"0.5% of Gross Profit {addMinimumTaxDto.NetAsset}";
                 singleDate.Value1 = $"{_0_5_of_Net_Assets}";
-                singleDate.Value2 = $"{_0_5_of_Net_Assets}";
+                singleDate.Value2 = $"{_maxTaxValue}";
                 data.Add(singleDate);
 
                 //Third Row
-                singleDate = new MinimumTax();
+                singleDate = new MinimumTaxDisplay();
                 singleDate.Name = $"0.5% of Gross Profit {addMinimumTaxDto.ShareCapital}";
                 singleDate.Value1 = $"{_0_25_of_Share_Capital}";
-                singleDate.Value2 = $"{0}";
+                singleDate.Value2 = $"{_maxTaxValue}";
                 data.Add(singleDate);
 
                 //Fourth Row
-                singleDate = new MinimumTax();
+                singleDate = new MinimumTaxDisplay();
                 singleDate.Name = $"0.5% of Gross Profit {addMinimumTaxDto.TurnOver}";
                 singleDate.Value1 = $"{_0_25_of_Turnover}";
                 singleDate.Value2 = $"{0}";
                 data.Add(singleDate);
 
                 //Fifth Row
-                singleDate = new MinimumTax();
+                singleDate = new MinimumTaxDisplay();
                 singleDate.Name = $"0.125% of Turnover in excess of {addMinimumTaxDto.TurnOver} /n 0.125% of ({addMinimumTaxDto.GrossProft} - {addMinimumTaxDto.TurnOver}) /n 0.125% of ({(decimal)(addMinimumTaxDto.GrossProft - addMinimumTaxDto.TurnOver)})";
                 singleDate.Value1 = $"{0}";
                 singleDate.Value2 = $"{_0_125_Turnover_Execess_500000}";
                 data.Add(singleDate);
 
                 //Sixth Row
-                singleDate = new MinimumTax();
+                singleDate = new MinimumTaxDisplay();
                 singleDate.Name = $"Minimum Tax Payable";
                 singleDate.Value1 = $"{0}";
                 singleDate.Value2 = $"{_minimumTaxPayable}";

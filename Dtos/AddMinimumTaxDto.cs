@@ -9,7 +9,7 @@ namespace TaxComputationSoftware.Dtos
         public decimal GrossProft { get; set; }
         public decimal NetAsset { get; set; }
         public decimal ShareCapital { get; set; }
-        public int TurnOver { get; set; } = 500000;
+        public decimal TurnOver { get; } = 500000;
 
     }
 }
