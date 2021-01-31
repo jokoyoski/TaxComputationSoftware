@@ -56,7 +56,7 @@ namespace TaxComputationAPI.Services
 
             int i = -9;
 
-            while(i < 0)
+            while(i <= 0)
             {
                 var previousOpening = opening.AddYears(i);
                 var previousClosing = closing.AddYears(i);
