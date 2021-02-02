@@ -16,13 +16,15 @@ namespace TaxComputationAPI.Services
     public class MinimumTaxService : IMinimumTaxService
     {
         private readonly IEmailService _emailService;
+        private readonly IUtilitiesRepository _utilitiesRepository;
         private readonly ICompaniesRepository _companiesRepository;
         private readonly ILogger<MinimumTaxService> _logger;
         private readonly IMinimumTaxRepository _minimumTaxRepository;
 
-        public MinimumTaxService(IEmailService emailService, ICompaniesRepository companiesRepository, ILogger<MinimumTaxService> logger, IMinimumTaxRepository minimumTaxRepository)
+        public MinimumTaxService(IEmailService emailService, IUtilitiesRepository utilitiesRepository, ICompaniesRepository companiesRepository, ILogger<MinimumTaxService> logger, IMinimumTaxRepository minimumTaxRepository)
         {
             _emailService = emailService;
+            _utilitiesRepository = utilitiesRepository;
             _companiesRepository = companiesRepository;
             _logger = logger;
             _minimumTaxRepository = minimumTaxRepository;
@@ -63,6 +65,18 @@ namespace TaxComputationAPI.Services
                     {
                         ResponseCode = System.Net.HttpStatusCode.NotFound,
                         ResponseDescription = $"No Company with Id: {addMinimumTaxDto.CompanyId}",
+                        Code = "10"
+                    };
+                }
+
+                var financialYear = await _utilitiesRepository.GetFinancialCompanyAsync(addMinimumTaxDto.CompanyId);
+
+                if(financialYear == null || !financialYear.Any() || financialYear.Any(p => p.Id != addMinimumTaxDto.FinancialYearId))
+                {
+                    return new MinimumTaxResponse
+                    {
+                        ResponseCode = System.Net.HttpStatusCode.NotFound,
+                        ResponseDescription = $"Financial year provided does no exist for {company.CompanyName}",
                         Code = "10"
                     };
                 }
