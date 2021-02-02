@@ -8,6 +8,7 @@ using TaxComputationAPI.Dtos;
 using TaxComputationAPI.Interfaces;
 using TaxComputationSoftware.Dtos;
 using TaxComputationSoftware.Interfaces;
+using TaxComputationSoftware.Model;
 using TaxComputationSoftware.Respoonse;
 
 namespace TaxComputationAPI.Services
@@ -15,12 +16,14 @@ namespace TaxComputationAPI.Services
     public class MinimumTaxService : IMinimumTaxService
     {
         private readonly IEmailService _emailService;
+        private readonly ICompaniesRepository _companiesRepository;
         private readonly ILogger<MinimumTaxService> _logger;
         private readonly IMinimumTaxRepository _minimumTaxRepository;
 
-        public MinimumTaxService(IEmailService emailService, ILogger<MinimumTaxService> logger, IMinimumTaxRepository minimumTaxRepository)
+        public MinimumTaxService(IEmailService emailService, ICompaniesRepository companiesRepository, ILogger<MinimumTaxService> logger, IMinimumTaxRepository minimumTaxRepository)
         {
             _emailService = emailService;
+            _companiesRepository = companiesRepository;
             _logger = logger;
             _minimumTaxRepository = minimumTaxRepository;
         } 
@@ -52,6 +55,18 @@ namespace TaxComputationAPI.Services
             try
             {
 
+                var company = await _companiesRepository.GetCompanyAsync(addMinimumTaxDto.CompanyId);
+
+                if(company == null)
+                {
+                    return new MinimumTaxResponse
+                    {
+                        ResponseCode = System.Net.HttpStatusCode.NotFound,
+                        ResponseDescription = $"No Company with Id: {addMinimumTaxDto.CompanyId}",
+                        Code = "10"
+                    };
+                }
+
                 decimal _0_5_of_Gross_Profit = (decimal)((0.5 / 100) * ((double)addMinimumTaxDto.GrossProft));
 
                 decimal _0_5_of_Net_Assets = (decimal)((0.5 / 100) * ((double)addMinimumTaxDto.NetAsset));
@@ -61,6 +76,7 @@ namespace TaxComputationAPI.Services
                 decimal _0_25_of_Turnover = (decimal)((0.25 / 100) * ((double)addMinimumTaxDto.TurnOver));
 
                 decimal _0_125_Turnover_Execess_500000 = 0;
+
                 decimal _maxTaxValue = 0;
 
                 _maxTaxValue = (_0_5_of_Gross_Profit < _0_5_of_Net_Assets) ? (_0_5_of_Net_Assets < _0_25_of_Share_Capital) ?_0_25_of_Share_Capital :_0_5_of_Net_Assets : _0_5_of_Gross_Profit ;
@@ -114,9 +130,20 @@ namespace TaxComputationAPI.Services
                 data.Add(singleDate);
 
                 //Todo: Persist Values
+                var saveMinimum = new MinimumTaxModel 
+                {
+                    CompanyId = addMinimumTaxDto.CompanyId,
+                    FinancialYearId = addMinimumTaxDto.FinancialYearId,
+                    GrossProft = addMinimumTaxDto.GrossProft,
+                    NetAsset = addMinimumTaxDto.NetAsset,
+                    ShareCapital = addMinimumTaxDto.ShareCapital,
+                    TurnOver = addMinimumTaxDto.TurnOver,
+                    MinimumTaxPayable = _minimumTaxPayable,
+                    DateCreated = DateTime.Now
+                };
                 
-
-
+                await _minimumTaxRepository.SaveMinimum(saveMinimum);
+                
                 return new MinimumTaxResponse
                 {
                     ResponseCode = System.Net.HttpStatusCode.OK,

@@ -34,7 +34,6 @@ namespace TaxComputationAPI.Repositories
         }
 
 
-
         public async Task<List<BalancingAdjustment>> GetBalancingAdjustment(int companyId, string year)
         {
             if (companyId <= 0) throw new ArgumentNullException(nameof(companyId));
@@ -79,8 +78,6 @@ namespace TaxComputationAPI.Repositories
 
 
         }
-
-
 
         public async Task<MinimumTaxModel> GetMinimumCompanyIdYearId(int companyId, int yearId)
         {
@@ -131,16 +128,15 @@ namespace TaxComputationAPI.Repositories
 
                     DynamicParameters parameters = new DynamicParameters();
 
-
-                    parameters.Add("@CompanyId", minimumTaxDto.CompanyId);
                     parameters.Add("@Id", minimumTaxDto.Id);
-                    parameters.Add("@AssestId", minimumTaxDto.GrossProft);
-                    parameters.Add("@Cost", minimumTaxDto.NetAsset);
-                    parameters.Add("@InitialAllowance", minimumTaxDto.ShareCapital);
-                    parameters.Add("@AnnualAllowance", minimumTaxDto.TurnOver);
-                    parameters.Add("@SalesProceed", minimumTaxDto.MinimumTaxPayable);
-                    parameters.Add("@Residue", minimumTaxDto.DateCreated);
-                    parameters.Add("@YearId", minimumTaxDto.FinancialYearId);
+                    parameters.Add("@CompanyId", minimumTaxDto.CompanyId);
+                    parameters.Add("@GrossProfit", minimumTaxDto.GrossProft);
+                    parameters.Add("@NetAsset", minimumTaxDto.NetAsset);
+                    parameters.Add("@ShareCapital", minimumTaxDto.ShareCapital);
+                    parameters.Add("@TurnOver", minimumTaxDto.TurnOver);
+                    parameters.Add("@MinimumTaxPayable", minimumTaxDto.MinimumTaxPayable);
+                    parameters.Add("@DateCreated", minimumTaxDto.DateCreated);
+                    parameters.Add("@FinancialYearId", minimumTaxDto.FinancialYearId);
 
                     var respone = conn.Execute("[dbo].[usp_Insert_Minimum_Tax]", parameters, commandType: CommandType.StoredProcedure);
                     conn.Close();
@@ -157,8 +153,6 @@ namespace TaxComputationAPI.Repositories
                 throw new SystemException(e.Message);
             }
         }
-
-
 
     }
 }
