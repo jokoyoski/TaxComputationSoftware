@@ -160,3 +160,12 @@ body {
 .file-uploader-container:hover {
   background: #f0f1f3;
 }
+
+.headerCompanyName {
+  margin-right: 10px;
+  max-width: 300px;
+  width: auto;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
