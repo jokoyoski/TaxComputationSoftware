@@ -62,7 +62,7 @@ const Header = ({ title, loading }) => {
                 {selectedFinancialYearLabel && `Year: ${selectedFinancialYearLabel}`}
               </p>
             )}
-            {companyName && <p className="headerCompanyName">{`Company: ${companyName}`}</p>}
+            {companyName && <p className="header-company-name">{`Company: ${companyName}`}</p>}
             <div style={{ position: "relative" }}>
               <Button
                 icon="pi pi-cog pi-20"
