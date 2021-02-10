@@ -58,11 +58,11 @@ namespace TaxComputationAPI.Controllers
                     }
                 }
 
-                var details = await _utilitiesService.GetFinancialYearAsync(createFixed.YearId);
+                var details = await _utilitiesService.GetFinancialYearAsync(createFixed.YearId); // get financial  year
+                int taxYear = int.Parse(details.Name);
                 var companyDetails = await _utilitiesService.GetPreNotificationsAsync();
                 var companyDate = companyDetails.FirstOrDefault(x => x.CompanyId == createFixed.CompanyId);
-                var isValid = Utilities.ValidateDate(companyDate.OpeningDate, companyDate.ClosingDate, details.OpeningDate, details.ClosingDate);
-                if (!isValid)
+                if (companyDate.ClosingDate.Year+1!=taxYear)
                 {
                     return StatusCode(400, new { errors = new[] { "The year selected has to be within the financial year!!" } });
                 }
@@ -186,9 +186,10 @@ namespace TaxComputationAPI.Controllers
             try
             {
                 var details = await _utilitiesService.GetFinancialYearAsync(yearId);
+                int taxYear = int.Parse(details.Name);
                 var companyDetails = await _utilitiesService.GetPreNotificationsAsync();
                 var companyDate = companyDetails.FirstOrDefault(x => x.CompanyId == companyId);
-                var isValid = Utilities.ValidateDate(companyDate.OpeningDate, companyDate.ClosingDate, details.OpeningDate, details.ClosingDate);
+                // var isValid = Utilities.ValidateDate(companyDate.OpeningDate, companyDate.ClosingDate, details.OpeningDate, details.ClosingDate);
                 if (yearId == 0)
                 {
                     return StatusCode(400, new { errors = new[] { "Please select a Valid year" } });
@@ -198,7 +199,7 @@ namespace TaxComputationAPI.Controllers
                 {
                     return StatusCode(404, new { errors = new[] { "Record not found at this time please try again later" } });
                 }
-                if (isValid)
+                if (companyDate.ClosingDate.Year +1 == taxYear)
                 {
                     fixedAsset.CanDelete = true;
                 }

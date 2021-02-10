@@ -76,7 +76,7 @@ namespace TaxComputationAPI.Services
                 UnRelievedCf = company.UnRelievedCf,
                 LossCf = company.LossCf,
                 CompanyId = companyDetails.Id,
-                YearId = companyFinancialYearList[0].Id,
+                YearId = companyFinancialYearList[8].Id,
             });
 
             _notificationRepository.InsertPreNotification(new PreNotification{ CompanyId = companyDetails.Id, OpeningDate = opening, ClosingDate= closing});

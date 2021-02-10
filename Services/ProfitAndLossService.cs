@@ -174,7 +174,6 @@ namespace TaxComputationAPI.Services
         {
             int i = 0;
             int profitAndLossId = profits.ProfitAndLossId;
-
             foreach (var selection in profits.TrialBalanceList)
             {
 
@@ -311,7 +310,7 @@ namespace TaxComputationAPI.Services
         }
 
 
-         public async Task<decimal> GetProfitAndLossForIncomeTax(int companyId, int yearId)
+        public async Task<decimal> GetProfitAndLossForIncomeTax(int companyId, int yearId)
         {
             decimal total = 0;
             ProfitAndLossViewDto revenue = new ProfitAndLossViewDto();
@@ -364,19 +363,21 @@ namespace TaxComputationAPI.Services
             otheroperatingincome.Total = $"₦{Utilities.FormatAmount(record.OtherOperatingIncome)}";
             records.Add(otheroperatingincome);
             total += Utilities.GetDecimal(record.OtherOperatingIncome);
-
-
+  
+            decimal otherOperatingType=decimal.Parse(record.OtherOperatingGainOrLoss);
+             decimal finalValue=otherOperatingType>=0 ? otherOperatingType :-otherOperatingType;
+       
             if (Utilities.GetDecimal(record.OtherOperatingGainOrLoss) < 0)
             {
                 otheroperatinggainorloss.Category = "Other Operating Loss";
                 otheroperatinggainorloss.Total = $"₦{Utilities.FormatAmount(record.OtherOperatingGainOrLoss)}";
-                total = total - Utilities.GetDecimal(record.OtherOperatingGainOrLoss);
+                total = finalValue - Utilities.GetDecimal(record.OtherOperatingGainOrLoss);
             }
             else
             {
                 otheroperatinggainorloss.Category = "Other Operating Gain";
                 otheroperatinggainorloss.Total = $"₦{Utilities.FormatAmount(record.OtherOperatingGainOrLoss)}";
-                total = total + Utilities.GetDecimal(record.OtherOperatingGainOrLoss);
+                total = finalValue + Utilities.GetDecimal(record.OtherOperatingGainOrLoss);
             }
             records.Add(otheroperatinggainorloss);
             operatingexpenses.Category = "Operating Expenses";
@@ -385,14 +386,14 @@ namespace TaxComputationAPI.Services
             total = total - Utilities.GetDecimal(record.OperatingExpenses);
             if (total < 0)
             {
-               return total;
+                return total;
 
             }
             else
             {
                 return total;
             }
-            
+
         }
 
 
@@ -416,21 +417,22 @@ namespace TaxComputationAPI.Services
             }
             revenue.Category = "Revenue";
             revenue.Total = $"₦{Utilities.FormatAmount(record.Revenue)}";
-
-
             records.Add(revenue);
+            //  decimal costOfSalesDisplay = decimal.Parse(record.CostOfSales) > 0 ? -decimal.Parse(record.CostOfSales) : decimal.Parse(record.CostOfSales);
+            //  decimal costOfSales = decimal.Parse(record.CostOfSales) > 0 ? decimal.Parse(record.CostOfSales) : -decimal.Parse(record.CostOfSales);
             costofsales.Category = "Cost Of Sales";
-            if (Utilities.GetDecimal(record.CostOfSales) < 0)
-            {
-                costofsales.Total = $"₦{Utilities.FormatAmount(record.CostOfSales)}";
-            }
-            else
-            {
-                costofsales.Total = $"₦({Utilities.FormatAmount(record.CostOfSales)})";
-            }
+            costofsales.Total = $"₦{Utilities.FormatAmount(record.CostOfSales)}";
+            /* if (Utilities.GetDecimal(record.CostOfSales) < 0)
+             {
+                 costofsales.Total = $"₦{Utilities.FormatAmount(record.CostOfSales)}";
+             }
+             else
+             {
+                 costofsales.Total = $"₦({Utilities.FormatAmount(record.CostOfSales)})";
+             }*/
             records.Add(costofsales);
 
-            if (Utilities.GetDecimal(record.Revenue) > Utilities.GetDecimal(record.CostOfSales))
+            if (Utilities.GetDecimal(record.Revenue) > decimal.Parse(record.CostOfSales))
             {
 
                 gross.Category = "Gross Profit";
@@ -442,34 +444,37 @@ namespace TaxComputationAPI.Services
             else
             {
                 gross.Category = "Gross Loss";
-                decimal loss = Utilities.GetDecimal(record.Revenue) - Utilities.GetDecimal(record.CostOfSales);
+                decimal loss = Utilities.GetDecimal(record.Revenue) - decimal.Parse(record.CostOfSales);
                 gross.Total = $"₦{Utilities.FormatAmount(loss)}";
                 records.Add(gross);
             }
-            total = Utilities.GetDecimal(record.Revenue) - Utilities.GetDecimal(record.CostOfSales);
+            total = Utilities.GetDecimal(record.Revenue) - decimal.Parse(record.CostOfSales);
             otheroperatingincome.Category = "Other Operating Income";
             otheroperatingincome.Total = $"₦{Utilities.FormatAmount(record.OtherOperatingIncome)}";
             records.Add(otheroperatingincome);
             total += Utilities.GetDecimal(record.OtherOperatingIncome);
-
-
+             decimal otherOperatingType=decimal.Parse(record.OtherOperatingGainOrLoss);
+             decimal finalValue=otherOperatingType>=0 ? otherOperatingType :-otherOperatingType;
+          //  record. = int.Parse(record.OtherOperatingIncome) >= 0 ? record.OtherOperatingIncome : -int.Parse(record.OtherOperatingIncome);
             if (Utilities.GetDecimal(record.OtherOperatingGainOrLoss) < 0)
             {
                 otheroperatinggainorloss.Category = "Other Operating Loss";
                 otheroperatinggainorloss.Total = $"₦{Utilities.FormatAmount(record.OtherOperatingGainOrLoss)}";
-                total = total - Utilities.GetDecimal(record.OtherOperatingGainOrLoss);
+                total = total - finalValue;
             }
             else
             {
                 otheroperatinggainorloss.Category = "Other Operating Gain";
                 otheroperatinggainorloss.Total = $"₦{Utilities.FormatAmount(record.OtherOperatingGainOrLoss)}";
-                total = total + Utilities.GetDecimal(record.OtherOperatingGainOrLoss);
+                total = total + finalValue;
             }
             records.Add(otheroperatinggainorloss);
             operatingexpenses.Category = "Operating Expenses";
-            operatingexpenses.Total = $"₦{Utilities.FormatAmount(record.OperatingExpenses)}";
+            decimal otherOperatingExpensesDisplay = decimal.Parse(record.OperatingExpenses) > 0 ? -decimal.Parse(record.OperatingExpenses) : decimal.Parse(record.OperatingExpenses);
+            operatingexpenses.Total = $"₦{Utilities.FormatAmount(otherOperatingExpensesDisplay)}";
             records.Add(operatingexpenses);
-            total = total - Utilities.GetDecimal(record.OperatingExpenses);
+            decimal otherOperatingExpenses = decimal.Parse(record.OperatingExpenses) > 0 ? decimal.Parse(record.OperatingExpenses) : -decimal.Parse(record.OperatingExpenses);
+            total = total - otherOperatingExpenses;
             if (total < 0)
             {
                 profitorlossbeforetax.Total = $"₦{Utilities.FormatAmount(total)}";
@@ -511,7 +516,7 @@ namespace TaxComputationAPI.Services
             otherIncomeValue = record.OtherOperatingIncome;
             if (decimal.Parse(record.OtherOperatingIncome) < 0)
             {
-              otherIncomeValue= await GetBackUpOtherOperatingIcome(companyId,yearId);
+                otherIncomeValue = await GetBackUpOtherOperatingIcome(companyId, yearId);
             }
 
             return new MinimumTaxObject
@@ -724,11 +729,12 @@ namespace TaxComputationAPI.Services
 
         }
 
-        private async Task<string> GetBackUpOtherOperatingIcome(int companyId ,int yearId){
-           var otherOperatingIncomeCreditTotal="0";
-              var items = await _profitAndLossRepository.GetProfitsAndLossByType("OtherOperatingIncome", companyId, yearId);
-              if (items.Count > 0)
-               {
+        private async Task<string> GetBackUpOtherOperatingIcome(int companyId, int yearId)
+        {
+            var otherOperatingIncomeCreditTotal = "0";
+            var items = await _profitAndLossRepository.GetProfitsAndLossByType("OtherOperatingIncome", companyId, yearId);
+            if (items.Count > 0)
+            {
                 foreach (var item in items)
                 {
 
@@ -737,7 +743,7 @@ namespace TaxComputationAPI.Services
                     {
                         otherOperatingIncomeCreditTotal += item.Credit;
                     }
-                    
+
 
                 }
 
@@ -780,6 +786,83 @@ namespace TaxComputationAPI.Services
         }
 
 
+        public async Task<bool> ValidateProfitAndLossInput(List<TrialBalanceValue> trialBalanceList, int companyId, int yearId, int profitAndLossId)
+        {
+            decimal oldCreditTotal = 0;
+            decimal oldDebitTotal = 0;
+            decimal newCreditTotal = 0;
+            decimal newDebitTotal = 0;
+            foreach (var j in trialBalanceList)
+            {
+                var newRecord = await _trialBalanceRepository.GetTrialBalanceById(j.TrialBalanceId);
+                if (j.IsDebit && !j.IsCredit && !j.IsBoth)
+                {
+                    newDebitTotal += newRecord.Debit;
+                }
+                else if (!j.IsDebit && j.IsCredit && !j.IsBoth)
+                {
+                    newCreditTotal += newRecord.Credit;
+                }
+
+
+            }
+
+
+
+            var items = await _profitAndLossRepository.GetProfitsAndLossByType(GetType(profitAndLossId), companyId, yearId);
+            if (items.Count > 0)
+            {
+                foreach (var item in items)
+                {
+
+
+                    if (item.Pick == "C")
+                    {
+                        oldCreditTotal += item.Credit;
+                    }
+                    else
+                    {
+                        oldDebitTotal += item.Debit;
+                    }
+
+
+                }
+            }
+
+            if (profitAndLossId == 1 || profitAndLossId == 3)
+            {
+                decimal oldTotal = oldCreditTotal + newCreditTotal;
+                decimal newTotal = oldDebitTotal + newDebitTotal;
+                decimal ols = oldTotal - newTotal;
+                if ((oldCreditTotal + newCreditTotal) - (oldDebitTotal + newDebitTotal) < 0)
+                {
+                    return false;
+                }
+
+            }
+            if (profitAndLossId == 2 || profitAndLossId == 4)
+            {
+                if ((oldDebitTotal + newDebitTotal) - (oldCreditTotal + newCreditTotal) < 0)
+                {
+                    return false;
+                }
+
+            }
+            return true;
+
+
+
+
+
+
+
+
+
+        }
+
 
     }
+
+
+
 }

@@ -34,7 +34,7 @@ namespace TaxComputationAPI.Controllers
 
         [HttpGet("{companyId}/{yearId}")]
         [Authorize]
-        public async Task<IActionResult> GetMinimumTax(int companyId, int yearId)
+        public async Task<IActionResult> GetMinimumTax(int companyId, int yearId , decimal percenttageTurnOver)
         {
         
             if (yearId == 0)
@@ -44,11 +44,11 @@ namespace TaxComputationAPI.Controllers
             try
             {
                 var value = await _profitAndLossService.GetMinimumTax(companyId, yearId);
-                decimal percentage = (decimal)1 / 100;     //annual percentage rate
+               
                 if (value!= null)
                 {
                     var turnOver = decimal.Parse(value.Revenue) + decimal.Parse(value.OtherIncome);
-                    var percent = percentage * turnOver;
+                    var percent = percenttageTurnOver * turnOver;
                     return Ok(new { turnOver = turnOver, fivePercentTurnOver =  percent });
                 }
                 else

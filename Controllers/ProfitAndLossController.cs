@@ -53,12 +53,21 @@ namespace TaxComputationAPI.Controllers
                         return StatusCode(400, new { errors = new[] { "One of the item selected has already been mapped, please reload" } });
                     }
                 }
+                if (profitAndLoss.ProfitAndLossId != 5)
+                {
+                    var value = await _profitAndLossService.ValidateProfitAndLossInput(profitAndLoss.TrialBalanceList, profitAndLoss.CompanyId, profitAndLoss.YearId, profitAndLoss.ProfitAndLossId);
+                    if (!value)
+                    {
+                        return StatusCode(400, new { errors = new[] { "Your total selections cant be  a negative!!!" } });
+                    }
+
+                }
+
                 var details = await _utilitiesServices.GetFinancialYearAsync(profitAndLoss.YearId);
                 var companyDetails = await _utilitiesServices.GetPreNotificationsAsync();
                 var companyDate = companyDetails.FirstOrDefault(x => x.CompanyId == profitAndLoss.CompanyId);
-                var isValid = Utilities.ValidateDate(companyDate.OpeningDate, companyDate.ClosingDate, details.OpeningDate, details.ClosingDate);
-
-                if (!isValid)
+                int taxYear = int.Parse(details.Name);
+                if (companyDate.ClosingDate.Year + 1 != taxYear)
                 {
                     return StatusCode(400, new { errors = new[] { "The year selected has to be within the financial year!!" } });
                 }
@@ -93,6 +102,7 @@ namespace TaxComputationAPI.Controllers
             {
                 return StatusCode(400, new { errors = new[] { "Please select a Valid year" } });
             }
+
             try
             {
                 var profitAndLoss = await _profitAndLossService.GetProfitAndLossByCompanyIdAndYear(companyId, yearId);

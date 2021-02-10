@@ -1,4 +1,3 @@
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -46,12 +45,16 @@ namespace TaxComputationAPI.Controllers
 
             try
             {
-                var details = await _utilitiesService.GetFinancialYearAsync();
-                if (details.FirstOrDefault().Id == int.Parse(year))
+                var financialYear = await _utilitiesService.GetFinancialCompanyAsync(companyId);
+                var financialYearRecord = financialYear.OrderByDescending(x => x.Id).FirstOrDefault();
+
+                // var details = await _utilitiesService.GetFinancialYearAsync();
+                if (financialYear.FirstOrDefault().Id == int.Parse(year))
                 {
                     return StatusCode(400, new { errors = new[] { "Invalid Year selected" } });
                 }
-                if (IsBringDeferredTaxFoward && details.LastOrDefault().Id != int.Parse(year))
+                // var x = details.LastOrDefault(x => x.CompanyId == companyId);
+                if (IsBringDeferredTaxFoward && financialYearRecord.Id != int.Parse(year))
                 {
                     return StatusCode(400, new { errors = new[] { "Please move the current Deferred tax and not previous deferred tax" } });
                 }
@@ -86,7 +89,12 @@ namespace TaxComputationAPI.Controllers
                 var details = await _utilitiesService.GetFinancialYearAsync(createDeferredTax.YearId);
                 var companyDetails = await _utilitiesService.GetPreNotificationsAsync();
                 var companyDate = companyDetails.FirstOrDefault(x => x.CompanyId == createDeferredTax.CompanyId);
-                var isValid = Utilities.ValidateDate(companyDate.OpeningDate, companyDate.ClosingDate, details.OpeningDate, details.ClosingDate);
+                int taxYear = int.Parse(details.Name);
+                if (companyDate.ClosingDate.Year + 1 != taxYear)
+                {
+                    return StatusCode(400, new { errors = new[] { "The year selected has to be within the financial year!!" } });
+                }
+                // var isValid = Utilities.ValidateDate(companyDate.OpeningDate, companyDate.ClosingDate, details.OpeningDate, details.ClosingDate);
                 foreach (var j in createDeferredTax.TrialBalanceList)
                 {
                     if (j.TrialBalanceId != 0)

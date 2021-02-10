@@ -50,8 +50,8 @@ namespace TaxComputationAPI.Controllers
                 var details = await _utilitiesService.GetFinancialYearAsync(investmentAllowanceDto.YearId);
                 var companyDetails = await _utilitiesService.GetPreNotificationsAsync();
                 var companyDate = companyDetails.FirstOrDefault(x => x.CompanyId == investmentAllowanceDto.CompanyId);
-                var isValid = Utilities.ValidateDate(companyDate.OpeningDate, companyDate.ClosingDate, details.OpeningDate, details.ClosingDate);
-                if (!isValid)
+                int taxYear = int.Parse(details.Name);
+                if (companyDate.ClosingDate.Year + 1 != taxYear)
                 {
                     return StatusCode(400, new { errors = new[] { "The year selected has to be within the financial year!!" } });
                 }

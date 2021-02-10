@@ -50,7 +50,22 @@ namespace TaxComputationAPI.Controllers
 
             try
             {
-                return Ok(await _trialBalanceService.GetTrialBalance(companyId, yearId));
+                var value = await _trialBalanceService.GetTrialBalance(companyId, yearId);
+                if (value == null)
+                {
+                    var record = new List<TrialBalance>(){
+                     new TrialBalance{
+                         AccountId="12222",
+                         Item="NO TRIAL BALANCE FOR THIS YEAR",
+                         Debit=0,
+                         Credit=0
+                     }
+                    };
+                    return Ok(record);
+                }
+
+                return Ok(value);
+
 
             }
             catch (Exception ex)
@@ -77,18 +92,14 @@ namespace TaxComputationAPI.Controllers
 
 
                 var details = await _utilityService.GetFinancialYearAsync(excel.YearId);
-
                 var companyDetails = await _utilityService.GetPreNotificationsAsync();
                 var companyDate = companyDetails.FirstOrDefault(x => x.CompanyId == excel.CompanyId);
-                var isValid = Utilities.ValidateDate(companyDate.OpeningDate, companyDate.ClosingDate, details.OpeningDate, details.ClosingDate);
-
-                if (!isValid)
+                int taxYear = int.Parse(details.Name);
+                if (companyDate.ClosingDate.Year + 1 != taxYear)
                 {
                     return StatusCode(400, new { errors = new[] { "The year selected has to be within the financial year!!" } });
                 }
-
                 await _trialBalanceService.UploadTrialBalance(excel);
-
                 return Ok($"{excel.File.FileName} successfully upload");
 
             }

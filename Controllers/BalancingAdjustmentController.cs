@@ -1,5 +1,4 @@
 
-
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -67,8 +66,8 @@ namespace TaxComputationAPI.Controllers
             var details = await _utilitiesService.GetFinancialYearAsync(int.Parse(addBalanceAdjustmentDto.Year));
             var companyDetails = await _utilitiesService.GetPreNotificationsAsync();
             var companyDate = companyDetails.FirstOrDefault(x => x.CompanyId == addBalanceAdjustmentDto.CompanyId);
-            var isValid = Utilities.ValidateDate(companyDate.OpeningDate, companyDate.ClosingDate, details.OpeningDate, details.ClosingDate);
-            if (!isValid)
+            int taxYear = int.Parse(details.Name);
+            if (companyDate.ClosingDate.Year + 1 != taxYear)
             {
                 return StatusCode(400, new { errors = new[] { "The year selected has to be within the financial year!!" } });
             }
@@ -108,11 +107,12 @@ namespace TaxComputationAPI.Controllers
             var details = await _utilitiesService.GetFinancialYearAsync(int.Parse(yearBought.YearId.ToString()));
             var companyDetails = await _utilitiesService.GetPreNotificationsAsync();
             var companyDate = companyDetails.FirstOrDefault(x => x.CompanyId == details.CompanyId);
-            var isValid = Utilities.ValidateDate(companyDate.OpeningDate, companyDate.ClosingDate, details.OpeningDate, details.ClosingDate);
-            if (!isValid)
+            int taxYear = int.Parse(details.Name);
+            if (companyDate.ClosingDate.Year + 1 != taxYear)
             {
-                return StatusCode(400, new { errors = new[] { "You cannot delete this balancing adjustment again!!" } });
+                return StatusCode(400, new { errors = new[] { "The year selected has to be within the financial year!!" } });
             }
+
             var response = await _balancingAdjustmentService.DeleteBalancingAdjustmentYearBoughtAsync(Id);
 
             return Ok(response);
