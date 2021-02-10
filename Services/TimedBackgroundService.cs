@@ -2,21 +2,23 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Taxcomputation.Interfaces;
 using TaxComputationSoftware.Interfaces;
 
 //Sample of time background service
 public class TimedHostedService : IHostedService, IDisposable
 {
     private int executionCount = 0;
-    private readonly IEmailService _emailService;
+    private readonly IServiceProvider _services;
     private readonly ILogger<TimedHostedService> _logger;
     private Timer _timer;
 
-    public TimedHostedService(IEmailService emailService, ILogger<TimedHostedService> logger)
+    public TimedHostedService(IServiceProvider services, ILogger<TimedHostedService> logger)
     {
-        _emailService = emailService;
+        _services = services;
         _logger = logger;
         
     }
@@ -25,8 +27,8 @@ public class TimedHostedService : IHostedService, IDisposable
     {
         _logger.LogInformation("Timed Hosted Service running.");
 
-        _timer = new Timer(DoWork, null, TimeSpan.Zero, 
-            TimeSpan.FromMinutes(30));
+        _timer = new Timer(DoWork, stoppingToken, TimeSpan.Zero, 
+            TimeSpan.FromMinutes(1));
 
         return Task.CompletedTask;
     }
@@ -37,8 +39,10 @@ public class TimedHostedService : IHostedService, IDisposable
 
         _logger.LogError(
             "Timed Hosted Service is working. Count: {Count}", count);
+        
+        
+        await SendEmail((CancellationToken)state);
 
-        //await _emailService.Send("azibaalpha@gmail.com", "bomana.ogoni@gmail.com", "Timed Background Service", "Hi Bomzy Testing Timed Backbground Service", null, "Bomzy", "Bomana");
     }
 
     public Task StopAsync(CancellationToken stoppingToken)
@@ -48,6 +52,21 @@ public class TimedHostedService : IHostedService, IDisposable
         _timer?.Change(Timeout.Infinite, 0);
 
         return Task.CompletedTask;
+    }
+
+    private async Task SendEmail(CancellationToken stoppingToken)
+    {
+        _logger.LogInformation(
+                "Consume Scoped Service Hosted Service is working.");
+
+        using (var scope = _services.CreateScope())
+        {
+            var scopedProcessingService = 
+                scope.ServiceProvider
+                    .GetRequiredService<IScopedProcessingService>();
+
+            await scopedProcessingService.SendEmail(stoppingToken);
+        }
     }
 
     public void Dispose()

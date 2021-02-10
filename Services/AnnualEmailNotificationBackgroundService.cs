@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Quartz;
@@ -30,7 +31,9 @@ namespace TaxComputationSoftware.Services
         public static string LogEmail = "azibaalpha@gmail.com";
         private Timer _timer;
 
-        public AnnualEmailNotificationBackgroundService(INotificationRepository notificationRepository, IUtilitiesRepository utilitiesRepository, ICompaniesRepository companyRepository, IEmailService emailService, ILogger<AnnualEmailNotificationBackgroundService> logger)
+        public AnnualEmailNotificationBackgroundService(INotificationRepository notificationRepository, 
+                                                        IUtilitiesRepository utilitiesRepository, ICompaniesRepository companyRepository, 
+                                                        IEmailService emailService, ILogger<AnnualEmailNotificationBackgroundService> logger)
         {
             _notificationRepository = notificationRepository;
             _utilitiesRepository = utilitiesRepository;
