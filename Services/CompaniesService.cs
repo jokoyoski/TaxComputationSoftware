@@ -46,12 +46,14 @@ namespace TaxComputationAPI.Services
                 throw new ArgumentNullException(nameof(company));
             }
 
+            company.OpeningYear = company.ClosingYear.AddYears(-1).AddDays(1);
+
             await _companiesRepository.AddCompanyAsync(company);
 
             var companyDetails = await GetCompanyByTinAsync(company.TinNumber);
 
+            var closing = companyDetails.ClosingYear;
             var opening = companyDetails.OpeningYear;
-            var closing = companyDetails.OpeningYear.AddDays(364);
             var tax = closing.AddYears(1);
 
             int i = -9;
@@ -85,6 +87,11 @@ namespace TaxComputationAPI.Services
         public async Task<Company> GetCompanyByTinAsync(string tinNumber)
         {
             return await _companiesRepository.GetCompanyByTinAsync(tinNumber);
+        }
+
+        public async Task<object> GetCompanyInfoByFinancialYear(int companyId, int financialYearId)
+        {
+            return await _companiesRepository.GetCompanyInfoByFinancialYear(companyId, financialYearId);
         }
 
 

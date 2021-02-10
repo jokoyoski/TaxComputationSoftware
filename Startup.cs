@@ -19,6 +19,7 @@ using Quartz;
 using Quartz.Impl;
 using Quartz.Spi;
 using Serilog;
+using Taxcomputation.Interfaces;
 using TaxComputation.Service;
 using TaxComputationAPI.Data;
 using TaxComputationAPI.Interfaces;
@@ -92,8 +93,8 @@ namespace TaxComputationAPI
             services.AddSingleton<IEmailService, EmailService>();
 
 
-           // services.AddSingleton<AnnualService>();
             services.AddSingleton<AnnualCalculation>();
+
 
    
             services.AddSingleton<JobSchedule>((x) =>
@@ -106,6 +107,7 @@ namespace TaxComputationAPI
 
             services.AddHostedService<TimedHostedService>();
 
+            services.AddScoped<IScopedProcessingService, ScopedProcessingService>();
 
             services.AddHostedService<AnnualEmailNotificationBackgroundService>();
             

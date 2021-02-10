@@ -90,6 +90,22 @@ namespace TaxComputationAPI.Controllers
 
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Company(int companyId, int financialYearId)
+        {
+            try
+            {
+                var company = await _companiesService.GetCompanyInfoByFinancialYear(companyId, financialYearId);
+
+                return Ok(company);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+        }
+
         [HttpPost("add-company")]
         //[Authorize]
 
@@ -109,7 +125,7 @@ namespace TaxComputationAPI.Controllers
 
                 }
 
-                if (DateTime.Parse(companyForRegisterDto.OpeningYear).Year >  DateTime.Now.Year)
+                if (DateTime.Parse(companyForRegisterDto.ClosingYear).Year >  DateTime.Now.Year)
                 {
                     return StatusCode(400, new { errors = new[] { "Include Next Financial Year not last financial year !!" } });
                 }

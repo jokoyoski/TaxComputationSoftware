@@ -94,7 +94,7 @@ namespace TaxComputationAPI.Repositories
                     parameters.Add("@TinNumber", company.TinNumber);
                     parameters.Add("@DateCreated", company.DateCreated);
                     parameters.Add("@OpeningYear", company.OpeningYear);
-                    parameters.Add("@ClosingYear", DateTime.Today);
+                    parameters.Add("@ClosingYear", company.ClosingYear);
                     parameters.Add("@IsActive", company.IsActive);
                     parameters.Add("@MonthOfOperation", company.MonthOfOperation);
                     rowAffected = con.Execute("[dbo].[usp_Insert_Company]", parameters, commandType: CommandType.StoredProcedure);
@@ -128,6 +128,33 @@ namespace TaxComputationAPI.Repositories
                 return await PagedList<Company>.CreateAsync(result, pagination.PageNumber, pagination.PageSIze);
             }
 
+        }
+
+        public async Task<object> GetCompanyInfoByFinancialYear(int companyId, int financialYearId)
+        {
+            try
+            {
+                using (IDbConnection conn = await _databaseManager.DatabaseConnection())
+                {
+                    if (conn.State == ConnectionState.Closed)
+                        conn.Open();
+
+                    DynamicParameters parameters = new DynamicParameters();
+
+                    parameters.Add("@CompanyId", companyId);
+                    parameters.Add("@FinancialYearId", financialYearId);
+
+                    var record = conn.QueryFirstOrDefault<object>("[dbo].[usp_Get_Company_By_CompanyId_FinancialYearId]", parameters, commandType: CommandType.StoredProcedure);
+                    return record;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                await _emailService.ExceptionEmail(MethodBase.GetCurrentMethod().DeclaringType.Name, ex.Message);
+            }
+
+            return null;
         }
     }
 }
