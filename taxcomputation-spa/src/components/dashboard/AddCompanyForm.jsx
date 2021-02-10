@@ -262,7 +262,7 @@ const AddCompanyForm = ({ showAddCompany, setShowAddCompany, toast, refresh }) =
         </div>
         <div className="p-d-flex p-flex-column" style={{ marginBottom: 15 }}>
           <label htmlFor="openingYearInput" style={{ marginBottom: 10 }}>
-            Opening Financial Year
+            Closing Financial Year
           </label>
           <Controller
             name="openingYear"

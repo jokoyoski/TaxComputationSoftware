@@ -125,14 +125,11 @@ namespace TaxComputationAPI.Controllers
 
                 }
 
-                if (DateTime.Parse(companyForRegisterDto.ClosingYear).Year >  DateTime.Now.Year)
-                {
-                    return StatusCode(400, new { errors = new[] { "Include Next Financial Year not last financial year !!" } });
-                }
                 var companyToCreate = _mapper.Map<Company>(companyForRegisterDto);
                 companyToCreate.IsActive = true;
                 companyToCreate.DateCreated = DateTime.Now;
                 companyToCreate.CompanyName = companyForRegisterDto.CompanyName;
+                companyToCreate.ClosingYear=companyToCreate.OpeningYear;
 
                 await _companiesService.AddCompanyAsync(companyToCreate);
 

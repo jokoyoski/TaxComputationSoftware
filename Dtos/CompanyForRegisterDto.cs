@@ -17,8 +17,11 @@ namespace TaxComputationAPI.Dtos
         public string CacNumber { get; set; }
         [Required(ErrorMessage = "TinNumber is Required")]
         public string TinNumber { get; set; }
-        [Required(ErrorMessage = "OpeningYear is Required")]
+
         public string ClosingYear { get; set; }
+        [Required(ErrorMessage = "OpeningYear is Required")]
+        public string OpeningYear { get; set; }
+
 
         [Required(ErrorMessage = "Month of Operation is Required")]
         public int MonthOfOperation { get; set; }
