@@ -32,7 +32,7 @@ const FinancialYear = ({ showFinancialYear, setShowFinancialYear, setShowSetting
     <div className="p-d-flex p-jc-center p-ai-center overlay">
       <Dialog
         style={{ width: 500 }}
-        header="Financial Year"
+        header="Tax Year"
         visible={showFinancialYear}
         blockScroll
         focusOnShow={false}
@@ -73,8 +73,7 @@ const FinancialYear = ({ showFinancialYear, setShowFinancialYear, setShowSetting
               className="pi pi-info-circle"
               style={{ marginRight: 10, color: "#01a4e4", fontSize: 20 }}></i>
             <span>
-              This will be used as the default financial year when viewing any module during this
-              session
+              This will be used as the default tax year when viewing any module during this session
             </span>
           </div>
         </div>

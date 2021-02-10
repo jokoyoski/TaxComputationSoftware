@@ -17,14 +17,14 @@ const FileUploader = ({ company: { companyId }, toast, setRefreshTrialBalanceTab
 
     if (!file && !year) {
       toast.show(
-        utils.toastCallback({ severity: "error", detail: "Add TB File and Select TB Year" })
+        utils.toastCallback({ severity: "error", detail: "Add TB File and Select Tax Year" })
       );
       return;
     } else if (!file) {
       toast.show(utils.toastCallback({ severity: "error", detail: "Add TB File" }));
       return;
     } else if (!year) {
-      toast.show(utils.toastCallback({ severity: "error", detail: "Select TB Year" }));
+      toast.show(utils.toastCallback({ severity: "error", detail: "Select Tax Year" }));
       return;
     }
 
@@ -53,16 +53,16 @@ const FileUploader = ({ company: { companyId }, toast, setRefreshTrialBalanceTab
             <p style={{ fontSize: 18, fontWeight: 600 }}>Upload File</p>
             <div>
               <Dropdown
-                style={{ marginRight: 20, width: 110 }}
+                style={{ marginRight: 20, width: 120 }}
                 value={year}
                 options={financialYears}
                 onChange={e => {
                   setYear(e.value);
                 }}
-                placeholder="TB Year"
+                placeholder="Tax Year"
               />
               <Button
-                style={{ width: 110 }}
+                style={{ width: 120 }}
                 label={!loading ? "Upload" : null}
                 icon={loading ? "pi pi-spin pi-spinner" : "pi pi-upload"}
                 onClick={onUpload}

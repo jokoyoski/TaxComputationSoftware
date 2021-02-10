@@ -173,10 +173,10 @@ const FixedAssetMapping = ({
             control={control}
             errors={errors}
             controllerName="year"
-            label="Year"
+            label="Tax Year"
             required
             dropdownOptions={financialYears}
-            errorMessage="Year is required"
+            errorMessage="Tax Year is required"
           />
           <InputController
             Controller={Controller}
