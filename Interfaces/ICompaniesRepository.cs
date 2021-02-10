@@ -13,6 +13,8 @@ namespace TaxComputationAPI.Interfaces
         Task<Company> GetCompanyByTinAsync(string tinNumber);
         Task<PagedList<Company>> GetCompaniesAsync(PaginationParams pagination);
         Task AddCompanyAsync(Company company);
+
+        Task<object> GetCompanyInfoByFinancialYear(int companyId, int financialYearId);
     
     }
 }
