@@ -156,3 +156,18 @@ values(
 @IsActive,
 @MonthOfOperation
 )
+
+
+
+--------------------------------------- STORED PROCEDURE TO  DELETE COMPANY -----------------------------------------
+IF OBJECT_ID('[dbo].[usp_Delete_Company]') IS nOT NULL
+BEGIN
+  DROP procedure [dbo].[usp_Delete_Company]
+END
+GO
+CREATE procedure [dbo].[usp_Delete_Company](
+  @Id INT
+)
+AS
+DELETE [dbo].[Company] WHERE  Id = @Id  
+GO

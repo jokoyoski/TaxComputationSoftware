@@ -1264,11 +1264,9 @@ namespace TaxComputationSoftware.Services
         {
 
             var itemToDelete = await _utilitiesRepository.GetAllowableDisAllowableById(allowableDisAllowableId);
-
             _utilitiesRepository.DeleteAllowableDisAllowableById(allowableDisAllowableId);
 
-            await _trialBalanceRepository.UpdateTrialBalance(itemToDelete.TrialBalanceId, null, true);  //fice
-
+           
         }
 
 
