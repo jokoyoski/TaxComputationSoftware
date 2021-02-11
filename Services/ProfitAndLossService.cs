@@ -7,7 +7,9 @@ using TaxComputationAPI.Helpers;
 using TaxComputationAPI.Interfaces;
 using TaxComputationAPI.Models;
 using TaxComputationSoftware.Dtos;
+using TaxComputationSoftware.Interfaces;
 using TaxComputationSoftware.Models;
+using TaxComputationSoftware.Repositories;
 
 namespace TaxComputationAPI.Services
 {
@@ -17,12 +19,15 @@ namespace TaxComputationAPI.Services
         private readonly ITrialBalanceRepository _trialBalanceRepository;
         private readonly IUtilitiesRepository _utilitiesRepository;
 
-        public ProfitAndLossService(IProfitAndLossRepository profitAndLossRepository, ITrialBalanceRepository trialBalanceRepository)
+        private readonly IIncomeTaxRepository _incomeTaxRepository;
+
+        public ProfitAndLossService(IProfitAndLossRepository profitAndLossRepository, IIncomeTaxRepository incomeTaxRepository, ITrialBalanceRepository trialBalanceRepository)
         {
 
 
             _trialBalanceRepository = trialBalanceRepository;
             _profitAndLossRepository = profitAndLossRepository;
+            _incomeTaxRepository = incomeTaxRepository;
         }
         ///////
 
@@ -174,6 +179,45 @@ namespace TaxComputationAPI.Services
         {
             int i = 0;
             int profitAndLossId = profits.ProfitAndLossId;
+
+            var allowableDisAllowable = new AllowableDisAllowable();
+
+            if (profits.IsAllowable)
+            {
+                foreach (var item in profits.TrialBalanceList)
+                {
+                    if (!item.IsBoth && item.IsCredit && !item.IsDebit)
+                    {
+                        allowableDisAllowable.SelectionId = 1;
+                        allowableDisAllowable.YearId = profits.YearId;
+                        allowableDisAllowable.TrialBalanceId = item.TrialBalanceId;
+                        allowableDisAllowable.CompanyId = profits.CompanyId;
+                        allowableDisAllowable.IsAllowable = true;
+                        await _incomeTaxRepository.CreateAllowableDisAllowable(allowableDisAllowable);
+
+                    }
+
+                }
+            }
+             if (profits.IsDisAllowable)
+            {
+                foreach (var item in profits.TrialBalanceList)
+                {
+                    if (!item.IsBoth && !item.IsCredit && item.IsDebit)
+                    {
+                        allowableDisAllowable.SelectionId = 0;
+                        allowableDisAllowable.YearId = profits.YearId;
+                        allowableDisAllowable.TrialBalanceId = item.TrialBalanceId;
+                        allowableDisAllowable.CompanyId = profits.CompanyId;
+                        allowableDisAllowable.IsAllowable = false;
+                        await _incomeTaxRepository.CreateAllowableDisAllowable(allowableDisAllowable);
+
+                    }
+
+                }
+            }
+
+
             foreach (var selection in profits.TrialBalanceList)
             {
 
@@ -363,10 +407,10 @@ namespace TaxComputationAPI.Services
             otheroperatingincome.Total = $"₦{Utilities.FormatAmount(record.OtherOperatingIncome)}";
             records.Add(otheroperatingincome);
             total += Utilities.GetDecimal(record.OtherOperatingIncome);
-  
-            decimal otherOperatingType=decimal.Parse(record.OtherOperatingGainOrLoss);
-             decimal finalValue=otherOperatingType>=0 ? otherOperatingType :-otherOperatingType;
-       
+
+            decimal otherOperatingType = decimal.Parse(record.OtherOperatingGainOrLoss);
+            decimal finalValue = otherOperatingType >= 0 ? otherOperatingType : -otherOperatingType;
+
             if (Utilities.GetDecimal(record.OtherOperatingGainOrLoss) < 0)
             {
                 otheroperatinggainorloss.Category = "Other Operating Loss";
@@ -453,9 +497,9 @@ namespace TaxComputationAPI.Services
             otheroperatingincome.Total = $"₦{Utilities.FormatAmount(record.OtherOperatingIncome)}";
             records.Add(otheroperatingincome);
             total += Utilities.GetDecimal(record.OtherOperatingIncome);
-             decimal otherOperatingType=decimal.Parse(record.OtherOperatingGainOrLoss);
-             decimal finalValue=otherOperatingType>=0 ? otherOperatingType :-otherOperatingType;
-          //  record. = int.Parse(record.OtherOperatingIncome) >= 0 ? record.OtherOperatingIncome : -int.Parse(record.OtherOperatingIncome);
+            decimal otherOperatingType = decimal.Parse(record.OtherOperatingGainOrLoss);
+            decimal finalValue = otherOperatingType >= 0 ? otherOperatingType : -otherOperatingType;
+            //  record. = int.Parse(record.OtherOperatingIncome) >= 0 ? record.OtherOperatingIncome : -int.Parse(record.OtherOperatingIncome);
             if (Utilities.GetDecimal(record.OtherOperatingGainOrLoss) < 0)
             {
                 otheroperatinggainorloss.Category = "Other Operating Loss";

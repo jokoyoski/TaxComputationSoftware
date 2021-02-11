@@ -94,7 +94,9 @@ namespace TaxComputationAPI.Services
             return await _companiesRepository.GetCompanyInfoByFinancialYear(companyId, financialYearId);
         }
 
-
-
+        public async  Task DeleteCompany(int Id)
+        {
+          _companiesRepository.DeleteCompany(Id);
+        }
     }
 }

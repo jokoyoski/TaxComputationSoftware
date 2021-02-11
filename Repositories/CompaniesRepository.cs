@@ -130,6 +130,33 @@ namespace TaxComputationAPI.Repositories
 
         }
 
+         public async Task DeleteCompany(int Id)
+        {
+            using (IDbConnection conn = await _databaseManager.DatabaseConnection())
+            {
+                if (conn.State == ConnectionState.Closed) conn.Open();
+
+                DynamicParameters parameters = new DynamicParameters();
+                parameters.Add("@Id", Id);
+                try
+                {
+                    conn.Execute("[dbo].[usp_Delete_Company]", parameters, commandType: CommandType.StoredProcedure);
+                    conn.Close();
+                }
+                catch (Exception e)
+                {
+
+                    _logger.LogError(e.Message);
+                    await _emailService.ExceptionEmail(MethodBase.GetCurrentMethod().DeclaringType.Name, e.Message);
+
+                    throw e;
+                }
+            }
+        }
+
+
+
+
         public async Task<object> GetCompanyInfoByFinancialYear(int companyId, int financialYearId)
         {
             try
