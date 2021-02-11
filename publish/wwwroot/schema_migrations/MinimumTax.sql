@@ -59,6 +59,7 @@ PRINT('OK')
 END
 GO
 CREATE PROCEDURE [dbo].[usp_Insert_Minimum_Tax](
+    @Id int,
     @CompanyId int,
     @FinancialYearId int,
     @GrossProfit varchar(50),
