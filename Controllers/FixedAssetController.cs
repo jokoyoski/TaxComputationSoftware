@@ -64,7 +64,8 @@ namespace TaxComputationAPI.Controllers
                 var companyDate = companyDetails.FirstOrDefault(x => x.CompanyId == createFixed.CompanyId);
                 if (companyDate.ClosingDate.Year+1!=taxYear)
                 {
-                    return StatusCode(400, new { errors = new[] { "The year selected has to be within the financial year!!" } });
+                    return StatusCode(400, new { errors = new[] { "This operation is not valid for previous tax years"} });
+  
                 }
 
                 bool status = createFixed.IsCost ? true : false;

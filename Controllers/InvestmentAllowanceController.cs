@@ -53,7 +53,8 @@ namespace TaxComputationAPI.Controllers
                 int taxYear = int.Parse(details.Name);
                 if (companyDate.ClosingDate.Year + 1 != taxYear)
                 {
-                    return StatusCode(400, new { errors = new[] { "The year selected has to be within the financial year!!" } });
+                    return StatusCode(400, new { errors = new[] { "This operation is not valid for previous tax years" } });
+
                 }
 
                 var investmentAllowanceToAdd = _mapper.Map<InvestmentAllowance>(investmentAllowanceDto);
@@ -90,7 +91,7 @@ namespace TaxComputationAPI.Controllers
             }
             catch (Exception ex)
             {
-                
+
                 _logger.LogError(ex.Message);
                 await _emailService.ExceptionEmail(MethodBase.GetCurrentMethod().DeclaringType.Name, ex.Message);
 

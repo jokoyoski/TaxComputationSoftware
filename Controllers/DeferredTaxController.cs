@@ -92,7 +92,8 @@ namespace TaxComputationAPI.Controllers
                 int taxYear = int.Parse(details.Name);
                 if (companyDate.ClosingDate.Year + 1 != taxYear)
                 {
-                    return StatusCode(400, new { errors = new[] { "The year selected has to be within the financial year!!" } });
+                    return StatusCode(400, new { errors = new[] { "This operation is not valid for previous tax years"} });
+  
                 }
                 // var isValid = Utilities.ValidateDate(companyDate.OpeningDate, companyDate.ClosingDate, details.OpeningDate, details.ClosingDate);
                 foreach (var j in createDeferredTax.TrialBalanceList)
