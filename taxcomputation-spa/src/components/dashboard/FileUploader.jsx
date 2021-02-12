@@ -76,7 +76,7 @@ const FileUploader = ({ company: { companyId }, toast, setRefreshTrialBalanceTab
       <div className="p-d-flex">
         <div className="p-d-flex p-ai-center p-jc-center file-uploader-container">
           <p className="accent-color" style={{ fontSize: 20 }}>
-            {file && file.item(0).name
+            {file && file?.item(0)?.name
               ? `"${file.item(0).name}" ready for upload`
               : "Click or Drag and drop Trial Balance file here to upload."}
           </p>
