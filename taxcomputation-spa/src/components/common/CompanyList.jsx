@@ -68,6 +68,7 @@ const CompanyList = ({ showCompanyList, setShowCompanyList, setShowCompanyDetail
             <CompanyItem
               key={item.id}
               companyData={item}
+              onCompanyList={onCompanyList}
               setShowCompanyList={setShowCompanyList}
               setShowCompanyDetails={setShowCompanyDetails}
               onSelectedCompany={onSelectedCompany}

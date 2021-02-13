@@ -74,14 +74,14 @@ const TrialBalanceTable = ({
           <div className="p-d-flex p-ai-center p-jc-between">
             <p style={{ fontSize: 18, fontWeight: 600 }}>Trial Balance</p>
             <Dropdown
-              style={{ width: 110 }}
+              style={{ width: 120 }}
               value={year}
               options={financialYears}
               onChange={e => {
                 setYear(e.value);
                 setRefreshTrialBalanceTable(true);
               }}
-              placeholder="TB Year"
+              placeholder="Tax Year"
             />
           </div>
         }

@@ -57,29 +57,34 @@ const AddCompanyForm = ({ showAddCompany, setShowAddCompany, toast, refresh }) =
         } = error.response;
         // display all errors as toast notification
         errors?.companyError &&
-          errors.error.companyError.map(err =>
-            toast.show(utils.toastCallback({ severity: "error", summary: "Error", detail: err }))
+          errors.error.companyError.map(error =>
+            toast.show(utils.toastCallback({ severity: "error", summary: "Error", detail: error }))
           );
         errors?.CompanyDescription &&
-          errors.CompanyDescription.map(err =>
-            toast.show(utils.toastCallback({ severity: "error", summary: "Error", detail: err }))
+          errors.CompanyDescription.map(error =>
+            toast.show(utils.toastCallback({ severity: "error", summary: "Error", detail: error }))
           );
         errors?.deferredTaxBroughtFoward &&
-          errors.deferredTaxBroughtFoward.map(err =>
-            toast.show(utils.toastCallback({ severity: "error", summary: "Error", detail: err }))
+          errors.deferredTaxBroughtFoward.map(error =>
+            toast.show(utils.toastCallback({ severity: "error", summary: "Error", detail: error }))
           );
         errors?.lossCf &&
-          errors.lossCf.map(err =>
-            toast.show(utils.toastCallback({ severity: "error", summary: "Error", detail: err }))
+          errors.lossCf.map(error =>
+            toast.show(utils.toastCallback({ severity: "error", summary: "Error", detail: error }))
           );
         errors?.unRelievedCf &&
-          errors.unRelievedCf.map(err =>
-            toast.show(utils.toastCallback({ severity: "error", summary: "Error", detail: err }))
+          errors.unRelievedCf.map(error =>
+            toast.show(utils.toastCallback({ severity: "error", summary: "Error", detail: error }))
           );
         errors?.monthOfOperation &&
-          errors.monthOfOperation.map(err =>
-            toast.show(utils.toastCallback({ severity: "error", summary: "Error", detail: err }))
+          errors.monthOfOperation.map(error =>
+            toast.show(utils.toastCallback({ severity: "error", summary: "Error", detail: error }))
           );
+        if (errors.length) {
+          errors.forEach(error =>
+            toast.show(utils.toastCallback({ severity: "error", summary: "Error", detail: error }))
+          );
+        }
       } else {
         // network errors
         toast.show(
@@ -262,7 +267,7 @@ const AddCompanyForm = ({ showAddCompany, setShowAddCompany, toast, refresh }) =
         </div>
         <div className="p-d-flex p-flex-column" style={{ marginBottom: 15 }}>
           <label htmlFor="openingYearInput" style={{ marginBottom: 10 }}>
-            Opening Financial Year
+            Closing Financial Year
           </label>
           <Controller
             name="openingYear"

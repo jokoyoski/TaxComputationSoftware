@@ -114,7 +114,7 @@ body {
 .asset-item:hover,
 .company-item:hover,
 .settings-item:hover {
-  background-color: #eee;
+  background-color: rgb(245, 245, 245);
 }
 
 .overlay {
@@ -126,6 +126,10 @@ body {
   width: 100vw;
   height: 100vh;
   z-index: 1000;
+}
+
+.info:hover {
+  color: #2196f3;
 }
 
 .edit:hover {

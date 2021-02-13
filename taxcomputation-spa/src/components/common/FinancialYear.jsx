@@ -16,6 +16,11 @@ const FinancialYear = ({ showFinancialYear, setShowFinancialYear, setShowSetting
     { onFinancialYear, onSelectedFinancialYear }
   ] = useResources();
 
+  const selectedFinancialYearHandler = () => {
+    onSelectedFinancialYear(selectedValue);
+    sessionStorage.setItem("year", selectedValue);
+  };
+
   React.useEffect(() => {
     utils.fetchCompanyFinancialYear({ companyId }, onFinancialYear, null);
   }, [companyId, onFinancialYear]);
@@ -47,10 +52,7 @@ const FinancialYear = ({ showFinancialYear, setShowFinancialYear, setShowSetting
             type="button"
             label="Select"
             disabled={!selectedValue}
-            onClick={() => {
-              onSelectedFinancialYear(selectedValue);
-              sessionStorage.setItem("year", selectedValue);
-            }}
+            onClick={selectedFinancialYearHandler}
           />
         }>
         <div className="p-d-flex p-flex-column">

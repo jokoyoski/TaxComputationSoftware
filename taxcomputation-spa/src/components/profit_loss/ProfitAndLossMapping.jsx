@@ -22,6 +22,10 @@ const ProfitAndLossMapping = ({
   const [loading, setLoading] = React.useState(false);
   const [init, setInit] = React.useState(true);
   const [selectedAccounts, setSelectedAccounts] = React.useState([]);
+  const typeSelectItems = [
+    { label: "Allowable", value: 0 },
+    { label: "Disallowable", value: 1 }
+  ];
 
   React.useEffect(() => {
     if (tbData.length > 0 && init) trialBalanceRefresh();
@@ -30,7 +34,7 @@ const ProfitAndLossMapping = ({
 
   const onSubmit = async data => {
     if (loading) return;
-    const { profitAndLossId, yearId } = data;
+    const { profitAndLossId, yearId, profitAndLossType } = data;
 
     if (selectedAccounts.length === 0) {
       toast.show(
@@ -50,7 +54,9 @@ const ProfitAndLossMapping = ({
         trialBalanceList: selectedAccounts,
         companyId,
         yearId,
-        mappedCode: "profitandloss"
+        mappedCode: "profitandloss",
+        isAllowable: profitAndLossType === 0 ? true : false,
+        isDisAllowable: profitAndLossType === 1 ? true : false
       });
       if (response.status === 200) {
         utils.onMappingSuccess(
@@ -78,7 +84,7 @@ const ProfitAndLossMapping = ({
           controllerName="profitAndLossId"
           label="Profit and Loss Item"
           placeholder="Select Item"
-          width={250}
+          width={200}
           required
           dropdownOptions={assetClassSelectItems}
           errorMessage="Profit and Loss Item is required"
@@ -89,10 +95,21 @@ const ProfitAndLossMapping = ({
           errors={errors}
           controllerName="yearId"
           label="Year"
-          width={250}
+          width={200}
           required
           dropdownOptions={financialYears}
           errorMessage="Year is required"
+        />
+        <DropdownController
+          Controller={Controller}
+          control={control}
+          errors={errors}
+          controllerName="profitAndLossType"
+          label="Profit and Loss Type"
+          width={200}
+          required
+          dropdownOptions={typeSelectItems}
+          errorMessage="Profit and Loss Type is required"
         />
         <div>
           <p style={{ color: "transparent", marginTop: 0, marginBottom: 5 }}>Submit</p>
@@ -100,7 +117,7 @@ const ProfitAndLossMapping = ({
             type="submit"
             label={!loading ? "Submit" : null}
             icon={loading ? "pi pi-spin pi-spinner" : null}
-            style={{ width: 250 }}
+            style={{ width: 200 }}
           />
         </div>
       </form>
