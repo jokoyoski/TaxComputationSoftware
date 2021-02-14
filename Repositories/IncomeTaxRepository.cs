@@ -245,19 +245,21 @@ namespace TaxComputationSoftware.Repositories
                     DynamicParameters parameters = new DynamicParameters();
                     parameters.Add("@CompanyId", broughtFoward.CompanyId);
                     parameters.Add("@LossCf", broughtFoward.LossCf);
-                    parameters.Add("@Accessible",0);
+                    parameters.Add("@Accessible", 0);
                     parameters.Add("@UnRelievedCf", broughtFoward.UnRelievedCf);
                     rowAffected = con.Execute("[dbo].[usp_Accessible_Cf_By_Income_Tax]", parameters, commandType: CommandType.StoredProcedure);
                 }
 
                 return rowAffected;
-            }catch(Exception ex){
+            }
+            catch (Exception ex)
+            {
 
                 _logger.LogError(ex.Message);
                 await _emailService.ExceptionEmail(MethodBase.GetCurrentMethod().DeclaringType.Name, ex.Message);
 
             }
-         return 5;
+            return 5;
 
         }
 
@@ -277,6 +279,80 @@ namespace TaxComputationSoftware.Repositories
             }
 
             return rowAffected;
+        }
+
+
+
+        public async Task<AsessableLossUnRelieved> SaveAsessableUnRelieved(AsessableLossUnRelieved asessableLossUn)
+        {
+            if (asessableLossUn == null) throw new ArgumentNullException(nameof(asessableLossUn));
+
+
+            try
+            {
+                var result = default(AsessableLossUnRelieved);
+
+                using (IDbConnection conn = await _databaseManager.DatabaseConnection())
+                {
+                    if (conn.State == ConnectionState.Closed) conn.Open();
+
+                    DynamicParameters parameters = new DynamicParameters();
+
+
+                    parameters.Add("@CompanyId", asessableLossUn.CompanyId);
+                    parameters.Add("@YearId", asessableLossUn.YearId);
+                    parameters.Add("@Id", 0);
+                    parameters.Add("@UnRelievedCf", asessableLossUn.UnRelievedCf);
+                    parameters.Add("@AssessableLoss", asessableLossUn.AssessableLoss);
+                    var respone = conn.Execute("[dbo].[usp_Insert_Asessable_UnRelieved_Table]", parameters, commandType: CommandType.StoredProcedure);
+                    conn.Close();
+
+                    return null;
+                }
+            }
+            catch (Exception e)
+            {
+
+                _logger.LogError(e.Message);
+                await _emailService.ExceptionEmail(MethodBase.GetCurrentMethod().DeclaringType.Name, e.Message);
+
+                throw new SystemException(e.Message);
+            }
+        }
+
+
+
+        public async Task<AsessableLossUnRelieved> GetAsessableLossUnRelievedByCompanyIdYearId(int companyId, int yearId)
+        {
+            try
+            {
+                var result = default(AsessableLossUnRelieved);
+
+                using (IDbConnection conn = await _databaseManager.DatabaseConnection())
+                {
+                    if (conn.State == ConnectionState.Closed) conn.Open();
+
+                    DynamicParameters parameters = new DynamicParameters();
+
+                    parameters.Add("@CompanyId", companyId);
+                    parameters.Add("@YearId", yearId);
+
+                    result = await conn.QueryFirstOrDefaultAsync<AsessableLossUnRelieved>("[dbo].[usp_Assessable_Loss_UnRelieved_By_CompanyId_YearId]", parameters, commandType: CommandType.StoredProcedure);
+                    conn.Close();
+
+                    return result;
+                }
+            }
+            catch (Exception e)
+            {
+
+                _logger.LogError(e.Message);
+                await _emailService.ExceptionEmail(MethodBase.GetCurrentMethod().DeclaringType.Name, e.Message);
+
+                throw new SystemException(e.Message);
+
+            }
+
         }
 
 

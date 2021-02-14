@@ -9,6 +9,7 @@ using TaxComputationAPI.Interfaces;
 using TaxComputationSoftware.Dtos;
 using TaxComputationSoftware.Interfaces;
 using TaxComputationSoftware.Model;
+using TaxComputationSoftware.Models;
 using TaxComputationSoftware.Respoonse;
 
 namespace TaxComputationAPI.Services
@@ -187,5 +188,15 @@ namespace TaxComputationAPI.Services
             var record = await _minimumTaxRepository.GetMinimumTaxByCompanyIdAndYearId(companyId, yearId);
             return record;
         }
+
+        public Task<MinimumTaxPercentageValue> GetMinimumTaxPercentageCompanyIdYearId(int companyId, int yearId)
+        {
+             return this._minimumTaxRepository.GetMinimumTaxPercentageCompanyIdYearId(companyId,yearId);
+        }
+
+        public Task<MinimumTaxPercentageValue> SaveMinimumPercentage(MinimumTaxPercentageValue minimumTaxDto)
+        {
+             return  _minimumTaxRepository.SaveMinimumPercentage(minimumTaxDto);
+        } 
     }
 }

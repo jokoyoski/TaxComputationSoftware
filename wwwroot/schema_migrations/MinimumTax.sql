@@ -156,3 +156,83 @@ DELETE FROM [dbo].[BalancingAdjustmentYearBought]
 WHERE Id = @Id
 
 GO
+
+
+
+--------------------------------------- STORED PROCEDURE TO  CREAYE MINIMUM TAX PERCENTAGE AND ASEESIBLE L0SS-----------------------------------------
+
+
+if NOT EXISTS(SELECT 1 FROM sysobjects where type='U' and name ='MinimumTaxPercentage')
+BEGIN
+create table MinimumTaxPercentage(
+
+ Id   int identity(1,1) NOT NULL ,
+ CompanyId int ,
+ MinimumTaxPercentage decimal,
+ YearId int
+
+ )
+
+END
+GO
+
+
+-------------------------------------- STORED PROCEDURE TO  GET MINIMUM TAX AND ASESSABLE LOSS BY COMPANY ID AND YEAR ID-----------------------------------------
+IF OBJECT_ID('[dbo].[usp_Get_Minimum_Tax_Percentage_By_CompanyId_YearId]') IS NOT NULL
+BEGIN
+DROP PROCEDURE [dbo].usp_Get_Minimum_Tax_Percentage_By_CompanyId_YearId
+END
+GO
+CREATE PROCEDURE [dbo].usp_Get_Minimum_Tax_Percentage_By_CompanyId_YearId(
+    @CompanyId int,@YearId int)
+   
+AS
+SELECT *
+FROM [dbo].[MinimumTaxPercentage]
+WHERE CompanyId=@CompanyId AND YearId=@YearId
+GO
+
+
+
+
+
+
+
+
+-------------------------------------- STORED PROCEDURE TO  INSERT INTO MINIMUM TAX TABLE-----------------------------------------
+
+IF OBJECT_ID('[dbo].[usp_Insert_Minimum_Tax_Percentage_Table]') IS NOT NULL
+BEGIN
+DROP PROCEDURE [dbo].[usp_Insert_Minimum_Tax_Percentage_Table]
+PRINT('OK')
+END
+GO
+CREATE PROCEDURE [dbo].[usp_Insert_Minimum_Tax_Percentage_Table](
+    @Id int,
+    @CompanyId int,
+    @YearId int,
+    @MinimumTaxPercentage varchar(50)
+)
+AS
+if exists (select * from MinimumTaxPercentage where CompanyId=@CompanyId  and YearId =@YearId)
+begin
+ update [dbo].[MinimumTaxPercentage] set MinimumTaxPercentage=@MinimumTaxPercentage
+end
+else
+INSERT [dbo].[MinimumTaxPercentage]
+(
+    CompanyId,
+    YearId,
+    MinimumTaxPercentage
+)
+VALUES
+(
+    @CompanyId,
+    @YearId,
+    @MinimumTaxPercentage
+   
+)
+SET @Id = SCOPE_IDENTITY()
+SELECT @Id
+GO
+
