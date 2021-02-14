@@ -28,6 +28,8 @@ namespace TaxComputationAPI.Repositories
             _emailService = emailService;
             _logger = logger;
         }
+
+        
         public async Task<MinimumTaxViewDto> GetMinimumTaxByCompanyIdAndYearId(int companyId, int yearId)
         {
             return new MinimumTaxViewDto { turnOver="220.23", fivePercentTurnOver ="3000.30"};

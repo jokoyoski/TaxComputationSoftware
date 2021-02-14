@@ -55,6 +55,7 @@ TinNumber nvarchar(max)null,
 DateCreated datetime null,
 OpeningYear datetime  null,
 ClosingYear datetime  null,
+MinimumTaxTypeId int null,
 IsActive bit null,
 MonthOfOperation int
 
@@ -103,6 +104,7 @@ TinNumber nvarchar(max)null,
 DateCreated datetime null,
 OpeningYear datetime  null,
 ClosingYear datetime  null,
+MinimumTaxTypeId int null,
 IsActive bit null,
 MonthOfOperation int
 
@@ -127,6 +129,7 @@ create procedure usp_Insert_Company(
 @DateCreated datetime  null,
 @OpeningYear datetime  null,
 @ClosingYear datetime  null,
+@MinimumTaxTypeId int null, 
 @IsActive bit null,
 @MonthOfOperation int  null
 )
@@ -141,6 +144,7 @@ TinNumber,
 DateCreated,
 OpeningYear,
 ClosingYear,
+MinimumTaxTypeId,
 IsActive,
 MonthOfOperation
 )
@@ -153,6 +157,22 @@ values(
 @DateCreated,
 @OpeningYear,
 @ClosingYear,
+@MinimumTaxTypeId,
 @IsActive,
 @MonthOfOperation
 )
+
+
+
+--------------------------------------- STORED PROCEDURE TO  DELETE COMPANY -----------------------------------------
+IF OBJECT_ID('[dbo].[usp_Delete_Company]') IS nOT NULL
+BEGIN
+  DROP procedure [dbo].[usp_Delete_Company]
+END
+GO
+CREATE procedure [dbo].[usp_Delete_Company](
+  @Id INT
+)
+AS
+DELETE [dbo].[Company] WHERE  Id = @Id  
+GO

@@ -16,6 +16,7 @@ namespace TaxComputationAPI.Models
         public DateTime DateCreated { get; set; }
         public DateTime OpeningYear { get; set; }
         public DateTime ClosingYear { get; set; }
+        public int MinimumTaxTypeId { get; set; }
         public bool IsActive { get; set; }
         public decimal UnRelievedCf { get; set; }
 
