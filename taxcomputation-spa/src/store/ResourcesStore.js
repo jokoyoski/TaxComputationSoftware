@@ -30,7 +30,7 @@ const ResourcesStore = createStore({
     onFinancialYear: financialYears => ({ setState }) => setState({ financialYears }),
     onSelectedFinancialYear: selectedFinancialYear => ({ setState }) =>
       setState({ selectedFinancialYear }),
-    resetResources: () => ({ setState }) => setState(initialState)
+    resetResources: () => ({ setState }) => setState({ ...initialState })
   },
   name: "resources"
 });

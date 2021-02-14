@@ -50,6 +50,11 @@ namespace TaxComputationAPI.Controllers
                 {
                     var turnOver = decimal.Parse(value.Revenue) + decimal.Parse(value.OtherIncome);
                     var percent = percenttageTurnOver * turnOver;
+                    _minimumTaxService.SaveMinimumPercentage( new TaxComputationSoftware.Models.MinimumTaxPercentageValue{
+                        MinimumTaxPercentage=percenttageTurnOver,
+                        CompanyId=companyId,
+                        YearId=yearId
+                    });
                     return Ok(new { turnOver = turnOver, fivePercentTurnOver =  percent });
                 }
                 else

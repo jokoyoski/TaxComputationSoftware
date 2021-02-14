@@ -18,6 +18,10 @@ namespace TaxComputationSoftware.Interfaces
         Task<int> UpdateLossBfById(int companyId);
         Task<int> UpdateAcessibleByIncomeTax(BroughtFoward broughtFoward);
 
+        Task<AsessableLossUnRelieved> SaveAsessableUnRelieved(AsessableLossUnRelieved asessableLossUn);
+        Task<AsessableLossUnRelieved> GetAsessableLossUnRelievedByCompanyIdYearId(int companyId, int yearId);
+
+
 
 
     }

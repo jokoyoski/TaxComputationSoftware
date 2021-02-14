@@ -225,3 +225,95 @@ VALUES(
 @YearId
 )
 GO
+
+
+
+
+
+
+
+
+
+
+
+
+--------------------------------------- STORED PROCEDURE TO  CREAYE MINIMUM TAX PERCENTAGE AND ASEESIBLE L0SS-----------------------------------------
+
+
+if NOT EXISTS(SELECT 1 FROM sysobjects where type='U' and name ='AsessableLossUnRelieved')
+BEGIN
+create table AsessableLossUnRelieved(
+
+ Id   int identity(1,1) NOT NULL ,
+ CompanyId int ,
+ AssessableLoss decimal,
+ UnRelievedCf decimal,
+ YearId int
+
+ )
+
+END
+GO
+
+
+-------------------------------------- STORED PROCEDURE TO  GET MINIMUM TAX AND ASESSABLE LOSS BY COMPANY ID AND YEAR ID-----------------------------------------
+IF OBJECT_ID('[dbo].[usp_Assessable_Loss_UnRelieved_By_CompanyId_YearId]') IS NOT NULL
+BEGIN
+DROP PROCEDURE [dbo].usp_Assessable_Loss_UnRelieved_By_CompanyId_YearId
+END
+GO
+CREATE PROCEDURE [dbo].usp_Assessable_Loss_UnRelieved_By_CompanyId_YearId(
+    @CompanyId int,@YearId int)
+   
+AS
+SELECT *
+FROM [dbo].[AsessableLossUnRelieved]
+WHERE CompanyId=@CompanyId AND YearId=@YearId
+GO
+
+
+
+
+
+
+
+
+-------------------------------------- STORED PROCEDURE TO  INSERT INTO MINIMUM TAX TABLE-----------------------------------------
+
+IF OBJECT_ID('[dbo].[usp_Insert_Asessable_UnRelieved_Table]') IS NOT NULL
+BEGIN
+DROP PROCEDURE [dbo].[usp_Insert_Asessable_UnRelieved_Table]
+PRINT('OK')
+END
+GO
+CREATE PROCEDURE [dbo].[usp_Insert_Asessable_UnRelieved_Table](
+    @Id int,
+    @CompanyId int,
+    @YearId int,
+    @AssessableLoss decimal,
+    @UnRelievedCf decimal 
+)
+AS
+if exists (select * from AsessableLossUnRelieved where CompanyId=@CompanyId  and YearId =@YearId)
+begin
+ update [dbo].[AsessableLossUnRelieved] set AssessableLoss=@AssessableLoss ,UnRelievedCf=@UnRelievedCf
+end
+else
+INSERT [dbo].[AsessableLossUnRelieved]
+(
+    CompanyId,
+    YearId,
+    AssessableLoss,
+    UnRelievedCf  
+)
+VALUES
+(
+    @CompanyId,
+    @YearId,
+    @AssessableLoss,
+    @UnRelievedCf  
+    
+)
+SET @Id = SCOPE_IDENTITY()
+SELECT @Id
+GO

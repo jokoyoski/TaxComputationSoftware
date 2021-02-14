@@ -25,7 +25,9 @@ namespace TaxComputationSoftware.Services
 
         private readonly IInvestmentAllowanceService _investmentAllowanceService;
 
-        public IncomeTaxService(IIncomeTaxRepository incomeTaxRepository, IUtilitiesRepository utilitiesRepository, IInvestmentAllowanceService investmentAllowanceService, ICapitalAllowanceService capitalAllowanceService, IProfitAndLossService profitAndLossService, IBalancingAdjustmentService balancingAdjustmentService, ITrialBalanceRepository trialBalanceRepository)
+        private readonly IMinimumTaxService _minimumTaxService;
+
+        public IncomeTaxService(IIncomeTaxRepository incomeTaxRepository, IMinimumTaxService minimumTaxService, IUtilitiesRepository utilitiesRepository, IInvestmentAllowanceService investmentAllowanceService, ICapitalAllowanceService capitalAllowanceService, IProfitAndLossService profitAndLossService, IBalancingAdjustmentService balancingAdjustmentService, ITrialBalanceRepository trialBalanceRepository)
         {
             _incomeTaxRepository = incomeTaxRepository;
             _profitAndLossService = profitAndLossService;
@@ -34,6 +36,7 @@ namespace TaxComputationSoftware.Services
             _capitalAllowanceService = capitalAllowanceService;
             _investmentAllowanceService = investmentAllowanceService;
             _utilitiesRepository = utilitiesRepository;
+            _minimumTaxService = minimumTaxService;
         }
 
         public async Task<(decimal, decimal)> GetIncomeTaxForDeferred(int companyId, int yearId)
@@ -494,8 +497,8 @@ namespace TaxComputationSoftware.Services
             var value = await _balancingAdjustmentService.GetBalancingAdjustmentForIncomeTax(companyId, yearId.ToString());
             var financialYear = await _utilitiesRepository.GetFinancialCompanyAsync(companyId);
             var result = financialYear.OrderByDescending(x => x.Id);
-            var result1=result.Where(x => x.Id < yearId);
-            var financialYearRecord=result1.FirstOrDefault();
+            var result1 = result.Where(x => x.Id < yearId);
+            var financialYearRecord = result1.FirstOrDefault();
             var record = await _incomeTaxRepository.GetBroughtFowardByCompanyId(companyId);
             var broughtFoward = record.ToList().Where(x => x.YearId == financialYearRecord.Id).FirstOrDefault();
             var incomeListDto = new List<IncomeTaxDto>();
@@ -558,7 +561,7 @@ namespace TaxComputationSoftware.Services
                 {
                     Description = "",
                     ColumnOne = "",
-                    ColumnTwo = $"₦({Utilities.FormatAmount(profitOrLoss)})"
+                    ColumnTwo = $"₦{Utilities.FormatAmount(profitOrLoss)}"
                 });
 
 
@@ -771,168 +774,25 @@ namespace TaxComputationSoftware.Services
             {
                 losscf = 0;
             }
-           
-                incomeListDto.Add(new IncomeTaxDto
-                {
-                    Description = "Loss b/f",
-                    ColumnOne = "",
-                    ColumnTwo = $"₦{Utilities.FormatAmount(broughtFoward.LossCf)}",
-                    CanBolden = true
-                });
-                //losscf = losscf;
-                incomeListDto.Add(new IncomeTaxDto
-                {
-                    Description = "Loss c/f",
-                    ColumnOne = "",
-                    ColumnTwo = $"₦{Utilities.FormatAmount(losscf)}",
-                    CanBolden = true
-                });
 
-            
-
-            /*  if (profitOrLoss < 0 && losscf<0) //incoming is negative and outing is negative
-              {
-                 incomeListDto.Add(new IncomeTaxDto
-                 {
-                     Description = "Loss b/f",
-                     ColumnOne = "",
-                     ColumnTwo = $"₦{Utilities.FormatAmount(broughtFoward.LossCf)}",
-                     CanBolden = true
-                 });
-                 //losscf = losscf;
-                 incomeListDto.Add(new IncomeTaxDto
-                 {
-                     Description = "Loss c/f",
-                     ColumnOne = "",
-                     ColumnTwo = $"₦{Utilities.FormatAmount(losscf)}",
-                     CanBolden = true
-                 });
-
-              } */
+            incomeListDto.Add(new IncomeTaxDto
+            {
+                Description = "Loss b/f",
+                ColumnOne = "",
+                ColumnTwo = $"₦{Utilities.FormatAmount(broughtFoward.LossCf)}",
+                CanBolden = true
+            });
+            //losscf = losscf;
+            incomeListDto.Add(new IncomeTaxDto
+            {
+                Description = "Loss c/f",
+                ColumnOne = "",
+                ColumnTwo = $"₦{Utilities.FormatAmount(losscf)}",
+                CanBolden = true
+            });
 
 
 
-
-
-
-            /* if (compareLoss > 0 && !isAssessibleProfit) //los broughtfoward + loss
-             {
-                 incomeListDto.Add(new IncomeTaxDto
-                 {
-                     Description = "Loss b/f",
-                     ColumnOne = "",
-                     ColumnTwo = $"₦{Utilities.FormatAmount(broughtFoward.LossCf)}",
-                     CanBolden = true
-                 });
-                 losscf = accessibleBalancingCharge + broughtFoward.LossCf;
-                 incomeListDto.Add(new IncomeTaxDto
-                 {
-                     Description = "Loss c/f",
-                     ColumnOne = "",
-                     ColumnTwo = $"₦{Utilities.FormatAmount(losscf)}",
-                     CanBolden = true
-                 });
-
-             }
-
-
-             if (compareLoss > 0 && isAssessibleProfit) //loss brought fooward and gain
-             {
-
-                 if (accessibleBalancingCharge > compareLoss)
-                 {
-                     incomeListDto.Add(new IncomeTaxDto
-                     {
-                         Description = "Loss b/f",
-                         ColumnOne = "",
-                         ColumnTwo = $"₦{Utilities.FormatAmount(broughtFoward.LossCf)}",
-                         CanBolden = true
-                     });
-                     incomeListDto.Add(new IncomeTaxDto
-                     {
-                         Description = "Current Gain is Greater than Loss b/f",
-                         ColumnOne = "",
-                         ColumnTwo = "",
-                         CanBolden = true
-                     });
-
-                     incomeListDto.Add(new IncomeTaxDto
-                     {
-                         Description = "Loss c/f",
-                         ColumnOne = "",
-                         ColumnTwo = "-",
-                         CanBolden = true
-                     });
-                     losscf = 0;
-                 }
-                 else if (accessibleBalancingCharge < compareLoss)
-                 {
-                     losscf = compareLoss - accessibleBalancingCharge;
-                     losscf = -losscf;
-                     incomeListDto.Add(new IncomeTaxDto
-                     {
-                         Description = "Loss b/f",
-                         ColumnOne = "",
-                         ColumnTwo = $"₦{Utilities.FormatAmount(broughtFoward.LossCf)}",
-                     });
-                     incomeListDto.Add(new IncomeTaxDto
-                     {
-                         Description = "Current Gain is Lesser than Loss b/f",
-                         ColumnOne = "",
-                         ColumnTwo = "",
-                         CanBolden = true
-                     });
-
-                     incomeListDto.Add(new IncomeTaxDto
-                     {
-                         Description = "Loss c/f",
-                         ColumnOne = "",
-                         ColumnTwo = $"₦{Utilities.FormatAmount(losscf)}",
-                         CanBolden = true
-                     });
-
-                 }
-             }
-
-
-             if (broughtFoward.LossCf == 0 && isAssessibleProfit) //no loss bf + gain
-             {
-                 incomeListDto.Add(new IncomeTaxDto
-                 {
-                     Description = "No Loss b/f and No Current Loss",
-                     ColumnOne = "",
-                     ColumnTwo = "",
-                     CanBolden = true
-                 });
-                 incomeListDto.Add(new IncomeTaxDto
-                 {
-                     Description = "Loss c/f",
-                     ColumnOne = "",
-                     ColumnTwo = "",
-                     CanBolden = true
-                 });
-                 losscf = 0;
-             }
-
-             if (broughtFoward.LossCf == 0 && !isAssessibleProfit)   //no loss bf  + loss
-             {
-                 losscf = accessibleBalancingCharge;
-                 incomeListDto.Add(new IncomeTaxDto
-                 {
-                     Description = "No Loss b/f but Current Loss Exist",
-                     ColumnOne = "",
-                     ColumnTwo = "",
-                     CanBolden = true
-                 });
-                 incomeListDto.Add(new IncomeTaxDto
-                 {
-                     Description = "Loss c/f",
-                     ColumnOne = "",
-                     ColumnTwo = $"₦{Utilities.FormatAmount(losscf)}",
-                     CanBolden = true
-                 });
-
-             } */
             incomeListDto.Add(new IncomeTaxDto
             {
                 Description = "",
@@ -1172,10 +1032,16 @@ namespace TaxComputationSoftware.Services
             }
 
             var minimumTaxValue = await _profitAndLossService.GetMinimumTax(companyId, yearId);
+            var minimumTaxPercentage = await _minimumTaxService.GetMinimumTaxPercentageCompanyIdYearId(companyId, yearId);
+            if (minimumTaxPercentage == null)
+            {
+                minimumTaxPercentage.MinimumTaxPercentage = 0;
+            }
+
             if (minimumTaxValue != null)
             {
                 var turnOver = decimal.Parse(minimumTaxValue.Revenue) + decimal.Parse(minimumTaxValue.OtherIncome);
-                var percent = percentage * turnOver;
+                var percent = minimumTaxPercentage.MinimumTaxPercentage * turnOver;
 
                 incomeListDto.Add(new IncomeTaxDto
                 {
@@ -1199,6 +1065,18 @@ namespace TaxComputationSoftware.Services
                 });
 
             }
+            decimal values=0;
+            if(!isAssessibleProfit){
+              values=accessibleType;
+            }else{
+                values=0;
+            }
+            _incomeTaxRepository.SaveAsessableUnRelieved(new AsessableLossUnRelieved{
+                CompanyId=companyId,
+                YearId=yearId,
+                UnRelievedCf=unrelievedCf,
+                AssessableLoss=values,
+            });
             if (IsBringLossFoward)
             {
                 _incomeTaxRepository.CreateBalanceBroughtFoward(new BroughtFoward
@@ -1266,7 +1144,7 @@ namespace TaxComputationSoftware.Services
             var itemToDelete = await _utilitiesRepository.GetAllowableDisAllowableById(allowableDisAllowableId);
             _utilitiesRepository.DeleteAllowableDisAllowableById(allowableDisAllowableId);
 
-           
+
         }
 
 
@@ -1301,5 +1179,14 @@ namespace TaxComputationSoftware.Services
 
         }
 
+        public Task<AsessableLossUnRelieved> SaveAsessableUnRelieved(AsessableLossUnRelieved asessableLossUn)
+        {
+            return _incomeTaxRepository.SaveAsessableUnRelieved(asessableLossUn);
+        }
+
+        public Task<AsessableLossUnRelieved> GetAsessableLossUnRelievedByCompanyIdYearId(int companyId, int yearId)
+        {
+            return _incomeTaxRepository.GetAsessableLossUnRelievedByCompanyIdYearId(companyId, yearId);
+        }
     }
 }

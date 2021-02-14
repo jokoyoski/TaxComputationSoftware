@@ -63,12 +63,12 @@ namespace TaxComputationSoftware.Services
 
             var financialYear = await _utilitiesRepository.GetFinancialCompanyAsync(companyId);
             var financialYearRecord = financialYear.OrderByDescending(x=>x.Id).Where(x => x.Id < yearId).FirstOrDefault();
-            //var financialYearRecord = financialYear.Where(x => x.Id < yearId).FirstOrDefault();
             var record = await _deferredTaxRepository.GetDeferredTaxFowarByCompanyId(companyId);
             var broughtFoward = record.ToList().Where(x => x.YearId == financialYearRecord.Id).OrderByDescending(x => x.Id).FirstOrDefault();
             var netbookValue = await _fixedAssetService.GetFixedAssetsByCompanyForDeferredTax(companyId, yearId);
             var capitalAllowanceSummary = await _capitalAllowanceService.GetCapitalAllowanceSummaryForDeferredTax(companyId);
-            var unrelievedCapitalAllowanceCf = await _incomeTaxService.GetIncomeTaxForDeferred(companyId, yearId);
+           // var unrelievedCapitalAllowanceCf = await _incomeTaxService.GetIncomeTaxForDeferred(companyId, yearId);
+           var unrelievedCf=await _incomeTaxService.GetAsessableLossUnRelievedByCompanyIdYearId(companyId,yearId);
             var fairValueGains = await _deferredTaxRepository.GetFairValueGainByCompanyIdAndYear(companyId, yearId);
             decimal deferredTaxCf = 0;
             decimal lessTotal = 0;
@@ -128,7 +128,7 @@ namespace TaxComputationSoftware.Services
             deferredTaxDto.Add(new DeferredTaxDto
             {
                 Description = "Unutilised Capital Allowances c/f",
-                ColumnOne = $"₦{Utilities.FormatAmount(unrelievedCapitalAllowanceCf.Item2)}",
+                ColumnOne = $"₦{Utilities.FormatAmount(unrelievedCf.UnRelievedCf)}",
                 ColumnTwo = "",
                 CanBolden = true
 
@@ -137,13 +137,13 @@ namespace TaxComputationSoftware.Services
             //  {
             //   lossCf+=-unrelievedCapitalAllowanceCf.Item1;
             //  }
-            if (unrelievedCapitalAllowanceCf.Item1 != 0)
+            if (unrelievedCf.AssessableLoss != 0)
             {
-                lossCf = unrelievedCapitalAllowanceCf.Item1 > 0 ? unrelievedCapitalAllowanceCf.Item1 : -unrelievedCapitalAllowanceCf.Item1;
+                lossCf = unrelievedCf.AssessableLoss > 0 ? unrelievedCf.AssessableLoss : -unrelievedCf.AssessableLoss;
 
 
             }
-            lessTotal = lossCf + unrelievedCapitalAllowanceCf.Item2 + capitalAllowanceSummary;
+            lessTotal = lossCf +unrelievedCf.UnRelievedCf + capitalAllowanceSummary;
 
             deferredTaxDto.Add(new DeferredTaxDto
             {

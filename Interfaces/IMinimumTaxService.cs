@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using TaxComputationAPI.Dtos;
 using TaxComputationSoftware.Dtos;
+using TaxComputationSoftware.Models;
 using TaxComputationSoftware.Respoonse;
 
 namespace TaxComputationAPI.Interfaces

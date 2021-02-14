@@ -44,8 +44,7 @@ namespace TaxComputationAPI.Controllers
         {
             try
             {
-                profitAndLoss.IsAllowable=true;
-                profitAndLoss.IsDisAllowable=true;
+                
                 foreach (var j in profitAndLoss.TrialBalanceList)
                 {
                     var trialBalanceRecord = await _trialBalanceService.GetTrialBalanceById(j.TrialBalanceId);

@@ -14,5 +14,9 @@ namespace TaxComputationSoftware.Interfaces
 
         Task DeleteAllowableDisAllowable(int allowableDisAllowableId);
         Task<BroughtFoward> GetBroughtFoward(int companyId);
+
+         Task<AsessableLossUnRelieved> SaveAsessableUnRelieved(AsessableLossUnRelieved asessableLossUn);
+         Task<AsessableLossUnRelieved> GetAsessableLossUnRelievedByCompanyIdYearId(int companyId, int yearId);
+
     }
 }

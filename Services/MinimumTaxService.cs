@@ -9,6 +9,7 @@ using TaxComputationAPI.Interfaces;
 using TaxComputationSoftware.Dtos;
 using TaxComputationSoftware.Interfaces;
 using TaxComputationSoftware.Model;
+using TaxComputationSoftware.Models;
 using TaxComputationSoftware.Respoonse;
 
 namespace TaxComputationAPI.Services
