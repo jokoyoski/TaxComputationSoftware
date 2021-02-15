@@ -63,7 +63,7 @@ namespace TaxComputationAPI.Controllers
 
         // [Authorize(Policy = "SystemAdmin")]   
         [HttpGet("get-companies")]
-        [Authorize]
+        //[Authorize]
 
         public async Task<IActionResult> GetCompanies([FromQuery] PaginationParams pagination)
         {

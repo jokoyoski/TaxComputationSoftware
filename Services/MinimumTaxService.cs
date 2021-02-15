@@ -159,6 +159,16 @@ namespace TaxComputationAPI.Services
             return data;
         }
 
+        public async Task<MinimumTaxPercentageValue> GetMinimumTaxPercentageCompanyIdYearId(int companyId, int yearId)
+        {
+            return await _minimumTaxRepository.GetMinimumTaxPercentageCompanyIdYearId(companyId, yearId);
+        }
+
+        public async Task<MinimumTaxPercentageValue> SaveMinimumPercentage(MinimumTaxPercentageValue minimumTaxDto)
+        {
+            return await _minimumTaxRepository.SaveMinimumPercentage(minimumTaxDto);
+        }
+
         private async Task<MinimumTaxResponse> CalculateOldMinimumTax(MinimumTaxModel addMinimumTaxDto)
         {
 
