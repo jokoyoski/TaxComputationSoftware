@@ -18,12 +18,12 @@ const IncomeTaxMapping = ({ tbData, onTrialBalance, trialBalanceRefresh, toast }
   const [selectedAccounts, setSelectedAccounts] = React.useState([]);
   const typeItems = [
     {
-      label: "Disallowable Expenses",
-      value: 0
+      label: "Allowable Income",
+      value: 1
     },
     {
-      label: "Allowable Expenses",
-      value: 1
+      label: "Disallowable Expenses",
+      value: 0
     }
   ];
 
@@ -91,10 +91,10 @@ const IncomeTaxMapping = ({ tbData, onTrialBalance, trialBalanceRefresh, toast }
             control={control}
             errors={errors}
             controllerName="yearId"
-            label="Year"
+            label="Tax Year"
             required
             dropdownOptions={financialYears}
-            errorMessage="Year is required"
+            errorMessage="Tax Year is required"
             width={250}
           />
           <div>

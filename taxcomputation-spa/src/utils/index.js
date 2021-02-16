@@ -145,7 +145,7 @@ const fetchCompanyFinancialYear = (company, onFinancialYear, toast, setLoading) 
     try {
       setLoading(true);
       const data = await getCompanyFinancialYear(company.companyId);
-      if (data) onFinancialYear(data.map(item => ({ label: item.name, value: item.id })));
+      if (data) onFinancialYear(data.map(item => ({ label: item.financialDate, value: item.id })));
     } catch (error) {
       if (toast) apiErrorHandling(error, toast);
       else console.log(error);

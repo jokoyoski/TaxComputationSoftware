@@ -49,10 +49,10 @@ const InvestmentAllowanceMapping = ({ assetClassSelectItems, toast }) => {
             control={control}
             errors={errors}
             controllerName="yearId"
-            label="Year"
+            label="Tax Year"
             required
             dropdownOptions={financialYears}
-            errorMessage="Year is required"
+            errorMessage="Tax Year is required"
             labelWidth={120}
             className="p-d-flex p-ai-center"
           />

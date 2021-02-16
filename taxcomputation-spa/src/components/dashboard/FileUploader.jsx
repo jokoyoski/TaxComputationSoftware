@@ -17,11 +17,11 @@ const FileUploader = ({ company: { companyId }, toast, setRefreshTrialBalanceTab
 
     if (!file && !year) {
       toast.show(
-        utils.toastCallback({ severity: "error", detail: "Add TB File and Select Tax Year" })
+        utils.toastCallback({ severity: "error", detail: "Add Tax File and Select Tax Year" })
       );
       return;
     } else if (!file) {
-      toast.show(utils.toastCallback({ severity: "error", detail: "Add TB File" }));
+      toast.show(utils.toastCallback({ severity: "error", detail: "Add Tax File" }));
       return;
     } else if (!year) {
       toast.show(utils.toastCallback({ severity: "error", detail: "Select Tax Year" }));
