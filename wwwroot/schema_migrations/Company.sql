@@ -33,7 +33,7 @@ DROP procedure [dbo].[usp_Get_Company_By_Tin]
 END
 GO
 CREATE procedure usp_Get_Company_By_Tin(
-@TinNumber varchar(20)
+@TinNumber varchar(50)
 
 )
 AS
