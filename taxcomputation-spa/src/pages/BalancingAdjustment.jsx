@@ -15,7 +15,7 @@ import Error from "../components/common/Error";
 
 const BalancingAdjustment = () => {
   const title = constants.modules.balancingAdjustment;
-  const toast = React.useRef();
+  const [toast, setToast] = React.useState(null);
   const { data: assetClass, error: assetClassError, refresh: assetClassRefresh } = useResource(
     fixedAssetModuleClassResource
   );
@@ -57,18 +57,18 @@ const BalancingAdjustment = () => {
               <BalancingAdjustmentAdding
                 yearSelectItems={yearSelectItems}
                 assetClassSelectItems={assetClassSelectItems}
-                toast={toast.current}
+                toast={toast}
               />
             ),
             view: (
               <ViewMode title={title} year={year}>
-                <BalancingAdjustmentView year={year} toast={toast.current} />
+                <BalancingAdjustmentView year={year} toast={toast} />
               </ViewMode>
             )
           }[mode]
         }
       </Main>
-      <Toast baseZIndex={1000} ref={el => (toast.current = el)} />
+      <Toast baseZIndex={1000} ref={el => setToast(el)} />
     </Layout>
   );
 };

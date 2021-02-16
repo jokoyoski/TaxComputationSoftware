@@ -51,6 +51,7 @@ const ViewMode = ({ title, year: yearId, children }) => {
   };
 
   React.useEffect(() => {
+    if (!companyId) return;
     companyViewHeaderDataCallback(companyId, yearId);
   }, [companyId, companyViewHeaderDataCallback, yearId]);
 

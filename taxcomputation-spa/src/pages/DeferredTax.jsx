@@ -15,7 +15,7 @@ import { Toast } from "primereact/toast";
 
 const DeferredTax = () => {
   const title = constants.modules.deferredTax;
-  const toast = React.useRef();
+  const [toast, setToast] = React.useState(null);
   const {
     data: trialBalance,
     error: trialBalanceError,
@@ -59,14 +59,14 @@ const DeferredTax = () => {
                 tbData={tbData}
                 onTrialBalance={onTrialBalance}
                 trialBalanceRefresh={trialBalanceRefresh}
-                toast={toast.current}
+                toast={toast}
               />
             ),
             view: (
               <ViewMode title={title} year={year}>
                 <DeferredTaxView
                   year={year}
-                  toast={toast.current}
+                  toast={toast}
                   isBringDeferredTaxFoward={JSON.parse(isBringDeferredTaxFoward || false)}
                 />
               </ViewMode>
@@ -74,7 +74,7 @@ const DeferredTax = () => {
           }[mode]
         }
       </Main>
-      <Toast baseZIndex={1000} ref={el => (toast.current = el)} />
+      <Toast baseZIndex={1000} ref={el => setToast(el)} />
     </Layout>
   );
 };

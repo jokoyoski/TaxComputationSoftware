@@ -15,7 +15,7 @@ import ProfitAndLossMapping from "../components/profit_loss/ProfitAndLossMapping
 
 const ProfitAndLoss = () => {
   const title = constants.modules.profit_loss;
-  const toast = React.useRef();
+  const [toast, setToast] = React.useState(null);
   const { data: assetClass, error: assetClassError, refresh: assetClassRefresh } = useResource(
     profitandlossModuleClassResource
   );
@@ -73,18 +73,18 @@ const ProfitAndLoss = () => {
                 tbData={tbData}
                 onTrialBalance={onTrialBalance}
                 trialBalanceRefresh={trialBalanceRefresh}
-                toast={toast.current}
+                toast={toast}
               />
             ),
             view: (
               <ViewMode title={title} year={year}>
-                <ProfitAndLossView year={year} toast={toast.current} />
+                <ProfitAndLossView year={year} toast={toast} />
               </ViewMode>
             )
           }[mode]
         }
       </Main>
-      <Toast baseZIndex={1000} ref={el => (toast.current = el)} />
+      <Toast baseZIndex={1000} ref={el => setToast(el)} />
     </Layout>
   );
 };

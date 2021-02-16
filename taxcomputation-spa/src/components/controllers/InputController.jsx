@@ -1,5 +1,6 @@
 import React from "react";
 import { InputText } from "primereact/inputtext";
+import { InputNumber } from "primereact/inputnumber";
 
 const InputController = ({
   Controller,
@@ -12,13 +13,35 @@ const InputController = ({
   disabled,
   otherRules,
   placeholder,
-  value,
   onChangeCallback,
   labelWidth,
   errorMessage = "",
   defaultValue = "",
+  type = "text",
   className = "p-d-flex p-flex-column"
 }) => {
+  const inputProps = ({ type, disabled, props, placeholder, onChangeCallback }) => {
+    return {
+      disabled,
+      value: props.value,
+      placeholder,
+      onChange:
+        type === "text"
+          ? e => {
+              props.onChange(e.target.value);
+              if (onChangeCallback) onChangeCallback(e.target.value);
+            }
+          : null,
+      onValueChange:
+        type === "number"
+          ? e => {
+              props.onChange(e.value);
+              if (onChangeCallback) onChangeCallback(e.value);
+            }
+          : null
+    };
+  };
+
   const ControllerError = () => (
     <>
       {errors[controllerName] && (
@@ -47,23 +70,28 @@ const InputController = ({
           name={controllerName}
           control={control}
           rules={{ required, ...otherRules }}
-          defaultValue={defaultValue}
-          render={props => (
-            <InputText
-              disabled={disabled}
-              style={{
-                marginBottom:
-                  !errors[controllerName] || className === "p-d-flex p-flex-column" ? 5 : 0,
-                width: width || 200
-              }}
-              value={value || props.value}
-              placeholder={placeholder}
-              onChange={e => {
-                props.onChange(e.target.value);
-                if (onChangeCallback) onChangeCallback(e.target.value);
-              }}
-            />
-          )}
+          defaultValue={type === "number" ? (defaultValue === "" ? 0 : defaultValue) : defaultValue}
+          render={props =>
+            type === "number" ? (
+              <InputNumber
+                {...inputProps({ type, disabled, props, placeholder, onChangeCallback })}
+                style={{
+                  marginBottom:
+                    !errors[controllerName] || className === "p-d-flex p-flex-column" ? 5 : 0,
+                  width: width || 200
+                }}
+              />
+            ) : (
+              <InputText
+                {...inputProps({ type, disabled, props, placeholder, onChangeCallback })}
+                style={{
+                  marginBottom:
+                    !errors[controllerName] || className === "p-d-flex p-flex-column" ? 5 : 0,
+                  width: width || 200
+                }}
+              />
+            )
+          }
         />
         {className === "p-d-flex p-flex-column" && <ControllerError />}
       </div>

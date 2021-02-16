@@ -15,7 +15,7 @@ import FixedAssetView from "../components/fixed_asset/FixedAssetView";
 
 const FixedAsset = () => {
   const title = constants.modules.fixedAsset;
-  const toast = React.useRef();
+  const [toast, setToast] = React.useState(null);
   const { data: assetClass, error: assetClassError, refresh: assetClassRefresh } = useResource(
     fixedAssetModuleClassResource
   );
@@ -73,18 +73,18 @@ const FixedAsset = () => {
                 tbData={tbData}
                 onTrialBalance={onTrialBalance}
                 trialBalanceRefresh={trialBalanceRefresh}
-                toast={toast.current}
+                toast={toast}
               />
             ),
             view: (
               <ViewMode title={title} year={year}>
-                <FixedAssetView year={year} toast={toast.current} />
+                <FixedAssetView year={year} toast={toast} />
               </ViewMode>
             )
           }[mode]
         }
       </Main>
-      <Toast baseZIndex={1000} ref={el => (toast.current = el)} />
+      <Toast baseZIndex={1000} ref={el => setToast(el)} />
     </Layout>
   );
 };

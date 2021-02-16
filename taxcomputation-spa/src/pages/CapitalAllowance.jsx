@@ -16,7 +16,7 @@ import CapitalAllowanceSummary from "../components/capital_allowance/CapitalAllo
 
 const CapitalAllowance = () => {
   const title = constants.modules.capitalAllowance;
-  const toast = React.useRef();
+  const [toast, setToast] = React.useState(null);
   const { data: assetClass, error: assetClassError, refresh: assetClassRefresh } = useResource(
     fixedAssetModuleClassResource
   );
@@ -61,25 +61,22 @@ const CapitalAllowance = () => {
         {
           {
             adding: (
-              <CapitalAllowanceAdding
-                assetClassSelectItems={assetClassSelectItems}
-                toast={toast.current}
-              />
+              <CapitalAllowanceAdding assetClassSelectItems={assetClassSelectItems} toast={toast} />
             ),
             view: (
               <ViewMode title={title} year={year}>
-                <CapitalAllowanceView assetId={Number(assetId)} toast={toast.current} />
+                <CapitalAllowanceView assetId={Number(assetId)} toast={toast} />
               </ViewMode>
             ),
             summary: (
               <ViewMode title={title} year={year}>
-                <CapitalAllowanceSummary toast={toast.current} />
+                <CapitalAllowanceSummary toast={toast} />
               </ViewMode>
             )
           }[mode]
         }
       </Main>
-      <Toast baseZIndex={1000} ref={el => (toast.current = el)} />
+      <Toast baseZIndex={1000} ref={el => setToast(el)} />
     </Layout>
   );
 };

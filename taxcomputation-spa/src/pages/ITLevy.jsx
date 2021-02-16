@@ -10,7 +10,7 @@ import { Toast } from "primereact/toast";
 
 const ITLevy = () => {
   const title = constants.modules.itLevy;
-  const toast = React.useRef();
+  const [toast, setToast] = React.useState(null);
   const [mode, setMode] = usePathParam("mode");
   const [year, setYear] = React.useState(utils.currentYear());
   const yearSelectItems = utils.getYears(year => ({
@@ -28,10 +28,10 @@ const ITLevy = () => {
         setYear={setYear}
         yearSelectItems={yearSelectItems}>
         <ViewMode title={title} year={year}>
-          <ITLevyView year={year} toast={toast.current} />
+          <ITLevyView year={year} toast={toast} />
         </ViewMode>
       </Main>
-      <Toast baseZIndex={1000} ref={el => (toast.current = el)} />
+      <Toast baseZIndex={1000} ref={el => setToast(el)} />
     </Layout>
   );
 };
