@@ -17,14 +17,12 @@ const Login = () => {
   const [{ isAuthenticated }, { onLoginSuccess }] = useAuth();
   const { push } = useRouterActions();
   const [loading, setLoading] = React.useState(false);
-  const toast = React.useRef();
+  const [toast, setToast] = React.useState(null);
 
   React.useEffect(() => {
     if (routerState.location.state)
-      toast.current.show(
-        utils.toastCallback({ severity: "success", detail: routerState.location.state })
-      );
-  }, [routerState]);
+      toast.show(utils.toastCallback({ severity: "success", detail: routerState.location.state }));
+  }, [routerState, toast]);
 
   const onSubmit = async data => {
     if (loading) return;
@@ -47,13 +45,13 @@ const Login = () => {
         } = error.response;
         // display all errors as toast notification
         errors.map(err =>
-          toast.current.show(
+          toast.show(
             utils.toastCallback({ severity: "error", summary: "Login Error", detail: err })
           )
         );
       } else {
         // network errors
-        toast.current.show(
+        toast.show(
           utils.toastCallback({
             severity: "error",
             summary: "Network Error",
@@ -127,7 +125,7 @@ const Login = () => {
           <p style={{ marginBottom: 0, marginTop: 20, fontSize: 14 }}>Forgot Password</p>
         </Link>
       </Card>
-      <Toast ref={el => (toast.current = el)} />
+      <Toast ref={el => setToast(el)} />
     </div>
   );
 };

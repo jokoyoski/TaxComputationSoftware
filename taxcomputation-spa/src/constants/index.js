@@ -31,7 +31,7 @@ export default {
     balancing_adjustment: "/balancing_adjustment",
     logout: "/logout"
   },
-  nonMappedModules: ["Minimum Tax", "I.T Levy"],
+  nonMappedModules: ["I.T Levy"],
   mappingCode: {
     fixedasset: "fixedasset",
     profitandloss: "profitandloss",

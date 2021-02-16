@@ -13,7 +13,7 @@ const CreateAsset = ({ setShowCreateAsset, setShowAssetList }) => {
   const { errors, handleSubmit, control } = useForm();
   const [{ selectedAsset }, { onAssetList }] = useResources();
   const [loading, setLoading] = React.useState(false);
-  const toast = React.useRef();
+  const [toast, setToast] = React.useState(null);
 
   const onSubmit = async data => {
     if (loading) return;
@@ -30,7 +30,7 @@ const CreateAsset = ({ setShowCreateAsset, setShowAssetList }) => {
             annual: annual ? annual : 0
           });
       if (response.status === 200) {
-        toast.current.show(
+        toast.show(
           utils.toastCallback({
             severity: "success",
             detail: selectedAsset ? "Asset updated successfully" : "Asset created successfully"
@@ -47,7 +47,7 @@ const CreateAsset = ({ setShowCreateAsset, setShowAssetList }) => {
       if (error.response) {
         const { data } = error.response;
         data.errors.error.forEach(err => {
-          toast.current.show(
+          toast.show(
             utils.toastCallback({
               severity: "error",
               detail: err
@@ -56,7 +56,7 @@ const CreateAsset = ({ setShowCreateAsset, setShowAssetList }) => {
         });
       } else {
         // network errors
-        toast.current.show(
+        toast.show(
           utils.toastCallback({
             severity: "error",
             summary: "Network Error",
@@ -128,7 +128,7 @@ const CreateAsset = ({ setShowCreateAsset, setShowAssetList }) => {
           </p>
         )}
       </Card>
-      <Toast ref={el => (toast.current = el)} />
+      <Toast ref={el => setToast(el)} />
     </div>
   );
 };

@@ -5,16 +5,30 @@ const initialState = {
   companyName: "",
   companyDescription: "",
   cacNumber: "",
-  tinNumber: ""
+  tinNumber: "",
+  minimumTaxTypeId: null
 };
 
 const CompanyStore = createStore({
   initialState,
   actions: {
     initCompany: initialState => ({ setState }) => setState(initialState),
-    onSelectCompany: ({ companyId, companyName, companyDescription, cacNumber, tinNumber }) => ({
-      setState
-    }) => setState({ companyId, companyName, companyDescription, cacNumber, tinNumber }),
+    onSelectCompany: ({
+      companyId,
+      companyName,
+      companyDescription,
+      cacNumber,
+      tinNumber,
+      minimumTaxTypeId
+    }) => ({ setState }) =>
+      setState({
+        companyId,
+        companyName,
+        companyDescription,
+        cacNumber,
+        tinNumber,
+        minimumTaxTypeId
+      }),
     resetCompany: () => ({ setState }) => setState({ ...initialState })
   },
   name: "company"

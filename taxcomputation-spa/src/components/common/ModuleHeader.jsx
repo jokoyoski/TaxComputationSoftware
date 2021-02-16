@@ -4,6 +4,7 @@ import { InputSwitch } from "primereact/inputswitch";
 import { InputText } from "primereact/inputtext";
 import constants from "../../constants";
 import { useResources } from "../../store/ResourcesStore";
+import { useCompany } from "../../store/CompanyStore";
 
 const ModuleHeader = ({
   title,
@@ -28,6 +29,7 @@ const ModuleHeader = ({
     constants.modules.capitalAllowance
   ]);
   const [{ financialYears }] = useResources();
+  const [{ minimumTaxTypeId }] = useCompany();
   const [summaryModules] = React.useState([constants.modules.capitalAllowance]);
   const [modeSelectItems, setModeSelectItems] = React.useState([
     addingModules.includes(title)
@@ -69,7 +71,7 @@ const ModuleHeader = ({
           }
         </p>
         <div className="p-d-flex p-ai-center">
-          {mode === "view" && title === constants.modules.minimumTax && (
+          {mode === "view" && title === constants.modules.minimumTax && minimumTaxTypeId === 1 && (
             <div className="p-d-flex p-ai-center">
               <span>% Turn Over</span>
               <InputText

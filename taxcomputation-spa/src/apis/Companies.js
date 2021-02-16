@@ -9,7 +9,8 @@ export const addCompany = async ({
   monthOfOperation,
   unRelievedCf,
   lossCf,
-  deferredTaxBroughtFoward
+  deferredTaxBroughtFoward,
+  minimumTaxTypeId
 }) => {
   try {
     return await axios.post("/api/Companies/add-company", {
@@ -21,7 +22,8 @@ export const addCompany = async ({
       monthOfOperation,
       unRelievedCf,
       lossCf,
-      deferredTaxBroughtFoward
+      deferredTaxBroughtFoward,
+      minimumTaxTypeId
     });
   } catch (error) {
     throw error;

@@ -17,7 +17,7 @@ import FinancialYear from "../components/common/FinancialYear";
 
 const Dashboard = () => {
   const title = constants.modules.dashboard;
-  const toast = React.useRef();
+  const [toast, setToast] = React.useState(null);
   const { data: companies, error, refresh } = useResource(companiesResource);
   const [showCompanyPicker, setShowCompanyPicker] = React.useState(true);
   const [showAddCompany, setShowAddCompany] = React.useState(false);
@@ -33,7 +33,7 @@ const Dashboard = () => {
       onFinancialYear([]);
       utils.fetchCompanyFinancialYear(company, onFinancialYear, toast, setLoading);
     }
-  }, [company, onFinancialYear, resources.financialYears]);
+  }, [company, onFinancialYear, resources.financialYears, toast]);
 
   React.useEffect(() => {
     if (resources.financialYears?.length > 0) setShowFinancialYear(true);
@@ -53,10 +53,25 @@ const Dashboard = () => {
     if (resources.companies) {
       setCompanySelectItems(
         resources.companies.map(
-          ({ id: companyId, companyName, companyDescription, cacNumber, tinNumber, isActive }) =>
+          ({
+            id: companyId,
+            companyName,
+            companyDescription,
+            cacNumber,
+            tinNumber,
+            isActive,
+            minimumTaxTypeId
+          }) =>
             isActive && {
               name: companyName,
-              value: { companyId, companyName, companyDescription, cacNumber, tinNumber }
+              value: {
+                companyId,
+                companyName,
+                companyDescription,
+                cacNumber,
+                tinNumber,
+                minimumTaxTypeId
+              }
             }
         )
       );
@@ -71,7 +86,7 @@ const Dashboard = () => {
     <Layout title={title}>
       <FileUploader
         company={company}
-        toast={toast.current}
+        toast={toast}
         setRefreshTrialBalanceTable={setRefreshTrialBalanceTable}
       />
       {company.companyId && (
@@ -85,7 +100,7 @@ const Dashboard = () => {
       <AddCompanyForm
         showAddCompany={showAddCompany}
         setShowAddCompany={setShowAddCompany}
-        toast={toast.current}
+        toast={toast}
         refresh={refresh}
       />
       {company.companyId === null && (
@@ -105,7 +120,7 @@ const Dashboard = () => {
           setShowFinancialYear={setShowFinancialYear}
         />
       )}
-      <Toast baseZIndex={1000} ref={el => (toast.current = el)} />
+      <Toast baseZIndex={1000} ref={el => setToast(el)} />
     </Layout>
   );
 };

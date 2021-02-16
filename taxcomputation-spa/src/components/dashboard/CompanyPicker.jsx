@@ -27,11 +27,11 @@ const CompanyPicker = ({
             }}
             className="p-button-outlined"
           />
-          <Button
+          {/* <Button
             label="Proceed"
             disabled={!company.companyId}
             onClick={() => company.companyId && setShowCompanyPicker(false)}
-          />
+          /> */}
         </div>
       }
       visible={showCompanyPicker}

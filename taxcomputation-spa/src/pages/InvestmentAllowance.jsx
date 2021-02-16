@@ -15,7 +15,7 @@ import Error from "../components/common/Error";
 
 const InvestmentAllowance = () => {
   const title = constants.modules.investmentAllowance;
-  const toast = React.useRef();
+  const [toast, setToast] = React.useState(null);
   const { data: assetClass, error: assetClassError, refresh: assetClassRefresh } = useResource(
     fixedAssetModuleClassResource
   );
@@ -52,18 +52,18 @@ const InvestmentAllowance = () => {
             mapping: (
               <InvestmentAllowanceMapping
                 assetClassSelectItems={assetClassSelectItems}
-                toast={toast.current}
+                toast={toast}
               />
             ),
             view: (
               <ViewMode title={title} year={year}>
-                <InvestmentAllowanceView year={year} toast={toast.current} />
+                <InvestmentAllowanceView year={year} toast={toast} />
               </ViewMode>
             )
           }[mode]
         }
       </Main>
-      <Toast baseZIndex={1000} ref={el => (toast.current = el)} />
+      <Toast baseZIndex={1000} ref={el => setToast(el)} />
     </Layout>
   );
 };

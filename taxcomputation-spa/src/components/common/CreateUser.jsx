@@ -12,7 +12,7 @@ import utils from "../../utils";
 const CreateUser = ({ setShowCreateUser }) => {
   const { errors, handleSubmit, control } = useForm();
   const [loading, setLoading] = React.useState(false);
-  const toast = React.useRef();
+  const [toast, setToast] = React.useState(null);
 
   const onSubmit = async data => {
     if (loading) return;
@@ -31,7 +31,7 @@ const CreateUser = ({ setShowCreateUser }) => {
         phoneNumber
       });
       if (response.status === 201) {
-        toast.current.show(
+        toast.show(
           utils.toastCallback({
             severity: "success",
             detail: "User created successfully"
@@ -44,7 +44,7 @@ const CreateUser = ({ setShowCreateUser }) => {
       if (error.response) {
         const { data } = error.response;
         // display error as toast notification
-        toast.current.show(
+        toast.show(
           utils.toastCallback({
             severity: "error",
             summary: data[0].code,
@@ -53,7 +53,7 @@ const CreateUser = ({ setShowCreateUser }) => {
         );
       } else {
         // network errors
-        toast.current.show(
+        toast.show(
           utils.toastCallback({
             severity: "error",
             summary: "Network Error",
@@ -174,7 +174,7 @@ const CreateUser = ({ setShowCreateUser }) => {
           </p>
         )}
       </Card>
-      <Toast ref={el => (toast.current = el)} />
+      <Toast ref={el => setToast(el)} />
     </div>
   );
 };

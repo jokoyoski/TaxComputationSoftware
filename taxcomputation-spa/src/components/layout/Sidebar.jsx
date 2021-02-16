@@ -8,7 +8,7 @@ import utils from "../../utils";
 
 const Sidebar = ({ selectedTitle, isActive }) => {
   const [{ firstName, lastName, email }, { onLogout }] = useAuth();
-  const [{ companyId }, { resetCompany }] = useCompany();
+  const [{ companyId, minimumTaxTypeId }, { resetCompany }] = useCompany();
   const [, { resetResources }] = useResources();
   const menuItems = [
     { title: "Dashboard", href: constants.routes.dashboard },
@@ -30,7 +30,7 @@ const Sidebar = ({ selectedTitle, isActive }) => {
     },
     {
       title: constants.modules.minimumTax,
-      href: `${constants.routes.minimum_tax}/${utils.defaultMode(constants.modules.minimumTax)}`
+      href: `${constants.routes.minimum_tax}/${minimumTaxTypeId === 0 ? "mapping" : "view"}`
     },
     {
       title: constants.modules.itLevy,
@@ -57,15 +57,18 @@ const Sidebar = ({ selectedTitle, isActive }) => {
   ];
 
   return (
-    <div className="p-d-flex" style={{ position: "fixed", zIndex: 1 }}>
+    <div className="p-d-flex" style={{ position: "fixed", height: "100%", zIndex: 1 }}>
       <div
         className="p-d-flex p-flex-column"
         style={{
           width: 256,
-          height: "100vh",
-          background: "#fff"
+          height: "100%",
+          background: "#fff",
+          overflowY: "auto"
         }}>
-        <h2 className="accent-color" style={{ margin: "5px 0", padding: "10px 20px" }}>
+        <h2
+          className="accent-color"
+          style={{ margin: "5px 0 10px 0", padding: "10px 20px", fontSize: "1.25rem" }}>
           Tax Computation
         </h2>
         <div className="divider"></div>
@@ -95,7 +98,7 @@ const Sidebar = ({ selectedTitle, isActive }) => {
         <div className="divider" style={{ margin: "10px 0px" }}></div>
         <div className="sidebar-link" style={{ padding: "0px 20px" }}>
           <p
-            style={{ margin: 0, cursor: "pointer" }}
+            style={{ margin: "0 0 20px 0", cursor: "pointer" }}
             onClick={() => {
               const removeYear = () => sessionStorage.removeItem("year");
               onLogout(resetCompany, resetResources, removeYear);
