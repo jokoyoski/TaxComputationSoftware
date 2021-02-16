@@ -22,7 +22,7 @@ const IncomeTaxMapping = ({ tbData, onTrialBalance, trialBalanceRefresh, toast }
       value: 0
     },
     {
-      label: "Allowable Expenses",
+      label: "Allowable Income",
       value: 1
     }
   ];
@@ -91,7 +91,7 @@ const IncomeTaxMapping = ({ tbData, onTrialBalance, trialBalanceRefresh, toast }
             control={control}
             errors={errors}
             controllerName="yearId"
-            label="Year"
+            label="Tax Year"
             required
             dropdownOptions={financialYears}
             errorMessage="Year is required"

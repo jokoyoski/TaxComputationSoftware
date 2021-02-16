@@ -1,14 +1,14 @@
 import React from "react";
 import { Button } from "primereact/button";
 import { Controller, useForm } from "react-hook-form";
-import { balancingAdjustmentAdding } from "../../apis/BalancingAdjustment";
+import { minimumTaxMapping } from "../../apis/MinimumTax";
 import { useCompany } from "../../store/CompanyStore";
 import utils from "../../utils";
 import DropdownController from "../controllers/DropdownController";
 import InputController from "../controllers/InputController";
 import { useResources } from "../../store/ResourcesStore";
 
-const BalancingAdjustmentAdding = ({ yearSelectItems, assetClassSelectItems, toast }) => {
+const MinimumTaxMapping = ({ toast }) => {
   const { errors, handleSubmit, control } = useForm();
   const [{ companyId }] = useCompany();
   const [{ financialYears }] = useResources();
@@ -17,16 +17,15 @@ const BalancingAdjustmentAdding = ({ yearSelectItems, assetClassSelectItems, toa
   const onSubmit = async data => {
     if (loading) return;
 
-    const { year, assetId, cost, salesProceed, yearBought } = data;
+    const { financialYearId, grossProft, netAsset, shareCapital } = data;
 
     setLoading(true);
     try {
-      const response = await balancingAdjustmentAdding({
-        year,
-        assetId,
-        cost,
-        salesProceed,
-        yearBought,
+      const response = await minimumTaxMapping({
+        financialYearId,
+        grossProft,
+        netAsset,
+        shareCapital,
         companyId
       });
       if (response.status === 200) {
@@ -51,8 +50,8 @@ const BalancingAdjustmentAdding = ({ yearSelectItems, assetClassSelectItems, toa
           Controller={Controller}
           control={control}
           errors={errors}
-          controllerName="year"
-          label="Tax Year"
+          controllerName="financialYearId"
+          label="Year"
           required
           dropdownOptions={financialYears}
           errorMessage="Year is required"
@@ -61,55 +60,43 @@ const BalancingAdjustmentAdding = ({ yearSelectItems, assetClassSelectItems, toa
         />
       </div>
       <div style={{ marginBottom: 10 }}>
-        <DropdownController
+        <InputController
+          type="number"
           Controller={Controller}
           control={control}
           errors={errors}
-          controllerName="assetId"
-          label="Asset"
+          controllerName="grossProft"
+          label="Gross Profit"
           required
-          dropdownOptions={assetClassSelectItems}
-          errorMessage="Asset is required"
+          errorMessage="Gross Profit is required"
           labelWidth={120}
           className="p-d-flex p-ai-center"
         />
       </div>
       <div style={{ marginBottom: 10 }}>
         <InputController
+          type="number"
           Controller={Controller}
           control={control}
           errors={errors}
-          controllerName="cost"
-          label="Cost"
+          controllerName="netAsset"
+          label="Net Asset"
           required
-          errorMessage="Cost is required"
+          errorMessage="Net Asset is required"
           labelWidth={120}
           className="p-d-flex p-ai-center"
         />
       </div>
       <div style={{ marginBottom: 10 }}>
         <InputController
+          type="number"
           Controller={Controller}
           control={control}
           errors={errors}
-          controllerName="salesProceed"
-          label="Sales Proceed"
+          controllerName="shareCapital"
+          label="Share Capital"
           required
-          errorMessage="Sales Proceed is required"
-          labelWidth={120}
-          className="p-d-flex p-ai-center"
-        />
-      </div>
-      <div style={{ marginBottom: 10 }}>
-        <DropdownController
-          Controller={Controller}
-          control={control}
-          errors={errors}
-          controllerName="yearBought"
-          label="Year Bought"
-          required
-          dropdownOptions={financialYears}
-          errorMessage="Year Bought is required"
+          errorMessage="Share Capital is required"
           labelWidth={120}
           className="p-d-flex p-ai-center"
         />
@@ -126,4 +113,4 @@ const BalancingAdjustmentAdding = ({ yearSelectItems, assetClassSelectItems, toa
   );
 };
 
-export default BalancingAdjustmentAdding;
+export default MinimumTaxMapping;

@@ -39,9 +39,9 @@ namespace TaxComputationAPI.Services
 
         public Task SaveCapitalAllowance(CapitalAllowance capitalAllowance)
         {
-            capitalAllowance.Channel = Constants.OldBalancingAdjustmentOpen;
-            _capitalAllowanceRepository.SaveArchivedCapitaLAllowance(capitalAllowance, Constants.OldBalancingAdjustmentOpen);
-            _capitalAllowanceRepository.SaveCapitaLAllowance(capitalAllowance, Constants.OldBalancingAdjustmentOpen);
+            capitalAllowance.Channel = Constants.OpenOld;
+            _capitalAllowanceRepository.SaveArchivedCapitaLAllowance(capitalAllowance, Constants.OpenOld);
+            _capitalAllowanceRepository.SaveCapitaLAllowance(capitalAllowance, Constants.OpenOld);
             SaveCapitalAllowanceSummary(capitalAllowance.AssetId, capitalAllowance.CompanyId);
             return Task.CompletedTask;
 
@@ -84,7 +84,7 @@ namespace TaxComputationAPI.Services
                 total = 0;
                 remianingYears = (int)100 / assetDetails.Annual;  //no of years
                 code = null;
-                channel = Constants.BalancingAdjustment;
+                channel = Constants.OpenNew;
                 numOfYearsAvailable = remianingYears;
                 disposal = 0;
 
@@ -107,7 +107,7 @@ namespace TaxComputationAPI.Services
                 closingResidue = addition - total;      //closingresidue=addition-total
                 remianingYears = totalNoOfYears - 1;    //remainingyears-1
                 code = "0";
-                channel = Constants.FixedAsset;
+                channel = Constants.Closed;
                 numOfYearsAvailable = totalNoOfYears;
             }
 
@@ -163,7 +163,7 @@ namespace TaxComputationAPI.Services
 
             if (previousRecord != null)
             {
-                if (previousRecord.Initial <= 0 && previousRecord.Channel == Constants.OldBalancingAdjustment || previousRecord.Channel == Constants.BalancingAdjustementOpen || previousRecord.Channel == Constants.FixedAssetOpen || previousRecord.Channel == Constants.OldBalancingAdjustmentOpen)
+                if (previousRecord.Initial <= 0 && previousRecord.Channel == Constants.OpenOld)
                 {
                     decimal openingResidueValue = previousRecord.OpeningResidue - residue;   //openingresidue- residue 
                     decimal annualValue = openingResidueValue / previousRecord.NumberOfYearsAvailable;  //opening residual/no of years available
@@ -187,7 +187,7 @@ namespace TaxComputationAPI.Services
                             CompanyId = companyId,
                             AssetId = previousRecord.AssetId,
                             CompanyCode = null,
-                            Channel = Constants.OldBalancingAdjustmentOpen,
+                            Channel = Constants.OpenOld,
                             NumberOfYearsAvailable = 0
 
 
@@ -213,7 +213,7 @@ namespace TaxComputationAPI.Services
                             CompanyId = companyId,
                             AssetId = assetId,
                             CompanyCode = "companyCode.Code",
-                            Channel = ChannelType(previousRecord.Channel),
+                            Channel =Constants.OpenOld,
                             NumberOfYearsAvailable = previousRecord.NumberOfYearsAvailable
 
 
@@ -261,7 +261,7 @@ namespace TaxComputationAPI.Services
                             CompanyId = companyId,
                             AssetId = previousRecord.AssetId,
                             CompanyCode = null,
-                            Channel = Constants.OldBalancingAdjustmentOpen,
+                            Channel = Constants.OpenNew,
                             NumberOfYearsAvailable = 0
 
 
@@ -288,7 +288,7 @@ namespace TaxComputationAPI.Services
                             CompanyId = companyId,
                             AssetId = assetId,
                             CompanyCode = "companyCode.Code",
-                            Channel = ChannelType(previousRecord.Channel),
+                            Channel = Constants.OpenNew,
                             NumberOfYearsAvailable = newtotalNoOfYears,
 
 
@@ -603,23 +603,6 @@ namespace TaxComputationAPI.Services
             return _capitalAllowanceRepository.UpdateArchivedCapitalAllowanceForChannel(channel, companyId, taxYear, assetId);
         }
 
-        public string ChannelType(string currentChannel)
-        {
-            if (currentChannel == Constants.FixedAssetOpen)
-            {
-                return Constants.FixedAssetLock;
-            }
-            if (currentChannel == Constants.BalancingAdjustment)
-            {
-                return Constants.BalancingAdjustmentlOCK;
-            }
-
-            if (currentChannel == Constants.OldBalancingAdjustmentOpen)
-            {
-                return Constants.OldBalancingAdjustmentLock;
-            }
-            return null;
-
-        }
+       
     }
 }

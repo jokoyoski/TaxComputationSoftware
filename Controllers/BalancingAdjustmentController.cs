@@ -69,23 +69,21 @@ namespace TaxComputationAPI.Controllers
             int taxYear = int.Parse(details.Name);
             if (companyDate.ClosingDate.Year + 1 != taxYear)
             {
-                return StatusCode(400, new { errors = new[] { "This operation is not valid for previous tax years"} });
+                return StatusCode(400, new { errors = new[] { "This operation is not valid for previous tax years" } });
             }
-
+            if (previousRecord.Channel == Constants.Closed)
+            {
+                return BadRequest(new { errors = new[] { "The annual for this item has already been calculated from fixed asset" } });
+            }
 
             if (previousRecord != null)
             {
-                if (previousRecord.Channel == Constants.FixedAsset)
+                if (previousRecord.Channel == Constants.Closed)
                 {
                     return BadRequest(new { errors = new[] { "The annual for this item has already been calculated from fixed asset" } });
                 }
 
 
-
-                if (previousRecord.Channel == Constants.FixedAssetLock || previousRecord.Channel == Constants.BalancingAdjustmentlOCK || previousRecord.Channel == Constants.OldBalancingAdjustmentLock)
-                {
-                    return BadRequest(new { errors = new[] { "The annual for this item has been calculated!!" } });
-                }
 
                 if (previousRecord.NumberOfYearsAvailable == 0)
                 {
@@ -110,8 +108,8 @@ namespace TaxComputationAPI.Controllers
             int taxYear = int.Parse(details.Name);
             if (companyDate.ClosingDate.Year + 1 != taxYear)
             {
-                return StatusCode(400, new { errors = new[] { "This operation is not valid for previous tax years"} });
-  
+                return StatusCode(400, new { errors = new[] { "This operation is not valid for previous tax years" } });
+
             }
 
             var response = await _balancingAdjustmentService.DeleteBalancingAdjustmentYearBoughtAsync(Id);

@@ -3,6 +3,7 @@ import { Dialog } from "primereact/dialog";
 import { InputText } from "primereact/inputtext";
 import { Calendar } from "primereact/calendar";
 import { Button } from "primereact/button";
+import { Dropdown } from "primereact/dropdown";
 import { useForm, Controller } from "react-hook-form";
 import { addCompany } from "../../apis/Companies";
 import constants from "../../constants";
@@ -11,6 +12,10 @@ import utils from "../../utils";
 const AddCompanyForm = ({ showAddCompany, setShowAddCompany, toast, refresh }) => {
   const { errors, handleSubmit, control } = useForm();
   const [loading, setLoading] = React.useState(false);
+  const minimumTaxTypeSelectItems = [
+    { label: "Old", value: 0 },
+    { label: "New", value: 1 }
+  ];
 
   const onSubmit = async data => {
     if (loading) return;
@@ -25,7 +30,8 @@ const AddCompanyForm = ({ showAddCompany, setShowAddCompany, toast, refresh }) =
       monthOfOperation,
       unRelievedCf,
       lossCf,
-      deferredTaxBroughtFoward
+      deferredTaxBroughtFoward,
+      minimumTaxTypeId
     } = data;
     try {
       const response = await addCompany({
@@ -37,7 +43,8 @@ const AddCompanyForm = ({ showAddCompany, setShowAddCompany, toast, refresh }) =
         monthOfOperation,
         unRelievedCf,
         lossCf,
-        deferredTaxBroughtFoward
+        deferredTaxBroughtFoward,
+        minimumTaxTypeId
       });
       if (response.status === 201) {
         toast.show(
@@ -193,12 +200,12 @@ const AddCompanyForm = ({ showAddCompany, setShowAddCompany, toast, refresh }) =
               )}
             />
             {errors.unRelievedCf && (
-              <span style={{ fontSize: 12, color: "red" }}>Unrelieved CA C/f is required</span>
+              <span style={{ fontSize: 12, color: "red" }}>Unrelieved CA b/f is required</span>
             )}
           </div>
           <div className="p-d-flex p-flex-column" style={{ marginBottom: 15, marginLeft: 10 }}>
             <label htmlFor="lossCfInput" style={{ marginBottom: 10 }}>
-              Loss C/f
+              Loss b/f
             </label>
             <Controller
               name="lossCf"
@@ -218,6 +225,31 @@ const AddCompanyForm = ({ showAddCompany, setShowAddCompany, toast, refresh }) =
               <span style={{ fontSize: 12, color: "red" }}>Loss C/f is required</span>
             )}
           </div>
+        </div>
+        <div className="p-d-flex p-flex-column" style={{ marginBottom: 15 }}>
+          <label htmlFor="minimumTaxTypeIdInput" style={{ marginBottom: 10 }}>
+            Minimum Tax Type
+          </label>
+          <Controller
+            name="minimumTaxTypeId"
+            control={control}
+            rules={{ required: true }}
+            defaultValue=""
+            render={props => (
+              <Dropdown
+                style={{ marginBottom: 5, width: "100%" }}
+                id="minimumTaxTypeIdInput"
+                value={props.value}
+                options={minimumTaxTypeSelectItems}
+                onChange={e => props.onChange(e.target.value)}
+              />
+            )}
+          />
+          {errors.deferredTaxBroughtFoward && (
+            <span style={{ fontSize: 12, color: "red" }}>
+              Deferred Tax Brought Foward is required
+            </span>
+          )}
         </div>
         <div className="p-d-flex p-flex-column" style={{ marginBottom: 15 }}>
           <label htmlFor="deferredTaxBroughtFowardInput" style={{ marginBottom: 10 }}>
@@ -262,7 +294,7 @@ const AddCompanyForm = ({ showAddCompany, setShowAddCompany, toast, refresh }) =
             )}
           />
           {errors.monthOfOperation && (
-            <span style={{ fontSize: 12, color: "red" }}>Month of Operation is required</span>
+            <span style={{ fontSize: 12, color: "red" }}>Month(s) of Operation is required</span>
           )}
         </div>
         <div className="p-d-flex p-flex-column" style={{ marginBottom: 15 }}>

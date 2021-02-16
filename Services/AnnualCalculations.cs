@@ -2,45 +2,47 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Quartz;
 using TaxComputationAPI.Dtos;
 using TaxComputationAPI.Helpers;
-using TaxComputationAPI.Interfaces;
 using TaxComputationAPI.Models;
 using TaxComputationSoftware.Dtos;
 using TaxComputationSoftware.Interfaces;
 
 namespace TaxComputationSoftware.Services
 {
-    [DisallowConcurrentExecution]
-    public class AnnualService : IJob
+    public class AnnualCalculations : IHostedService, IDisposable
     {
 
-        private readonly INotificationRepository _notificationRepository;
+         private readonly INotificationRepository _notificationRepository;
 
         private readonly IEmailService _emailService;
-        private readonly ILogger<AnnualService> _logger;
+        private readonly ILogger<INotificationRepository> _logger;
 
-        public AnnualService(INotificationRepository notificationRepository, IEmailService emailService, 
-                            ILogger<AnnualService> logger)
+        public AnnualCalculations(INotificationRepository notificationRepository,IEmailService emailService, ILogger<INotificationRepository> logger)
         {
-            _emailService = emailService;
+            _emailService=emailService;
             _logger = logger;
             _notificationRepository = notificationRepository;
         }
-
-        public async Task Execute(IJobExecutionContext context)
+        public void Dispose()
         {
-            try
+            throw new NotImplementedException();
+        }
+
+        public async Task StartAsync(CancellationToken cancellationToken)
+        {
+             try
             {
                 var pre = await _notificationRepository.GetPreNotification();
                 foreach (var item in pre)
                 {
-                    if (DateTime.Now.Date == item.ClosingDate.Date && !item.IsLocked)
+                    if (DateTime.Now.Date == item.ClosingDate.Date)   // add isLockBack
                     {  //add unlock
-                        UnlockCapitalAllowance(item.CompanyId, item.Id);
+                        await CalculateAnnualCalculation(item.CompanyId, item.Id);
                     }
                 }
             }
@@ -55,54 +57,39 @@ namespace TaxComputationSoftware.Services
 
         }
 
-        public async Task UnlockCapitalAllowance(int companyId, int Id)
+
+
+         public async Task CalculateAnnualCalculation(int companyId, int itemId)
         {
-            try
+            decimal annualValue = 0;
+            decimal total = 0;
+            decimal closingResidue = 0;
+            var assetClasses = await _notificationRepository.GetAssetMappingAsync();
+            foreach (var item in assetClasses)
             {
-                var assetClasses = await _notificationRepository.GetAssetMappingAsync();
-                foreach (var item in assetClasses)
+                var values = await _notificationRepository.GetCapitalAllowance(item.Id, companyId);
+                var record = GetCapitalAllowance(values.ToList());
+                if (record.capitalAllowances.Count > 0)
                 {
-                    var values = await _notificationRepository.GetCapitalAllowance(item.Id, companyId);
-                    var record = GetCapitalAllowance(values.ToList());
-                    if (record.capitalAllowances.Count > 0)
+                    foreach (var value in record.capitalAllowances)
                     {
-                        foreach (var value in record.capitalAllowances)
-                        {
-                            string channel = "";
-                            if (value.Channel.ElementAt(0) == 'F')
-                            {
-                                channel = Constants.FixedAssetOpen;
-                            }
-                            if (value.Channel.ElementAt(0) == 'B')
-                            {
-                                channel = Constants.BalancingAdjustementOpen;
-                            }
-                            if (value.Channel.ElementAt(0) == 'O')
-                            {
-                                channel = Constants.OldBalancingAdjustmentOpen;
-                            }
-                            await _notificationRepository.UpdateCapitalAllowanceForChannel(channel, value.Id);
-                            await _notificationRepository.UpdateArchivedCapitalAllowanceForChannel(channel, value.CompanyId, value.TaxYear, item.Id);
-                            _notificationRepository.Lock(new Model.PreNotification
-                            {
-                                Id = Id,
-                                IsLocked = true
-                            });
-                        }
+                        
+                    
+                         
+
+                      
+            
+
                     }
                 }
             }
-            catch (Exception ex)
-            {
-
-                _logger.LogError(ex.Message);
-                await _emailService.ExceptionEmail(MethodBase.GetCurrentMethod().DeclaringType.Name, ex.Message);
-            }
-
-
+             
+                        
+            var companyDetails=await _notificationRepository.GetCompanyAsync(companyId);
+            string text=$"This is to alert you that {companyDetails.CompanyName} annual calculation for the  end of financial year has been computed";
+         // _emailService.Send("jookoyoski@gmail.com","bomana.ogoni@gmail.com","End of Financial Year Calculation",text.ToString(),"");
 
         }
-
 
         private CapitalAllowanceDto GetCapitalAllowance(List<CapitalAllowance> capitalAllowances)
         {
@@ -158,16 +145,16 @@ namespace TaxComputationSoftware.Services
                     var m = new CapitalAllowanceViewDto
                     {
                         Id = x.Id,
-                        TaxYear = x.TaxYear,
-                        OpeningResidue = $"₦{Utilities.FormatAmount(x.OpeningResidue)}",
-                        Addition = $"₦{Utilities.FormatAmount(x.Addition)}",
-                        Disposal = $"₦{Utilities.FormatAmount(x.Disposal)}",
-                        Initial = $"₦{Utilities.FormatAmount(x.Initial)}",
-                        Annual = $"₦{Utilities.FormatAmount(x.Annual)}",
-                        Total = $"₦{Utilities.FormatAmount(x.Total)}",
+                        TaxYear = x.YearId,
+                        OpeningResidue = x.OpeningResidue.ToString(),
+                        Addition = x.Addition.ToString(),
+                        Disposal = x.Disposal.ToString(),
+                        Initial = x.Initial.ToString(),
+                        Annual = x.Addition.ToString(),
+                        Total = x.Total.ToString(),
                         YearsToGo = x.YearsToGo,
                         NumberOfYearsAvailable = x.NumberOfYearsAvailable,
-                        ClosingResidue = $"₦{Utilities.FormatAmount(x.ClosingResidue)}",
+                        ClosingResidue = x.ClosingResidue.ToString(),
                         Channel = x.Channel,
                         CompanyId = x.CompanyId
                     };
@@ -202,6 +189,13 @@ namespace TaxComputationSoftware.Services
 
 
         }
-    }
 
+
+
+
+        public Task StopAsync(CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }

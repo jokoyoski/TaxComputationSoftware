@@ -15,7 +15,7 @@ import Error from "../components/common/Error";
 
 const IncomeTax = () => {
   const title = constants.modules.incomeTax;
-  const toast = React.useRef();
+  const [toast, setToast] = React.useState(null);
   const {
     data: trialBalance,
     error: trialBalanceError,
@@ -60,14 +60,14 @@ const IncomeTax = () => {
                 tbData={tbData}
                 onTrialBalance={onTrialBalance}
                 trialBalanceRefresh={trialBalanceRefresh}
-                toast={toast.current}
+                toast={toast}
               />
             ),
             view: (
               <ViewMode title={title} year={year}>
                 <IncomeTaxView
                   year={year}
-                  toast={toast.current}
+                  toast={toast}
                   showITLevy={JSON.parse(showITLevy || false)}
                   isBringLossFoward={JSON.parse(isBringLossFoward || false)}
                 />
@@ -76,7 +76,7 @@ const IncomeTax = () => {
           }[mode]
         }
       </Main>
-      <Toast baseZIndex={1000} ref={el => (toast.current = el)} />
+      <Toast baseZIndex={1000} ref={el => setToast(el)} />
     </Layout>
   );
 };

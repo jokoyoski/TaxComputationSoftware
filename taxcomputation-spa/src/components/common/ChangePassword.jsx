@@ -17,14 +17,12 @@ const ChangePassword = ({ setShowChangePassword }) => {
   const [, { onLogout }] = useAuth();
   const [, { resetCompany }] = useCompany();
   const [loading, setLoading] = React.useState(false);
-  const toast = React.useRef();
+  const [toast, setToast] = React.useState(null);
 
   React.useEffect(() => {
     if (routerState.location.state)
-      toast.current.show(
-        utils.toastCallback({ severity: "success", detail: routerState.location.state })
-      );
-  }, [routerState]);
+      toast.show(utils.toastCallback({ severity: "success", detail: routerState.location.state }));
+  }, [routerState, toast]);
 
   const onSubmit = async data => {
     if (loading) return;
@@ -32,7 +30,7 @@ const ChangePassword = ({ setShowChangePassword }) => {
     const { currentPassword, newPassword } = data;
     // display error notification if current password and new password are the same
     if (currentPassword === newPassword) {
-      toast.current.show(
+      toast.show(
         utils.toastCallback({
           severity: "error",
           detail: "Current Password and New Password cannot be the same"
@@ -51,7 +49,7 @@ const ChangePassword = ({ setShowChangePassword }) => {
       if (error.response) {
         const { data } = error.response;
         // display error as toast notification
-        toast.current.show(
+        toast.show(
           utils.toastCallback({
             severity: "error",
             summary: "Error",
@@ -60,7 +58,7 @@ const ChangePassword = ({ setShowChangePassword }) => {
         );
       } else {
         // network errors
-        toast.current.show(
+        toast.show(
           utils.toastCallback({
             severity: "error",
             summary: "Network Error",
@@ -124,7 +122,7 @@ const ChangePassword = ({ setShowChangePassword }) => {
           </p>
         )}
       </Card>
-      <Toast ref={el => (toast.current = el)} />
+      <Toast ref={el => setToast(el)} />
     </div>
   );
 };

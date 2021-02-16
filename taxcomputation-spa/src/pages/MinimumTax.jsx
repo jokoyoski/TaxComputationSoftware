@@ -1,6 +1,7 @@
 import React from "react";
 import Layout from "../components/layout";
 import MinimumTaxView from "../components/minimum_tax/MinimumTaxView";
+import MinimumTaxMapping from "../components/minimum_tax/MinimumTaxMapping";
 import ViewMode from "../components/common/ViewMode";
 import constants from "../constants";
 import utils from "../utils";
@@ -10,7 +11,7 @@ import { Toast } from "primereact/toast";
 
 const MinimumTax = () => {
   const title = constants.modules.minimumTax;
-  const toast = React.useRef();
+  const [toast, setToast] = React.useState(null);
   const [mode, setMode] = usePathParam("mode");
   const [year, setYear] = React.useState(utils.currentYear());
   const [percentageTurnOverValue, setPercentageTurnOverValue] = useQueryParam("percentageTurnOver");
@@ -39,16 +40,23 @@ const MinimumTax = () => {
         percentageTurnOver={percentageTurnOver}
         setPercentageTurnOver={setPercentageTurnOver}
         yearSelectItems={yearSelectItems}>
-        <ViewMode title={title} year={year}>
-          <MinimumTaxView
-            year={year}
-            toast={toast.current}
-            percentageTurnOver={percentageTurnOver}
-            setPercentageTurnOver={setPercentageTurnOver}
-          />
-        </ViewMode>
+        {
+          {
+            mapping: <MinimumTaxMapping toast={toast} />,
+            view: (
+              <ViewMode title={title} year={year}>
+                <MinimumTaxView
+                  year={year}
+                  toast={toast}
+                  percentageTurnOver={percentageTurnOver}
+                  setPercentageTurnOver={setPercentageTurnOver}
+                />
+              </ViewMode>
+            )
+          }[mode]
+        }
       </Main>
-      <Toast baseZIndex={1000} ref={el => (toast.current = el)} />
+      <Toast baseZIndex={1000} ref={el => setToast(el)} />
     </Layout>
   );
 };
