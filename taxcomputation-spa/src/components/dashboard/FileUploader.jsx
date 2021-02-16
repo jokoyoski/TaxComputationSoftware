@@ -1,7 +1,6 @@
 import React from "react";
 import { Card } from "primereact/card";
 import { Button } from "primereact/button";
-import { Dropdown } from "primereact/dropdown";
 import utils from "../../utils";
 import { uploadTrialBalance } from "../../apis/TrialBalance";
 import { useResources } from "../../store/ResourcesStore";
@@ -15,16 +14,8 @@ const FileUploader = ({ company: { companyId }, toast, setRefreshTrialBalanceTab
   const onUpload = async () => {
     if (loading) return;
 
-    if (!file && !year) {
-      toast.show(
-        utils.toastCallback({ severity: "error", detail: "Add Tax File and Select Tax Year" })
-      );
-      return;
-    } else if (!file) {
+    if (!file) {
       toast.show(utils.toastCallback({ severity: "error", detail: "Add Tax File" }));
-      return;
-    } else if (!year) {
-      toast.show(utils.toastCallback({ severity: "error", detail: "Select Tax Year" }));
       return;
     }
 
@@ -33,7 +24,6 @@ const FileUploader = ({ company: { companyId }, toast, setRefreshTrialBalanceTab
     try {
       const response = await uploadTrialBalance({ file, companyId, year });
       if (response.status === 200) {
-        setYear(null);
         setFile(null);
         setRefreshTrialBalanceTable(true);
         toast.show(utils.toastCallback({ severity: "success", detail: response.data }));
@@ -45,6 +35,14 @@ const FileUploader = ({ company: { companyId }, toast, setRefreshTrialBalanceTab
     }
   };
 
+  React.useEffect(() => {
+    if (financialYears) {
+      const latestFinancialYearId = financialYears[financialYears.length - 1].value;
+      setYear(latestFinancialYearId);
+      sessionStorage.setItem("yid", latestFinancialYearId);
+    }
+  }, [financialYears]);
+
   return (
     <Card
       header={
@@ -52,15 +50,6 @@ const FileUploader = ({ company: { companyId }, toast, setRefreshTrialBalanceTab
           <div className="p-d-flex p-ai-center p-jc-between" style={{ padding: "0px 20px" }}>
             <p style={{ fontSize: 18, fontWeight: 600 }}>Upload File</p>
             <div>
-              <Dropdown
-                style={{ marginRight: 20, width: 120 }}
-                value={year}
-                options={financialYears}
-                onChange={e => {
-                  setYear(e.value);
-                }}
-                placeholder="Tax Year"
-              />
               <Button
                 style={{ width: 120 }}
                 label={!loading ? "Upload" : null}
