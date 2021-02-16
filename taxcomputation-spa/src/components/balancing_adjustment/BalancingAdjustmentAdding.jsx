@@ -52,7 +52,7 @@ const BalancingAdjustmentAdding = ({ yearSelectItems, assetClassSelectItems, toa
           control={control}
           errors={errors}
           controllerName="year"
-          label="Year"
+          label="Tax Year"
           required
           dropdownOptions={financialYears}
           errorMessage="Year is required"

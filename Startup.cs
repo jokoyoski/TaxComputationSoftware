@@ -93,17 +93,8 @@ namespace TaxComputationAPI
             services.AddSingleton<IEmailService, EmailService>();
 
 
-            services.AddSingleton<AnnualCalculation>();
-
-
+            
    
-            services.AddSingleton<JobSchedule>((x) =>
-            {
-
-                var cronExpression = "0 */3 * * * ?";
-                return new JobSchedule(jobType: typeof(AnnualCalculation), cronExpression: cronExpression);
-
-            });
 
             services.AddHostedService<TimedHostedService>();
 

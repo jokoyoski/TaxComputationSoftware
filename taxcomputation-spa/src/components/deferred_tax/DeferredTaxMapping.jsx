@@ -86,7 +86,7 @@ const DeferredTaxMapping = ({ tbData, onTrialBalance, trialBalanceRefresh, toast
           control={control}
           errors={errors}
           controllerName="yearId"
-          label="Year"
+          label="Tax Year"
           required
           dropdownOptions={financialYears}
           errorMessage="Year is required"

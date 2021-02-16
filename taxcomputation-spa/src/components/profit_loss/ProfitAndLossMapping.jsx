@@ -23,6 +23,7 @@ const ProfitAndLossMapping = ({
   const [init, setInit] = React.useState(true);
   const [selectedAccounts, setSelectedAccounts] = React.useState([]);
   const typeSelectItems = [
+    { label: "No Selection", value: 3 },
     { label: "Allowable", value: 0 },
     { label: "Disallowable", value: 1 }
   ];
@@ -94,7 +95,7 @@ const ProfitAndLossMapping = ({
           control={control}
           errors={errors}
           controllerName="yearId"
-          label="Year"
+          label="Tax Year"
           width={200}
           required
           dropdownOptions={financialYears}

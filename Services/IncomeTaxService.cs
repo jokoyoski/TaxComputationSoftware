@@ -1035,10 +1035,13 @@ namespace TaxComputationSoftware.Services
             var minimumTaxPercentage = await _minimumTaxService.GetMinimumTaxPercentageCompanyIdYearId(companyId, yearId);
             if (minimumTaxPercentage == null)
             {
-                minimumTaxPercentage.MinimumTaxPercentage = 0;
+                 minimumTaxPercentage= new MinimumTaxPercentageValue{
+                    MinimumTaxPercentage=0
+                };
+              
             }
 
-            if (minimumTaxValue != null)
+            if (minimumTaxValue  != null)
             {
                 var turnOver = decimal.Parse(minimumTaxValue.Revenue) + decimal.Parse(minimumTaxValue.OtherIncome);
                 var percent = minimumTaxPercentage.MinimumTaxPercentage * turnOver;
@@ -1118,7 +1121,7 @@ namespace TaxComputationSoftware.Services
                 }
                 else
                 {
-                    string trialBalanceValue = $"MAPPED TO [INCOME TAX] DisAllowable Income";
+                    string trialBalanceValue = $"MAPPED TO [INCOME TAX] DisAllowable Expenses";
                     await _trialBalanceRepository.UpdateTrialBalance(item.TrialBalanceId, trialBalanceValue, false);
                 }
                 await _incomeTaxRepository.CreateAllowableDisAllowable(allowableDisAllowable);

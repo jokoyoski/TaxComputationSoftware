@@ -193,12 +193,12 @@ const AddCompanyForm = ({ showAddCompany, setShowAddCompany, toast, refresh }) =
               )}
             />
             {errors.unRelievedCf && (
-              <span style={{ fontSize: 12, color: "red" }}>Unrelieved CA C/f is required</span>
+              <span style={{ fontSize: 12, color: "red" }}>Unrelieved CA b/f is required</span>
             )}
           </div>
           <div className="p-d-flex p-flex-column" style={{ marginBottom: 15, marginLeft: 10 }}>
             <label htmlFor="lossCfInput" style={{ marginBottom: 10 }}>
-              Loss C/f
+              Loss b/f
             </label>
             <Controller
               name="lossCf"
@@ -262,7 +262,7 @@ const AddCompanyForm = ({ showAddCompany, setShowAddCompany, toast, refresh }) =
             )}
           />
           {errors.monthOfOperation && (
-            <span style={{ fontSize: 12, color: "red" }}>Month of Operation is required</span>
+            <span style={{ fontSize: 12, color: "red" }}>Month(s) of Operation is required</span>
           )}
         </div>
         <div className="p-d-flex p-flex-column" style={{ marginBottom: 15 }}>
