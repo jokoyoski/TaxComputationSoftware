@@ -76,7 +76,7 @@ namespace TaxComputationAPI.Repositories
                     parameters.Add("@CompanyId", financialYear.CompanyId);
                     parameters.Add("@OpeningDate", financialYear.OpeningDate);
                     parameters.Add("@ClosingDate", financialYear.ClosingDate);
-                    parameters.Add("@FinancialDate", financialYear.ClosingDate);
+                    parameters.Add("@FinancialDate", financialYear.FinancialDate);
 
 
                     try

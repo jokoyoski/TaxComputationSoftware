@@ -66,7 +66,8 @@ CREATE PROCEDURE [dbo].[usp_Insert_Minimum_Tax](
     @NetAsset varchar(50),
     @ShareCapital varchar(50),
     @TurnOver varchar(50),
-    @MinimumTaxPayable varchar(50)
+    @MinimumTaxPayable varchar(50),
+    @DateCreated datetime2(7)
 )
 AS
 
@@ -89,7 +90,8 @@ VALUES
     @NetAsset,
     @ShareCapital,
     @TurnOver,
-    @MinimumTaxPayable
+    @MinimumTaxPayable,
+    @DateCreated
 )
 SET @Id = SCOPE_IDENTITY()
 SELECT @Id
@@ -116,12 +118,12 @@ PRINT('====================================================Update Minimum tax ta
 
 ------------------------------------------------ STORED PROCEDURE TO UPDATE MINIMUM TAX TABLE--------------------------------------------
 
-IF OBJECT_ID('[dbo].[usp_MinimumTax]') IS NOT NULL
+IF OBJECT_ID('[dbo].[usp_Update_MinimumTax]') IS NOT NULL
 BEGIN
-DROP PROCEDURE [dbo].[usp_MinimumTax]
+DROP PROCEDURE [dbo].[usp_Update_MinimumTax]
 END
 GO
-CREATE PROCEDURE [dbo].[usp_MinimumTax](
+CREATE PROCEDURE [dbo].[usp_Update_MinimumTax](
     @Id int,
     @GrossProfit varchar(50),
     @NetAsset varchar(50),
@@ -133,7 +135,7 @@ AS
 
 UPDATE [dbo].[MinimumTax]
 SET GrossProfit = @GrossProfit, 
-    NetAsset = @FinancialYearId, 
+    NetAsset = @NetAsset, 
     ShareCapital=@ShareCapital,
     TurnOver=@TurnOver,
     MinimumTaxPayable=@MinimumTaxPayable

@@ -86,7 +86,7 @@ namespace TaxComputationAPI.Services
                 {
                     CompanyId = addMinimumTaxDto.CompanyId,
                     FinancialYearId = addMinimumTaxDto.FinancialYearId,
-                    GrossProft = addMinimumTaxDto.GrossProft,
+                    GrossProfit = addMinimumTaxDto.GrossProft,
                     NetAsset = addMinimumTaxDto.NetAsset,
                     ShareCapital = addMinimumTaxDto.ShareCapital,
                     TurnOver = addMinimumTaxDto.TurnOver,
@@ -107,7 +107,16 @@ namespace TaxComputationAPI.Services
 
                 saveMinimum.MinimumTaxPayable = total;
 
-                await _minimumTaxRepository.SaveMinimum(saveMinimum);
+                var exit = await _minimumTaxRepository.GetMinimumCompanyIdYearId(saveMinimum.CompanyId, saveMinimum.FinancialYearId);
+
+                if(exit == null)
+                {
+                    await _minimumTaxRepository.SaveMinimum(saveMinimum);
+                }
+                else
+                {
+                    await _minimumTaxRepository.UpdatedMinimum(exit);
+                }
 
             }
             catch (Exception e)
@@ -172,7 +181,7 @@ namespace TaxComputationAPI.Services
         private async Task<MinimumTaxResponse> CalculateOldMinimumTax(MinimumTaxModel addMinimumTaxDto)
         {
 
-            decimal _0_5_of_Gross_Profit = (decimal)((0.5 / 100) * ((double)addMinimumTaxDto.GrossProft));
+            decimal _0_5_of_Gross_Profit = (decimal)((0.5 / 100) * ((double)addMinimumTaxDto.GrossProfit));
 
             decimal _0_5_of_Net_Assets = (decimal)((0.5 / 100) * ((double)addMinimumTaxDto.NetAsset));
 
@@ -186,7 +195,7 @@ namespace TaxComputationAPI.Services
 
             _maxTaxValue = (_0_5_of_Gross_Profit < _0_5_of_Net_Assets) ? (_0_5_of_Net_Assets < _0_25_of_Share_Capital) ? _0_25_of_Share_Capital : _0_5_of_Net_Assets : _0_5_of_Gross_Profit;
 
-            if (addMinimumTaxDto.GrossProft > addMinimumTaxDto.TurnOver) _0_125_Turnover_Execess_500000 = (decimal)((0.125 / 100) * ((double)(addMinimumTaxDto.GrossProft - addMinimumTaxDto.TurnOver)));
+            if (addMinimumTaxDto.GrossProfit > addMinimumTaxDto.TurnOver) _0_125_Turnover_Execess_500000 = (decimal)((0.125 / 100) * ((double)(addMinimumTaxDto.GrossProfit - addMinimumTaxDto.TurnOver)));
 
             decimal _minimumTaxPayable = _maxTaxValue + _0_125_Turnover_Execess_500000;
 
@@ -194,9 +203,9 @@ namespace TaxComputationAPI.Services
 
             //First Row
             var singleDate = new MinimumTaxDisplay();
-            singleDate.Name = $"0.5% of Gross Profit {addMinimumTaxDto.GrossProft}";
+            singleDate.Name = $"0.5% of Gross Profit {addMinimumTaxDto.GrossProfit}";
             singleDate.Value1 = $"{_0_5_of_Gross_Profit}";
-            singleDate.Value2 = $"{_maxTaxValue}";
+            singleDate.Value2 = $"{0}";
             data.Add(singleDate);
 
             //Second Row
@@ -210,7 +219,7 @@ namespace TaxComputationAPI.Services
             singleDate = new MinimumTaxDisplay();
             singleDate.Name = $"0.5% of Gross Profit {addMinimumTaxDto.ShareCapital}";
             singleDate.Value1 = $"{_0_25_of_Share_Capital}";
-            singleDate.Value2 = $"{_maxTaxValue}";
+            singleDate.Value2 = $"{0}";
             data.Add(singleDate);
 
             //Fourth Row
@@ -222,7 +231,7 @@ namespace TaxComputationAPI.Services
 
             //Fifth Row
             singleDate = new MinimumTaxDisplay();
-            singleDate.Name = $"0.125% of Turnover in excess of {addMinimumTaxDto.TurnOver} /n 0.125% of ({addMinimumTaxDto.GrossProft} - {addMinimumTaxDto.TurnOver}) /n 0.125% of ({(decimal)(addMinimumTaxDto.GrossProft - addMinimumTaxDto.TurnOver)})";
+            singleDate.Name = $"0.125% of Turnover in excess of {addMinimumTaxDto.TurnOver} 0.125% of ({addMinimumTaxDto.GrossProfit} - {addMinimumTaxDto.TurnOver}) 0.125% of ({(decimal)(addMinimumTaxDto.GrossProfit - addMinimumTaxDto.TurnOver)})";
             singleDate.Value1 = $"{0}";
             singleDate.Value2 = $"{_0_125_Turnover_Execess_500000}";
             data.Add(singleDate);
