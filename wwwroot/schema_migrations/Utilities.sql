@@ -191,6 +191,7 @@ BEGIN
     Name varchar(50),
     OpeningDate DATETIME2 NOT NULL,
     ClosingDate DATETIME2 NOT NULL,
+    FinancialDate VARCHAR(50) NOT NULL,
     CompanyId int
   )
 END
@@ -205,6 +206,7 @@ CREATE procedure [dbo].[usp_Insert_Financial_Year](
   @Name varchar(50),
   @OpeningDate datetime2,
   @ClosingDate datetime2,
+  @FinancialDate varchar(30),
   @CompanyId int
 )
 AS
@@ -213,12 +215,14 @@ INSERT [dbo].[FinancialYear]
   Name,
   OpeningDate,
   ClosingDate,
+  FinancialDate,
   CompanyId
   )
 VALUES(
     @Name,
     @OpeningDate,
     @ClosingDate,
+    @FinancialDate,
     @CompanyId
 )
 GO

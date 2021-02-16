@@ -63,8 +63,9 @@ namespace TaxComputationAPI.Services
                 var previousOpening = opening.AddYears(i);
                 var previousClosing = closing.AddYears(i);
                 var previousTax = tax.AddYears(i);
+                var previousFinancial = closing.Year.ToString();
 
-                await _utilitiesRepository.AddFinancialYearAsync(new FinancialYear { Name = previousTax.Year.ToString(), OpeningDate = previousOpening, ClosingDate = previousClosing, CompanyId = companyDetails.Id });
+                await _utilitiesRepository.AddFinancialYearAsync(new FinancialYear { Name = previousTax.Year.ToString(), OpeningDate = previousOpening, ClosingDate = previousClosing, FinancialDate = previousFinancial, CompanyId = companyDetails.Id });
 
                 i++;
             }

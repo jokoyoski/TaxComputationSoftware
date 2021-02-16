@@ -4,5 +4,6 @@ namespace TaxComputationAPI.Dtos
     {
        
         public int Name {get;set;}
+        public string FinancialDate { get; set; }
     }
 }

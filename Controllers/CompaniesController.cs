@@ -63,7 +63,7 @@ namespace TaxComputationAPI.Controllers
 
         // [Authorize(Policy = "SystemAdmin")]   
         [HttpGet("get-companies")]
-        //[Authorize]
+        [Authorize]
 
         public async Task<IActionResult> GetCompanies([FromQuery] PaginationParams pagination)
         {
@@ -129,7 +129,7 @@ namespace TaxComputationAPI.Controllers
         }
 
         [HttpPost("add-company")]
-        //[Authorize]
+        [Authorize]
 
         // [Authorize(Roles = Constants.SYS+ "," + Constants.User)]
         public async Task<IActionResult> AddCompany(CompanyForRegisterDto companyForRegisterDto)

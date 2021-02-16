@@ -84,7 +84,8 @@ SELECT
   [dbo].[Company].CompanyName,
   [dbo].[FinancialYear].Name,
   [dbo].[FinancialYear].OpeningDate,
-  [dbo].[FinancialYear].ClosingDate
+  [dbo].[FinancialYear].ClosingDate,
+  [dbo].[FinancialYear].FinancialDate
 from [dbo].[Company] inner join [dbo].[FinancialYear] on
 [dbo].[FinancialYear].CompanyId = [dbo].[Company].Id
 where [FinancialYear].CompanyId = @CompanyId and [FinancialYear].Id=@FinancialYearId
