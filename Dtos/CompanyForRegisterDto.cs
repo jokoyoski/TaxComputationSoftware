@@ -21,8 +21,8 @@ namespace TaxComputationAPI.Dtos
         public string ClosingYear { get; set; }
         [Required(ErrorMessage = "OpeningYear is Required")]
         public string OpeningYear { get; set; }
-
-
+        public int MinimumTaxTypeId { get; set; }
+        
         [Required(ErrorMessage = "Month of Operation is Required")]
         public int MonthOfOperation { get; set; }
         [Required(ErrorMessage = "UnRelievedCf is Required")]

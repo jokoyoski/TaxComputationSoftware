@@ -13,6 +13,8 @@ namespace TaxComputationAPI.Interfaces
     {
         Task<MinimumTaxViewDto> GetMinimumTaxByCompanyIdAndYearId(int companyId, int yearId);
 
+        Task<MinimumTaxModel> GetMinimumCompanyIdYearId(int companyId, int yearId);
+    
         Task<MinimumTaxModel> SaveMinimum(MinimumTaxModel minimumTaxDto);
 
         Task<MinimumTaxPercentageValue> GetMinimumTaxPercentageCompanyIdYearId(int companyId, int yearId);

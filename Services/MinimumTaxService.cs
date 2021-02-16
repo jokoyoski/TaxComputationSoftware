@@ -29,9 +29,9 @@ namespace TaxComputationAPI.Services
             _companiesRepository = companiesRepository;
             _logger = logger;
             _minimumTaxRepository = minimumTaxRepository;
-        } 
+        }
 
-        public async Task<MinimumTaxResponse> AddMinimumTax(AddMinimumTaxDto addMinimumTaxDto)
+        public async Task<MinimumTaxResponse> AddOldMinimumTax(AddMinimumTaxDto addMinimumTaxDto)
         {
             string errorMessage = string.Empty;
 
@@ -60,7 +60,7 @@ namespace TaxComputationAPI.Services
 
                 var company = await _companiesRepository.GetCompanyAsync(addMinimumTaxDto.CompanyId);
 
-                if(company == null)
+                if (company == null)
                 {
                     return new MinimumTaxResponse
                     {
@@ -72,80 +72,17 @@ namespace TaxComputationAPI.Services
 
                 var financialYear = await _utilitiesRepository.GetFinancialCompanyAsync(addMinimumTaxDto.CompanyId);
 
-                if(financialYear == null || !financialYear.Any() || financialYear.Any(p => p.Id != addMinimumTaxDto.FinancialYearId))
+                if (financialYear == null || !financialYear.Any() || financialYear.FirstOrDefault(p => p.Id == addMinimumTaxDto.FinancialYearId) == null)
                 {
                     return new MinimumTaxResponse
                     {
                         ResponseCode = System.Net.HttpStatusCode.NotFound,
-                        ResponseDescription = $"Financial year provided does no exist for {company.CompanyName}",
+                        ResponseDescription = $"Financial year provided does not exist for {company.CompanyName}",
                         Code = "10"
                     };
                 }
 
-                decimal _0_5_of_Gross_Profit = (decimal)((0.5 / 100) * ((double)addMinimumTaxDto.GrossProft));
-
-                decimal _0_5_of_Net_Assets = (decimal)((0.5 / 100) * ((double)addMinimumTaxDto.NetAsset));
-
-                decimal _0_25_of_Share_Capital = (decimal)((0.25 / 100) * ((double)addMinimumTaxDto.ShareCapital));
-
-                decimal _0_25_of_Turnover = (decimal)((0.25 / 100) * ((double)addMinimumTaxDto.TurnOver));
-
-                decimal _0_125_Turnover_Execess_500000 = 0;
-
-                decimal _maxTaxValue = 0;
-
-                _maxTaxValue = (_0_5_of_Gross_Profit < _0_5_of_Net_Assets) ? (_0_5_of_Net_Assets < _0_25_of_Share_Capital) ?_0_25_of_Share_Capital :_0_5_of_Net_Assets : _0_5_of_Gross_Profit ;
-
-                if (addMinimumTaxDto.GrossProft > addMinimumTaxDto.TurnOver) _0_125_Turnover_Execess_500000 = (decimal)((0.125 / 100) * ((double)(addMinimumTaxDto.GrossProft - addMinimumTaxDto.TurnOver)));
-
-                decimal _minimumTaxPayable = _maxTaxValue + _0_125_Turnover_Execess_500000;
-
-                var data = new List<MinimumTaxDisplay>();
-
-                //First Row
-                var singleDate = new MinimumTaxDisplay();
-                singleDate.Name = $"0.5% of Gross Profit {addMinimumTaxDto.GrossProft}";
-                singleDate.Value1 = $"{_0_5_of_Gross_Profit}";
-                singleDate.Value2 = $"{_maxTaxValue}";
-                data.Add(singleDate);
-
-                //Second Row
-                singleDate = new MinimumTaxDisplay();
-                singleDate.Name = $"0.5% of Gross Profit {addMinimumTaxDto.NetAsset}";
-                singleDate.Value1 = $"{_0_5_of_Net_Assets}";
-                singleDate.Value2 = $"{_maxTaxValue}";
-                data.Add(singleDate);
-
-                //Third Row
-                singleDate = new MinimumTaxDisplay();
-                singleDate.Name = $"0.5% of Gross Profit {addMinimumTaxDto.ShareCapital}";
-                singleDate.Value1 = $"{_0_25_of_Share_Capital}";
-                singleDate.Value2 = $"{_maxTaxValue}";
-                data.Add(singleDate);
-
-                //Fourth Row
-                singleDate = new MinimumTaxDisplay();
-                singleDate.Name = $"0.5% of Gross Profit {addMinimumTaxDto.TurnOver}";
-                singleDate.Value1 = $"{_0_25_of_Turnover}";
-                singleDate.Value2 = $"{0}";
-                data.Add(singleDate);
-
-                //Fifth Row
-                singleDate = new MinimumTaxDisplay();
-                singleDate.Name = $"0.125% of Turnover in excess of {addMinimumTaxDto.TurnOver} /n 0.125% of ({addMinimumTaxDto.GrossProft} - {addMinimumTaxDto.TurnOver}) /n 0.125% of ({(decimal)(addMinimumTaxDto.GrossProft - addMinimumTaxDto.TurnOver)})";
-                singleDate.Value1 = $"{0}";
-                singleDate.Value2 = $"{_0_125_Turnover_Execess_500000}";
-                data.Add(singleDate);
-
-                //Sixth Row
-                singleDate = new MinimumTaxDisplay();
-                singleDate.Name = $"Minimum Tax Payable";
-                singleDate.Value1 = $"{0}";
-                singleDate.Value2 = $"{_minimumTaxPayable}";
-                data.Add(singleDate);
-
-                //Todo: Persist Values
-                var saveMinimum = new MinimumTaxModel 
+                var saveMinimum = new MinimumTaxModel
                 {
                     CompanyId = addMinimumTaxDto.CompanyId,
                     FinancialYearId = addMinimumTaxDto.FinancialYearId,
@@ -153,32 +90,46 @@ namespace TaxComputationAPI.Services
                     NetAsset = addMinimumTaxDto.NetAsset,
                     ShareCapital = addMinimumTaxDto.ShareCapital,
                     TurnOver = addMinimumTaxDto.TurnOver,
-                    MinimumTaxPayable = _minimumTaxPayable,
                     DateCreated = DateTime.Now
                 };
-                
-                await _minimumTaxRepository.SaveMinimum(saveMinimum);
-                
-                return new MinimumTaxResponse
+
+                var data = await CalculateOldMinimumTax(saveMinimum);
+
+                if (!Decimal.TryParse(data.Values[5].Value2, out decimal total))
                 {
-                    ResponseCode = System.Net.HttpStatusCode.OK,
-                    ResponseDescription = "SUCCESSFUL",
-                    Code = "00",
-                    Values = data
-                };
+                    return new MinimumTaxResponse
+                    {
+                        ResponseCode = System.Net.HttpStatusCode.InternalServerError,
+                        ResponseDescription = $"Error while calculating minimum tax",
+                        Code = "15"
+                    };
+                }
+
+                saveMinimum.MinimumTaxPayable = total;
+
+                await _minimumTaxRepository.SaveMinimum(saveMinimum);
+
             }
             catch (Exception e)
             {
                 errorMessage = e.Message;
                 _logger.LogError(e.Message);
                 await _emailService.ExceptionEmail(MethodBase.GetCurrentMethod().DeclaringType.Name, e.Message);
+
+                return new MinimumTaxResponse
+                {
+                    ResponseCode = System.Net.HttpStatusCode.InternalServerError,
+                    ResponseDescription = errorMessage,
+                    Code = "11"
+                };
+
             }
 
             return new MinimumTaxResponse
             {
-                ResponseCode = System.Net.HttpStatusCode.InternalServerError,
-                ResponseDescription = errorMessage,
-                Code = "11"
+                ResponseCode = System.Net.HttpStatusCode.OK,
+                ResponseDescription = "SUCCESSFUL",
+                Code = "00"
             };
 
         }
@@ -189,14 +140,107 @@ namespace TaxComputationAPI.Services
             return record;
         }
 
-        public Task<MinimumTaxPercentageValue> GetMinimumTaxPercentageCompanyIdYearId(int companyId, int yearId)
+        public async Task<MinimumTaxResponse> GetOldMinimumTax(int companyId, int financialYearId)
         {
-             return this._minimumTaxRepository.GetMinimumTaxPercentageCompanyIdYearId(companyId,yearId);
+            var record = await _minimumTaxRepository.GetMinimumCompanyIdYearId(companyId, financialYearId);
+
+            if(record == null)
+            {
+                return new MinimumTaxResponse
+                {
+                    ResponseCode = System.Net.HttpStatusCode.NotFound,
+                    ResponseDescription = $"Minimum tax not found",
+                    Code = "10"
+                };
+            }
+
+            var data = await CalculateOldMinimumTax(record);
+
+            return data;
         }
 
-        public Task<MinimumTaxPercentageValue> SaveMinimumPercentage(MinimumTaxPercentageValue minimumTaxDto)
+        public async Task<MinimumTaxPercentageValue> GetMinimumTaxPercentageCompanyIdYearId(int companyId, int yearId)
         {
-             return  _minimumTaxRepository.SaveMinimumPercentage(minimumTaxDto);
-        } 
+            return await _minimumTaxRepository.GetMinimumTaxPercentageCompanyIdYearId(companyId, yearId);
+        }
+
+        public async Task<MinimumTaxPercentageValue> SaveMinimumPercentage(MinimumTaxPercentageValue minimumTaxDto)
+        {
+            return await _minimumTaxRepository.SaveMinimumPercentage(minimumTaxDto);
+        }
+
+        private async Task<MinimumTaxResponse> CalculateOldMinimumTax(MinimumTaxModel addMinimumTaxDto)
+        {
+
+            decimal _0_5_of_Gross_Profit = (decimal)((0.5 / 100) * ((double)addMinimumTaxDto.GrossProft));
+
+            decimal _0_5_of_Net_Assets = (decimal)((0.5 / 100) * ((double)addMinimumTaxDto.NetAsset));
+
+            decimal _0_25_of_Share_Capital = (decimal)((0.25 / 100) * ((double)addMinimumTaxDto.ShareCapital));
+
+            decimal _0_25_of_Turnover = (decimal)((0.25 / 100) * ((double)addMinimumTaxDto.TurnOver));
+
+            decimal _0_125_Turnover_Execess_500000 = 0;
+
+            decimal _maxTaxValue = 0;
+
+            _maxTaxValue = (_0_5_of_Gross_Profit < _0_5_of_Net_Assets) ? (_0_5_of_Net_Assets < _0_25_of_Share_Capital) ? _0_25_of_Share_Capital : _0_5_of_Net_Assets : _0_5_of_Gross_Profit;
+
+            if (addMinimumTaxDto.GrossProft > addMinimumTaxDto.TurnOver) _0_125_Turnover_Execess_500000 = (decimal)((0.125 / 100) * ((double)(addMinimumTaxDto.GrossProft - addMinimumTaxDto.TurnOver)));
+
+            decimal _minimumTaxPayable = _maxTaxValue + _0_125_Turnover_Execess_500000;
+
+            var data = new List<MinimumTaxDisplay>();
+
+            //First Row
+            var singleDate = new MinimumTaxDisplay();
+            singleDate.Name = $"0.5% of Gross Profit {addMinimumTaxDto.GrossProft}";
+            singleDate.Value1 = $"{_0_5_of_Gross_Profit}";
+            singleDate.Value2 = $"{_maxTaxValue}";
+            data.Add(singleDate);
+
+            //Second Row
+            singleDate = new MinimumTaxDisplay();
+            singleDate.Name = $"0.5% of Gross Profit {addMinimumTaxDto.NetAsset}";
+            singleDate.Value1 = $"{_0_5_of_Net_Assets}";
+            singleDate.Value2 = $"{_maxTaxValue}";
+            data.Add(singleDate);
+
+            //Third Row
+            singleDate = new MinimumTaxDisplay();
+            singleDate.Name = $"0.5% of Gross Profit {addMinimumTaxDto.ShareCapital}";
+            singleDate.Value1 = $"{_0_25_of_Share_Capital}";
+            singleDate.Value2 = $"{_maxTaxValue}";
+            data.Add(singleDate);
+
+            //Fourth Row
+            singleDate = new MinimumTaxDisplay();
+            singleDate.Name = $"0.5% of Gross Profit {addMinimumTaxDto.TurnOver}";
+            singleDate.Value1 = $"{_0_25_of_Turnover}";
+            singleDate.Value2 = $"{0}";
+            data.Add(singleDate);
+
+            //Fifth Row
+            singleDate = new MinimumTaxDisplay();
+            singleDate.Name = $"0.125% of Turnover in excess of {addMinimumTaxDto.TurnOver} /n 0.125% of ({addMinimumTaxDto.GrossProft} - {addMinimumTaxDto.TurnOver}) /n 0.125% of ({(decimal)(addMinimumTaxDto.GrossProft - addMinimumTaxDto.TurnOver)})";
+            singleDate.Value1 = $"{0}";
+            singleDate.Value2 = $"{_0_125_Turnover_Execess_500000}";
+            data.Add(singleDate);
+
+            //Sixth Row
+            singleDate = new MinimumTaxDisplay();
+            singleDate.Name = $"Minimum Tax Payable";
+            singleDate.Value1 = $"{0}";
+            singleDate.Value2 = $"{_minimumTaxPayable}";
+            data.Add(singleDate);
+
+            return new MinimumTaxResponse
+            {
+                ResponseCode = System.Net.HttpStatusCode.OK,
+                ResponseDescription = "SUCCESSFUL",
+                Code = "00",
+                Values = data
+            };
+        }
     }
 }

@@ -63,7 +63,7 @@ namespace TaxComputationAPI.Controllers
 
         // [Authorize(Policy = "SystemAdmin")]   
         [HttpGet("get-companies")]
-        [Authorize]
+        //[Authorize]
 
         public async Task<IActionResult> GetCompanies([FromQuery] PaginationParams pagination)
         {
@@ -93,9 +93,15 @@ namespace TaxComputationAPI.Controllers
         [HttpGet]
         public async Task<IActionResult> Company(int companyId, int financialYearId)
         {
+
+            if(companyId <= 0) return BadRequest("Invlaid companyId");
+            if(financialYearId <= 0) return BadRequest("Invlaid financialYearId");
+            
             try
             {
                 var company = await _companiesService.GetCompanyInfoByFinancialYear(companyId, financialYearId);
+
+                if (company == null) return NotFound();
 
                 return Ok(company);
             }

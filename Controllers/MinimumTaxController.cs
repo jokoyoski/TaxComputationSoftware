@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Reflection;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -76,16 +77,44 @@ namespace TaxComputationAPI.Controllers
 
             }
         }
+
+        [HttpGet]
+        public async Task<IActionResult> GetOldMinimumTax(int companyId, int financialYearId)
+        {
+            if(companyId <= 0) return BadRequest($"CompanyId: {companyId} is invalid");
+
+            if(financialYearId <= 0) return BadRequest($"FinancialYearId: {financialYearId} is invalid");
+
+            try
+            {
+                var response = await _minimumTaxService.GetOldMinimumTax(companyId, financialYearId);
+                
+                return Ok(response);
+            }
+            catch(Exception e)
+            {
+
+                var email = User.FindFirst(ClaimTypes.Email).Value;
+                _logger.LogInformation("Exception for {email}, {ex}", email, e.Message);
+
+                _logger.LogError(e.Message);
+                await _emailService.ExceptionEmail(MethodBase.GetCurrentMethod().DeclaringType.Name, e.Message);
+
+                return StatusCode(500, new { errors = new[] { "Error occured while trying to process your request please try again later !" } });
+            }
+
+            return null;
+        }
     
 
         [HttpPost]
         public async Task<IActionResult> AddOldMinimumTax(AddMinimumTaxDto addMinimumTaxDto)
         {
-            if(addMinimumTaxDto == null) return BadRequest("");
+            if(addMinimumTaxDto == null) return BadRequest("payload is null");
 
             try
             {
-                var response = await _minimumTaxService.AddMinimumTax(addMinimumTaxDto);
+                var response = await _minimumTaxService.AddOldMinimumTax(addMinimumTaxDto);
                 
                 return Ok(response);
             }

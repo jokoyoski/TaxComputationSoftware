@@ -94,6 +94,7 @@ namespace TaxComputationAPI.Repositories
                     parameters.Add("@TinNumber", company.TinNumber);
                     parameters.Add("@DateCreated", company.DateCreated);
                     parameters.Add("@OpeningYear", company.OpeningYear);
+                    parameters.Add("@MinimumTaxTypeId", company.MinimumTaxTypeId);
                     parameters.Add("@ClosingYear", company.ClosingYear);
                     parameters.Add("@IsActive", company.IsActive);
                     parameters.Add("@MonthOfOperation", company.MonthOfOperation);
