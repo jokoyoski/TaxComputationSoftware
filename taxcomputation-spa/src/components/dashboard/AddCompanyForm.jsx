@@ -183,7 +183,7 @@ const AddCompanyForm = ({ showAddCompany, setShowAddCompany, toast, refresh }) =
         <div className="p-d-flex">
           <div className="p-d-flex p-flex-column" style={{ marginBottom: 15, marginRight: 10 }}>
             <label htmlFor="unRelievedCfInput" style={{ marginBottom: 10 }}>
-              Unrelieved CA C/f
+              Unrelieved Capital Allowance b/f
             </label>
             <Controller
               name="unRelievedCf"
@@ -205,7 +205,7 @@ const AddCompanyForm = ({ showAddCompany, setShowAddCompany, toast, refresh }) =
           </div>
           <div className="p-d-flex p-flex-column" style={{ marginBottom: 15, marginLeft: 10 }}>
             <label htmlFor="lossCfInput" style={{ marginBottom: 10 }}>
-              Loss b/f
+              Asessable Loss b/f
             </label>
             <Controller
               name="lossCf"
@@ -277,7 +277,7 @@ const AddCompanyForm = ({ showAddCompany, setShowAddCompany, toast, refresh }) =
         </div>
         <div className="p-d-flex p-flex-column" style={{ marginBottom: 15 }}>
           <label htmlFor="monthOfOperationInput" style={{ marginBottom: 10 }}>
-            Month of Operation
+            Month(s) of Operation
           </label>
           <Controller
             name="monthOfOperation"

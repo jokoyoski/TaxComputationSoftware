@@ -2,7 +2,6 @@ import React from "react";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { Card } from "primereact/card";
-import { Dropdown } from "primereact/dropdown";
 import utils from "../../utils";
 import { getTrialBalance } from "../../apis/TrialBalance";
 import { useResources } from "../../store/ResourcesStore";
@@ -59,8 +58,11 @@ const TrialBalanceTable = ({
   }, [companyId, year, refreshTrialBalanceTable, setRefreshTrialBalanceTable, toast]);
 
   React.useEffect(() => {
-    setYear(selectedFinancialYear);
-  }, [selectedFinancialYear]);
+    if (selectedFinancialYear) {
+      setYear(financialYears[financialYears.length - 1].value);
+      setRefreshTrialBalanceTable(true);
+    }
+  }, [financialYears, selectedFinancialYear, setRefreshTrialBalanceTable]);
 
   return (
     <Card style={{ width: "100%" }}>
@@ -71,18 +73,8 @@ const TrialBalanceTable = ({
         rows={10}
         rowsPerPageOptions={[10, 20, 50, 100]}
         header={
-          <div className="p-d-flex p-ai-center p-jc-between">
+          <div className="p-d-flex p-ai-center">
             <p style={{ fontSize: 18, fontWeight: 600 }}>Trial Balance</p>
-            <Dropdown
-              style={{ width: 120 }}
-              value={year}
-              options={financialYears}
-              onChange={e => {
-                setYear(e.value);
-                setRefreshTrialBalanceTable(true);
-              }}
-              placeholder="Tax Year"
-            />
           </div>
         }
         footer={
