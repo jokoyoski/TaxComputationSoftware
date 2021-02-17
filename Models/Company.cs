@@ -14,6 +14,16 @@ namespace TaxComputationAPI.Models
         public string CacNumber { get; set; }
         public string TinNumber { get; set; }
         public DateTime DateCreated { get; set; }
+        public DateTime OpeningYear { get; set; }
+        public DateTime ClosingYear { get; set; }
+        public int MinimumTaxTypeId { get; set; }
         public bool IsActive { get; set; }
+        public decimal UnRelievedCf { get; set; }
+
+        public decimal LossCf { get; set; }
+
+        public decimal DeferredTaxBroughtFoward { get; set; }
+
+        public int MonthOfOperation { get; set; }
     }
 }

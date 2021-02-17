@@ -7,3 +7,4 @@ bin
 obj
 *.suo
 *.dtbcache.v2
+Logger

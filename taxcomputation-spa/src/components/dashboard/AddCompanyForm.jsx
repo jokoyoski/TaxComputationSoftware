@@ -162,10 +162,22 @@ const AddCompanyForm = ({ showAddCompany, setShowAddCompany, toast, refresh }) =
               errorMessage="Unrelieved CA b/f is required"
               width="100%"
             />
+
           </div>
           <div className="p-d-flex p-flex-column" style={{ marginBottom: 15, marginLeft: 10 }}>
             <InputController
               Controller={Controller}
+
+            {errors.unRelievedCf && (
+              <span style={{ fontSize: 12, color: "red" }}>Unrelieved CA b/f is required</span>
+            )}
+          </div>
+          <div className="p-d-flex p-flex-column" style={{ marginBottom: 15, marginLeft: 10 }}>
+            <label htmlFor="lossCfInput" style={{ marginBottom: 10 }}>
+              Loss b/f
+            </label>
+            <Controller
+              name="lossCf"
               control={control}
               errors={errors}
               controllerName="lossCf"
@@ -212,6 +224,10 @@ const AddCompanyForm = ({ showAddCompany, setShowAddCompany, toast, refresh }) =
             errorMessage="Month(s) of Operation is required"
             width="100%"
           />
+
+          {errors.monthOfOperation && (
+            <span style={{ fontSize: 12, color: "red" }}>Month(s) of Operation is required</span>
+          )}
         </div>
         <div className="p-d-flex p-flex-column" style={{ marginBottom: 15 }}>
           <label htmlFor="openingYearInput" style={{ marginBottom: 10 }}>

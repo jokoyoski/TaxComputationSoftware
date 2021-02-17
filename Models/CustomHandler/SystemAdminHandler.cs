@@ -18,7 +18,7 @@ namespace TaxComputationAPI.Models.CustomHandler
             var y=identity.Claims;
              foreach(var j in y){
                  
-                if(j.Value=="User"){
+                if(j.Value=="SystemAdmin"){
                     context.Succeed(requirement);
                 }
              }
