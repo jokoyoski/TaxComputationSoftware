@@ -24,8 +24,8 @@ const ProfitAndLossMapping = ({
   const [selectedAccounts, setSelectedAccounts] = React.useState([]);
   const typeSelectItems = [
     { label: "No Selection", value: 3 },
-    { label: "Allowable", value: 0 },
-    { label: "Disallowable", value: 1 }
+    { label: "Allowable Income", value: 0 },
+    { label: "Disallowable Expenses", value: 1 }
   ];
 
   React.useEffect(() => {
