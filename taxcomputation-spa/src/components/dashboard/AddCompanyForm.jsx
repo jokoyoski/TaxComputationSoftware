@@ -205,7 +205,7 @@ const AddCompanyForm = ({ showAddCompany, setShowAddCompany, toast, refresh }) =
           </div>
           <div className="p-d-flex p-flex-column" style={{ marginBottom: 15, marginLeft: 10 }}>
             <label htmlFor="lossCfInput" style={{ marginBottom: 10 }}>
-              Loss b/f
+              Asessable Loss b/f
             </label>
             <Controller
               name="lossCf"
