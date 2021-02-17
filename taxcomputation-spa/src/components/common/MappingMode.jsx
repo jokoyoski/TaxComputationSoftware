@@ -58,7 +58,7 @@ const MappingMode = ({ year, setYear, yearSelectItems }) => {
           onChange={e => {
             setYear(e.value);
           }}
-          placeholder="Select Year"
+          placeholder="Select Tax Year"
         />
         <Button type="submit" label="Submit" style={{ width: 250 }} />
       </form>

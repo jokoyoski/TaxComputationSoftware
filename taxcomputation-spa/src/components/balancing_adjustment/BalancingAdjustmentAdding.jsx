@@ -55,7 +55,7 @@ const BalancingAdjustmentAdding = ({ yearSelectItems, assetClassSelectItems, toa
           label="Tax Year"
           required
           dropdownOptions={financialYears}
-          errorMessage="Year is required"
+          errorMessage="Tax Year is required"
           labelWidth={120}
           className="p-d-flex p-ai-center"
         />
