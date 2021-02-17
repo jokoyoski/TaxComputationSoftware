@@ -465,7 +465,7 @@ namespace TaxComputationAPI.Services
             //  decimal costOfSalesDisplay = decimal.Parse(record.CostOfSales) > 0 ? -decimal.Parse(record.CostOfSales) : decimal.Parse(record.CostOfSales);
             //  decimal costOfSales = decimal.Parse(record.CostOfSales) > 0 ? decimal.Parse(record.CostOfSales) : -decimal.Parse(record.CostOfSales);
             costofsales.Category = "Cost Of Sales";
-            costofsales.Total = $"₦{Utilities.FormatAmount(record.CostOfSales)}";
+            costofsales.Total = $"₦({Utilities.FormatAmount(record.CostOfSales)})";
             /* if (Utilities.GetDecimal(record.CostOfSales) < 0)
              {
                  costofsales.Total = $"₦{Utilities.FormatAmount(record.CostOfSales)}";
