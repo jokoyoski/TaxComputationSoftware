@@ -118,9 +118,9 @@ namespace TaxComputationSoftware.Services
                         int month = mail.OpeningDate.Month;
                         int year = mail.OpeningDate.Year;
                         int tax = mail.ClosingDate.AddYears(1).Year;
-                        string financialYear = mail.ClosingDate.Year.ToString();
+                        int financialYear = mail.ClosingDate.Year;
 
-                        await _utilitiesRepository.AddFinancialYearAsync(new FinancialYear { Name = $"{tax}", CompanyId = company.Id, OpeningDate = mail.OpeningDate, ClosingDate = mail.ClosingDate, FinancialDate = financialYear });
+                        await _utilitiesRepository.AddFinancialYearAsync(new FinancialYear { Name = $"{tax}", CompanyId = company.Id, OpeningDate = mail.OpeningDate, ClosingDate = mail.ClosingDate, FinancialDate = financialYear.ToString() });
 
                     }
                 }

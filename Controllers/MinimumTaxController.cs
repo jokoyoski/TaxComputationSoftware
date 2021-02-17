@@ -88,6 +88,11 @@ namespace TaxComputationAPI.Controllers
             try
             {
                 var response = await _minimumTaxService.GetOldMinimumTax(companyId, financialYearId);
+
+                if(response.ResponseCode == HttpStatusCode.NotFound)
+                {
+                    return StatusCode(400, new { errors = new[] { response.ResponseDescription } });
+                }
                 
                 return Ok(response);
             }

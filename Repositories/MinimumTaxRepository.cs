@@ -134,7 +134,7 @@ namespace TaxComputationAPI.Repositories
 
                     parameters.Add("@Id", minimumTaxDto.Id);
                     parameters.Add("@CompanyId", minimumTaxDto.CompanyId);
-                    parameters.Add("@GrossProfit", minimumTaxDto.GrossProft);
+                    parameters.Add("@GrossProfit", minimumTaxDto.GrossProfit);
                     parameters.Add("@NetAsset", minimumTaxDto.NetAsset);
                     parameters.Add("@ShareCapital", minimumTaxDto.ShareCapital);
                     parameters.Add("@TurnOver", minimumTaxDto.TurnOver);
@@ -143,6 +143,46 @@ namespace TaxComputationAPI.Repositories
                     parameters.Add("@FinancialYearId", minimumTaxDto.FinancialYearId);
 
                     var respone = conn.Execute("[dbo].[usp_Insert_Minimum_Tax]", parameters, commandType: CommandType.StoredProcedure);
+                    conn.Close();
+
+                    return result = minimumTaxDto;
+                }
+            }
+            catch (Exception e)
+            {
+
+                _logger.LogError(e.Message);
+                await _emailService.ExceptionEmail(MethodBase.GetCurrentMethod().DeclaringType.Name, e.Message);
+
+                throw new SystemException(e.Message);
+            }
+        }
+
+
+        public async Task<MinimumTaxModel> UpdatedMinimum(MinimumTaxModel minimumTaxDto)
+
+        {
+            if (minimumTaxDto == null) throw new ArgumentNullException(nameof(minimumTaxDto));
+
+
+            try
+            {
+                var result = default(MinimumTaxModel);
+
+                using (IDbConnection conn = await _databaseManager.DatabaseConnection())
+                {
+                    if (conn.State == ConnectionState.Closed) conn.Open();
+
+                    DynamicParameters parameters = new DynamicParameters();
+
+                    parameters.Add("@Id", minimumTaxDto.Id);
+                    parameters.Add("@GrossProfit", minimumTaxDto.GrossProfit);
+                    parameters.Add("@NetAsset", minimumTaxDto.NetAsset);
+                    parameters.Add("@ShareCapital", minimumTaxDto.ShareCapital);
+                    parameters.Add("@TurnOver", minimumTaxDto.TurnOver);
+                    parameters.Add("@MinimumTaxPayable", minimumTaxDto.MinimumTaxPayable);
+
+                    var respone = conn.Execute("[dbo].[usp_Update_MinimumTax]", parameters, commandType: CommandType.StoredProcedure);
                     conn.Close();
 
                     return result = minimumTaxDto;

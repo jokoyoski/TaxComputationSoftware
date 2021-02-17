@@ -21,7 +21,7 @@ const InputController = ({
   className = "p-d-flex p-flex-column"
 }) => {
   const inputProps = ({ type, disabled, props, placeholder, onChangeCallback }) => {
-    return {
+    const inputPropsObj = {
       disabled,
       value: props.value,
       placeholder,
@@ -31,15 +31,16 @@ const InputController = ({
               props.onChange(e.target.value);
               if (onChangeCallback) onChangeCallback(e.target.value);
             }
-          : null,
-      onValueChange:
-        type === "number"
-          ? e => {
-              props.onChange(e.value);
-              if (onChangeCallback) onChangeCallback(e.value);
-            }
           : null
     };
+
+    if (type === "number") {
+      inputPropsObj.onValueChange = e => {
+        props.onChange(e.value);
+        if (onChangeCallback) onChangeCallback(e.value);
+      };
+    }
+    return inputPropsObj;
   };
 
   const ControllerError = () => (

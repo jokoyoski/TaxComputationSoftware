@@ -27,7 +27,7 @@ export const trialBalanceResource = createResource({
   getData: () =>
     getTrialBalance({
       companyId: sessionStorage.getItem("cid"),
-      year: sessionStorage.getItem("year")
+      year: sessionStorage.getItem("yid")
     })
 });
 
