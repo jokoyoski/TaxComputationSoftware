@@ -59,7 +59,7 @@ const Header = ({ title, loading }) => {
           <div className="p-d-flex p-ai-center">
             {selectedFinancialYear && (
               <p style={{ marginRight: 20 }}>
-                {selectedFinancialYearLabel && `Financial Year: ${selectedFinancialYearLabel}`}
+                {selectedFinancialYearLabel && `Tax Year: ${selectedFinancialYearLabel}`}
               </p>
             )}
             {companyName && <p className="header-company-name">{`Company: ${companyName}`}</p>}
