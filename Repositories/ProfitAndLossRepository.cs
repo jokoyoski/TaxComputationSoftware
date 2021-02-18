@@ -55,14 +55,14 @@ namespace TaxComputationAPI.Repositories
 
                     _logger.LogError(e.Message);
                     await _emailService.ExceptionEmail(MethodBase.GetCurrentMethod().DeclaringType.Name, e.Message);
-                    
+
                     throw e;
                 }
             }
         }
 
 
-        public async Task<List<TaxComputationSoftware.Models.ProfitsAndLossValue>> GetProfitsAndLossByType(string Type,int companyId, int yearId)
+        public async Task<List<TaxComputationSoftware.Models.ProfitsAndLossValue>> GetProfitsAndLossByType(string Type, int companyId, int yearId)
         {
 
 
@@ -74,8 +74,8 @@ namespace TaxComputationAPI.Repositories
                 DynamicParameters parameters = new DynamicParameters();
 
                 parameters.Add("@TypeValue", Type);
-                parameters.Add("@CompanyId ", companyId); 
-                 parameters.Add("@YearId", yearId);
+                parameters.Add("@CompanyId ", companyId);
+                parameters.Add("@YearId", yearId);
 
                 var record = await conn.QueryMultipleAsync("[dbo].[usp_Get_Profits_And_Loss_By_Type]", parameters, commandType: CommandType.StoredProcedure);
                 var result = await record.ReadAsync<TaxComputationSoftware.Models.ProfitsAndLossValue>();
@@ -112,7 +112,7 @@ namespace TaxComputationAPI.Repositories
                 await _emailService.ExceptionEmail(MethodBase.GetCurrentMethod().DeclaringType.Name, ex.Message);
 
             }
-          return null;
+            return null;
 
         }
         public async Task CreateProfitsAndLoss(TaxComputationSoftware.Dtos.ProfitsAndLoss profits)
@@ -120,11 +120,11 @@ namespace TaxComputationAPI.Repositories
             using (IDbConnection conn = await _databaseManager.DatabaseConnection())
             {
                 if (conn.State == ConnectionState.Closed) conn.Open();
-          
+
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@Pick", profits.Pick);
                 parameters.Add("@TrialBalanceId", profits.TrialBalanceId);
-                parameters.Add("@YearId", profits.Year);  
+                parameters.Add("@YearId", profits.Year);
                 parameters.Add("@CompanyId", profits.CompanyId);
                 parameters.Add("@TypeValue", profits.TypeValue);
                 parameters.Add("@Id", 0);
@@ -138,7 +138,7 @@ namespace TaxComputationAPI.Repositories
 
                     _logger.LogError(e.Message);
                     await _emailService.ExceptionEmail(MethodBase.GetCurrentMethod().DeclaringType.Name, e.Message);
-                    
+
                     throw e;
                 }
             }
@@ -162,10 +162,82 @@ namespace TaxComputationAPI.Repositories
 
                     _logger.LogError(e.Message);
                     await _emailService.ExceptionEmail(MethodBase.GetCurrentMethod().DeclaringType.Name, e.Message);
-                    
+
                     throw e;
                 }
             }
+        }
+
+     
+        public async Task<string> SaveProfitAndLossRecord(ProfitAndLossRecord profitAndLoss)
+        {
+            if (profitAndLoss == null) throw new ArgumentNullException(nameof(profitAndLoss));
+
+
+            try
+            {
+
+                using (IDbConnection conn = await _databaseManager.DatabaseConnection())
+                {
+                    if (conn.State == ConnectionState.Closed) conn.Open();
+
+                    DynamicParameters parameters = new DynamicParameters();
+
+
+                    parameters.Add("@CompanyId", profitAndLoss.CompanyId);
+                    parameters.Add("@YearId", profitAndLoss.YearId);
+                    parameters.Add("@Id", 0);
+                    parameters.Add("@ProfitAndLoss", profitAndLoss.ProfitAndLoss);
+                    var respone = conn.Execute("[dbo].[usp_Insert_Profit_And_Loss_Record_Table]", parameters, commandType: CommandType.StoredProcedure);
+                    conn.Close();
+
+                    return null;
+                }
+            }
+            catch (Exception e)
+            {
+
+                _logger.LogError(e.Message);
+                await _emailService.ExceptionEmail(MethodBase.GetCurrentMethod().DeclaringType.Name, e.Message);
+
+                throw new SystemException(e.Message);
+            }
+        }
+
+
+
+
+        public async Task<ProfitAndLossRecord> GetProfitAndLossRecordAsync(int companyId, int yearId)
+        {
+            try
+            {
+                var result = default(ProfitAndLossRecord);
+
+                using (IDbConnection conn = await _databaseManager.DatabaseConnection())
+                {
+                    if (conn.State == ConnectionState.Closed) conn.Open();
+
+                    DynamicParameters parameters = new DynamicParameters();
+
+                    parameters.Add("@CompanyId", companyId);
+                    parameters.Add("@YearId", yearId);
+
+                    result = await conn.QueryFirstOrDefaultAsync<ProfitAndLossRecord>("[dbo].[usp_Get_Profit_And_Loss_By_CompanyId_YearId]", parameters, commandType: CommandType.StoredProcedure);
+                    conn.Close();
+
+                    return result;
+                }
+            }
+            catch (Exception e)
+            {
+
+                _logger.LogError(e.Message);
+                await _emailService.ExceptionEmail(MethodBase.GetCurrentMethod().DeclaringType.Name, e.Message);
+
+                throw new SystemException(e.Message);
+
+            }
+
         }
 
 
