@@ -20,10 +20,7 @@ namespace TaxComputationSoftware.Services
 
     public class AnnualEmailNotificationBackgroundService : IHostedService, IDisposable
     {
-        private readonly INotificationRepository _notificationRepository;
-        private readonly IUtilitiesRepository _utilitiesRepository;
-        private readonly ICompaniesRepository _companyRepository;
-        private readonly IEmailService _emailService;
+        private readonly IServiceProvider _services;
         private readonly ILogger<AnnualEmailNotificationBackgroundService> _logger;
         public const int AnnualJob = 48;
         public const int EmailDay = 2;
@@ -31,14 +28,9 @@ namespace TaxComputationSoftware.Services
         public static string LogEmail = "azibaalpha@gmail.com";
         private Timer _timer;
 
-        public AnnualEmailNotificationBackgroundService(INotificationRepository notificationRepository, 
-                                                        IUtilitiesRepository utilitiesRepository, ICompaniesRepository companyRepository, 
-                                                        IEmailService emailService, ILogger<AnnualEmailNotificationBackgroundService> logger)
+        public AnnualEmailNotificationBackgroundService(IServiceProvider services, ILogger<AnnualEmailNotificationBackgroundService> logger)
         {
-            _notificationRepository = notificationRepository;
-            _utilitiesRepository = utilitiesRepository;
-            _companyRepository = companyRepository;
-            _emailService = emailService;
+            _services = services;
             _logger = logger;
 
         }
@@ -67,7 +59,7 @@ namespace TaxComputationSoftware.Services
             try
             {
 
-                var pre = await _notificationRepository.GetPreNotification();
+                var pre = await GetPreNotificationScopedService();
 
                 var emailList = new List<PreNotification>();
 
@@ -100,27 +92,27 @@ namespace TaxComputationSoftware.Services
                         mail.OpeningDate = mail.OpeningDate.AddYears(1);
                         mail.ClosingDate = mail.ClosingDate.AddYears(1);
 
-                        await _notificationRepository.UpdatePreNotification(mail);
+                        await UpdatePreNotificationScopedService(mail);
 
                         mail.IsLocked = false;
 
-                        await _notificationRepository.Lock(mail);
+                        await LockPreNotificationScopedService(mail);
 
-                        var company = await _companyRepository.GetCompanyAsync(mail.CompanyId);
+                        var company = await GetCompanyAsyncScopedService(mail.CompanyId);
 
                         var date = mail.ClosingDate.AddDays(AnnualJob + 1);
 
                         _toEmail = "Aziba Alpha";
                         _toName = "azibaalpha@gmail.com";
 
-                        await _emailService.PreNotificationEmail(company.CompanyName, date);
-                        
+                        await PreNotificationEmailScopedService(company.CompanyName, date);
+
                         int month = mail.OpeningDate.Month;
                         int year = mail.OpeningDate.Year;
                         int tax = mail.ClosingDate.AddYears(1).Year;
                         int financialYear = mail.ClosingDate.Year;
 
-                        await _utilitiesRepository.AddFinancialYearAsync(new FinancialYear { Name = $"{tax}", CompanyId = company.Id, OpeningDate = mail.OpeningDate, ClosingDate = mail.ClosingDate, FinancialDate = financialYear.ToString() });
+                        await AddFinancialYearAsyncScopedService(new FinancialYear { Name = $"{tax}", CompanyId = company.Id, OpeningDate = mail.OpeningDate, ClosingDate = mail.ClosingDate, FinancialDate = financialYear.ToString() });
 
                     }
                 }
@@ -128,7 +120,7 @@ namespace TaxComputationSoftware.Services
             catch (Exception e)
             {
                 _logger.LogError(e.Message);
-                await _emailService.ExceptionEmail(MethodBase.GetCurrentMethod().DeclaringType.Name, e.Message);
+                await ExceptionEmailScopedService(MethodBase.GetCurrentMethod().DeclaringType.Name, e.Message);
             }
         }
 
@@ -137,5 +129,113 @@ namespace TaxComputationSoftware.Services
             _timer?.Dispose();
         }
 
+        #region Prenotification Repository Scoped Service
+        private async Task<List<PreNotification>> GetPreNotificationScopedService()
+        {
+            _logger.LogInformation(
+                    "Consume Scoped Service Hosted Service is working.");
+
+            using (var scope = _services.CreateScope())
+            {
+                var scopedProcessingService =
+                    scope.ServiceProvider
+                        .GetRequiredService<INotificationRepository>();
+
+                return await scopedProcessingService.GetPreNotification();
+            }
+        }
+
+        private async Task UpdatePreNotificationScopedService(PreNotification preNotification)
+        {
+            _logger.LogInformation(
+                    "Consume Scoped Service Hosted Service is working.");
+
+            using (var scope = _services.CreateScope())
+            {
+                var scopedProcessingService =
+                    scope.ServiceProvider
+                        .GetRequiredService<INotificationRepository>();
+
+                await scopedProcessingService.UpdatePreNotification(preNotification);
+            }
+        }
+
+        private async Task LockPreNotificationScopedService(PreNotification preNotification)
+        {
+            _logger.LogInformation(
+                    "Consume Scoped Service Hosted Service is working.");
+
+            using (var scope = _services.CreateScope())
+            {
+                var scopedProcessingService =
+                    scope.ServiceProvider
+                        .GetRequiredService<INotificationRepository>();
+
+                await scopedProcessingService.Lock(preNotification);
+            }
+        }
+        #endregion
+
+        #region Company Scoped Service
+        private async Task<Company> GetCompanyAsyncScopedService(int companyId)
+        {
+            _logger.LogInformation(
+                    "Consume Scoped Service Hosted Service is working.");
+
+            using (var scope = _services.CreateScope())
+            {
+                var scopedProcessingService =
+                    scope.ServiceProvider
+                        .GetRequiredService<ICompaniesService>();
+
+                return await scopedProcessingService.GetCompanyAsync(companyId);
+            }
+        }
+        #endregion
+
+        #region Email Notification Scoped Service
+        private async Task PreNotificationEmailScopedService(string companyName, DateTime date)
+        {
+            _logger.LogInformation(
+                    "Consume Scoped Service Hosted Service is working.");
+
+            using (var scope = _services.CreateScope())
+            {
+                var scopedProcessingService =
+                    scope.ServiceProvider
+                        .GetRequiredService<IEmailService>();
+                await scopedProcessingService.PreNotificationEmail(companyName, date);
+            }
+        }
+        private async Task ExceptionEmailScopedService(string methodName, string errorMessage)
+        {
+            _logger.LogInformation(
+                    "Consume Scoped Service Hosted Service is working.");
+
+            using (var scope = _services.CreateScope())
+            {
+                var scopedProcessingService =
+                    scope.ServiceProvider
+                        .GetRequiredService<IEmailService>();
+                await scopedProcessingService.ExceptionEmail(methodName, errorMessage);
+            }
+        }
+        #endregion
+
+        #region Utility Notification Service Scoped
+        private async Task AddFinancialYearAsyncScopedService(FinancialYear financialYear)
+        {
+            _logger.LogInformation(
+                    "Consume Scoped Service Hosted Service is working.");
+
+            using (var scope = _services.CreateScope())
+            {
+                var scopedProcessingService =
+                    scope.ServiceProvider
+                        .GetRequiredService<IUtilitiesRepository>();
+                await scopedProcessingService.AddFinancialYearAsync(financialYear);
+            }
+        }
+        #endregion
     }
 }
