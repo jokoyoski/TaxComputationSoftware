@@ -6,7 +6,12 @@ import { useResources } from "../../store/ResourcesStore";
 import { getCompanies } from "../../apis/Companies";
 import CompanyItem from "./CompanyItem";
 
-const CompanyList = ({ showCompanyList, setShowCompanyList, setShowCompanyDetails }) => {
+const CompanyList = ({
+  showCompanyList,
+  setShowCompanyList,
+  setShowCompanyDetails,
+  setShowAddEditCompany
+}) => {
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState(null);
   const [{ companyList }, { onCompanyList, onSelectedCompany }] = useResources();
@@ -71,6 +76,7 @@ const CompanyList = ({ showCompanyList, setShowCompanyList, setShowCompanyDetail
               onCompanyList={onCompanyList}
               setShowCompanyList={setShowCompanyList}
               setShowCompanyDetails={setShowCompanyDetails}
+              setShowAddEditCompany={setShowAddEditCompany}
               onSelectedCompany={onSelectedCompany}
             />
           ))}

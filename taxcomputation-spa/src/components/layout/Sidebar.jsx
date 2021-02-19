@@ -66,11 +66,14 @@ const Sidebar = ({ selectedTitle, isActive }) => {
           background: "#fff",
           overflowY: "auto"
         }}>
-        <h2
+        <div className="logo-container">
+          <div className="logo" />
+        </div>
+        {/* <h2
           className="accent-color"
           style={{ margin: "5px 0 10px 0", padding: "10px 20px", fontSize: "1.25rem" }}>
           Tax Computation
-        </h2>
+        </h2> */}
         <div className="divider"></div>
         <div style={{ padding: "10px 20px" }}>
           <div style={{ marginTop: 10, background: "#f5f6f8", padding: 10 }}>

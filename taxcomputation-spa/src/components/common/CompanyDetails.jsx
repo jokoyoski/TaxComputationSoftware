@@ -2,7 +2,7 @@ import React from "react";
 import { Dialog } from "primereact/dialog";
 import { Button } from "primereact/button";
 import Loader from "./Loader";
-import { getCompany } from "../../apis/Companies";
+import useFetchCompanyDetails from "../hooks/useFetchCompanyDetails";
 
 const CompanyDetails = ({
   companyId,
@@ -10,28 +10,7 @@ const CompanyDetails = ({
   setShowCompanyDetails,
   setShowCompanyList
 }) => {
-  const [loading, setLoading] = React.useState(false);
-  const [error, setError] = React.useState(null);
-  const [companyDetails, setCompanyDetails] = React.useState(null);
-
-  const fetchCompany = React.useCallback(async () => {
-    if (companyId) {
-      try {
-        setLoading(true);
-        setError(null);
-        const data = await getCompany(companyId);
-        if (data) setCompanyDetails(data);
-      } catch (error) {
-        setError("Failed to get selected company");
-      } finally {
-        setLoading(false);
-      }
-    }
-  }, [companyId]);
-
-  React.useEffect(() => {
-    fetchCompany();
-  }, [fetchCompany]);
+  const { companyDetails, loading, error, fetchCompany } = useFetchCompanyDetails(companyId);
 
   return (
     <Dialog
@@ -47,7 +26,7 @@ const CompanyDetails = ({
         setShowCompanyDetails(false);
         setShowCompanyList(true);
       }}>
-      <div className="p-d-flex p-flex-column" style={{ height: 400 }}>
+      <div className="p-d-flex p-flex-column" style={{ height: 350 }}>
         {loading && (
           <div
             className="p-d-flex p-jc-center p-ai-center"
@@ -78,13 +57,20 @@ const CompanyDetails = ({
               <strong>TIN Number:</strong> {companyDetails.tinNumber}
             </p>
             <p className="company-details">
-              <strong>Date Created:</strong> {companyDetails.dateCreated}
+              <strong>Date Created:</strong>{" "}
+              {new Date(companyDetails.dateCreated).toISOString().slice(0, 10)}
             </p>
             <p className="company-details">
-              <strong>Opening Year:</strong> {companyDetails.openingYear}
+              <strong>Opening Year:</strong>{" "}
+              {new Date(companyDetails.openingYear).toISOString().slice(0, 10)}
             </p>
             <p className="company-details">
-              <strong>Closing Year:</strong> {companyDetails.closingYear}
+              <strong>Closing Year:</strong>{" "}
+              {new Date(companyDetails.closingYear).toISOString().slice(0, 10)}
+            </p>
+            <p className="company-details">
+              <strong>Minimum Tax Type:</strong>{" "}
+              {companyDetails.minimumTaxTypeId === 1 ? "New" : "Old"}
             </p>
             <p className="company-details">
               <strong>Active:</strong> {companyDetails.isActive ? "Yes" : "No"}
