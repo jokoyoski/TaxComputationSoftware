@@ -10,7 +10,7 @@ namespace TaxComputationAPI.Data
     {
         public static void SeedUsers(UserManager<User> userManager, RoleManager<Role> roleManager)
         {
-            if(!userManager.Users.Any())
+            if(!roleManager.Roles.Any())
             {
 
                 var roles = new List<Role>

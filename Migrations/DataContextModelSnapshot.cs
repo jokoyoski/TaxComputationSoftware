@@ -213,6 +213,27 @@ namespace TaxComputationAPI.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
+            modelBuilder.Entity("TaxComputationAPI.Models.UserCode", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Code")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("UserCodes");
+                });
+
             modelBuilder.Entity("TaxComputationAPI.Models.UserRole", b =>
                 {
                     b.Property<int>("UserId")

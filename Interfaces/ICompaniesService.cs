@@ -15,6 +15,9 @@ namespace TaxComputationAPI.Interfaces
 
         Task AddCompanyAsync(Company company);
         Task<PagedList<Company>> GetCompaniesAsync(PaginationParams pagination);
+
+        Task<object> GetCompanyInfoByFinancialYear(int companyId, int financialYearId);
+        Task DeleteCompany(int Id);
     
     }
 }

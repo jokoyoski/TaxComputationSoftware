@@ -4,7 +4,7 @@ namespace TaxComputationAPI.Dtos
 {
     public class FixedAssetDto
     {
-        public List<FixedAssetListDto>  values {get;set;}
+       // public List<FixedAssetListDto>  values {get;set;}
 
         public List<NetBookValue> netBookValue {get;set;}
 

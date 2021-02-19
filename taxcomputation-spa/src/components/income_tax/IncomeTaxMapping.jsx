@@ -22,8 +22,8 @@ const IncomeTaxMapping = ({ tbData, onTrialBalance, trialBalanceRefresh, toast }
       value: 1
     },
     {
-      label: "Disallowable Expenses",
-      value: 0
+      label: "Allowable Income",
+      value: 1
     }
   ];
 
