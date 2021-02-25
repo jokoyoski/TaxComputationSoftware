@@ -89,8 +89,8 @@ namespace TaxComputationAPI
 
             services.AddSingleton<IJobFactory, SingletonJobFactory>();
             services.AddSingleton<ISchedulerFactory, StdSchedulerFactory>();
-            services.AddSingleton<INotificationRepository, NotificationRepository>();
-            services.AddSingleton<IEmailService, EmailService>();
+            services.AddScoped<INotificationRepository, NotificationRepository>();
+            services.AddScoped<IEmailService, EmailService>();
 
 
             
@@ -110,7 +110,7 @@ namespace TaxComputationAPI
             services.AddScoped<IBalancingAdjustmentRepository, BalancingAdjustmentRepository>();
             services.AddScoped<IUsersService, UsersService>();
             services.AddScoped<IBalancingAdjustmentService, BalancingAdjustmentService>();
-            services.AddSingleton<ICompaniesRepository, CompaniesRepository>();
+            services.AddScoped<ICompaniesRepository, CompaniesRepository>();
             services.AddScoped<IFixedAssetService, FixedAssetService>();
             services.AddScoped<IFixedAssetRepository, FixedAssetRepository>();
             services.AddScoped<ITrialBalanceRepository, TrialBalanceRepository>();
@@ -118,7 +118,7 @@ namespace TaxComputationAPI
             services.AddScoped<IUtilitiesService, UtilitiesService>();
             services.AddScoped<ITrialBalanceService, TrialBalanceService>();
             services.AddScoped<ITrialBalanceRepository, TrialBalanceRepository>();
-            services.AddSingleton<IUtilitiesRepository, UtilitiesRepository>();
+            services.AddScoped<IUtilitiesRepository, UtilitiesRepository>();
             services.AddScoped<IAuthenticationRepository, AuthenticationRepository>();
             services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddSingleton<IAuthorizationHandler, SystemAdminHandler>();
@@ -136,7 +136,7 @@ namespace TaxComputationAPI
             services.AddScoped<IIncomeTaxService, IncomeTaxService>();
             services.AddScoped<IDeferredTaxRepository, DeferredTaxRepository>();
            services.AddScoped<IDeferredTaxService, DeferredTaxService>();
-            services.AddSingleton<DatabaseManager>();
+            services.AddScoped<DatabaseManager>();
             services.Configure<ConnectionString>(_configuration.GetSection("ConnectionString"));
             services.AddDbContext<DataContext>(options => options.UseSqlServer(_configuration.GetConnectionString("DefaultConnection")));
             services.AddAutoMapper(typeof(Startup));

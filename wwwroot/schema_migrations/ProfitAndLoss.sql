@@ -90,3 +90,90 @@ AS
 delete  from [dbo].[ProfitsAndLoss] where TrialBalanceId=@TrialBalanceId
 GO
 
+
+
+
+
+
+
+
+
+
+
+
+--------------------------------------- STORED PROCEDURE TO  CREATE PROFIT AND LOSS RECORD -----------------------------------------
+
+
+if NOT EXISTS(SELECT 1 FROM sysobjects where type='U' and name ='ProfitAndLossRecord')
+BEGIN
+create table ProfitAndLossRecord(
+
+ Id   int identity(1,1) NOT NULL ,
+ CompanyId int ,
+ ProfitAndLoss decimal,
+ YearId int
+
+ )
+
+END
+GO
+
+
+-------------------------------------- STORED PROCEDURE TO  GET PROFIT AND LOS LOSS BY COMPANY ID AND YEAR ID-----------------------------------------
+IF OBJECT_ID('[dbo].[usp_Get_Profit_And_Loss_By_CompanyId_YearId]') IS NOT NULL
+BEGIN
+DROP PROCEDURE [dbo].usp_Get_Profit_And_Loss_By_CompanyId_YearId
+END
+GO
+CREATE PROCEDURE [dbo].usp_Get_Profit_And_Loss_By_CompanyId_YearId(
+    @CompanyId int,@YearId int)
+   
+AS
+SELECT *
+FROM [dbo].[ProfitAndLossRecord]
+WHERE CompanyId=@CompanyId AND YearId=@YearId
+GO
+
+
+
+
+
+
+
+
+-------------------------------------- STORED PROCEDURE TO  INSERT INTO Profit and loss record  TAX TABLE-----------------------------------------
+
+IF OBJECT_ID('[dbo].[usp_Insert_Profit_And_Loss_Record_Table]') IS NOT NULL
+BEGIN
+DROP PROCEDURE [dbo].[usp_Insert_Profit_And_Loss_Record_Table]
+PRINT('OK')
+END
+GO
+CREATE PROCEDURE [dbo].[usp_Insert_Profit_And_Loss_Record_Table](
+    @Id int,
+    @CompanyId int,
+    @YearId int,
+    @ProfitAndLoss varchar(50)
+)
+AS
+if exists (select * from ProfitAndLossRecord where CompanyId=@CompanyId  and YearId =@YearId)
+begin
+ update [dbo].[ProfitAndLossRecord] set ProfitAndLoss=@ProfitAndLoss
+end
+else
+INSERT [dbo].[ProfitAndLossRecord]
+(
+    CompanyId,
+    YearId,
+    ProfitAndLoss
+)
+VALUES
+(
+    @CompanyId,
+    @YearId,
+    @ProfitAndLoss
+   
+)
+SET @Id = SCOPE_IDENTITY()
+SELECT @Id
+GO
