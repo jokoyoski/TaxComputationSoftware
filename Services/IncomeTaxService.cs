@@ -411,13 +411,7 @@ namespace TaxComputationSoftware.Services
                 });
 
             }
-            incomeListDto.Add(new IncomeTaxDto
-            {
-                Description = "",
-                ColumnOne = "",
-                ColumnTwo = "",
-            });
-
+         
             taxableProfit = accessibleBalancingCharge - capitalAllowanceClaimed;
             if (isAssessibleProfit)
             {
@@ -563,7 +557,7 @@ namespace TaxComputationSoftware.Services
             }
             _incomeTaxRepository.SaveAsessableUnRelieved(new AsessableLossUnRelieved{
                 CompanyId=companyId,
-                YearId=yearId,
+                YearId=yearId,y
                 UnRelievedCf=unrelievedCf,
                 AssessableLoss=values,
             });
@@ -615,15 +609,7 @@ namespace TaxComputationSoftware.Services
 
             }
 
-            /*  _incomeTaxRepository.CreateBalanceBroughtFoward(new BroughtFoward
-              {
-                  CompanyId = incomeTax.CompanyId,
-                  IsStarted = true,
-                  LossCf = incomeTax.LossBroughtFoward,
-                  UnRelievedBf = incomeTax.UnrelievedCapitalAllowanceBroughtFoward
-              }); */
-
-
+         
         }
 
 
