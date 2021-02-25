@@ -533,7 +533,7 @@ namespace TaxComputationSoftware.Services
                     ColumnOne = "-",
                     ColumnTwo = $"₦{Utilities.FormatAmount(percent)}",
                     CanBolden = true,
-                    CanUnderline=true
+                    
                 });
 
             }
@@ -558,7 +558,7 @@ namespace TaxComputationSoftware.Services
             }
             _incomeTaxRepository.SaveAsessableUnRelieved(new AsessableLossUnRelieved{
                 CompanyId=companyId,
-                YearId=yearId,y
+                YearId=yearId,
                 UnRelievedCf=unrelievedCf,
                 AssessableLoss=values,
             });
