@@ -16,7 +16,9 @@ namespace TaxComputationSoftware.Dtos
 
         public bool CanDelete   {get;set;}
 
-        public bool CanBolden {get;set;}\
+        public bool CanBolden {get;set;}
+
+        public bool CanUnderline {get;set;}
 
     }
 }

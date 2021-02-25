@@ -532,7 +532,8 @@ namespace TaxComputationSoftware.Services
                     Description = "Minimum Tax Payable",
                     ColumnOne = "-",
                     ColumnTwo = $"₦{Utilities.FormatAmount(percent)}",
-                    CanBolden = true
+                    CanBolden = true,
+                    CanUnderline=true
                 });
 
             }
