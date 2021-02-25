@@ -74,5 +74,84 @@ namespace TaxComputationAPI.Helpers
         {
             return Convert.ToDecimal(amount);
         }
+
+        public static string ValueMoneyFormatter(this string money, string currency, bool addCurrency)
+        {
+        
+            if(string.IsNullOrEmpty(money)) return string.Empty;
+
+            if(!Decimal.TryParse(money, out decimal moneyValue)) return string.Empty;
+
+            bool isNegative = false;
+            
+            if(moneyValue < 0) 
+            {
+                money = money.Substring(1);
+                isNegative = true;
+            }
+
+            string result = string.Empty;
+            string curr = string.Empty;
+
+            string [] currencyArray = {"=N=", "=S=", "=E=", "=P=", "=Y="};
+
+            switch(currency)
+            {
+                case "NGN":
+                    curr = currencyArray[0];
+                    break;
+                case "USD":
+                    curr = currencyArray[1];
+                    break;
+                case "EUR":
+                    curr = currencyArray[2];
+                    break;
+                case "GBP":
+                    curr = currencyArray[3];
+                    break;
+                case "CNY":
+                    curr = currencyArray[4];
+                    break;
+                default:
+                    curr = currencyArray[0];
+                    break;
+            }
+            
+            money = money.Trim();
+            int moneySize = money.Length;
+            int count = 1;
+
+            for(int i = money.Length - 1; i >= 0; i--)
+            {
+                string value = money[i].ToString();
+
+                if(string.IsNullOrEmpty(result)) 
+                {
+                    result += value;
+                }
+                else
+                {
+                    result = result.Insert(0, value);
+                }
+
+                moneySize--;
+
+                if(count == 3 && (moneySize > 3 || moneySize >= 1)) 
+                {
+                    result = "," + result;
+                    count = 0;
+                }
+
+                count++;
+            }
+
+
+            if(isNegative) result = $"({result})";
+
+            if(addCurrency) result = curr + " " + result;
+
+            return result;
+        }
+    
     }
 }

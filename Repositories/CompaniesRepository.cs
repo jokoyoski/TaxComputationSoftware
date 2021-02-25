@@ -31,20 +31,29 @@ namespace TaxComputationAPI.Repositories
 
         public async Task<Company> GetCompanyAsync(int id)
         {
-
-
-            using (IDbConnection conn = await _databaseManager.DatabaseConnection())
+            try
             {
-                if (conn.State == ConnectionState.Closed)
-                    conn.Open();
+                using (IDbConnection conn = await _databaseManager.DatabaseConnection())
+                {
+                    if (conn.State == ConnectionState.Closed)
+                        conn.Open();
 
-                DynamicParameters parameters = new DynamicParameters();
+                    DynamicParameters parameters = new DynamicParameters();
 
-                parameters.Add("@Id", id);
+                    parameters.Add("@Id", id);
 
-                var record = await conn.QueryFirstAsync<Company>("[dbo].[usp_Get_Company_By_Id]", parameters, commandType: CommandType.StoredProcedure);
-                return record;
+                    var record = await conn.QueryFirstAsync<Company>("[dbo].[usp_Get_Company_By_Id]", parameters, commandType: CommandType.StoredProcedure);
+                    return record;
+                }
             }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                await _emailService.ExceptionEmail(MethodBase.GetCurrentMethod().DeclaringType.Name, ex.Message);
+            }
+
+            return null;
+
 
 
         }
@@ -108,7 +117,7 @@ namespace TaxComputationAPI.Repositories
                 _logger.LogError(ex.Message);
                 await _emailService.ExceptionEmail(MethodBase.GetCurrentMethod().DeclaringType.Name, ex.Message);
             }
-      
+
 
         }
 
@@ -131,7 +140,7 @@ namespace TaxComputationAPI.Repositories
 
         }
 
-         public async Task DeleteCompany(int Id)
+        public async Task DeleteCompany(int Id)
         {
             using (IDbConnection conn = await _databaseManager.DatabaseConnection())
             {
