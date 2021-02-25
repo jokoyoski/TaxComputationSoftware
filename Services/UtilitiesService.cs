@@ -188,7 +188,7 @@ namespace TaxComputationAPI.Services
                 moduleTypes.Add(new ModuleTypeDto
                 {
                     Id = 5,
-                    Name = "Other Operating Type"
+                    Name = "Other Operating Gain/(Loss)"
                 });
             }
 
