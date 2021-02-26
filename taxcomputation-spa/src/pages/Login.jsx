@@ -73,8 +73,11 @@ const Login = () => {
       <Card
         header={
           <>
-            <h2 className="p-text-center accent-color">Tax Computation</h2>
-            <div className="divider"></div>
+            <div className="logo-anim-container">
+              <div className="logo-anim" />
+            </div>
+            {/* <h2 className="p-text-center accent-color">Tax Computation</h2> */}
+            <div className="divider" />
           </>
         }
         style={{ width: 320 }}>

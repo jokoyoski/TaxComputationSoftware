@@ -1,6 +1,7 @@
 import axios from "axios";
 
-export const addCompany = async ({
+export const addEditCompany = async ({
+  companyId,
   companyName,
   companyDescription,
   cacNumber,
@@ -14,6 +15,7 @@ export const addCompany = async ({
 }) => {
   try {
     return await axios.post("/api/Companies/add-company", {
+      companyId,
       companyName,
       companyDescription,
       cacNumber,

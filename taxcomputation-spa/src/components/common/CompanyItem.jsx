@@ -6,11 +6,24 @@ const CompanyItem = ({
   onCompanyList,
   setShowCompanyList,
   setShowCompanyDetails,
+  setShowAddEditCompany,
   onSelectedCompany
 }) => {
   const [isDeleting, setIsDeleting] = React.useState(false);
 
-  const deleteAssetHandler = async () => {
+  const companyInfoHandler = () => {
+    onSelectedCompany(companyData.id);
+    setShowCompanyDetails(true);
+    setShowCompanyList(false);
+  };
+
+  const editCompanyHandler = () => {
+    onSelectedCompany(companyData.id);
+    setShowAddEditCompany(true);
+    setShowCompanyList(false);
+  };
+
+  const deleteCompanyHandler = async () => {
     try {
       setIsDeleting(true);
       const response = await deleteCompany(companyData.id);
@@ -24,20 +37,14 @@ const CompanyItem = ({
 
   return (
     <div className="p-d-flex p-jc-between p-ai-center company-item">
-      <p style={{ marginTop: 10, marginBottom: 10 }}>{companyData.companyName}</p>
+      <p className="company-item-name">{companyData.companyName}</p>
       <div>
-        <i
-          className="pi pi-info-circle info"
-          onClick={() => {
-            onSelectedCompany(companyData.id);
-            setShowCompanyList(false);
-            setShowCompanyDetails(true);
-          }}
-        />
+        <i className="pi pi-info-circle info" onClick={companyInfoHandler} />
+        <i className="pi pi-pencil edit" style={{ marginLeft: 20 }} onClick={editCompanyHandler} />
         <i
           className={isDeleting ? "pi pi-spin pi-spinner" : "pi pi-trash delete"}
           style={{ marginLeft: 20, marginRight: 10 }}
-          onClick={deleteAssetHandler}
+          onClick={deleteCompanyHandler}
         />
       </div>
     </div>

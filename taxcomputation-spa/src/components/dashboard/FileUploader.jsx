@@ -36,7 +36,7 @@ const FileUploader = ({ company: { companyId }, toast, setRefreshTrialBalanceTab
   };
 
   React.useEffect(() => {
-    if (financialYears) {
+    if (financialYears?.length) {
       const latestFinancialYearId = financialYears[financialYears.length - 1].value;
       setYear(latestFinancialYearId);
       sessionStorage.setItem("yid", latestFinancialYearId);

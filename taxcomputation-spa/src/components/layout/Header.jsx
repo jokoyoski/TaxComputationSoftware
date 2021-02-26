@@ -11,6 +11,7 @@ import AssetList from "../common/AssetList";
 import FinancialYear from "../common/FinancialYear";
 import CompanyList from "../common/CompanyList";
 import CompanyDetails from "../common/CompanyDetails";
+import AddEditCompanyForm from "../common/AddEditCompanyForm";
 
 const Header = ({ title, loading }) => {
   const { replace } = useRouterActions();
@@ -21,6 +22,7 @@ const Header = ({ title, loading }) => {
   const [showAssetList, setShowAssetList] = React.useState();
   const [showCompanyList, setShowCompanyList] = React.useState();
   const [showCompanyDetails, setShowCompanyDetails] = React.useState();
+  const [showAddEditCompany, setShowAddEditCompany] = React.useState();
   const [showFinancialYear, setShowFinancialYear] = React.useState(false);
   const [{ companyName }, { resetCompany }] = useCompany();
   const [
@@ -145,6 +147,7 @@ const Header = ({ title, loading }) => {
           showCompanyList={showCompanyList}
           setShowCompanyList={setShowCompanyList}
           setShowCompanyDetails={setShowCompanyDetails}
+          setShowAddEditCompany={setShowAddEditCompany}
         />
       )}
       {showCompanyDetails && selectedCompany && (
@@ -152,6 +155,14 @@ const Header = ({ title, loading }) => {
           companyId={selectedCompany}
           showCompanyDetails={showCompanyDetails}
           setShowCompanyDetails={setShowCompanyDetails}
+          setShowCompanyList={setShowCompanyList}
+        />
+      )}
+      {showAddEditCompany && selectedCompany && (
+        <AddEditCompanyForm
+          companyId={selectedCompany}
+          showAddEditCompany={showAddEditCompany}
+          setShowAddEditCompany={setShowAddEditCompany}
           setShowCompanyList={setShowCompanyList}
         />
       )}
