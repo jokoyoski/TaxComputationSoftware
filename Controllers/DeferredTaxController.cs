@@ -47,13 +47,10 @@ namespace TaxComputationAPI.Controllers
             {
                 var financialYear = await _utilitiesService.GetFinancialCompanyAsync(companyId);
                 var financialYearRecord = financialYear.OrderByDescending(x => x.Id).FirstOrDefault();
-
-                // var details = await _utilitiesService.GetFinancialYearAsync();
                 if (financialYear.FirstOrDefault().Id == int.Parse(year))
                 {
                     return StatusCode(400, new { errors = new[] { "Invalid Year selected" } });
                 }
-                // var x = details.LastOrDefault(x => x.CompanyId == companyId);
                 if (IsBringDeferredTaxFoward && financialYearRecord.Id != int.Parse(year))
                 {
                     return StatusCode(400, new { errors = new[] { "Please move the current Deferred tax and not previous deferred tax" } });
@@ -78,57 +75,6 @@ namespace TaxComputationAPI.Controllers
 
         }
 
-        [HttpPost]
-        [Authorize]
-        public async Task<IActionResult> AddDeferredTax(CreateDeferredTax createDeferredTax)
-        {
-
-            try
-            {
-
-                var details = await _utilitiesService.GetFinancialYearAsync(createDeferredTax.YearId);
-                var companyDetails = await _utilitiesService.GetPreNotificationsAsync();
-                var companyDate = companyDetails.FirstOrDefault(x => x.CompanyId == createDeferredTax.CompanyId);
-                int taxYear = int.Parse(details.Name);
-                if (companyDate.ClosingDate.Year + 1 != taxYear)
-                {
-                    return StatusCode(400, new { errors = new[] { "This operation is not valid for previous tax years"} });
-  
-                }
-                // var isValid = Utilities.ValidateDate(companyDate.OpeningDate, companyDate.ClosingDate, details.OpeningDate, details.ClosingDate);
-                foreach (var j in createDeferredTax.TrialBalanceList)
-                {
-                    if (j.TrialBalanceId != 0)
-                    {
-                        var trialBalanceRecord = await _trialBalanceService.GetTrialBalanceById(j.TrialBalanceId);
-                        if (trialBalanceRecord.IsCheck)
-                        {
-                            return StatusCode(400, new { errors = new[] { "One of the item selected has already been mapped, please reload" } });
-                        }
-                    }
-
-                }
-
-                //  var broughtFowardInfo = await _deferredTaxService.GetBroughtFoward(createDeferredTax.CompanyId);
-
-                _deferredTaxService.SaveDeferredTax(createDeferredTax);
-                return Ok("Saved Successfully!!!");
-
-            }
-            catch (Exception ex)
-            {
-                var email = User.FindFirst(ClaimTypes.Email).Value;
-                _logger.LogInformation("Exception for {email}, {ex}", email, ex.Message);
-
-
-                _logger.LogError(ex.Message);
-                await _emailService.ExceptionEmail(MethodBase.GetCurrentMethod().DeclaringType.Name, ex.Message);
-
-                return StatusCode(500, new { errors = new[] { "Error occured while trying to process your request please try again later !" } });
-
-            }
-
-        }
-
+      
     }
 }

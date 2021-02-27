@@ -15,8 +15,7 @@ namespace TaxComputationSoftware.Services
 
         private readonly IIncomeTaxService _incomeTaxService;
 
-        private readonly IDeferredTaxRepository _deferredTaxRepository;
-
+        private readonly IDeferredTaxRepository _deferredTaxRepository; 
         private readonly ICapitalAllowanceService _capitalAllowanceService;
         private readonly ITrialBalanceRepository _trialBalanceRepository;
         private readonly IUtilitiesRepository _utilitiesRepository;
@@ -33,25 +32,6 @@ namespace TaxComputationSoftware.Services
             _trialBalanceRepository = trialBalanceRepository;
             _capitalAllowanceService = capitalAllowanceService;
         }
-        public async Task SaveDeferredTax(CreateDeferredTax deferredTax)
-        {
-
-            foreach (var item in deferredTax.TrialBalanceList)
-            {
-                var fairValueGain = new FairValueGain();
-                fairValueGain.SelectionId = GetSelectionType(item);
-                fairValueGain.YearId = deferredTax.YearId;
-                fairValueGain.TrialBalanceId = item.TrialBalanceId;
-                fairValueGain.CompanyId = deferredTax.CompanyId;
-
-                string trialBalanceValue = $"MAPPED TO [DEFERRED TAX] Fair Value Gain";
-                await _trialBalanceRepository.UpdateTrialBalance(item.TrialBalanceId, trialBalanceValue, false);
-                await _deferredTaxRepository.CreateFairValueGain(fairValueGain);
-
-            }
-          
-        }
-
         public async Task<List<DeferredTaxDto>> GetDeferredTax(int companyId, int yearId, bool IsBringDeferredTaxFoward)
         {
 
@@ -289,23 +269,5 @@ namespace TaxComputationSoftware.Services
 
         }
 
-
-        public int GetSelectionType(TrialBalanceValue incomeTax)
-        {
-
-
-            if (!incomeTax.IsDebit && !incomeTax.IsBoth && incomeTax.IsCredit)
-            {
-                return 1;
-            }
-
-            if (incomeTax.IsDebit && !incomeTax.IsBoth && !incomeTax.IsCredit)
-            {
-                return 0;
-            }
-
-            return 0;
-
-        }
     }
 }

@@ -19,17 +19,13 @@ namespace TaxComputationAPI.Services
         private readonly ITrialBalanceRepository _trialBalanceRepository;
         private readonly IUtilitiesRepository _utilitiesRepository;
         private readonly IIncomeTaxRepository _incomeTaxRepository;
-        private readonly IDeferredTaxRepository _deferredTaxRepository;
-        private readonly IDeferredTaxService   _deferredTaxService;
-
-        public ProfitAndLossService(IProfitAndLossRepository profitAndLossRepository,IDeferredTaxService deferredTaxService,IDeferredTaxRepository deferredTaxRepository ,IIncomeTaxRepository incomeTaxRepository, ITrialBalanceRepository trialBalanceRepository)
+        
+        public ProfitAndLossService(IProfitAndLossRepository profitAndLossRepository ,IIncomeTaxRepository incomeTaxRepository, ITrialBalanceRepository trialBalanceRepository)
         {
-
-            _deferredTaxRepository=deferredTaxRepository;
             _trialBalanceRepository = trialBalanceRepository;
             _profitAndLossRepository = profitAndLossRepository;
             _incomeTaxRepository = incomeTaxRepository;
-            _deferredTaxService=deferredTaxService;
+        
         }
         ///////
 
@@ -225,14 +221,13 @@ namespace TaxComputationAPI.Services
                     if (!item.IsBoth && item.IsCredit && !item.IsDebit)
                     {
                         var fairValueGain = new FairValueGain();
-                        fairValueGain.SelectionId =_deferredTaxRepository.GetSelectionType(item);
+                        fairValueGain.SelectionId =_profitAndLossRepository.GetSelectionType(item);
                         fairValueGain.YearId = profits.YearId;
                         fairValueGain.TrialBalanceId = item.TrialBalanceId;
                         fairValueGain.CompanyId = profits.CompanyId;
-
                         string trialBalanceValue = $"MAPPED TO [DEFERRED TAX] Fair Value Gain";
                         await _trialBalanceRepository.UpdateTrialBalance(item.TrialBalanceId, trialBalanceValue, false);
-                        await _deferredTaxRepository.CreateFairValueGain(fairValueGain);
+                        await _profitAndLossRepository.CreateFairValueGain(fairValueGain);
                     }
                 }
             }

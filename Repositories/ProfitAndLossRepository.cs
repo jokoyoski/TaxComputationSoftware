@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Dapper;
 using Microsoft.Extensions.Logging;
+using TaxComputationAPI.Dtos;
 using TaxComputationAPI.Interfaces;
 using TaxComputationAPI.Manager;
 using TaxComputationAPI.Models;
@@ -27,7 +28,23 @@ namespace TaxComputationAPI.Repositories
             _logger = logger;
         }
 
+       public int GetSelectionType(TrialBalanceValue incomeTax)
+        {
 
+
+            if (!incomeTax.IsDebit && !incomeTax.IsBoth && incomeTax.IsCredit)
+            {
+                return 1;
+            }
+
+            if (incomeTax.IsDebit && !incomeTax.IsBoth && !incomeTax.IsCredit)
+            {
+                return 0;
+            }
+
+            return 0;
+
+        }
 
 
         public async Task UpdateProfitAndLoss(AddProfitAndLoss addProfitAndLoss)
@@ -168,7 +185,38 @@ namespace TaxComputationAPI.Repositories
             }
         }
 
-     
+         public async Task<int> CreateFairValueGain(FairValueGain fairValueGain)
+        {
+
+            try
+            {
+                int rowAffected = 0;
+                using (IDbConnection con = await _databaseManager.DatabaseConnection())
+                {
+                    if (con.State == ConnectionState.Closed)
+                        con.Open();
+
+                    DynamicParameters parameters = new DynamicParameters();
+                    parameters.Add("@CompanyId", fairValueGain.CompanyId);
+                    parameters.Add("@YearId", fairValueGain.YearId);
+                    parameters.Add("@TrialBalanceId", fairValueGain.TrialBalanceId);
+                    parameters.Add("@SelectionId", fairValueGain.SelectionId);
+
+                    rowAffected = con.Execute("[dbo].[Insert_Into_Deferred_Tax]", parameters, commandType: CommandType.StoredProcedure);
+                }
+
+                return rowAffected;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                await _emailService.ExceptionEmail(MethodBase.GetCurrentMethod().DeclaringType.Name, ex.Message);
+            }
+
+            return 4;
+        }
+
+
         public async Task<string> SaveProfitAndLossRecord(ProfitAndLossRecord profitAndLoss)
         {
             if (profitAndLoss == null) throw new ArgumentNullException(nameof(profitAndLoss));

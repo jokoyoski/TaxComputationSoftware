@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TaxComputationAPI.Dtos;
 using TaxComputationAPI.Models;
 using TaxComputationSoftware.Models;
 
@@ -9,6 +10,8 @@ namespace TaxComputationAPI.Interfaces
 {
     public interface IProfitAndLossRepository
     {
+        int GetSelectionType(TrialBalanceValue incomeTax);
+        Task<int> CreateFairValueGain(FairValueGain fairValueGain);
         Task UpdateProfitAndLoss(AddProfitAndLoss addProfitAndLoss);
         Task<List<TaxComputationSoftware.Models.ProfitsAndLossValue>> GetProfitsAndLossByType(string Type, int companyId, int yearId);
         Task DeleteProfitsAndLossById(int TrialBalanceId);

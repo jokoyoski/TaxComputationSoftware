@@ -205,7 +205,9 @@ namespace TaxComputationSoftware.Services
                         ColumnOne = $"₦{Utilities.FormatAmount(allowable.Credit)}",
                         ColumnTwo = $"₦({Utilities.FormatAmount(totalAllowable)})",
                         CanDelete = true,
-                        Id = allowable.Id
+                        Id = allowable.Id,
+                        CanUnderlineUpColumn1=true
+                        
                     });
 
 
@@ -442,7 +444,8 @@ namespace TaxComputationSoftware.Services
                     Description = " Income Tax thereon on total profit at 30%",
                     ColumnOne = "",
                     ColumnTwo = $"₦{Utilities.FormatAmount(incomeTaxPayablePercent * taxableProfit)}",
-                    CanBolden = true
+                    CanBolden = true,
+                     CanUnderlineDownColumn2=true
                 });
 
 
@@ -454,7 +457,8 @@ namespace TaxComputationSoftware.Services
                     Description = " Income Tax thereon on total profit at 30%",
                     ColumnOne = "-",
                     ColumnTwo = "₦0.0",
-                    CanBolden = true
+                    CanBolden = true,
+                     CanUnderlineDownColumn2=true
                 });
 
             }
@@ -466,7 +470,8 @@ namespace TaxComputationSoftware.Services
                     Description = "Education Tax @ 2% of Assessable profit",
                     ColumnOne = "",
                     ColumnTwo = $"₦{Utilities.FormatAmount(educationTaxAssesibleProfit * taxableProfit)}",
-                    CanBolden = true
+                    CanBolden = true,
+                     CanUnderlineDownColumn2=true
 
 
                 });
@@ -480,7 +485,8 @@ namespace TaxComputationSoftware.Services
                     Description = "Education Tax @ 2% of Assessable profit",
                     ColumnOne = "-",
                     ColumnTwo = "₦0.0",
-                    CanBolden = true
+                    CanBolden = true,
+                     CanUnderlineDownColumn2=true
                 });
 
             }
@@ -493,7 +499,8 @@ namespace TaxComputationSoftware.Services
                     Description = "I.T. Levy",
                     ColumnOne = "",
                     ColumnTwo = $"₦{Utilities.FormatAmount(iTLevy)}",
-                    CanBolden = true
+                    CanBolden = true,
+                     CanUnderlineDownColumn2=true
 
 
                 });
@@ -507,7 +514,8 @@ namespace TaxComputationSoftware.Services
                     Description = "IT Levy",
                     ColumnOne = "-",
                     ColumnTwo = "₦0.0",
-                    CanBolden = true
+                    CanBolden = true,
+                     CanUnderlineDownColumn2=true
                 });
 
             }
@@ -533,6 +541,7 @@ namespace TaxComputationSoftware.Services
                     ColumnOne = "-",
                     ColumnTwo = $"₦{Utilities.FormatAmount(percent)}",
                     CanBolden = true,
+                     CanUnderlineDownColumn2=true
                     
                 });
 
@@ -546,7 +555,9 @@ namespace TaxComputationSoftware.Services
                     Description = "Minimum Tax Payable",
                     ColumnOne = "-",
                     ColumnTwo = "₦0.0",
-                    CanBolden = true
+                    CanBolden = true,
+                    CanUnderlineDownColumn2=true
+                    
                 });
 
             }

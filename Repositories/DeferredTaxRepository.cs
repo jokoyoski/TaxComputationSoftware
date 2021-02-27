@@ -25,38 +25,7 @@ namespace TaxComputationSoftware.Repositories
             _logger = logger;
         }
 
-        public async Task<int> CreateFairValueGain(FairValueGain fairValueGain)
-        {
-
-            try
-            {
-                int rowAffected = 0;
-                using (IDbConnection con = await _databaseManager.DatabaseConnection())
-                {
-                    if (con.State == ConnectionState.Closed)
-                        con.Open();
-
-                    DynamicParameters parameters = new DynamicParameters();
-                    parameters.Add("@CompanyId", fairValueGain.CompanyId);
-                    parameters.Add("@YearId", fairValueGain.YearId);
-                    parameters.Add("@TrialBalanceId", fairValueGain.TrialBalanceId);
-                    parameters.Add("@SelectionId", fairValueGain.SelectionId);
-
-                    rowAffected = con.Execute("[dbo].[Insert_Into_Deferred_Tax]", parameters, commandType: CommandType.StoredProcedure);
-                }
-
-                return rowAffected;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex.Message);
-                await _emailService.ExceptionEmail(MethodBase.GetCurrentMethod().DeclaringType.Name, ex.Message);
-            }
-
-            return 4;
-        }
-
-        public async Task<int> CreateDeferredTaxBroughtFoward(int companyId, decimal deferredTaxBroughtFoward, int yearId)
+         public async Task<int> CreateDeferredTaxBroughtFoward(int companyId, decimal deferredTaxBroughtFoward, int yearId)
         {
 
             int rowAffected = 0;
