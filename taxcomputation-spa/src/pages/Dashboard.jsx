@@ -1,5 +1,5 @@
 import React from "react";
-import AddCompanyForm from "../components/dashboard/AddCompanyForm";
+import AddEditCompanyForm from "../components/common/AddEditCompanyForm";
 import FileUploader from "../components/dashboard/FileUploader";
 import Layout from "../components/layout/index";
 import TrialBalanceTable from "../components/dashboard/TrialBalanceTable";
@@ -20,7 +20,7 @@ const Dashboard = () => {
   const [toast, setToast] = React.useState(null);
   const { data: companies, error, refresh } = useResource(companiesResource);
   const [showCompanyPicker, setShowCompanyPicker] = React.useState(true);
-  const [showAddCompany, setShowAddCompany] = React.useState(false);
+  const [showAddEditCompany, setShowAddEditCompany] = React.useState(false);
   const [companySelectItems, setCompanySelectItems] = React.useState(null);
   const [showFinancialYear, setShowFinancialYear] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
@@ -40,10 +40,10 @@ const Dashboard = () => {
   }, [resources.financialYears]);
 
   React.useEffect(() => {
-    if (!showAddCompany) {
+    if (!showAddEditCompany) {
       setShowCompanyPicker(true);
     }
-  }, [showAddCompany]);
+  }, [showAddEditCompany]);
 
   React.useEffect(() => {
     if (companies) onCompanies(companies);
@@ -97,15 +97,15 @@ const Dashboard = () => {
           setRefreshTrialBalanceTable={setRefreshTrialBalanceTable}
         />
       )}
-      <AddCompanyForm
-        showAddCompany={showAddCompany}
-        setShowAddCompany={setShowAddCompany}
+      <AddEditCompanyForm
+        showAddEditCompany={showAddEditCompany}
+        setShowAddEditCompany={setShowAddEditCompany}
         toast={toast}
         refresh={refresh}
       />
       {company.companyId === null && (
         <CompanyPicker
-          setShowAddCompany={setShowAddCompany}
+          setShowAddEditCompany={setShowAddEditCompany}
           showCompanyPicker={showCompanyPicker}
           setShowCompanyPicker={setShowCompanyPicker}
           company={company}

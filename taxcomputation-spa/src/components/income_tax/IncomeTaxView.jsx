@@ -33,7 +33,9 @@ const IncomeTaxView = ({ year, toast, showITLevy, isBringLossFoward }) => {
               ...item,
               description: (
                 <div className="p-d-flex p-jc-between p-ai-center">
-                  <p>{item.canBolden ? <strong>{item.description}</strong> : item.description}</p>
+                  <p className="margin-0">
+                    {item.canBolden ? <strong>{item.description}</strong> : item.description}
+                  </p>
                   {item.canDelete && (
                     <i
                       className="pi pi-times-circle delete"
@@ -60,8 +62,32 @@ const IncomeTaxView = ({ year, toast, showITLevy, isBringLossFoward }) => {
                   )}
                 </div>
               ),
-              columnOne: item.canBolden ? <strong>{item.columnOne}</strong> : item.columnOne,
-              columnTwo: item.canBolden ? <strong>{item.columnTwo}</strong> : item.columnTwo
+              columnOne: item.canBolden ? (
+                <>
+                  {item.canUnderlineUpColumn1 && <div className="top-line"></div>}
+                  <strong>{item.columnOne}</strong>
+                  {item.canUnderlineDownColumn1 && <div className="bottom-line"></div>}
+                </>
+              ) : (
+                <>
+                  {item.canUnderlineUpColumn1 && <div className="top-line"></div>}
+                  {item.columnOne}
+                  {item.canUnderlineDownColumn1 && <div className="bottom-line"></div>}
+                </>
+              ),
+              columnTwo: item.canBolden ? (
+                <>
+                  {item.canUnderlineUpColumn2 && <div className="top-line"></div>}
+                  <strong>{item.columnTwo}</strong>
+                  {item.canUnderlineDownColumn2 && <div className="bottom-line"></div>}
+                </>
+              ) : (
+                <>
+                  {item.canUnderlineUpColumn2 && <div className="top-line"></div>}
+                  {item.columnTwo}
+                  {item.canUnderlineDownColumn2 && <div className="bottom-line"></div>}
+                </>
+              )
             }))
           );
         }

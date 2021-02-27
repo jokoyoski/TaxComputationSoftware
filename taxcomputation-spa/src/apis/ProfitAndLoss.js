@@ -7,7 +7,8 @@ export const profitAndLossMapping = async ({
   yearId,
   mappedCode,
   isAllowable,
-  isDisAllowable
+  isDisAllowable,
+  isFairValueGain
 }) => {
   try {
     return await axios.post("/api/ProfitAndLoss", {
@@ -17,7 +18,8 @@ export const profitAndLossMapping = async ({
       yearId,
       mappedCode,
       isAllowable,
-      isDisAllowable
+      isDisAllowable,
+      isFairValueGain
     });
   } catch (error) {
     throw error;

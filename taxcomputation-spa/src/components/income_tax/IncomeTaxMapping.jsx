@@ -18,8 +18,8 @@ const IncomeTaxMapping = ({ tbData, onTrialBalance, trialBalanceRefresh, toast }
   const [selectedAccounts, setSelectedAccounts] = React.useState([]);
   const typeItems = [
     {
-      label: "Allowable Income",
-      value: 1
+      label: "Disallowable Expenses",
+      value: 0
     },
     {
       label: "Allowable Income",

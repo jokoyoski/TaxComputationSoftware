@@ -173,3 +173,72 @@ body {
   text-overflow: ellipsis;
   overflow: hidden;
 }
+
+.logo-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.logo {
+  background-image: url("../assets/tax.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  width: 220px;
+  height: 50px;
+}
+
+.logo-anim-container {
+  width: 320px;
+  height: 80px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.logo-anim {
+  background-image: url("../assets/tax.gif");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  width: 260px;
+  height: 60px;
+}
+
+.company-item-name {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  width: 300px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.margin-0 {
+  margin: 0 !important;
+}
+
+td {
+  position: relative;
+}
+
+.top-line {
+  position: absolute;
+  width: 100%;
+  height: 1px;
+  background-color: #000;
+  top: 0px;
+  left: 0px;
+}
+
+.bottom-line {
+  position: absolute;
+  width: 100%;
+  height: 1px;
+  background-color: #000;
+  bottom: 0px;
+  left: 0px;
+}

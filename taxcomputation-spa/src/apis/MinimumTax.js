@@ -1,17 +1,10 @@
 import axios from "axios";
 
-export const minimumTaxMapping = async ({
-  companyId,
-  financialYearId,
-  grossProft,
-  netAsset,
-  shareCapital
-}) => {
+export const minimumTaxMapping = async ({ companyId, financialYearId, netAsset, shareCapital }) => {
   try {
     return await axios.post("/api/MinimumTax", {
       companyId,
       financialYearId,
-      grossProft,
       netAsset,
       shareCapital
     });

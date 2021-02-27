@@ -8501,4 +8501,26 @@ export default `<style type="text/css">/* poppins-devanagari-400-italic*/
 .p-shadow-24 {
   box-shadow: 0 11px 15px -7px rgba(0, 0, 0, 0.2), 0 24px 38px 3px rgba(0, 0, 0, 0.14), 0 9px 46px 8px rgba(0, 0, 0, 0.12);
 }
+
+.margin-0 {
+  margin: 0 !important;
+}
+
+.top-line {
+  position: absolute;
+  width: 100%;
+  height: 1px;
+  background-color: #000;
+  top: 0px;
+  left: 0px;
+}
+
+.bottom-line {
+  position: absolute;
+  width: 100%;
+  height: 1px;
+  background-color: #000;
+  bottom: 0px;
+  left: 0px;
+}
 </style>`;

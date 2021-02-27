@@ -4,7 +4,7 @@ import { Button } from "primereact/button";
 import { Dropdown } from "primereact/dropdown";
 
 const CompanyPicker = ({
-  setShowAddCompany,
+  setShowAddEditCompany,
   showCompanyPicker,
   setShowCompanyPicker,
   company,
@@ -22,7 +22,7 @@ const CompanyPicker = ({
           <Button
             label="Add Company"
             onClick={() => {
-              setShowAddCompany(true);
+              setShowAddEditCompany(true);
               setShowCompanyPicker(false);
             }}
             className="p-button-outlined"

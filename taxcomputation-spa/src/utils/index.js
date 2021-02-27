@@ -1,3 +1,4 @@
+import { getCompany } from "../apis/Companies";
 import { getCompanyFinancialYear } from "../apis/Utilities";
 import constants from "../constants";
 
@@ -156,6 +157,20 @@ const fetchCompanyFinancialYear = (company, onFinancialYear, toast, setLoading) 
   fetcher();
 };
 
+/** fetch company details */
+const fetchCompanyCallback = async (setLoading, setError, companyId, setCompanyDetails) => {
+  try {
+    setLoading(true);
+    setError(null);
+    const data = await getCompany(companyId);
+    if (data) setCompanyDetails(data);
+  } catch (error) {
+    setError("Failed to get selected company");
+  } finally {
+    setLoading(false);
+  }
+};
+
 export default {
   currentYear,
   getYears,
@@ -167,5 +182,6 @@ export default {
   onTbData,
   apiErrorHandling,
   onMappingSuccess,
-  fetchCompanyFinancialYear
+  fetchCompanyFinancialYear,
+  fetchCompanyCallback
 };
