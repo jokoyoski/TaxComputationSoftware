@@ -65,20 +65,6 @@ const MinimumTaxMapping = ({ toast }) => {
           Controller={Controller}
           control={control}
           errors={errors}
-          controllerName="grossProft"
-          label="Gross Profit"
-          required
-          errorMessage="Gross Profit is required"
-          labelWidth={120}
-          className="p-d-flex p-ai-center"
-        />
-      </div>
-      <div style={{ marginBottom: 10 }}>
-        <InputController
-          type="number"
-          Controller={Controller}
-          control={control}
-          errors={errors}
           controllerName="netAsset"
           label="Net Asset"
           required
