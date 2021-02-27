@@ -148,7 +148,7 @@ namespace TaxComputationAPI.Helpers
 
             if(isNegative) result = $"({result})";
 
-            if(addCurrency) result = curr + " " + result;
+            if(addCurrency) result = curr + result;
 
             return result;
         }

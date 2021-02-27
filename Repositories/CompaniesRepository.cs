@@ -193,5 +193,40 @@ namespace TaxComputationAPI.Repositories
 
             return null;
         }
+
+        public async Task UpdateCompany(Company company)
+        {
+            
+            try
+            {
+                int rowAffected = 0;
+                using (IDbConnection con = await _databaseManager.DatabaseConnection())
+                {
+                    if (con.State == ConnectionState.Closed)
+                        con.Open();
+
+                    DynamicParameters parameters = new DynamicParameters();
+                    parameters.Add("@Id", company.Id);
+                    parameters.Add("@CompanyName", company.CompanyName);
+                    parameters.Add("@CompanyDescription", company.CompanyDescription);
+                    parameters.Add("@CacNumber", company.CompanyDescription);
+                    parameters.Add("@TinNumber", company.TinNumber);
+                    parameters.Add("@OpeningYear", company.OpeningYear);
+                    parameters.Add("@MinimumTaxTypeId", company.MinimumTaxTypeId);
+                    parameters.Add("@ClosingYear", company.ClosingYear);
+                    parameters.Add("@MonthOfOperation", company.MonthOfOperation);
+                    rowAffected = con.Execute("[dbo].[usp_Update_Company]", parameters, commandType: CommandType.StoredProcedure);
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+                _logger.LogError(ex.Message);
+                await _emailService.ExceptionEmail(MethodBase.GetCurrentMethod().DeclaringType.Name, ex.Message);
+            }
+
+
+        }
     }
 }

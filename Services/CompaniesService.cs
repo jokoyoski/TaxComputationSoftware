@@ -38,6 +38,21 @@ namespace TaxComputationAPI.Services
             return await _companiesRepository.GetCompanyAsync(id);
         }
 
+        public async Task UpdateCompanyAsync(Company company)
+        {
+
+            if (company == null)
+            {
+                throw new ArgumentNullException(nameof(company));
+            }
+
+            if(company.Id > 0)
+            {
+                await _companiesRepository.UpdateCompany(company);
+            } 
+
+        }
+
         public async Task AddCompanyAsync(Company company)
         {
 
