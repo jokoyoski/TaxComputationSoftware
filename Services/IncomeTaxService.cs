@@ -532,7 +532,8 @@ namespace TaxComputationSoftware.Services
                     Description = "Minimum Tax Payable",
                     ColumnOne = "-",
                     ColumnTwo = $"₦{Utilities.FormatAmount(percent)}",
-                    CanBolden = true
+                    CanBolden = true,
+                    
                 });
 
             }
@@ -557,7 +558,7 @@ namespace TaxComputationSoftware.Services
             }
             _incomeTaxRepository.SaveAsessableUnRelieved(new AsessableLossUnRelieved{
                 CompanyId=companyId,
-                YearId=yearId,y
+                YearId=yearId,
                 UnRelievedCf=unrelievedCf,
                 AssessableLoss=values,
             });

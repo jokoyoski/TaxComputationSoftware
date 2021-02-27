@@ -113,6 +113,7 @@ namespace TaxComputationAPI.Controllers
         }
 
         [HttpDelete]
+        [Authorize]
         public async Task<IActionResult> Company(int companyId)
         {
             try
@@ -136,19 +137,32 @@ namespace TaxComputationAPI.Controllers
         {
             try
             {
+                if(companyForRegisterDto == null) return StatusCode(400, new { errors = new[] { "Company information is empty" } });
+                
 
                 if (companyForRegisterDto.LossCf > 0)
                 {
                     return StatusCode(400, new { errors = new[] { "Since it is a loss brought foward, a negative value is needed!!" } });
                 }
+
+
+                var companyToCreate = _mapper.Map<Company>(companyForRegisterDto);
+
+                if(companyForRegisterDto.Id > 0) 
+                {
+                    await _companiesService.UpdateCompanyAsync(companyToCreate);
+
+                    return Ok(companyToCreate);
+                }
+
                 var companyRecord = await _companiesService.GetCompanyByTinAsync(companyForRegisterDto.TinNumber);
+
                 if (companyRecord != null)
                 {
                     return StatusCode(400, new { errors = new[] { "Company already exist!" } });
 
                 }
 
-                var companyToCreate = _mapper.Map<Company>(companyForRegisterDto);
                 companyToCreate.IsActive = true;
                 companyToCreate.DateCreated = DateTime.Now;
                 companyToCreate.CompanyName = companyForRegisterDto.CompanyName;

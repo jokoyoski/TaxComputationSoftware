@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Taxcomputation.Interfaces;
+using TaxComputationAPI.Helpers;
 using TaxComputationSoftware.Interfaces;
 
 namespace TaxComputationSoftware.Services
@@ -30,6 +31,8 @@ namespace TaxComputationSoftware.Services
                 _logger.LogInformation("Scoped Processing Service is working. Count: {Count}", executionCount);
 
                 //await _emailService.PreNotificationEmail("Alexo", DateTime.UtcNow);
+
+                //string money = "3443253".ValueMoneyFormatter("NGN", true);
 
                 await Task.Delay(10000, stoppingToken);
             }

@@ -120,6 +120,16 @@ namespace TaxComputationAPI.Controllers
             try
             {
                 var response = await _minimumTaxService.AddOldMinimumTax(addMinimumTaxDto);
+
+                switch(response.ResponseCode)
+                {
+                    case HttpStatusCode.NotFound:
+                        return StatusCode(404, new { errors = new [] { response.ResponseDescription }});
+                    case HttpStatusCode.BadRequest:
+                        return StatusCode(400, new { errors = new [] { response.ResponseDescription }});
+                    default:
+                        break;
+                }
                 
                 return Ok(response);
             }

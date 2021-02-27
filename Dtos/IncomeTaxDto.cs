@@ -18,5 +18,7 @@ namespace TaxComputationSoftware.Dtos
 
         public bool CanBolden {get;set;}
 
+        public bool CanUnderline {get;set;}
+
     }
 }

@@ -163,7 +163,7 @@ values(
 @MonthOfOperation
 )
 
-
+GO
 
 --------------------------------------- STORED PROCEDURE TO  DELETE COMPANY -----------------------------------------
 IF OBJECT_ID('[dbo].[usp_Delete_Company]') IS nOT NULL
@@ -176,4 +176,40 @@ CREATE procedure [dbo].[usp_Delete_Company](
 )
 AS
 DELETE [dbo].[Company] WHERE  Id = @Id  
+GO
+
+
+
+
+
+if object_id('[dbo].[usp_Update_Company]') IS NOT NULL
+BEGIN
+drop procedure [dbo].[usp_Update_Company]
+end
+go
+create procedure usp_Update_Company(
+@Id int,
+@CompanyName varchar(200),
+@CompanyDescription varchar(200),
+@CacNumber nvarchar(max) null,
+@TinNumber nvarchar(max)null,
+@OpeningYear datetime  null,
+@ClosingYear datetime  null,
+@MinimumTaxTypeId int null, 
+@MonthOfOperation int  null
+)
+AS
+
+Update [dbo].[Company]
+set CompanyName = @CompanyName,
+CompanyDescription = @CompanyDescription,
+CacNumber = @CacNumber,
+TinNumber = @TinNumber,
+OpeningYear = @OpeningYear,
+ClosingYear = @ClosingYear,
+MinimumTaxTypeId = @MinimumTaxTypeId, 
+MonthOfOperation = @MonthOfOperation
+
+where Id = @Id
+
 GO
