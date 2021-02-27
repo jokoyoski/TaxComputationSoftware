@@ -31,13 +31,13 @@ export default {
     balancing_adjustment: "/balancing_adjustment",
     logout: "/logout"
   },
-  nonMappedModules: ["I.T Levy"],
+  nonMappedModules: ["Income Tax", "Deferred Tax", "I.T Levy"],
   mappingCode: {
     fixedasset: "fixedasset",
     profitandloss: "profitandloss",
-    balancingadjustment: "balancingadjustment",
-    deferredtax: "deferredtax",
-    incometax: "incometax"
+    balancingadjustment: "balancingadjustment"
+    // deferredtax: "deferredtax",
+    // incometax: "incometax"
   },
   networkErrorMessage: "Unable to reach server, check your network or contact your admin"
 };

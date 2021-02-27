@@ -216,3 +216,29 @@ body {
   white-space: nowrap;
   text-overflow: ellipsis;
 }
+
+.margin-0 {
+  margin: 0 !important;
+}
+
+td {
+  position: relative;
+}
+
+.top-line {
+  position: absolute;
+  width: 100%;
+  height: 1px;
+  background-color: #000;
+  top: 0px;
+  left: 0px;
+}
+
+.bottom-line {
+  position: absolute;
+  width: 100%;
+  height: 1px;
+  background-color: #000;
+  bottom: 0px;
+  left: 0px;
+}
