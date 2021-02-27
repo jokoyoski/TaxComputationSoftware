@@ -8,6 +8,7 @@ import { useCompany } from "../../store/CompanyStore";
 import utils from "../../utils";
 import { profitAndLossMapping } from "../../apis/ProfitAndLoss";
 import { useResources } from "../../store/ResourcesStore";
+import { Checkbox } from "primereact/checkbox";
 
 const ProfitAndLossMapping = ({
   assetClassSelectItems,
@@ -21,9 +22,9 @@ const ProfitAndLossMapping = ({
   const [{ financialYears }] = useResources();
   const [loading, setLoading] = React.useState(false);
   const [init, setInit] = React.useState(true);
+  const [isFairValueGain, setIsFairValueGain] = React.useState(false);
   const [selectedAccounts, setSelectedAccounts] = React.useState([]);
   const typeSelectItems = [
-    { label: "No Selection", value: 3 },
     { label: "Allowable", value: 0 },
     { label: "Disallowable", value: 1 }
   ];
@@ -57,7 +58,8 @@ const ProfitAndLossMapping = ({
         yearId,
         mappedCode: "profitandloss",
         isAllowable: profitAndLossType === 0 ? true : false,
-        isDisAllowable: profitAndLossType === 1 ? true : false
+        isDisAllowable: profitAndLossType === 1 ? true : false,
+        isFairValueGain
       });
       if (response.status === 200) {
         utils.onMappingSuccess(
@@ -77,48 +79,60 @@ const ProfitAndLossMapping = ({
 
   return (
     <>
-      <form className="p-d-flex p-jc-between" onSubmit={handleSubmit(onSubmit)}>
-        <DropdownController
-          Controller={Controller}
-          control={control}
-          errors={errors}
-          controllerName="profitAndLossId"
-          label="Profit and Loss Item"
-          placeholder="Select Item"
-          width={200}
-          required
-          dropdownOptions={assetClassSelectItems}
-          errorMessage="Profit and Loss Item is required"
-        />
-        <DropdownController
-          Controller={Controller}
-          control={control}
-          errors={errors}
-          controllerName="yearId"
-          label="Tax Year"
-          width={200}
-          required
-          dropdownOptions={financialYears}
-          errorMessage="Tax Year is required"
-        />
-        <DropdownController
-          Controller={Controller}
-          control={control}
-          errors={errors}
-          controllerName="profitAndLossType"
-          label="Profit and Loss Type"
-          width={200}
-          dropdownOptions={typeSelectItems}
-          errorMessage="Profit and Loss Type is required"
-        />
-        <div>
-          <p style={{ color: "transparent", marginTop: 0, marginBottom: 5 }}>Submit</p>
-          <Button
-            type="submit"
-            label={!loading ? "Submit" : null}
-            icon={loading ? "pi pi-spin pi-spinner" : null}
-            style={{ width: 200 }}
+      <form className="p-d-flex p-flex-column" onSubmit={handleSubmit(onSubmit)}>
+        <div className="p-d-flex p-jc-between">
+          <DropdownController
+            Controller={Controller}
+            control={control}
+            errors={errors}
+            controllerName="profitAndLossId"
+            label="Profit and Loss Item"
+            placeholder="Select Item"
+            width={200}
+            required
+            dropdownOptions={assetClassSelectItems}
+            errorMessage="Profit and Loss Item is required"
           />
+          <DropdownController
+            Controller={Controller}
+            control={control}
+            errors={errors}
+            controllerName="yearId"
+            label="Tax Year"
+            width={200}
+            required
+            dropdownOptions={financialYears}
+            errorMessage="Tax Year is required"
+          />
+          <DropdownController
+            Controller={Controller}
+            control={control}
+            errors={errors}
+            controllerName="profitAndLossType"
+            label="Profit and Loss Type"
+            width={200}
+            dropdownOptions={typeSelectItems}
+            errorMessage="Profit and Loss Type is required"
+          />
+          <div>
+            <p style={{ color: "transparent", marginTop: 0, marginBottom: 5 }}>Submit</p>
+            <Button
+              type="submit"
+              label={!loading ? "Submit" : null}
+              icon={loading ? "pi pi-spin pi-spinner" : null}
+              style={{ width: 200 }}
+            />
+          </div>
+        </div>
+        <div className="p-field-checkbox" style={{ marginTop: 20 }}>
+          <Checkbox
+            inputId="isFairValueGain"
+            checked={isFairValueGain}
+            onChange={e => setIsFairValueGain(e.checked)}
+          />
+          <label htmlFor="isFairValueGain" className="p-checkbox-label">
+            Fair Value Gain
+          </label>
         </div>
       </form>
       <TrialBalanceMappingTable
