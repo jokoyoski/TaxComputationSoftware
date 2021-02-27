@@ -49,13 +49,7 @@ namespace TaxComputationSoftware.Services
                 await _deferredTaxRepository.CreateFairValueGain(fairValueGain);
 
             }
-            // if (!deferredTax.IsStarted)
-            //  {
-            //  _deferredTaxRepository.CreateDeferredTaxBroughtFoward(deferredTax.CompanyId, deferredTax.DeferredTaxBroughtFoward);
-
-            // }
-
-
+          
         }
 
         public async Task<List<DeferredTaxDto>> GetDeferredTax(int companyId, int yearId, bool IsBringDeferredTaxFoward)
@@ -133,10 +127,7 @@ namespace TaxComputationSoftware.Services
                 CanBolden = true
 
             });
-            // if(unrelievedCapitalAllowanceCf.Item1!=0)
-            //  {
-            //   lossCf+=-unrelievedCapitalAllowanceCf.Item1;
-            //  }
+           
             if (unrelievedCf.AssessableLoss != 0)
             {
                 lossCf = unrelievedCf.AssessableLoss > 0 ? unrelievedCf.AssessableLoss : -unrelievedCf.AssessableLoss;

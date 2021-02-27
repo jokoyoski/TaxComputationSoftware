@@ -18,16 +18,18 @@ namespace TaxComputationAPI.Services
         private readonly IProfitAndLossRepository _profitAndLossRepository;
         private readonly ITrialBalanceRepository _trialBalanceRepository;
         private readonly IUtilitiesRepository _utilitiesRepository;
-
         private readonly IIncomeTaxRepository _incomeTaxRepository;
+        private readonly IDeferredTaxRepository _deferredTaxRepository;
+        private readonly IDeferredTaxService   _deferredTaxService;
 
-        public ProfitAndLossService(IProfitAndLossRepository profitAndLossRepository, IIncomeTaxRepository incomeTaxRepository, ITrialBalanceRepository trialBalanceRepository)
+        public ProfitAndLossService(IProfitAndLossRepository profitAndLossRepository,IDeferredTaxService deferredTaxService,IDeferredTaxRepository deferredTaxRepository ,IIncomeTaxRepository incomeTaxRepository, ITrialBalanceRepository trialBalanceRepository)
         {
 
-
+            _deferredTaxRepository=deferredTaxRepository;
             _trialBalanceRepository = trialBalanceRepository;
             _profitAndLossRepository = profitAndLossRepository;
             _incomeTaxRepository = incomeTaxRepository;
+            _deferredTaxService=deferredTaxService;
         }
         ///////
 
@@ -199,7 +201,7 @@ namespace TaxComputationAPI.Services
 
                 }
             }
-             if (profits.IsDisAllowable)
+            if (profits.IsDisAllowable)
             {
                 foreach (var item in profits.TrialBalanceList)
                 {
@@ -214,6 +216,24 @@ namespace TaxComputationAPI.Services
 
                     }
 
+                }
+            }
+            if (profits.IsFairValueGain)
+            {
+                foreach (var item in profits.TrialBalanceList)
+                {
+                    if (!item.IsBoth && item.IsCredit && !item.IsDebit)
+                    {
+                        var fairValueGain = new FairValueGain();
+                        fairValueGain.SelectionId =_deferredTaxRepository.GetSelectionType(item);
+                        fairValueGain.YearId = profits.YearId;
+                        fairValueGain.TrialBalanceId = item.TrialBalanceId;
+                        fairValueGain.CompanyId = profits.CompanyId;
+
+                        string trialBalanceValue = $"MAPPED TO [DEFERRED TAX] Fair Value Gain";
+                        await _trialBalanceRepository.UpdateTrialBalance(item.TrialBalanceId, trialBalanceValue, false);
+                        await _deferredTaxRepository.CreateFairValueGain(fairValueGain);
+                    }
                 }
             }
 
@@ -354,7 +374,7 @@ namespace TaxComputationAPI.Services
         }
 
 
-        
+
 
         public async Task<List<ProfitAndLossViewDto>> GetProfitAndLossByCompanyIdAndYear(int companyId, int yearId)
         {
@@ -378,7 +398,7 @@ namespace TaxComputationAPI.Services
             records.Add(revenue);
             costofsales.Category = "Cost Of Sales";
             costofsales.Total = $"₦({Utilities.FormatAmount(record.CostOfSales)})";
-           
+
             records.Add(costofsales);
 
             if (Utilities.GetDecimal(record.Revenue) > decimal.Parse(record.CostOfSales))
@@ -437,8 +457,11 @@ namespace TaxComputationAPI.Services
 
             }
             records.Add(profitorlossbeforetax);
-            _profitAndLossRepository.SaveProfitAndLossRecord(new ProfitAndLossRecord{
-                CompanyId=companyId,YearId=yearId,ProfitAndLoss=total
+            _profitAndLossRepository.SaveProfitAndLossRecord(new ProfitAndLossRecord
+            {
+                CompanyId = companyId,
+                YearId = yearId,
+                ProfitAndLoss = total
             });
             return records;
         }
@@ -812,13 +835,16 @@ namespace TaxComputationAPI.Services
 
         }
 
-        public  async Task<decimal> GetProfitAndLossForIncomeTax(int companyId, int yearId)
+        
+
+        public async Task<decimal> GetProfitAndLossForIncomeTax(int companyId, int yearId)
         {
-           var record =await _profitAndLossRepository.GetProfitAndLossRecordAsync(companyId,yearId);
-           if(record!=null){
-               return record.ProfitAndLoss;
-           }
-           return 0;
+            var record = await _profitAndLossRepository.GetProfitAndLossRecordAsync(companyId, yearId);
+            if (record != null)
+            {
+                return record.ProfitAndLoss;
+            }
+            return 0;
         }
     }
 

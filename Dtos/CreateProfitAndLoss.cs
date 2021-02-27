@@ -17,6 +17,7 @@ namespace TaxComputationAPI.Dtos
         public bool IsAllowable {get;set;}
 
         public bool IsDisAllowable {get;set;}
+        public bool IsFairValueGain {get;set;}
     }
 
 
