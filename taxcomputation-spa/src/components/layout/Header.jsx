@@ -111,7 +111,7 @@ const Header = ({ title, loading }) => {
                       setShowFinancialYear(true);
                       setShowSettings(false);
                     }}>
-                    Financial Year
+                    Tax Year
                   </p>
                   <p className="settings-item" onClick={onSwitchCompany}>
                     Switch Company
