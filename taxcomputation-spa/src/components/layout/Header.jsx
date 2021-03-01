@@ -12,9 +12,11 @@ import FinancialYear from "../common/FinancialYear";
 import CompanyList from "../common/CompanyList";
 import CompanyDetails from "../common/CompanyDetails";
 import AddEditCompanyForm from "../common/AddEditCompanyForm";
+import { Toast } from "primereact/toast";
 
 const Header = ({ title, loading }) => {
   const { replace } = useRouterActions();
+  const [toast, setToast] = React.useState(null);
   const [showSettings, setShowSettings] = React.useState();
   const [showChangePassword, setShowChangePassword] = React.useState();
   const [showCreateUser, setShowCreateUser] = React.useState();
@@ -84,6 +86,14 @@ const Header = ({ title, loading }) => {
                   <p
                     className="settings-item"
                     onClick={() => {
+                      setShowFinancialYear(true);
+                      setShowSettings(false);
+                    }}>
+                    Tax Year
+                  </p>
+                  <p
+                    className="settings-item"
+                    onClick={() => {
                       setShowAssetList(!showAssetList);
                       setShowSettings(false);
                     }}>
@@ -104,14 +114,6 @@ const Header = ({ title, loading }) => {
                       setShowSettings(false);
                     }}>
                     Company List
-                  </p>
-                  <p
-                    className="settings-item"
-                    onClick={() => {
-                      setShowFinancialYear(true);
-                      setShowSettings(false);
-                    }}>
-                    Tax Year
                   </p>
                   <p className="settings-item" onClick={onSwitchCompany}>
                     Switch Company
@@ -160,6 +162,7 @@ const Header = ({ title, loading }) => {
       )}
       {showAddEditCompany && selectedCompany && (
         <AddEditCompanyForm
+          toast={toast}
           companyId={selectedCompany}
           showAddEditCompany={showAddEditCompany}
           setShowAddEditCompany={setShowAddEditCompany}
@@ -173,6 +176,7 @@ const Header = ({ title, loading }) => {
           setShowSettings={setShowSettings}
         />
       )}
+      <Toast baseZIndex={1000} ref={el => setToast(el)} />
     </>
   );
 };

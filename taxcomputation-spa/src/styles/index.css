@@ -232,6 +232,7 @@ td {
   background-color: #000;
   top: 0px;
   left: 0px;
+  border: 1px solid #000;
 }
 
 .bottom-line {
@@ -241,4 +242,5 @@ td {
   background-color: #000;
   bottom: 0px;
   left: 0px;
+  border: 1px solid #000;
 }

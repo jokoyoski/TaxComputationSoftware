@@ -8506,6 +8506,10 @@ export default `<style type="text/css">/* poppins-devanagari-400-italic*/
   margin: 0 !important;
 }
 
+td {
+  position: relative;
+}
+
 .top-line {
   position: absolute;
   width: 100%;
@@ -8513,6 +8517,7 @@ export default `<style type="text/css">/* poppins-devanagari-400-italic*/
   background-color: #000;
   top: 0px;
   left: 0px;
+  border: 1px solid #000;
 }
 
 .bottom-line {
@@ -8522,5 +8527,6 @@ export default `<style type="text/css">/* poppins-devanagari-400-italic*/
   background-color: #000;
   bottom: 0px;
   left: 0px;
+  border: 1px solid #000;
 }
 </style>`;
