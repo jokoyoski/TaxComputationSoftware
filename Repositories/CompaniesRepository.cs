@@ -209,7 +209,7 @@ namespace TaxComputationAPI.Repositories
                     parameters.Add("@Id", company.Id);
                     parameters.Add("@CompanyName", company.CompanyName);
                     parameters.Add("@CompanyDescription", company.CompanyDescription);
-                    parameters.Add("@CacNumber", company.CompanyDescription);
+                    parameters.Add("@CacNumber", company.CacNumber);
                     parameters.Add("@TinNumber", company.TinNumber);
                     parameters.Add("@OpeningYear", company.OpeningYear);
                     parameters.Add("@MinimumTaxTypeId", company.MinimumTaxTypeId);

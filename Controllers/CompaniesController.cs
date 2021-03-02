@@ -94,9 +94,9 @@ namespace TaxComputationAPI.Controllers
         public async Task<IActionResult> Company(int companyId, int financialYearId)
         {
 
-            if(companyId <= 0) return BadRequest("Invlaid companyId");
-            if(financialYearId <= 0) return BadRequest("Invlaid financialYearId");
-            
+            if (companyId <= 0) return BadRequest("Invlaid companyId");
+            if (financialYearId <= 0) return BadRequest("Invlaid financialYearId");
+
             try
             {
                 var company = await _companiesService.GetCompanyInfoByFinancialYear(companyId, financialYearId);
@@ -137,30 +137,30 @@ namespace TaxComputationAPI.Controllers
         {
             try
             {
-                if(companyForRegisterDto == null) return StatusCode(400, new { errors = new[] { "Company information is empty" } });
-                
+                if (companyForRegisterDto == null) return StatusCode(400, new { errors = new[] { "Company information is empty" } });
+
 
                 if (companyForRegisterDto.LossCf > 0)
                 {
                     return StatusCode(400, new { errors = new[] { "Since it is a loss brought foward, a negative value is needed!!" } });
                 }
 
-
                 var companyToCreate = _mapper.Map<Company>(companyForRegisterDto);
 
-                if(companyForRegisterDto.Id > 0) 
+                if (companyForRegisterDto.CompanyId > 0) companyToCreate.Id = companyForRegisterDto.CompanyId;
+
+                if (companyForRegisterDto.CompanyId > 0)
                 {
                     await _companiesService.UpdateCompanyAsync(companyToCreate);
 
-                    return Ok(companyToCreate);
+                    return CreatedAtRoute("GetCompany", new { controller = "Companies"});
                 }
-
+                
                 var companyRecord = await _companiesService.GetCompanyByTinAsync(companyForRegisterDto.TinNumber);
 
                 if (companyRecord != null)
                 {
                     return StatusCode(400, new { errors = new[] { "Company already exist!" } });
-
                 }
 
                 companyToCreate.IsActive = true;

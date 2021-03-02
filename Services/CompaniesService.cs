@@ -48,6 +48,8 @@ namespace TaxComputationAPI.Services
 
             if(company.Id > 0)
             {
+                company.ClosingYear = company.OpeningYear.AddYears(1).AddDays(-1);
+                
                 await _companiesRepository.UpdateCompany(company);
             } 
 
