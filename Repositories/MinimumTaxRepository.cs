@@ -30,7 +30,7 @@ namespace TaxComputationAPI.Repositories
             _logger = logger;
         }
 
-        
+
         public async Task<MinimumTaxViewDto> GetMinimumTaxByCompanyIdAndYearId(int companyId, int yearId)
         {
             return new MinimumTaxViewDto { turnOver = "220.23", fivePercentTurnOver = "3000.30" };
@@ -217,7 +217,7 @@ namespace TaxComputationAPI.Repositories
 
                     parameters.Add("@CompanyId", minimumTaxDto.CompanyId);
                     parameters.Add("@YearId", minimumTaxDto.YearId);
-                     parameters.Add("@Id", 0);
+                    parameters.Add("@Id", 0);
                     parameters.Add("@MinimumTaxPercentage", minimumTaxDto.MinimumTaxPercentage);
                     var respone = conn.Execute("[dbo].[usp_Insert_Minimum_Tax_Percentage_Table]", parameters, commandType: CommandType.StoredProcedure);
                     conn.Close();
@@ -270,6 +270,84 @@ namespace TaxComputationAPI.Repositories
             }
 
         }
+
+
+
+
+        public async Task<NewMinimumTax> SaveNewMinimumTax(NewMinimumTax minimumTaxDto)
+        {
+            if (minimumTaxDto == null) throw new ArgumentNullException(nameof(minimumTaxDto));
+
+
+            try
+            {
+                var result = default(MinimumTaxModel);
+
+                using (IDbConnection conn = await _databaseManager.DatabaseConnection())
+                {
+                    if (conn.State == ConnectionState.Closed) conn.Open();
+
+                    DynamicParameters parameters = new DynamicParameters();
+
+
+                    parameters.Add("@CompanyId", minimumTaxDto.CompanyId);
+                    parameters.Add("@YearId", minimumTaxDto.YearId);
+                    parameters.Add("@OtherOperatingIncome", minimumTaxDto.OtherOperatingIncome);
+                    parameters.Add("@OtherOperatingGain", minimumTaxDto.OtherOperatingGain);
+                    parameters.Add("@Revenue", minimumTaxDto.Revenue);
+                    var respone = conn.Execute("[dbo].[usp_Insert_New_Minimum_Tax_Table]", parameters, commandType: CommandType.StoredProcedure);
+                    conn.Close();
+
+                    return null;
+                }
+            }
+            catch (Exception e)
+            {
+
+                _logger.LogError(e.Message);
+                await _emailService.ExceptionEmail(MethodBase.GetCurrentMethod().DeclaringType.Name, e.Message);
+
+                throw new SystemException(e.Message);
+            }
+        }
+
+
+
+
+        public async Task<NewMinimumTax> GetNewMinimumTax(int companyId, int yearId)
+        {
+            try
+            {
+                var result = default(NewMinimumTax);
+
+                using (IDbConnection conn = await _databaseManager.DatabaseConnection())
+                {
+                    if (conn.State == ConnectionState.Closed) conn.Open();
+
+                    DynamicParameters parameters = new DynamicParameters();
+
+                    parameters.Add("@CompanyId", companyId);
+                    parameters.Add("@YearId", yearId);
+
+                    result = await conn.QueryFirstOrDefaultAsync<NewMinimumTax>("[dbo].[usp_Get_New_Minimum_Tax_By_CompanyId_YearId]", parameters, commandType: CommandType.StoredProcedure);
+                    conn.Close();
+
+                    return result;
+                }
+            }
+            catch (Exception e)
+            {
+
+                _logger.LogError(e.Message);
+                await _emailService.ExceptionEmail(MethodBase.GetCurrentMethod().DeclaringType.Name, e.Message);
+
+                throw new SystemException(e.Message);
+
+            }
+
+        }
+
+
 
 
 

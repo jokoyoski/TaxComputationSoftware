@@ -17,8 +17,8 @@ namespace TaxComputationAPI.Interfaces
     
         Task<MinimumTaxModel> SaveMinimum(MinimumTaxModel minimumTaxDto);
         Task<MinimumTaxModel> UpdatedMinimum(MinimumTaxModel minimumTaxDto);
-        
-
+        Task<NewMinimumTax> GetNewMinimumTax(int companyId, int yearId);
+        Task<NewMinimumTax> SaveNewMinimumTax(NewMinimumTax minimumTaxDto);
         Task<MinimumTaxPercentageValue> GetMinimumTaxPercentageCompanyIdYearId(int companyId, int yearId);
         Task<MinimumTaxPercentageValue> SaveMinimumPercentage(MinimumTaxPercentageValue minimumTaxDto);
 

@@ -27,7 +27,9 @@ namespace TaxComputationSoftware.Services
 
         private readonly IMinimumTaxService _minimumTaxService;
 
-        public IncomeTaxService(IIncomeTaxRepository incomeTaxRepository, IMinimumTaxService minimumTaxService, IUtilitiesRepository utilitiesRepository, IInvestmentAllowanceService investmentAllowanceService, ICapitalAllowanceService capitalAllowanceService, IProfitAndLossService profitAndLossService, IBalancingAdjustmentService balancingAdjustmentService, ITrialBalanceRepository trialBalanceRepository)
+        private readonly ICompaniesService _companiesService;
+
+        public IncomeTaxService(IIncomeTaxRepository incomeTaxRepository, ICompaniesService companiesService, IMinimumTaxService minimumTaxService, IUtilitiesRepository utilitiesRepository, IInvestmentAllowanceService investmentAllowanceService, ICapitalAllowanceService capitalAllowanceService, IProfitAndLossService profitAndLossService, IBalancingAdjustmentService balancingAdjustmentService, ITrialBalanceRepository trialBalanceRepository)
         {
             _incomeTaxRepository = incomeTaxRepository;
             _profitAndLossService = profitAndLossService;
@@ -37,6 +39,7 @@ namespace TaxComputationSoftware.Services
             _investmentAllowanceService = investmentAllowanceService;
             _utilitiesRepository = utilitiesRepository;
             _minimumTaxService = minimumTaxService;
+            _companiesService = companiesService;
         }
 
         public async Task<List<IncomeTaxDto>> GetIncomeTax(int companyId, int yearId, bool IsItLevyView, bool IsBringLossFoward)
@@ -63,8 +66,9 @@ namespace TaxComputationSoftware.Services
             decimal taxableProfit = 0;
             decimal incomeTaxPayablePercent = (decimal)30 / 100;
             decimal educationTaxAssesibleProfit = (decimal)2 / 100;
+            var companyDetails = await _companiesService.GetCompanyAsync(companyId);
             decimal percentage = (decimal)1 / 100;     //annual percentage rate
-            decimal twothird = (decimal)662 / 3;
+            decimal twothird = (decimal)2/3;
             twothird = Math.Round(twothird, 1);
             bool isAssessibleProfit = false;
             decimal iTLevy = 0;
@@ -114,7 +118,7 @@ namespace TaxComputationSoftware.Services
                     Description = "",
                     ColumnOne = "",
                     ColumnTwo = $"₦{Utilities.FormatAmount(profitOrLoss)}",
-                    CanBolden=true
+                    CanBolden = true
                 });
 
 
@@ -133,7 +137,7 @@ namespace TaxComputationSoftware.Services
             }
 
 
-          
+
             incomeListDto.Add(new IncomeTaxDto
             {
                 Description = "Add: Disallowable Expenses",
@@ -206,8 +210,8 @@ namespace TaxComputationSoftware.Services
                         ColumnTwo = $"₦({Utilities.FormatAmount(totalAllowable)})",
                         CanDelete = true,
                         Id = allowable.Id,
-                        CanUnderlineUpColumn1=true
-                        
+                        CanUnderlineUpColumn1 = true
+
                     });
 
 
@@ -216,7 +220,7 @@ namespace TaxComputationSoftware.Services
                 else
                 {
 
-                    totalAllowable +=allowable.Credit;
+                    totalAllowable += allowable.Credit;
                     incomeListDto.Add(new IncomeTaxDto
                     {
                         Description = allowable.Item,
@@ -236,7 +240,7 @@ namespace TaxComputationSoftware.Services
             {
                 incomeListDto.Add(new IncomeTaxDto
                 {
-                    Description = "Accessible Loss",
+                    Description = "Asessable Loss",
                     ColumnOne = "",
                     ColumnTwo = $"₦{Utilities.FormatAmount(accessibleType)}",
                     CanBolden = true,
@@ -247,7 +251,7 @@ namespace TaxComputationSoftware.Services
                 isAssessibleProfit = true;
                 incomeListDto.Add(new IncomeTaxDto
                 {
-                    Description = "Asessable Gain",
+                    Description = "Asessable Profit",
                     ColumnOne = "",
                     ColumnTwo = $"₦{Utilities.FormatAmount(accessibleType)}",
                     CanBolden = true,
@@ -267,7 +271,7 @@ namespace TaxComputationSoftware.Services
                 Description = "",
                 ColumnOne = "",
                 ColumnTwo = $"₦{Utilities.FormatAmount(accessibleBalancingCharge)}",
-                CanBolden=true
+                CanBolden = true
             });
             if (broughtFoward == null)
             {
@@ -289,7 +293,7 @@ namespace TaxComputationSoftware.Services
                 Description = "Loss b/f",
                 ColumnOne = "",
                 ColumnTwo = $"₦{Utilities.FormatAmount(broughtFoward.LossCf)}",
-               
+
             });
             incomeListDto.Add(new IncomeTaxDto
             {
@@ -413,7 +417,7 @@ namespace TaxComputationSoftware.Services
                 });
 
             }
-         
+
             taxableProfit = accessibleBalancingCharge - capitalAllowanceClaimed;
             if (isAssessibleProfit)
             {
@@ -445,7 +449,7 @@ namespace TaxComputationSoftware.Services
                     ColumnOne = "",
                     ColumnTwo = $"₦{Utilities.FormatAmount(incomeTaxPayablePercent * taxableProfit)}",
                     CanBolden = true,
-                     CanUnderlineDownColumn2=true
+                    CanUnderlineDownColumn2 = true
                 });
 
 
@@ -458,7 +462,7 @@ namespace TaxComputationSoftware.Services
                     ColumnOne = "-",
                     ColumnTwo = "₦0.0",
                     CanBolden = true,
-                     CanUnderlineDownColumn2=true
+                    CanUnderlineDownColumn2 = true
                 });
 
             }
@@ -471,7 +475,7 @@ namespace TaxComputationSoftware.Services
                     ColumnOne = "",
                     ColumnTwo = $"₦{Utilities.FormatAmount(educationTaxAssesibleProfit * taxableProfit)}",
                     CanBolden = true,
-                     CanUnderlineDownColumn2=true
+                    CanUnderlineDownColumn2 = true
 
 
                 });
@@ -486,7 +490,7 @@ namespace TaxComputationSoftware.Services
                     ColumnOne = "-",
                     ColumnTwo = "₦0.0",
                     CanBolden = true,
-                     CanUnderlineDownColumn2=true
+                    CanUnderlineDownColumn2 = true
                 });
 
             }
@@ -500,7 +504,7 @@ namespace TaxComputationSoftware.Services
                     ColumnOne = "",
                     ColumnTwo = $"₦{Utilities.FormatAmount(iTLevy)}",
                     CanBolden = true,
-                     CanUnderlineDownColumn2=true
+                    CanUnderlineDownColumn2 = true
 
 
                 });
@@ -515,63 +519,105 @@ namespace TaxComputationSoftware.Services
                     ColumnOne = "-",
                     ColumnTwo = "₦0.0",
                     CanBolden = true,
-                     CanUnderlineDownColumn2=true
+                    CanUnderlineDownColumn2 = true
                 });
 
             }
-
-            var minimumTaxValue = await _profitAndLossService.GetMinimumTax(companyId, yearId);
-            var minimumTaxPercentage = await _minimumTaxService.GetMinimumTaxPercentageCompanyIdYearId(companyId, yearId);
-            if (minimumTaxPercentage == null)
-            {
-                 minimumTaxPercentage= new MinimumTaxPercentageValue{
-                    MinimumTaxPercentage=0
-                };
-              
-            }
-
-            if (minimumTaxValue  != null)
-            {
-                var turnOver = decimal.Parse(minimumTaxValue.Revenue) + decimal.Parse(minimumTaxValue.OtherIncome);
-                var percent = minimumTaxPercentage.MinimumTaxPercentage * turnOver;
-
-                incomeListDto.Add(new IncomeTaxDto
+             bool boma=true;
+            if (boma)
+            {    //// if old 
+                var minimumTaxValue = await _minimumTaxService.GetOldMinimumTax(companyId, yearId);
+                if (minimumTaxValue != null)
                 {
-                    Description = "Minimum Tax Payable",
-                    ColumnOne = "-",
-                    ColumnTwo = $"₦{Utilities.FormatAmount(percent)}",
-                    CanBolden = true,
-                     CanUnderlineDownColumn2=true
-                    
-                });
+                    incomeListDto.Add(new IncomeTaxDto
+                    {
+                        Description = "Minimum Tax Payable",
+                        ColumnOne = "-",
+                        ColumnTwo = $"₦{Utilities.FormatAmount(minimumTaxValue.Values[5].Value2)}",
+                        CanBolden = true,
+                        CanUnderlineDownColumn2 = true
 
+                    });
+
+                }
+                else
+                {
+
+
+                    incomeListDto.Add(new IncomeTaxDto
+                    {
+                        Description = "Minimum Tax Payable",
+                        ColumnOne = "-",
+                        ColumnTwo = "₦0.0",
+                        CanBolden = true,
+                        CanUnderlineDownColumn2 = true
+
+                    });
+
+                }
+            }
+            else
+            { ///if new 
+                var minimumTaxValue = await _profitAndLossService.GetNewMinimumTax(companyId, yearId);
+                var minimumTaxPercentage = await _minimumTaxService.GetMinimumTaxPercentageCompanyIdYearId(companyId, yearId);
+                if (minimumTaxPercentage == null)
+                {
+                    minimumTaxPercentage = new MinimumTaxPercentageValue
+                    {
+                        MinimumTaxPercentage = 0
+                    };
+
+                }
+
+                if (minimumTaxValue != null)
+                {
+                    var turnOver = minimumTaxValue.Revenue + minimumTaxValue.OtherOperatingGain + minimumTaxValue.OtherOperatingIncome;
+                    var percent = minimumTaxPercentage.MinimumTaxPercentage * turnOver;
+
+                    incomeListDto.Add(new IncomeTaxDto
+                    {
+                        Description = "Minimum Tax Payable",
+                        ColumnOne = "-",
+                        ColumnTwo = $"₦{Utilities.FormatAmount(percent)}",
+                        CanBolden = true,
+                        CanUnderlineDownColumn2 = true
+
+                    });
+
+                }
+                else
+                {
+
+
+                    incomeListDto.Add(new IncomeTaxDto
+                    {
+                        Description = "Minimum Tax Payable",
+                        ColumnOne = "-",
+                        ColumnTwo = "₦0.0",
+                        CanBolden = true,
+                        CanUnderlineDownColumn2 = true
+
+                    });
+
+                }
+            }
+
+
+            decimal values = 0;
+            if (!isAssessibleProfit)
+            {
+                values = accessibleType;
             }
             else
             {
-
-
-                incomeListDto.Add(new IncomeTaxDto
-                {
-                    Description = "Minimum Tax Payable",
-                    ColumnOne = "-",
-                    ColumnTwo = "₦0.0",
-                    CanBolden = true,
-                    CanUnderlineDownColumn2=true
-                    
-                });
-
+                values = 0;
             }
-            decimal values=0;
-            if(!isAssessibleProfit){
-              values=accessibleType;
-            }else{
-                values=0;
-            }
-            _incomeTaxRepository.SaveAsessableUnRelieved(new AsessableLossUnRelieved{
-                CompanyId=companyId,
-                YearId=yearId,
-                UnRelievedCf=unrelievedCf,
-                AssessableLoss=values,
+            _incomeTaxRepository.SaveAsessableUnRelieved(new AsessableLossUnRelieved
+            {
+                CompanyId = companyId,
+                YearId = yearId,
+                UnRelievedCf = unrelievedCf,
+                AssessableLoss = values,
             });
             if (IsBringLossFoward)
             {
@@ -621,7 +667,7 @@ namespace TaxComputationSoftware.Services
 
             }
 
-         
+
         }
 
 

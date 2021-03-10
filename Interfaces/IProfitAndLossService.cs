@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using TaxComputationAPI.Dtos;
 using TaxComputationSoftware.Dtos;
+using TaxComputationSoftware.Models;
 
 namespace TaxComputationAPI.Interfaces
 {
@@ -14,7 +15,7 @@ namespace TaxComputationAPI.Interfaces
 
         Task<List<ProfitAndLossViewDto>> GetProfitAndLossByCompanyIdAndYear(int companyId, int yearId);
         Task SaveProfitAndLoss(CreateProfitAndLoss createProfitAndLoss);
-        Task<MinimumTaxObject> GetMinimumTax(int companyId, int yearId);
+        Task<NewMinimumTax> GetNewMinimumTax(int companyId, int yearId);
 
         Task SaveProfitsAndLoss(CreateProfitAndLoss profits);
 

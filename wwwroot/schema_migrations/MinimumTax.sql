@@ -14,11 +14,11 @@ BEGIN
         [Id] [int] IDENTITY(1,1) NOT NULL,
         [CompanyId] [int] NOT NULL,
         [FinancialYearId] [int] NOT NULL,
-        [GrossProfit] [varchar(50)] NOT NULL,
-        [NetAsset] [varchar(50)] NOT NULL,
-        [ShareCapital] [varchar(50)] NOT NULL,
-        [TurnOver] [varchar(50)] NOT NULL,
-        [MinimumTaxPayable] [varchar(50)] NOT NULL,
+        [GrossProfit] varchar(50) NOT NULL,
+        [NetAsset] varchar(50) NOT NULL,
+        [ShareCapital] varchar(50) NOT NULL,
+        [TurnOver] varchar(50) NOT NULL,
+        [MinimumTaxPayable] varchar(50) NOT NULL,
         [DateCreated] [datetime2](7) NOT NULL,
         CONSTRAINT [PK_MinimumTax] PRIMARY KEY CLUSTERED
     (
@@ -134,8 +134,8 @@ CREATE PROCEDURE [dbo].[usp_Update_MinimumTax](
 AS
 
 UPDATE [dbo].[MinimumTax]
-SET GrossProfit = @GrossProfit, 
-    NetAsset = @NetAsset, 
+SET GrossProfit = @GrossProfit,
+    NetAsset = @NetAsset,
     ShareCapital=@ShareCapital,
     TurnOver=@TurnOver,
     MinimumTaxPayable=@MinimumTaxPayable
@@ -238,3 +238,100 @@ SET @Id = SCOPE_IDENTITY()
 SELECT @Id
 GO
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--------------------------------------- STORED PROCEDURE TO  CREATE NEW MINIMUM TAX -----------------------------------------
+
+
+if NOT EXISTS(SELECT 1 FROM sysobjects where type='U' and name ='NewMinimumTax')
+BEGIN
+create table NewMinimumTax(
+
+ Id   int identity(1,1) NOT NULL ,
+ CompanyId int ,
+ OtherOperatingGain decimal,
+ Revenue decimal,
+ OtherOperatingIncome decimal,
+ YearId int
+
+ )
+
+END
+GO
+
+
+-------------------------------------- STORED PROCEDURE TO  GET NEW MINIMUM TAX BY COMPANY ID AND YEAR ID-----------------------------------------
+IF OBJECT_ID('[dbo].[usp_Get_New_Minimum_Tax_By_CompanyId_YearId]') IS NOT NULL
+BEGIN
+DROP PROCEDURE [dbo].usp_Get_New_Minimum_Tax_By_CompanyId_YearId
+END
+GO
+CREATE PROCEDURE [dbo].usp_Get_New_Minimum_Tax_By_CompanyId_YearId(
+    @CompanyId int,@YearId int)
+   
+AS
+SELECT *
+FROM [dbo].[NewMinimumTax]
+WHERE CompanyId=@CompanyId AND YearId=@YearId
+GO
+
+
+
+
+
+
+
+
+-------------------------------------- STORED PROCEDURE TO  INSERT INTO  NEW MINIMUM TAX TABLE-----------------------------------------
+
+IF OBJECT_ID('[dbo].[usp_Insert_New_Minimum_Tax_Table]') IS NOT NULL
+BEGIN
+DROP PROCEDURE [dbo].[usp_Insert_New_Minimum_Tax_Table]
+PRINT('OK')
+END
+GO
+CREATE PROCEDURE [dbo].[usp_Insert_New_Minimum_Tax_Table](
+ @CompanyId int ,
+ @OtherOperatingGain decimal,
+ @Revenue decimal,
+ @OtherOperatingIncome decimal,
+ @YearId int
+   
+)
+AS
+if exists (select * from NewMinimumTax where CompanyId=@CompanyId  and YearId =@YearId)
+begin
+ update [dbo].[NewMinimumTax] set OtherOperatingGain=@OtherOperatingGain ,Revenue=@Revenue,OtherOperatingIncome=@OtherOperatingIncome
+end
+else
+INSERT [dbo].[NewMinimumTax]
+(
+ CompanyId,
+ OtherOperatingGain,
+ Revenue,
+ OtherOperatingIncome,
+ YearId
+)
+VALUES
+(
+ @CompanyId,
+ @OtherOperatingGain,
+ @Revenue,
+ @OtherOperatingIncome,
+ @YearId
+)
+GO
