@@ -234,44 +234,44 @@ namespace TaxComputationAPI.Services
 
             //First Row
             var singleDate = new MinimumTaxDisplay();
-            singleDate.Name = $"0.5% of Gross {Profit_Loss} {addMinimumTaxDto.GrossProfit.ToString().ValueMoneyFormatter("NGN", true)}";
-            singleDate.Value1 = $"{_0_5_of_Gross_Profit}";
+            singleDate.Name = $"0.5% of Gross {Profit_Loss} {Math.Floor(addMinimumTaxDto.GrossProfit).ToString().ValueMoneyFormatter("NGN", true)}";
+            singleDate.Value1 = $"{Math.Floor(_0_5_of_Gross_Profit)}";
             singleDate.Value2 = $"{0}";
             data.Add(singleDate);
 
             //Second Row
             singleDate = new MinimumTaxDisplay();
-            singleDate.Name = $"0.5% of Net Assets {addMinimumTaxDto.NetAsset.ToString().ValueMoneyFormatter("NGN", true)}";
-            singleDate.Value1 = $"{_0_5_of_Net_Assets}";
-            singleDate.Value2 = $"{_maxTaxValue}";
+            singleDate.Name = $"0.5% of Net Assets {Math.Floor(addMinimumTaxDto.NetAsset).ToString().ValueMoneyFormatter("NGN", true)}";
+            singleDate.Value1 = $"{Math.Floor(_0_5_of_Net_Assets)}";
+            singleDate.Value2 = $"{Math.Floor(_maxTaxValue)}";
             data.Add(singleDate);
 
             //Third Row
             singleDate = new MinimumTaxDisplay();
-            singleDate.Name = $"0.25% of Paid-up Share Capital {addMinimumTaxDto.ShareCapital.ToString().ValueMoneyFormatter("NGN", true)}";
-            singleDate.Value1 = $"{_0_25_of_Share_Capital}";
+            singleDate.Name = $"0.25% of Paid-up Share Capital {Math.Floor(addMinimumTaxDto.ShareCapital).ToString().ValueMoneyFormatter("NGN", true)}";
+            singleDate.Value1 = $"{Math.Floor(_0_25_of_Share_Capital)}";
             singleDate.Value2 = $"{0}";
             data.Add(singleDate);
 
             //Fourth Row
             singleDate = new MinimumTaxDisplay();
-            singleDate.Name = $"0.25% of Turnover of {addMinimumTaxDto.TurnOver.ToString().ValueMoneyFormatter("NGN", true)}";
-            singleDate.Value1 = $"{_0_25_of_Turnover}";
+            singleDate.Name = $"0.25% of Turnover of {Math.Floor(addMinimumTaxDto.TurnOver).ToString().ValueMoneyFormatter("NGN", true)}";
+            singleDate.Value1 = $"{Math.Floor(_0_25_of_Turnover)}";
             singleDate.Value2 = $"{0}";
             data.Add(singleDate);
 
             //Fifth Row
             singleDate = new MinimumTaxDisplay();
-            singleDate.Name = $"0.125% of Turnover in excess of {addMinimumTaxDto.TurnOver.ToString().ValueMoneyFormatter("NGN", true)} 0.125% of =N=({addMinimumTaxDto.GrossProfit} - {addMinimumTaxDto.TurnOver}) 0.125% of {(addMinimumTaxDto.GrossProfit - addMinimumTaxDto.TurnOver).ToString().ValueMoneyFormatter("NGN", true)}";
+            singleDate.Name = $"0.125% of Turnover in excess of {Math.Floor(addMinimumTaxDto.TurnOver).ToString().ValueMoneyFormatter("NGN", true)} 0.125% of =N=({addMinimumTaxDto.GrossProfit} - {addMinimumTaxDto.TurnOver}) 0.125% of {(addMinimumTaxDto.GrossProfit - addMinimumTaxDto.TurnOver).ToString().ValueMoneyFormatter("NGN", true)}";
             singleDate.Value1 = $"{0}";
-            singleDate.Value2 = $"{_0_125_Turnover_Execess_500000}";
+            singleDate.Value2 = $"{Math.Floor(_0_125_Turnover_Execess_500000)}";
             data.Add(singleDate);
 
             //Sixth Row
             singleDate = new MinimumTaxDisplay();
             singleDate.Name = $"Minimum Tax Payable";
             singleDate.Value1 = $"{0}";
-            singleDate.Value2 = $"{_minimumTaxPayable}";
+            singleDate.Value2 = $"{Math.Floor(_minimumTaxPayable)}";
             data.Add(singleDate);
 
             return new MinimumTaxResponse

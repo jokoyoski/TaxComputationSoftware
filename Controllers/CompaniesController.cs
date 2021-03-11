@@ -166,7 +166,7 @@ namespace TaxComputationAPI.Controllers
                 companyToCreate.IsActive = true;
                 companyToCreate.DateCreated = DateTime.Now;
                 companyToCreate.CompanyName = companyForRegisterDto.CompanyName;
-                companyToCreate.ClosingYear = companyToCreate.OpeningYear;
+                companyToCreate.ClosingYear = companyToCreate.ClosingYear;
 
                 await _companiesService.AddCompanyAsync(companyToCreate);
 

@@ -17,6 +17,7 @@ namespace TaxComputationAPI.Interfaces
 
         Task UploadTrialBalance(UploadTrackTrialBalanceDto excel);
 
+        Task<byte[]> DownloadExcel(int companyId, int yearId);
 
     }
 }
