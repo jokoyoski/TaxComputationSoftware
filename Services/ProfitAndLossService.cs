@@ -19,12 +19,14 @@ namespace TaxComputationAPI.Services
         private readonly ITrialBalanceRepository _trialBalanceRepository;
         private readonly IUtilitiesRepository _utilitiesRepository;
         private readonly IIncomeTaxRepository _incomeTaxRepository;
+        private readonly IMinimumTaxRepository  _minimumTaxRepository;
         
-        public ProfitAndLossService(IProfitAndLossRepository profitAndLossRepository ,IIncomeTaxRepository incomeTaxRepository, ITrialBalanceRepository trialBalanceRepository)
+        public ProfitAndLossService(IProfitAndLossRepository profitAndLossRepository ,IMinimumTaxRepository  minimumTaxRepository,IIncomeTaxRepository incomeTaxRepository, ITrialBalanceRepository trialBalanceRepository)
         {
             _trialBalanceRepository = trialBalanceRepository;
             _profitAndLossRepository = profitAndLossRepository;
             _incomeTaxRepository = incomeTaxRepository;
+            _minimumTaxRepository=minimumTaxRepository;
         
         }
         ///////
@@ -374,6 +376,9 @@ namespace TaxComputationAPI.Services
         public async Task<List<ProfitAndLossViewDto>> GetProfitAndLossByCompanyIdAndYear(int companyId, int yearId)
         {
             decimal total = 0;
+            decimal revenueValue=0;
+            decimal otherOperatingIncome=0;
+            decimal otherOperatingGain=0;
             ProfitAndLossViewDto revenue = new ProfitAndLossViewDto();
             ProfitAndLossViewDto costofsales = new ProfitAndLossViewDto();
             ProfitAndLossViewDto gross = new ProfitAndLossViewDto();
@@ -389,6 +394,7 @@ namespace TaxComputationAPI.Services
                 return records;
             }
             revenue.Category = "Revenue";
+            revenueValue=decimal.Parse(record.Revenue);
             revenue.Total = $"₦{Utilities.FormatAmount(record.Revenue)}";
             records.Add(revenue);
             costofsales.Category = "Cost Of Sales";
@@ -414,6 +420,7 @@ namespace TaxComputationAPI.Services
             }
             total = Utilities.GetDecimal(record.Revenue) - decimal.Parse(record.CostOfSales);
             otheroperatingincome.Category = "Other Operating Income";
+            otherOperatingIncome=decimal.Parse(record.OtherOperatingIncome);
             otheroperatingincome.Total = $"₦{Utilities.FormatAmount(record.OtherOperatingIncome)}";
             records.Add(otheroperatingincome);
             total += Utilities.GetDecimal(record.OtherOperatingIncome);
@@ -429,6 +436,7 @@ namespace TaxComputationAPI.Services
             else
             {
                 otheroperatinggainorloss.Category = "Other Operating Gain";
+                otherOperatingGain=decimal.Parse(record.OtherOperatingGainOrLoss);
                 otheroperatinggainorloss.Total = $"₦{Utilities.FormatAmount(record.OtherOperatingGainOrLoss)}";
                 total = total + finalValue;
             }
@@ -457,43 +465,20 @@ namespace TaxComputationAPI.Services
                 CompanyId = companyId,
                 YearId = yearId,
                 ProfitAndLoss = total
+            }); 
+            _minimumTaxRepository.SaveNewMinimumTax( new NewMinimumTax{
+            CompanyId=companyId,
+            YearId=yearId,
+            OtherOperatingGain=otherOperatingGain<0 ?0 :otherOperatingGain,
+            OtherOperatingIncome=otherOperatingIncome,
+            Revenue=revenueValue
             });
             return records;
         }
 
-        public async Task<MinimumTaxObject> GetMinimumTax(int companyId, int yearId)
+        public async Task<NewMinimumTax> GetNewMinimumTax(int companyId, int yearId)
         {
-            decimal total = 0;
-            string revenueValue = "";
-            string otherIncomeValue = "";
-
-            ProfitAndLossViewDto revenue = new ProfitAndLossViewDto();
-            ProfitAndLossViewDto costofsales = new ProfitAndLossViewDto();
-            ProfitAndLossViewDto gross = new ProfitAndLossViewDto();
-            ProfitAndLossViewDto otheroperatingincome = new ProfitAndLossViewDto();
-            ProfitAndLossViewDto otheroperatinggainorloss = new ProfitAndLossViewDto();
-            ProfitAndLossViewDto operatingexpenses = new ProfitAndLossViewDto();
-            ProfitAndLossViewDto profitorlossbeforetax = new ProfitAndLossViewDto();
-            List<ProfitAndLossViewDto> records = new List<ProfitAndLossViewDto>();
-            var record = await GetProfitAndLoss(yearId, companyId);
-            if (record == null)
-            {
-                return null;
-            }
-            revenue.Category = "Revenue";
-            revenue.Total = $"₦{Utilities.FormatAmount(record.Revenue)}";
-            revenueValue = record.Revenue;
-            otherIncomeValue = record.OtherOperatingIncome;
-            if (decimal.Parse(record.OtherOperatingIncome) < 0)
-            {
-                otherIncomeValue = await GetBackUpOtherOperatingIcome(companyId, yearId);
-            }
-
-            return new MinimumTaxObject
-            {
-                Revenue = revenueValue,
-                OtherIncome = otherIncomeValue,
-            };
+           return await  _minimumTaxRepository.GetNewMinimumTax(companyId,yearId);
         }
 
 

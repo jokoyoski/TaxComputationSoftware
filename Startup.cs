@@ -96,14 +96,14 @@ namespace TaxComputationAPI
             
    
 
-            services.AddHostedService<TimedHostedService>();
+           /* services.AddHostedService<TimedHostedService>();
 
             services.AddScoped<IScopedProcessingService, ScopedProcessingService>();
 
             services.AddHostedService<AnnualEmailNotificationBackgroundService>();
             
 
-            services.AddHostedService<BackgroundJobService>();
+            services.AddHostedService<BackgroundJobService>();*/
 
             services.AddScoped<IUsersRepository, UsersRepository>();
             services.AddMemoryCache();

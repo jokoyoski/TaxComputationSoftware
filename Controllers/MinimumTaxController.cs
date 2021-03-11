@@ -44,11 +44,12 @@ namespace TaxComputationAPI.Controllers
             }
             try
             {
-                var value = await _profitAndLossService.GetMinimumTax(companyId, yearId);
+                percenttageTurnOver=percenttageTurnOver/100;
+                var value = await _profitAndLossService.GetNewMinimumTax(companyId, yearId);
                
                 if (value!= null)
                 {
-                    var turnOver = decimal.Parse(value.Revenue) + decimal.Parse(value.OtherIncome);
+                    var turnOver = value.Revenue+value.OtherOperatingGain+value.OtherOperatingIncome;
                     var percent = percenttageTurnOver * turnOver;
                     _minimumTaxService.SaveMinimumPercentage( new TaxComputationSoftware.Models.MinimumTaxPercentageValue{
                         MinimumTaxPercentage=percenttageTurnOver,

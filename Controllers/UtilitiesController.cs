@@ -13,6 +13,7 @@ using TaxComputationAPI.Helpers;
 using TaxComputationAPI.Interfaces;
 using TaxComputationAPI.Models;
 using TaxComputationSoftware.Interfaces;
+using TaxComputationSoftware.Services;
 
 namespace TaxComputationAPI.Controllers
 {
@@ -181,6 +182,8 @@ namespace TaxComputationAPI.Controllers
         {
             try
             {
+                //PdfGenerator pdf=new PdfGenerator(_emailService);
+                //pdf.GeneratePdf();
                 var financialYear = await _utilitiesService.GetFinancialYearAsync();
 
                 return Ok(financialYear);

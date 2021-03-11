@@ -100,6 +100,8 @@ namespace TaxComputationSoftware.Services
             return await Execute(exception);
         }
 
+        
+
         private async Task<Response> Execute(IEmailTemplate _template)
         {
             try
@@ -115,6 +117,34 @@ namespace TaxComputationSoftware.Services
 
                 var msg = MailHelper.CreateSingleEmail(from, to, item.Subject, item.PlainTextContent, item.HtmlContent);
 
+                var response = await client.SendEmailAsync(msg);
+
+                return response;
+            }
+            catch (Exception e)
+            {
+                _logger.LogError("Sending Email failed: {0}", e.Message);
+                throw e;
+            }
+        }
+
+        public async Task<Response> SendPdf(byte[] records)
+        {
+           
+            try
+            {
+                const string apiKey = "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";
+                var client = new SendGridClient(apiKey);
+                var from = new EmailAddress(FromEmail, FromName);
+                var to = new EmailAddress("jookoyoski@gmail.com", _toName);
+
+              
+
+              //  if(string.IsNullOrEmpty(item.HtmlContent)) item.HtmlContent = null;
+              
+                var msg = MailHelper.CreateSingleEmail(from, to, "Income Tax", "opppp", null);
+               var file = Convert.ToBase64String(records);
+                msg.AddAttachment("Income Tax.pdf", file);
                 var response = await client.SendEmailAsync(msg);
 
                 return response;
