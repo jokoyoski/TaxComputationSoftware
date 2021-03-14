@@ -30,7 +30,9 @@ const Sidebar = ({ selectedTitle, isActive }) => {
     },
     {
       title: constants.modules.minimumTax,
-      href: `${constants.routes.minimum_tax}/${minimumTaxTypeId === 0 ? "mapping" : "view"}`
+      href: `${constants.routes.minimum_tax}/${
+        minimumTaxTypeId === constants.minimumTaxType.old ? "mapping" : "view"
+      }`
     },
     {
       title: constants.modules.itLevy,

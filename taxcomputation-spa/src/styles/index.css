@@ -63,9 +63,13 @@ body {
   color: #2196f3;
 }
 
+.link,
 .sidebar-link {
   text-decoration: none;
   color: inherit;
+}
+
+.sidebar-link {
   transition: margin-left 0.3s ease-in-out;
 }
 
@@ -243,4 +247,8 @@ td {
   bottom: 0px;
   left: 0px;
   border: 1px solid #000;
+}
+
+table {
+  font-size: 14px;
 }

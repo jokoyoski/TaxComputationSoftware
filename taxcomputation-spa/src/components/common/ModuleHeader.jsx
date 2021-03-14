@@ -71,20 +71,22 @@ const ModuleHeader = ({
           }
         </p>
         <div className="p-d-flex p-ai-center">
-          {mode === "view" && title === constants.modules.minimumTax && minimumTaxTypeId === 1 && (
-            <div className="p-d-flex p-ai-center">
-              <span>% Turn Over</span>
-              <InputText
-                style={{ marginLeft: 10 }}
-                placeholder="Percentage Turn Over"
-                disabled={percentageTurnOver.canQuery === null}
-                value={percentageTurnOver.value}
-                onChange={e => setPercentageTurnOver({ value: e.target.value, canQuery: false })}
-                onBlur={canQueryPercentageTurnOver}
-                onKeyDown={e => e.key === "Enter" && canQueryPercentageTurnOver()}
-              />
-            </div>
-          )}
+          {mode === "view" &&
+            title === constants.modules.minimumTax &&
+            minimumTaxTypeId === constants.minimumTaxType.new && (
+              <div className="p-d-flex p-ai-center">
+                <span>% Turn Over</span>
+                <InputText
+                  style={{ marginLeft: 10 }}
+                  placeholder="Percentage Turn Over"
+                  disabled={percentageTurnOver.canQuery === null}
+                  value={percentageTurnOver.value}
+                  onChange={e => setPercentageTurnOver({ value: e.target.value, canQuery: false })}
+                  onBlur={canQueryPercentageTurnOver}
+                  onKeyDown={e => e.key === "Enter" && canQueryPercentageTurnOver()}
+                />
+              </div>
+            )}
           {mode === "view" && title === constants.modules.incomeTax && (
             <>
               <div className="p-d-flex p-ai-center">
@@ -145,7 +147,12 @@ const ModuleHeader = ({
           <Dropdown
             style={{ width: 180, marginLeft: 20 }}
             value={mode}
-            disabled={constants.nonMappedModules.includes(title)}
+            disabled={
+              title === constants.modules.minimumTax &&
+              minimumTaxTypeId === constants.minimumTaxType.new
+                ? true
+                : constants.nonMappedModules.includes(title)
+            }
             options={modeSelectItems}
             onChange={e => {
               setMode(e.value);

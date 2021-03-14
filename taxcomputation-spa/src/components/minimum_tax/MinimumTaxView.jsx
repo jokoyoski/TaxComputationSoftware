@@ -5,6 +5,7 @@ import utils from "../../utils";
 import { minimumTaxViewData, minimumTaxOldViewData } from "../../apis/MinimumTax";
 import ViewModeDataTable from "../common/ViewModeDataTable";
 import ViewLoader from "../common/ViewLoader";
+import constants from "../../constants";
 
 const MinimumTaxView = ({ year, toast, percentageTurnOver, setPercentageTurnOver }) => {
   const isMounted = React.useRef(true);
@@ -22,7 +23,7 @@ const MinimumTaxView = ({ year, toast, percentageTurnOver, setPercentageTurnOver
   React.useEffect(() => {
     if (!companyId) return;
 
-    if (minimumTaxTypeId === 0) {
+    if (minimumTaxTypeId === constants.minimumTaxType.old) {
       const fetchMinimumTaxOldViewData = async () => {
         try {
           setError(null);
@@ -109,14 +110,14 @@ const MinimumTaxView = ({ year, toast, percentageTurnOver, setPercentageTurnOver
 
   return (
     <>
-      {minimumTaxData && minimumTaxTypeId === 0 && (
+      {minimumTaxData && minimumTaxTypeId === constants.minimumTaxType.old && (
         <ViewModeDataTable value={minimumTaxData}>
           <Column field="name" header=""></Column>
           <Column field="value1" header="₦"></Column>
           <Column field="value2" header="₦"></Column>
         </ViewModeDataTable>
       )}
-      {minimumTaxData && minimumTaxTypeId === 1 && (
+      {minimumTaxData && minimumTaxTypeId === constants.minimumTaxType.new && (
         <ViewModeDataTable value={minimumTaxData}>
           <Column field="category" header=""></Column>
           <Column field="credit" header="₦"></Column>

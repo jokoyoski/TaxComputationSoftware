@@ -7,10 +7,12 @@ import utils from "../../utils";
 import DropdownController from "../controllers/DropdownController";
 import InputController from "../controllers/InputController";
 import { useResources } from "../../store/ResourcesStore";
+import constants from "../../constants";
+import NotFound from "../../pages/NotFound";
 
 const MinimumTaxMapping = ({ toast }) => {
   const { errors, handleSubmit, control } = useForm();
-  const [{ companyId }] = useCompany();
+  const [{ companyId, minimumTaxTypeId }] = useCompany();
   const [{ financialYears }] = useResources();
   const [loading, setLoading] = React.useState(false);
 
@@ -42,6 +44,10 @@ const MinimumTaxMapping = ({ toast }) => {
       setLoading(false);
     }
   };
+
+  if (minimumTaxTypeId === constants.minimumTaxType.new) {
+    return <NotFound isPage={false} />;
+  }
 
   return (
     <form className="p-d-flex p-flex-column p-jc-between" onSubmit={handleSubmit(onSubmit)}>
