@@ -138,6 +138,7 @@ namespace TaxComputationAPI.Repositories
                     parameters.Add("@NetAsset", minimumTaxDto.NetAsset);
                     parameters.Add("@ShareCapital", minimumTaxDto.ShareCapital);
                     parameters.Add("@TurnOver", minimumTaxDto.TurnOver);
+                    parameters.Add("@Revenue", minimumTaxDto.Revenue);
                     parameters.Add("@MinimumTaxPayable", minimumTaxDto.MinimumTaxPayable);
                     parameters.Add("@DateCreated", minimumTaxDto.DateCreated);
                     parameters.Add("@FinancialYearId", minimumTaxDto.FinancialYearId);
@@ -179,6 +180,7 @@ namespace TaxComputationAPI.Repositories
                     parameters.Add("@GrossProfit", minimumTaxDto.GrossProfit);
                     parameters.Add("@NetAsset", minimumTaxDto.NetAsset);
                     parameters.Add("@ShareCapital", minimumTaxDto.ShareCapital);
+                    parameters.Add("@Revenue", minimumTaxDto.Revenue);
                     parameters.Add("@TurnOver", minimumTaxDto.TurnOver);
                     parameters.Add("@MinimumTaxPayable", minimumTaxDto.MinimumTaxPayable);
 

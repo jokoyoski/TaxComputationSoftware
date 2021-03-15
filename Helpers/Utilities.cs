@@ -120,9 +120,12 @@ namespace TaxComputationAPI.Helpers
             money = money.Trim();
             int moneySize = money.Length;
             int count = 1;
+            bool foundDot = false;
 
             for(int i = money.Length - 1; i >= 0; i--)
             {
+                if(money[i].ToString() == ".") foundDot = true;
+
                 string value = money[i].ToString();
 
                 if(string.IsNullOrEmpty(result)) 
@@ -138,8 +141,11 @@ namespace TaxComputationAPI.Helpers
 
                 if(count == 3 && (moneySize > 3 || moneySize >= 1)) 
                 {
-                    result = "," + result;
-                    count = 0;
+                    if(!foundDot)
+                    {
+                        result = "," + result;
+                        count = 0;
+                    }
                 }
 
                 count++;

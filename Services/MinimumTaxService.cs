@@ -24,8 +24,8 @@ namespace TaxComputationAPI.Services
         private readonly IMinimumTaxRepository _minimumTaxRepository;
         private readonly IProfitAndLossRepository _profitAndLossRepository;
 
-        public MinimumTaxService(IEmailService emailService, IUtilitiesRepository utilitiesRepository, 
-                                ICompaniesRepository companiesRepository, ILogger<MinimumTaxService> logger, 
+        public MinimumTaxService(IEmailService emailService, IUtilitiesRepository utilitiesRepository,
+                                ICompaniesRepository companiesRepository, ILogger<MinimumTaxService> logger,
                                 IMinimumTaxRepository minimumTaxRepository, IProfitAndLossRepository profitAndLossRepository)
         {
             _emailService = emailService;
@@ -38,23 +38,6 @@ namespace TaxComputationAPI.Services
 
         public async Task<MinimumTaxResponse> AddOldMinimumTax(AddMinimumTaxDto addMinimumTaxDto)
         {
-            string errorMessage = string.Empty;
-
-            var result = await _profitAndLossRepository.GetProfitAndLossRecordAsync(addMinimumTaxDto.CompanyId, addMinimumTaxDto.FinancialYearId);
-
-            if(result == null)
-            {
-                return new MinimumTaxResponse
-                {
-                    ResponseCode = System.Net.HttpStatusCode.NotFound,
-                    ResponseDescription = "Company doesnot have profit and loss data",
-                    Code = "10"
-                };
-            
-            }
-
-            var grossProft = result.ProfitAndLoss;
-
             if (addMinimumTaxDto.CompanyId <= 0)
             {
                 return new MinimumTaxResponse
@@ -75,10 +58,32 @@ namespace TaxComputationAPI.Services
                 };
             }
 
+            string errorMessage = string.Empty;
+
             try
             {
 
                 var company = await _companiesRepository.GetCompanyAsync(addMinimumTaxDto.CompanyId);
+
+                var profitAndLoss_GrossProfit = await _profitAndLossRepository.GetProfitAndLossRecordAsync(addMinimumTaxDto.CompanyId, addMinimumTaxDto.FinancialYearId);
+
+                var profitAndLoss_Revenue = await _minimumTaxRepository.GetNewMinimumTax(addMinimumTaxDto.CompanyId, addMinimumTaxDto.FinancialYearId);
+
+
+                if (profitAndLoss_GrossProfit == null || profitAndLoss_Revenue == null)
+                {
+                    return new MinimumTaxResponse
+                    {
+                        ResponseCode = System.Net.HttpStatusCode.NotFound,
+                        ResponseDescription = "Company doesnot have profit and loss data",
+                        Code = "10"
+                    };
+
+                }
+
+                var grossProft = profitAndLoss_GrossProfit.ProfitAndLoss;
+
+                var revenue = profitAndLoss_Revenue.Revenue;
 
                 if (company == null)
                 {
@@ -110,6 +115,7 @@ namespace TaxComputationAPI.Services
                     NetAsset = addMinimumTaxDto.NetAsset,
                     ShareCapital = addMinimumTaxDto.ShareCapital,
                     TurnOver = addMinimumTaxDto.TurnOver,
+                    Revenue = revenue,
                     DateCreated = DateTime.Now
                 };
 
@@ -129,7 +135,7 @@ namespace TaxComputationAPI.Services
 
                 var exit = await _minimumTaxRepository.GetMinimumCompanyIdYearId(saveMinimum.CompanyId, saveMinimum.FinancialYearId);
 
-                if(exit == null)
+                if (exit == null)
                 {
                     await _minimumTaxRepository.SaveMinimum(saveMinimum);
                 }
@@ -173,7 +179,7 @@ namespace TaxComputationAPI.Services
         {
             var record = await _minimumTaxRepository.GetMinimumCompanyIdYearId(companyId, financialYearId);
 
-            if(record == null)
+            if (record == null)
             {
                 return new MinimumTaxResponse
                 {
@@ -215,7 +221,7 @@ namespace TaxComputationAPI.Services
 
             _maxTaxValue = (_0_5_of_Gross_Profit < _0_5_of_Net_Assets) ? (_0_5_of_Net_Assets < _0_25_of_Share_Capital) ? _0_25_of_Share_Capital : _0_5_of_Net_Assets : _0_5_of_Gross_Profit;
 
-            if (addMinimumTaxDto.GrossProfit > addMinimumTaxDto.TurnOver) _0_125_Turnover_Execess_500000 = (decimal)((0.125 / 100) * ((double)(addMinimumTaxDto.GrossProfit - addMinimumTaxDto.TurnOver)));
+            if (addMinimumTaxDto.Revenue > addMinimumTaxDto.TurnOver) _0_125_Turnover_Execess_500000 = (decimal)((0.125 / 100) * ((double)(addMinimumTaxDto.Revenue - addMinimumTaxDto.TurnOver)));
 
             decimal _minimumTaxPayable = _maxTaxValue + _0_125_Turnover_Execess_500000;
 
@@ -223,7 +229,7 @@ namespace TaxComputationAPI.Services
 
             string Profit_Loss = string.Empty;
 
-            if(addMinimumTaxDto.GrossProfit > 0)
+            if (addMinimumTaxDto.GrossProfit > 0)
             {
                 Profit_Loss = "Profit";
             }
@@ -234,44 +240,44 @@ namespace TaxComputationAPI.Services
 
             //First Row
             var singleDate = new MinimumTaxDisplay();
-            singleDate.Name = $"0.5% of Gross {Profit_Loss} {Math.Floor(addMinimumTaxDto.GrossProfit).ToString().ValueMoneyFormatter("NGN", true)}";
+            singleDate.Name = $"0.5% of Gross {Profit_Loss} {Utilities.FormatAmount(addMinimumTaxDto.GrossProfit)}";
             singleDate.Value1 = $"{Math.Floor(_0_5_of_Gross_Profit)}";
             singleDate.Value2 = $"{0}";
             data.Add(singleDate);
 
             //Second Row
             singleDate = new MinimumTaxDisplay();
-            singleDate.Name = $"0.5% of Net Assets {Math.Floor(addMinimumTaxDto.NetAsset).ToString().ValueMoneyFormatter("NGN", true)}";
+            singleDate.Name = $"0.5% of Net Assets {Utilities.FormatAmount(addMinimumTaxDto.NetAsset)}";
             singleDate.Value1 = $"{Math.Floor(_0_5_of_Net_Assets)}";
             singleDate.Value2 = $"{Math.Floor(_maxTaxValue)}";
             data.Add(singleDate);
 
             //Third Row
             singleDate = new MinimumTaxDisplay();
-            singleDate.Name = $"0.25% of Paid-up Share Capital {Math.Floor(addMinimumTaxDto.ShareCapital).ToString().ValueMoneyFormatter("NGN", true)}";
+            singleDate.Name = $"0.25% of Paid-up Share Capital {Utilities.FormatAmount(addMinimumTaxDto.ShareCapital)}";
             singleDate.Value1 = $"{Math.Floor(_0_25_of_Share_Capital)}";
             singleDate.Value2 = $"{0}";
             data.Add(singleDate);
 
             //Fourth Row
             singleDate = new MinimumTaxDisplay();
-            singleDate.Name = $"0.25% of Turnover of {Math.Floor(addMinimumTaxDto.TurnOver).ToString().ValueMoneyFormatter("NGN", true)}";
+            singleDate.Name = $"0.25% of Turnover of {Utilities.FormatAmount(addMinimumTaxDto.TurnOver)}";
             singleDate.Value1 = $"{Math.Floor(_0_25_of_Turnover)}";
             singleDate.Value2 = $"{0}";
             data.Add(singleDate);
 
             //Fifth Row
             singleDate = new MinimumTaxDisplay();
-            singleDate.Name = $"0.125% of Turnover in excess of {Math.Floor(addMinimumTaxDto.TurnOver).ToString().ValueMoneyFormatter("NGN", true)} 0.125% of =N=({addMinimumTaxDto.GrossProfit} - {addMinimumTaxDto.TurnOver}) 0.125% of {(addMinimumTaxDto.GrossProfit - addMinimumTaxDto.TurnOver).ToString().ValueMoneyFormatter("NGN", true)}";
+            singleDate.Name = $"0.125% of Turnover in excess of {Utilities.FormatAmount(addMinimumTaxDto.TurnOver)} 0.125% of =N=({addMinimumTaxDto.Revenue} - {addMinimumTaxDto.TurnOver}) 0.125% of {Utilities.FormatAmount(addMinimumTaxDto.GrossProfit - addMinimumTaxDto.TurnOver)}";
             singleDate.Value1 = $"{0}";
-            singleDate.Value2 = $"{Math.Floor(_0_125_Turnover_Execess_500000)}";
+            singleDate.Value2 = $"{Utilities.FormatAmount(_0_125_Turnover_Execess_500000)}";
             data.Add(singleDate);
 
             //Sixth Row
             singleDate = new MinimumTaxDisplay();
             singleDate.Name = $"Minimum Tax Payable";
             singleDate.Value1 = $"{0}";
-            singleDate.Value2 = $"{Math.Floor(_minimumTaxPayable)}";
+            singleDate.Value2 = $"{_minimumTaxPayable.ToString().ValueMoneyFormatter("NGN", true)}";
             data.Add(singleDate);
 
             return new MinimumTaxResponse
