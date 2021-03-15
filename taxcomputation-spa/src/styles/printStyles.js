@@ -8529,4 +8529,8 @@ td {
   left: 0px;
   border: 1px solid #000;
 }
+
+table {
+  font-size: 14px;
+}
 </style>`;

@@ -1,6 +1,7 @@
 import React from "react";
 import { Dialog } from "primereact/dialog";
 import { Calendar } from "primereact/calendar";
+import { InputTextarea } from "primereact/inputtextarea";
 import { Button } from "primereact/button";
 import { useForm, Controller } from "react-hook-form";
 import { addEditCompany } from "../../apis/Companies";
@@ -46,13 +47,18 @@ const AddEditCompanyForm = ({
       minimumTaxTypeId
     } = data;
     try {
+      const openingYearDate = new Date(openingYear);
+      const day = openingYearDate.getDate();
+      const month = openingYearDate.getMonth() + 1;
+      const year = openingYearDate.getFullYear();
+      const formattedOpeningYear = `${year}/${month}/${day}`;
       const response = await addEditCompany({
         companyId,
         companyName,
         cacNumber,
         tinNumber,
         companyDescription,
-        openingYear,
+        openingYear: formattedOpeningYear,
         monthOfOperation,
         unRelievedCf,
         lossCf,
@@ -272,7 +278,7 @@ const AddEditCompanyForm = ({
                     id="openingYearInput"
                     dateFormat="yy/mm/dd"
                     value={props.value}
-                    onChange={e => props.onChange(e.target.value)}
+                    onChange={e => props.onChange(e.value)}
                   />
                 )}
               />
@@ -283,17 +289,28 @@ const AddEditCompanyForm = ({
               )}
             </div>
             <div className="p-d-flex p-flex-column" style={{ marginBottom: 15 }}>
-              <InputController
-                Controller={Controller}
+              <label htmlFor="companyDescriptionInput" style={{ marginBottom: 10 }}>
+                Address
+              </label>
+              <Controller
+                name="companyDescription"
                 control={control}
-                errors={errors}
-                controllerName="companyDescription"
-                label="Address"
-                required
-                errorMessage="Address is required"
-                width="100%"
-                defaultValue={companyDetails && companyDetails.companyDescription}
+                rules={{ required: true }}
+                defaultValue=""
+                render={props => (
+                  <InputTextarea
+                    rows={3}
+                    cols={30}
+                    style={{ marginBottom: 5, width: "100%", resize: "none" }}
+                    id="companyDescriptionInput"
+                    value={props.value}
+                    onChange={e => props.onChange(e.target.value)}
+                  />
+                )}
               />
+              {errors.companyDescription && (
+                <span style={{ fontSize: 12, color: "red" }}>Address is required</span>
+              )}
             </div>
             <Button
               label={!loading ? (!companyId ? "Add Company" : "Update Company") : null}
