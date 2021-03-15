@@ -3,6 +3,7 @@ import { Dialog } from "primereact/dialog";
 import { Button } from "primereact/button";
 import Loader from "./Loader";
 import useFetchCompanyDetails from "../hooks/useFetchCompanyDetails";
+import constants from "../../constants";
 
 const CompanyDetails = ({
   companyId,
@@ -70,7 +71,7 @@ const CompanyDetails = ({
             </p>
             <p className="company-details">
               <strong>Minimum Tax Type:</strong>{" "}
-              {companyDetails.minimumTaxTypeId === 1 ? "New" : "Old"}
+              {companyDetails.minimumTaxTypeId === constants.minimumTaxType.new ? "New" : "Old"}
             </p>
             <p className="company-details">
               <strong>Active:</strong> {companyDetails.isActive ? "Yes" : "No"}

@@ -2,6 +2,10 @@ export default {
   startYear: 1980,
   toastLifeTime: 6000,
   modes: ["adding", "mapping", "view", "summary"],
+  minimumTaxType: {
+    old: 0,
+    new: 1
+  },
   modules: {
     dashboard: "Dashboard",
     fixedAsset: "Fixed Asset",

@@ -17,13 +17,14 @@ const InputController = ({
   labelWidth,
   errorMessage = "",
   defaultValue = "",
+  value = null,
   type = "text",
   className = "p-d-flex p-flex-column"
 }) => {
   const inputProps = ({ type, disabled, props, placeholder, onChangeCallback }) => {
     const inputPropsObj = {
       disabled,
-      value: props.value,
+      value: value || props.value,
       placeholder,
       onChange:
         type === "text"

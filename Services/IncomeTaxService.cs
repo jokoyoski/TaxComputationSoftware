@@ -523,8 +523,9 @@ namespace TaxComputationSoftware.Services
                 });
 
             }
-            if (companyDetails.MinimumTaxTypeId == 1)
-            {    
+             //bool boma=true;
+            if (companyDetails.MinimumTaxTypeId==0)
+            {    //// if old 
                 var minimumTaxValue = await _minimumTaxService.GetOldMinimumTax(companyId, yearId);
                 if (minimumTaxValue != null)
                 {
