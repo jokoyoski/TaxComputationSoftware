@@ -128,6 +128,8 @@ namespace TaxComputationAPI.Controllers
                         return StatusCode(404, new { errors = new [] { response.ResponseDescription }});
                     case HttpStatusCode.BadRequest:
                         return StatusCode(400, new { errors = new [] { response.ResponseDescription }});
+                    case HttpStatusCode.InternalServerError:
+                        return StatusCode(500, new { errors = new [] { response.ResponseDescription }});
                     default:
                         break;
                 }

@@ -18,6 +18,7 @@ BEGIN
         [NetAsset] varchar(50) NOT NULL,
         [ShareCapital] varchar(50) NOT NULL,
         [TurnOver] varchar(50) NOT NULL,
+        [Revenue] varchar(50) NOT NULL,
         [MinimumTaxPayable] varchar(50) NOT NULL,
         [DateCreated] [datetime2](7) NOT NULL,
         CONSTRAINT [PK_MinimumTax] PRIMARY KEY CLUSTERED
@@ -66,6 +67,7 @@ CREATE PROCEDURE [dbo].[usp_Insert_Minimum_Tax](
     @NetAsset varchar(50),
     @ShareCapital varchar(50),
     @TurnOver varchar(50),
+    @Revenue varchar(50),
     @MinimumTaxPayable varchar(50),
     @DateCreated datetime2(7)
 )
@@ -79,6 +81,7 @@ INSERT [dbo].[MinimumTax]
     NetAsset,
     ShareCapital,
     TurnOver,
+    Revenue,
     MinimumTaxPayable,
     DateCreated
 )
@@ -90,6 +93,7 @@ VALUES
     @NetAsset,
     @ShareCapital,
     @TurnOver,
+    @Revenue,
     @MinimumTaxPayable,
     @DateCreated
 )
@@ -129,6 +133,7 @@ CREATE PROCEDURE [dbo].[usp_Update_MinimumTax](
     @NetAsset varchar(50),
     @ShareCapital varchar(50),
     @TurnOver varchar(50),
+    @Revenue varchar(50),
     @MinimumTaxPayable varchar(50)
 )
 AS
@@ -138,7 +143,8 @@ SET GrossProfit = @GrossProfit,
     NetAsset = @NetAsset,
     ShareCapital=@ShareCapital,
     TurnOver=@TurnOver,
-    MinimumTaxPayable=@MinimumTaxPayable
+    Revenue = @Revenue,
+    MinimumTaxPayable = @MinimumTaxPayable
 WHERE Id=@Id
 GO
 

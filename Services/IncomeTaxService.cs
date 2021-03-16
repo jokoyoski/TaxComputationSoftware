@@ -68,8 +68,6 @@ namespace TaxComputationSoftware.Services
             decimal educationTaxAssesibleProfit = (decimal)2 / 100;
             var companyDetails = await _companiesService.GetCompanyAsync(companyId);
             decimal percentage = (decimal)1 / 100;     //annual percentage rate
-            decimal twothird = (decimal)2/3;
-            twothird = Math.Round(twothird, 1);
             bool isAssessibleProfit = false;
             decimal iTLevy = 0;
 
@@ -360,7 +358,7 @@ namespace TaxComputationSoftware.Services
             else
             {
 
-                twoThirdaccessibleType = twothird * accessibleType;
+                twoThirdaccessibleType = (2 * accessibleType)/3;
                 if (twoThirdaccessibleType > capitalAllowanceOfTheYear)
                 {
                     capitalAllowanceClaimed = capitalAllowanceOfTheYear;

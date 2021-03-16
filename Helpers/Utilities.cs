@@ -77,14 +77,16 @@ namespace TaxComputationAPI.Helpers
 
         public static string ValueMoneyFormatter(this string money, string currency, bool addCurrency)
         {
-        
-            if(string.IsNullOrEmpty(money)) return string.Empty;
 
-            if(!Decimal.TryParse(money, out decimal moneyValue)) return string.Empty;
+            if (string.IsNullOrEmpty(money)) return string.Empty;
+
+            if (!Decimal.TryParse(money, out decimal moneyValue)) return string.Empty;
+
+            money = Math.Round(moneyValue, 2).ToString();
 
             bool isNegative = false;
-            
-            if(moneyValue < 0) 
+
+            if (moneyValue < 0)
             {
                 money = money.Substring(1);
                 isNegative = true;
@@ -93,9 +95,9 @@ namespace TaxComputationAPI.Helpers
             string result = string.Empty;
             string curr = string.Empty;
 
-            string [] currencyArray = {"=N=", "=S=", "=E=", "=P=", "=Y="};
+            string[] currencyArray = { "=N=", "=S=", "=E=", "=P=", "=Y=" };
 
-            switch(currency)
+            switch (currency)
             {
                 case "NGN":
                     curr = currencyArray[0];
@@ -116,19 +118,21 @@ namespace TaxComputationAPI.Helpers
                     curr = currencyArray[0];
                     break;
             }
-            
+
             money = money.Trim();
+
+            bool hasDot = money.Any(p => p.Equals('.'));
+
             int moneySize = money.Length;
             int count = 1;
-            bool foundDot = false;
+            bool fountDot = false;
 
-            for(int i = money.Length - 1; i >= 0; i--)
+            for (int i = money.Length - 1; i >= 0; i--)
             {
-                if(money[i].ToString() == ".") foundDot = true;
 
                 string value = money[i].ToString();
 
-                if(string.IsNullOrEmpty(result)) 
+                if (string.IsNullOrEmpty(result))
                 {
                     result += value;
                 }
@@ -139,25 +143,44 @@ namespace TaxComputationAPI.Helpers
 
                 moneySize--;
 
-                if(count == 3 && (moneySize > 3 || moneySize >= 1)) 
+                if (hasDot)
                 {
-                    if(!foundDot)
+                    if (fountDot)
                     {
-                        result = "," + result;
-                        count = 0;
-                    }
-                }
+                        var report = AddComma(result, count, moneySize);
 
-                count++;
+                        result = report.Item1;
+                        count = report.Item2;
+                    }
+                    if (money[i] == '.') fountDot = true;
+                }
+                else
+                {
+                    var report = AddComma(result, count, moneySize);
+
+                    result = report.Item1;
+                    count = report.Item2;
+                }
+                
             }
 
+            if (isNegative) result = $"({result})";
 
-            if(isNegative) result = $"({result})";
-
-            if(addCurrency) result = curr + result;
+            if (addCurrency) result = curr + result;
 
             return result;
         }
-    
+
+        private static Tuple<string, int> AddComma(string result, int count, int moneySize)
+        {
+            if (count == 3 && (moneySize > 3 || moneySize >= 1))
+            {
+                result = "," + result;
+                count = 0;
+            }
+            count++;
+            return new Tuple<string, int>(result, count);
+        }
+
     }
 }
