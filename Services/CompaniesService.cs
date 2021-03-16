@@ -48,6 +48,8 @@ namespace TaxComputationAPI.Services
 
             if(company.Id > 0)
             {
+
+                //Frontend hack
                 company.ClosingYear = company.OpeningYear;
                 company.OpeningYear = company.ClosingYear.AddYears(-1).AddDays(1);
                 
