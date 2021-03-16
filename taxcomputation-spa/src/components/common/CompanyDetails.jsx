@@ -58,16 +58,13 @@ const CompanyDetails = ({
               <strong>TIN Number:</strong> {companyDetails.tinNumber}
             </p>
             <p className="company-details">
-              <strong>Date Created:</strong>{" "}
-              {new Date(companyDetails.dateCreated).toISOString().slice(0, 10)}
+              <strong>Date Created:</strong> {companyDetails.dateCreated.slice(0, 10)}
             </p>
             <p className="company-details">
-              <strong>Opening Year:</strong>{" "}
-              {new Date(companyDetails.openingYear).toISOString().slice(0, 10)}
+              <strong>Opening Year:</strong> {companyDetails.openingYear.slice(0, 10)}
             </p>
             <p className="company-details">
-              <strong>Closing Year:</strong>{" "}
-              {new Date(companyDetails.closingYear).toISOString().slice(0, 10)}
+              <strong>Closing Year:</strong> {companyDetails.closingYear.slice(0, 10)}
             </p>
             <p className="company-details">
               <strong>Minimum Tax Type:</strong>{" "}
