@@ -7,7 +7,13 @@ import ViewModeDataTable from "../common/ViewModeDataTable";
 import ViewLoader from "../common/ViewLoader";
 import constants from "../../constants";
 
-const MinimumTaxView = ({ year, toast, percentageTurnOver, setPercentageTurnOver }) => {
+const MinimumTaxView = ({
+  year,
+  toast,
+  percentageTurnOver,
+  setPercentageTurnOver,
+  setPercentageTurnOverValue
+}) => {
   const isMounted = React.useRef(true);
   const [{ companyId, minimumTaxTypeId }] = useCompany();
   const [loading, setLoading] = React.useState();
@@ -19,6 +25,13 @@ const MinimumTaxView = ({ year, toast, percentageTurnOver, setPercentageTurnOver
 
     return () => (isMounted.current = false);
   }, []);
+
+  React.useEffect(() => {
+    if (!percentageTurnOver.value) {
+      setMinimumTaxData(null);
+      setPercentageTurnOverValue(undefined);
+    }
+  }, [percentageTurnOver.value, setPercentageTurnOverValue]);
 
   React.useEffect(() => {
     if (!companyId) return;
@@ -78,16 +91,16 @@ const MinimumTaxView = ({ year, toast, percentageTurnOver, setPercentageTurnOver
               let newState = [];
               return newState.concat([
                 {
-                  category: `${percentageTurnOver.value}% OF TURNOVER`,
-                  credit: utils.currencyFormatter(data.fivePercentTurnOver)
+                  category: <strong>Minimum Tax Payable</strong>,
+                  credit: utils.currencyFormatter(data.turnOver)
                 },
                 {
                   category: "Dividend Income",
                   credit: data.dividend ? utils.currencyFormatter(data.dividend) : null
                 },
                 {
-                  category: <strong>Minimum Tax Payable</strong>,
-                  credit: utils.currencyFormatter(data.turnOver)
+                  category: `${percentageTurnOver.value}% OF TURNOVER`,
+                  credit: utils.currencyFormatter(data.fivePercentTurnOver)
                 }
               ]);
             });

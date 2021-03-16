@@ -41,12 +41,14 @@ const ModuleHeader = ({
     { label: "View - Mode", value: "view" }
   ]);
 
-  const canQueryPercentageTurnOver = () =>
+  const canQueryPercentageTurnOver = () => {
+    if (!percentageTurnOver.value) return;
     setPercentageTurnOver(state => {
       const newState = { ...state };
       newState.canQuery = true;
       return newState;
     });
+  };
 
   React.useEffect(() => {
     setModeSelectItems(state =>

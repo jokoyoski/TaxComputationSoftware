@@ -39,7 +39,7 @@ const AddEditCompanyForm = ({
       cacNumber,
       tinNumber,
       companyDescription,
-      openingYear,
+      closingYear,
       monthOfOperation,
       unRelievedCf,
       lossCf,
@@ -47,18 +47,19 @@ const AddEditCompanyForm = ({
       minimumTaxTypeId
     } = data;
     try {
-      const openingYearDate = new Date(openingYear);
-      const day = openingYearDate.getDate();
-      const month = openingYearDate.getMonth() + 1;
-      const year = openingYearDate.getFullYear();
-      const formattedOpeningYear = `${year}/${month}/${day}`;
+      const closingYearDate = new Date(closingYear);
+      const day = closingYearDate.getDate();
+      const month = closingYearDate.getMonth() + 1;
+      const year = closingYearDate.getFullYear();
+      const formattedClosingYear = `${year}/${month}/${day}`;
       const response = await addEditCompany({
         companyId,
         companyName,
         cacNumber,
         tinNumber,
         companyDescription,
-        openingYear: formattedOpeningYear,
+        closingYear: formattedClosingYear,
+        openingYear: formattedClosingYear,
         monthOfOperation,
         unRelievedCf,
         lossCf,
@@ -264,25 +265,25 @@ const AddEditCompanyForm = ({
               />
             </div>
             <div className="p-d-flex p-flex-column" style={{ marginBottom: 15 }}>
-              <label htmlFor="openingYearInput" style={{ marginBottom: 10 }}>
+              <label htmlFor="closingYearInput" style={{ marginBottom: 10 }}>
                 Closing Financial Year
               </label>
               <Controller
-                name="openingYear"
+                name="closingYear"
                 control={control}
                 rules={{ required: true }}
-                defaultValue={companyDetails && new Date(companyDetails.closingYear)}
+                defaultValue={companyDetails && new Date(companyDetails.closingYear.slice(0, 10))}
                 render={props => (
                   <Calendar
                     style={{ marginBottom: 5, width: "100%" }}
-                    id="openingYearInput"
+                    id="closingYearInput"
                     dateFormat="yy/mm/dd"
                     value={props.value}
                     onChange={e => props.onChange(e.value)}
                   />
                 )}
               />
-              {errors.openingYear && (
+              {errors.closingYear && (
                 <span style={{ fontSize: 12, color: "red" }}>
                   Closing Financial Year is required
                 </span>
@@ -296,7 +297,7 @@ const AddEditCompanyForm = ({
                 name="companyDescription"
                 control={control}
                 rules={{ required: true }}
-                defaultValue=""
+                defaultValue={companyDetails && companyDetails.companyDescription}
                 render={props => (
                   <InputTextarea
                     rows={3}
