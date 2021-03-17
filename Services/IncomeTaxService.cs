@@ -64,12 +64,12 @@ namespace TaxComputationSoftware.Services
             var profitOrLoss = await _profitAndLossService.GetProfitAndLossForIncomeTax(companyId, yearId);
             decimal unrelievedCf = 0;
             decimal taxableProfit = 0;
-            decimal incomeTaxPayablePercent = (decimal)30 / 100;
-            decimal educationTaxAssesibleProfit = (decimal)2 / 100;
+            decimal incomeTaxPayablePercent = 0.3M;
+            decimal educationTaxAssesibleProfit = 0.02M;
             var companyDetails = await _companiesService.GetCompanyAsync(companyId);
-            decimal percentage = (decimal)1 / 100;     //annual percentage rate
+            decimal percentage = 0.01M;     //annual percentage rate
             bool isAssessibleProfit = false;
-            decimal iTLevy = 0;
+            decimal iTLevy = 0M;
 
 
             if (IsItLevyView)
@@ -471,7 +471,7 @@ namespace TaxComputationSoftware.Services
                 {
                     Description = "Education Tax @ 2% of Assessable profit",
                     ColumnOne = "",
-                    ColumnTwo = $"₦{Utilities.FormatAmount(educationTaxAssesibleProfit * taxableProfit)}",
+                    ColumnTwo = $"₦{Utilities.FormatAmount(educationTaxAssesibleProfit * accessibleType)}",
                     CanBolden = true,
                     CanUnderlineDownColumn2 = true
 
