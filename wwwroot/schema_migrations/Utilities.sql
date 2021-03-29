@@ -226,6 +226,51 @@ VALUES(
     @CompanyId
 )
 GO
+
+--------------------------------------- STORED PROCEDURE TO  Update FINANCIAL YEAR -----------------------------------------
+IF OBJECT_ID('[dbo].[usp_Update_Financial_Year]') IS NOT NULL
+BEGIN
+  DROP procedure [dbo].[usp_Update_Financial_Year]
+END
+GO
+CREATE procedure [dbo].[usp_Update_Financial_Year](
+  @Id int,
+  @Name varchar(50),
+  @OpeningDate datetime2,
+  @ClosingDate datetime2,
+  @FinancialDate varchar(30),
+  @CompanyId int
+)
+AS
+-- Update rows in table 'TableName'
+UPDATE [dbo].[FinancialYear]
+SET
+    Name = @Name,
+    OpeningDate = @OpeningDate,
+    ClosingDate = @ClosingDate,
+    FinancialDate = @FinancialDate,
+    CompanyId = @CompanyId
+  -- add more columns and values here
+WHERE 	Id = @Id
+GO 
+
+
+--------------------------------------- STORED PROCEDURE TO  DELETE FINANCIAL YEAR -----------------------------------------
+IF OBJECT_ID('[dbo].[usp_Delete_Financial_Year]') IS NOT NULL
+BEGIN
+  DROP procedure [dbo].[usp_Delete_Financial_Year]
+END
+GO
+CREATE procedure [dbo].[usp_Delete_Financial_Year](
+  @CompanyId int
+)
+AS
+-- Update rows in table 'TableName'
+DELETE FROM [dbo].[FinancialYear] WHERE 	CompanyId = @CompanyId
+GO 
+
+
+
 --------------------------------------- STORED PROCEDURE TO  GET FINANCIAL YEAR -------------------------------------------------------
 IF OBJECT_ID('[dbo].[usp_Get_Financial_Year]') IS nOT NULL
 BEGIN

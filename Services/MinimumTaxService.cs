@@ -23,10 +23,12 @@ namespace TaxComputationAPI.Services
         private readonly ILogger<MinimumTaxService> _logger;
         private readonly IMinimumTaxRepository _minimumTaxRepository;
         private readonly IProfitAndLossRepository _profitAndLossRepository;
+        private readonly IProfitAndLossService _profitAndLossService;
 
         public MinimumTaxService(IEmailService emailService, IUtilitiesRepository utilitiesRepository,
                                 ICompaniesRepository companiesRepository, ILogger<MinimumTaxService> logger,
-                                IMinimumTaxRepository minimumTaxRepository, IProfitAndLossRepository profitAndLossRepository)
+                                IMinimumTaxRepository minimumTaxRepository, IProfitAndLossRepository profitAndLossRepository,
+                                IProfitAndLossService profitAndLossService)
         {
             _emailService = emailService;
             _utilitiesRepository = utilitiesRepository;
@@ -34,6 +36,7 @@ namespace TaxComputationAPI.Services
             _logger = logger;
             _minimumTaxRepository = minimumTaxRepository;
             _profitAndLossRepository = profitAndLossRepository;
+            _profitAndLossService = profitAndLossService;
         }
 
         public async Task<MinimumTaxResponse> AddOldMinimumTax(AddMinimumTaxDto addMinimumTaxDto)
@@ -65,7 +68,18 @@ namespace TaxComputationAPI.Services
 
                 var company = await _companiesRepository.GetCompanyAsync(addMinimumTaxDto.CompanyId);
 
-                var profitAndLoss_GrossProfit = await _profitAndLossRepository.GetProfitAndLossRecordAsync(addMinimumTaxDto.CompanyId, addMinimumTaxDto.FinancialYearId);
+                if (company == null)
+                {
+                    return new MinimumTaxResponse
+                    {
+                        ResponseCode = System.Net.HttpStatusCode.NotFound,
+                        ResponseDescription = $"Company with Id - {addMinimumTaxDto.CompanyId} doesnot exist",
+                        Code = "10"
+                    };
+
+                }
+
+                var profitAndLoss_GrossProfit = await _profitAndLossService.GetProfitAndLoss(addMinimumTaxDto.FinancialYearId, addMinimumTaxDto.CompanyId);
 
                 var profitAndLoss_Revenue = await _minimumTaxRepository.GetNewMinimumTax(addMinimumTaxDto.CompanyId, addMinimumTaxDto.FinancialYearId);
 
@@ -81,7 +95,7 @@ namespace TaxComputationAPI.Services
 
                 }
 
-                var grossProft = profitAndLoss_GrossProfit.ProfitAndLoss;
+                var grossProft = Decimal.Parse(profitAndLoss_GrossProfit.Revenue) - Decimal.Parse(profitAndLoss_GrossProfit.CostOfSales);
 
                 var revenue = profitAndLoss_Revenue.Revenue;
 
@@ -278,6 +292,8 @@ namespace TaxComputationAPI.Services
             singleDate.Name = $"Minimum Tax Payable";
             singleDate.Value1 = $"{0}";
             singleDate.Value2 = $"{_minimumTaxPayable}";
+            singleDate.CanBolden = true;
+            singleDate.CanUnderlineDownColumn2 = true;
             data.Add(singleDate);
 
             return new MinimumTaxResponse

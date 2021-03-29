@@ -31,7 +31,7 @@ namespace TaxComputationAPI.Services
         }
         ///////
 
-        private async Task<ProfitAndLoss> GetProfitAndLoss(int yearId, int companyId)
+        public async Task<ProfitAndLoss> GetProfitAndLoss(int yearId, int companyId)
         {
             decimal revenueCreditTotal = 0;
             decimal revenueDebitTotal = 0;
@@ -409,7 +409,7 @@ namespace TaxComputationAPI.Services
                 decimal profit = decimal.Parse(record.Revenue) - decimal.Parse(record.CostOfSales);
                 gross.Total = $"₦{Utilities.FormatAmount(profit)}";
                 records.Add(gross);
-
+                ///////
             }
             else
             {

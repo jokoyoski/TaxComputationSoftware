@@ -13,6 +13,7 @@ using TaxComputationAPI.Interfaces;
 using TaxComputationAPI.Manager;
 using TaxComputationAPI.Models;
 using TaxComputationSoftware.Interfaces;
+using TaxComputationSoftware.Models;
 
 namespace TaxComputationAPI.Repositories
 {
@@ -99,7 +100,7 @@ namespace TaxComputationAPI.Repositories
                     DynamicParameters parameters = new DynamicParameters();
                     parameters.Add("@CompanyName", company.CompanyName);
                     parameters.Add("@CompanyDescription", company.CompanyDescription);
-                    parameters.Add("@CacNumber", company.CompanyDescription);
+                    parameters.Add("@CacNumber", company.CacNumber);
                     parameters.Add("@TinNumber", company.TinNumber);
                     parameters.Add("@DateCreated", company.DateCreated);
                     parameters.Add("@OpeningYear", company.OpeningYear);
@@ -211,10 +212,7 @@ namespace TaxComputationAPI.Repositories
                     parameters.Add("@CompanyDescription", company.CompanyDescription);
                     parameters.Add("@CacNumber", company.CacNumber);
                     parameters.Add("@TinNumber", company.TinNumber);
-                    parameters.Add("@OpeningYear", company.OpeningYear);
                     parameters.Add("@MinimumTaxTypeId", company.MinimumTaxTypeId);
-                    parameters.Add("@ClosingYear", company.ClosingYear);
-                    parameters.Add("@MonthOfOperation", company.MonthOfOperation);
                     rowAffected = con.Execute("[dbo].[usp_Update_Company]", parameters, commandType: CommandType.StoredProcedure);
                 }
 

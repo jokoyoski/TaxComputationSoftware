@@ -72,25 +72,8 @@ namespace TaxComputationAPI.Services
 
             var companyDetails = await GetCompanyByTinAsync(company.TinNumber);
 
-            var closing = companyDetails.ClosingYear;
-            var opening = companyDetails.OpeningYear;
-            var tax = closing.AddYears(1);
+            await ProcessFinancialYear(companyDetails, 0);
 
-            int i = -9;
-
-            while(i <= 0)
-            {
-                var previousOpening = opening.AddYears(i);
-                var previousClosing = closing.AddYears(i);
-                var previousTax = tax.AddYears(i);
-                var previousFinancial = previousClosing.Year;
-
-                await _utilitiesRepository.AddFinancialYearAsync(new FinancialYear { Name = previousTax.Year.ToString(), OpeningDate = previousOpening, ClosingDate = previousClosing, FinancialDate = previousFinancial.ToString(), CompanyId = companyDetails.Id });
-
-                i++;
-            }
-
-            
             var companyFinancialYearList = await _utilitiesRepository.GetFinancialCompanyAsync(companyDetails.Id);
 
             _deferredTaxRepository.CreateDeferredTaxBroughtFoward(companyDetails.Id, company.DeferredTaxBroughtFoward, companyFinancialYearList[8].Id);
@@ -102,8 +85,48 @@ namespace TaxComputationAPI.Services
                 YearId = companyFinancialYearList[8].Id,
             });
 
-            _notificationRepository.InsertPreNotification(new PreNotification{ CompanyId = companyDetails.Id, OpeningDate = opening, ClosingDate= closing});
+            _notificationRepository.InsertPreNotification(new PreNotification{ CompanyId = companyDetails.Id, OpeningDate = companyDetails.OpeningYear, ClosingDate= companyDetails.ClosingYear});
          }
+
+        private async Task ProcessFinancialYear(Company companyDetails, int operation)
+        {
+            var closing = companyDetails.ClosingYear;
+            var opening = companyDetails.OpeningYear;
+            var tax = closing.AddYears(1);
+            bool financialYearDeleted = false;
+
+            int i = -9;
+
+            while(i <= 0)
+            {
+                var previousOpening = opening.AddYears(i);
+                var previousClosing = closing.AddYears(i);
+                var previousTax = tax.AddYears(i);
+                var previousFinancial = previousClosing.Year;
+
+                switch(operation)
+                {
+                    case 0:
+
+                        await _utilitiesRepository.AddFinancialYearAsync(new FinancialYear { Name = previousTax.Year.ToString(), OpeningDate = previousOpening, ClosingDate = previousClosing, FinancialDate = previousFinancial.ToString(), CompanyId = companyDetails.Id });
+                        break;
+                        
+                    case 1:
+
+                        if(!financialYearDeleted) 
+                        {
+                            financialYearDeleted = true; 
+                            await _utilitiesRepository.DeleteFinancialYearAsync(new FinancialYear { Name = previousTax.Year.ToString(), OpeningDate = previousOpening, ClosingDate = previousClosing, FinancialDate = previousFinancial.ToString(), CompanyId = companyDetails.Id });
+                        }
+                        
+                        await _utilitiesRepository.AddFinancialYearAsync(new FinancialYear { Name = previousTax.Year.ToString(), OpeningDate = previousOpening, ClosingDate = previousClosing, FinancialDate = previousFinancial.ToString(), CompanyId = companyDetails.Id });
+            
+                        break;
+                }
+                
+                i++;
+            }
+        }
      
         public async Task<Company> GetCompanyByTinAsync(string tinNumber)
         {

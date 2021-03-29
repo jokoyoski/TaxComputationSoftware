@@ -12,7 +12,6 @@ namespace TaxComputationAPI.Dtos
         [Required]
         public string CompanyName { get; set; }
         [Required]
-        [StringLength(50, MinimumLength = 5, ErrorMessage = "You must specify description between 10 and 20 characters")]
         public string CompanyDescription { get; set; }
         [Required(ErrorMessage = "CacNumber is Required")]
         public string CacNumber { get; set; }
