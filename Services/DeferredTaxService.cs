@@ -108,9 +108,9 @@ namespace TaxComputationSoftware.Services
 
             });
            
-            if (unrelievedCf.AssessableLoss != 0)
+            if (unrelievedCf.UnRelievedCf != 0)
             {
-                lossCf = unrelievedCf.AssessableLoss > 0 ? unrelievedCf.AssessableLoss : -unrelievedCf.AssessableLoss;
+                lossCf = unrelievedCf.UnRelievedCf > 0 ? unrelievedCf.UnRelievedCf : -unrelievedCf.UnRelievedCf;
 
 
             }
@@ -118,7 +118,7 @@ namespace TaxComputationSoftware.Services
 
             deferredTaxDto.Add(new DeferredTaxDto
             {
-                Description = "Unabsorbed losses c/f",
+                Description = "Unrelieved loss c/f",
                 ColumnOne = $"₦{Utilities.FormatAmount(lossCf)}",
                 ColumnTwo = $"₦{Utilities.FormatAmount(lessTotal)}",
                 CanBolden = true

@@ -69,7 +69,7 @@ namespace TaxComputationSoftware.Services
             var companyDetails = await _companiesService.GetCompanyAsync(companyId);
             decimal percentage = (decimal)1 / 100;     //annual percentage rate
             decimal twothird = (decimal)2/3;
-            twothird = Math.Round(twothird, 1);
+            twothird = Math.Round(twothird,2);
             bool isAssessibleProfit = false;
             decimal iTLevy = 0;
 
