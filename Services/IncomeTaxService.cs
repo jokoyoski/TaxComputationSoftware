@@ -525,7 +525,7 @@ namespace TaxComputationSoftware.Services
             if (companyDetails.MinimumTaxTypeId==0)
             {    //// if old 
                 var minimumTaxValue = await _minimumTaxService.GetOldMinimumTax(companyId, yearId);
-                if (minimumTaxValue != null)
+               if (minimumTaxValue.ResponseDescription!="Minimum tax not found")
                 {
                     incomeListDto.Add(new IncomeTaxDto
                     {
@@ -615,7 +615,7 @@ namespace TaxComputationSoftware.Services
                 CompanyId = companyId,
                 YearId = yearId,
                 UnRelievedCf = unrelievedCf,
-                AssessableLoss = values,
+                AssessableLoss = losscf,
             });
             if (IsBringLossFoward)
             {

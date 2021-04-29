@@ -76,8 +76,6 @@ namespace TaxComputationAPI.Services
 
             if (disposal != 0)  //less than zero specifies that the account needs balancing aadjustmnet
             {
-
-
                 closingResidue = 0;
                 annual = 0;
                 Initial = 0;

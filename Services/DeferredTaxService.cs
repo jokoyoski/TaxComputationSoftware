@@ -108,9 +108,9 @@ namespace TaxComputationSoftware.Services
 
             });
            
-            if (unrelievedCf.UnRelievedCf != 0)
+            if (unrelievedCf.AssessableLoss != 0)
             {
-                lossCf = unrelievedCf.UnRelievedCf > 0 ? unrelievedCf.UnRelievedCf : -unrelievedCf.UnRelievedCf;
+                lossCf = unrelievedCf.AssessableLoss > 0 ? unrelievedCf.AssessableLoss : -unrelievedCf.AssessableLoss;
 
 
             }
