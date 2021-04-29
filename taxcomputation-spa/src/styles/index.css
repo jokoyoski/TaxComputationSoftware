@@ -252,3 +252,8 @@ td {
 table {
   font-size: 14px;
 }
+
+.p-datepicker {
+  left: -25px !important;
+  transform: scale(0.7) !important;
+}

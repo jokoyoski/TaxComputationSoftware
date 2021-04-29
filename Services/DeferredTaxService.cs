@@ -118,7 +118,7 @@ namespace TaxComputationSoftware.Services
 
             deferredTaxDto.Add(new DeferredTaxDto
             {
-                Description = "Unabsorbed losses c/f",
+                Description = "Unrelieved loss c/f",
                 ColumnOne = $"₦{Utilities.FormatAmount(lossCf)}",
                 ColumnTwo = $"₦{Utilities.FormatAmount(lessTotal)}",
                 CanBolden = true
