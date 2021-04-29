@@ -102,6 +102,92 @@ namespace TaxComputationAPI.Repositories
             }
         }
 
+
+        public async Task UpdateFinancialYearAsync(FinancialYear financialYear)
+        {
+            if (financialYear == null) throw new ArgumentNullException(nameof(financialYear));
+
+            try
+            {
+
+                using (IDbConnection conn = await _databaseManager.DatabaseConnection())
+                {
+                    if (conn.State == ConnectionState.Closed) conn.Open();
+
+                    DynamicParameters parameters = new DynamicParameters();
+
+                    parameters.Add("@Id", financialYear.Id);
+                    parameters.Add("@Name", financialYear.Name);
+                    parameters.Add("@CompanyId", financialYear.CompanyId);
+                    parameters.Add("@OpeningDate", financialYear.OpeningDate);
+                    parameters.Add("@ClosingDate", financialYear.ClosingDate);
+                    parameters.Add("@FinancialDate", financialYear.FinancialDate);
+
+
+                    try
+                    {
+                        var respone = conn.Execute("[dbo].[usp_Update_Financial_Year]", parameters, commandType: CommandType.StoredProcedure);
+                        conn.Close();
+                    }
+                    catch (Exception e)
+                    {
+
+                        _logger.LogError($"{e.Message}");
+
+                        throw e;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+
+                _logger.LogError(e.Message);
+                await _emailService.ExceptionEmail(MethodBase.GetCurrentMethod().DeclaringType.Name, e.Message);
+                throw new SystemException(e.Message);
+            }
+        }
+
+
+        public async Task DeleteFinancialYearAsync(FinancialYear financialYear)
+        {
+            if (financialYear == null) throw new ArgumentNullException(nameof(financialYear));
+
+            try
+            {
+
+                using (IDbConnection conn = await _databaseManager.DatabaseConnection())
+                {
+                    if (conn.State == ConnectionState.Closed) conn.Open();
+
+                    DynamicParameters parameters = new DynamicParameters();
+
+                    parameters.Add("@CompanyId", financialYear.CompanyId);
+
+
+                    try
+                    {
+                        var respone = conn.Execute("[dbo].[usp_Delete_Financial_Year]", parameters, commandType: CommandType.StoredProcedure);
+                        conn.Close();
+                    }
+                    catch (Exception e)
+                    {
+
+                        _logger.LogError($"{e.Message}");
+
+                        throw e;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+
+                _logger.LogError(e.Message);
+                await _emailService.ExceptionEmail(MethodBase.GetCurrentMethod().DeclaringType.Name, e.Message);
+                throw new SystemException(e.Message);
+            }
+        }
+
+
         public async Task<FinancialYear> GetFinancialYearAsync(int year)
         {
             if (year <= 0) throw new ArgumentNullException(nameof(year));

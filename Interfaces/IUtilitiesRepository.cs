@@ -23,6 +23,10 @@ namespace TaxComputationAPI.Interfaces
 
         Task AddFinancialYearAsync(FinancialYear financialClass);
 
+        Task UpdateFinancialYearAsync(FinancialYear financialYear);
+
+        Task DeleteFinancialYearAsync(FinancialYear financialYear);
+
         Task<List<AssetMapping>> GetAssetMappingAsync();
 
         Task<AssetMapping> GetAssetMappingAsync(string Name);

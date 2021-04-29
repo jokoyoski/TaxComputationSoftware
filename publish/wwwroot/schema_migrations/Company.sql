@@ -99,7 +99,7 @@ create table Company(
 
  Id   int identity(1,1) NOT NULL ,
  CompanyName varchar(200),
-CompanyDescription varchar(200),
+CompanyDescription varchar(max),
 CacNumber nvarchar(max) null,
 TinNumber nvarchar(max)null,
 DateCreated datetime null,
@@ -193,23 +193,17 @@ create procedure usp_Update_Company(
 @CompanyDescription varchar(200),
 @CacNumber nvarchar(max) null,
 @TinNumber nvarchar(max)null,
-@OpeningYear datetime  null,
-@ClosingYear datetime  null,
-@MinimumTaxTypeId int null, 
-@MonthOfOperation int  null
+@MinimumTaxTypeId int null
 )
 AS
-
 Update [dbo].[Company]
 set CompanyName = @CompanyName,
 CompanyDescription = @CompanyDescription,
 CacNumber = @CacNumber,
 TinNumber = @TinNumber,
-OpeningYear = @OpeningYear,
-ClosingYear = @ClosingYear,
-MinimumTaxTypeId = @MinimumTaxTypeId, 
-MonthOfOperation = @MonthOfOperation
-
+MinimumTaxTypeId = @MinimumTaxTypeId
 where Id = @Id
-
 GO
+
+
+

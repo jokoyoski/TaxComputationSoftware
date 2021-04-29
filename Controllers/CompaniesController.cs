@@ -39,7 +39,7 @@ namespace TaxComputationAPI.Controllers
         }
 
         [HttpGet("get-company/{id}", Name = "GetCompany")]
-        [Authorize]
+        //[Authorize]
 
         public async Task<IActionResult> GetCompany(int id)
         {
@@ -94,14 +94,14 @@ namespace TaxComputationAPI.Controllers
         public async Task<IActionResult> Company(int companyId, int financialYearId)
         {
 
-            if (companyId <= 0) return BadRequest("Invlaid companyId");
-            if (financialYearId <= 0) return BadRequest("Invlaid financialYearId");
+            if (companyId <= 0) return StatusCode(400, new { errors = new[] { "Invlaid companyId!" } });
+            if (financialYearId <= 0) return StatusCode(400, new { errors = new[] { "Invlaid financialYearId!" } });
 
             try
             {
                 var company = await _companiesService.GetCompanyInfoByFinancialYear(companyId, financialYearId);
 
-                if (company == null) return NotFound();
+                if (company == null) return StatusCode(404, new { errors = new[] { "Data not found!" } });
 
                 return Ok(company);
             }
@@ -130,7 +130,7 @@ namespace TaxComputationAPI.Controllers
         }
 
         [HttpPost("add-company")]
-        [Authorize]
+        //[Authorize]
 
         // [Authorize(Roles = Constants.SYS+ "," + Constants.User)]
         public async Task<IActionResult> AddCompany(CompanyForRegisterDto companyForRegisterDto)
@@ -145,6 +145,8 @@ namespace TaxComputationAPI.Controllers
                     return StatusCode(400, new { errors = new[] { "Since it is a loss brought foward, a negative value is needed!!" } });
                 }
 
+                
+
                 var companyToCreate = _mapper.Map<Company>(companyForRegisterDto);
 
                 if (companyForRegisterDto.CompanyId > 0) companyToCreate.Id = companyForRegisterDto.CompanyId;
@@ -153,8 +155,12 @@ namespace TaxComputationAPI.Controllers
                 {
                     await _companiesService.UpdateCompanyAsync(companyToCreate);
 
-                    return CreatedAtRoute("GetCompany", new { controller = "Companies"});
+                    return Ok();
                 }
+
+                //Hack for Frontend
+                companyToCreate.ClosingYear = companyToCreate.OpeningYear;
+                companyToCreate.OpeningYear = default(DateTime);
                 
                 var companyRecord = await _companiesService.GetCompanyByTinAsync(companyForRegisterDto.TinNumber);
 
@@ -166,7 +172,7 @@ namespace TaxComputationAPI.Controllers
                 companyToCreate.IsActive = true;
                 companyToCreate.DateCreated = DateTime.Now;
                 companyToCreate.CompanyName = companyForRegisterDto.CompanyName;
-                companyToCreate.ClosingYear = companyToCreate.OpeningYear;
+                companyToCreate.ClosingYear = companyToCreate.ClosingYear;
 
                 await _companiesService.AddCompanyAsync(companyToCreate);
 

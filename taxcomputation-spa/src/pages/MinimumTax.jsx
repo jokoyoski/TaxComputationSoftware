@@ -25,9 +25,23 @@ const MinimumTax = () => {
   }));
 
   React.useEffect(() => {
-    if (percentageTurnOver.value === "") setPercentageTurnOverValue(undefined);
-    else setPercentageTurnOverValue(percentageTurnOver.value);
-  }, [percentageTurnOver.value, setPercentageTurnOverValue]);
+    if (percentageTurnOverValue && !percentageTurnOver.canQuery) {
+      setPercentageTurnOver(state => ({ ...state, canQuery: true }));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  React.useEffect(() => {
+    if (!percentageTurnOver.canQuery) {
+      if (percentageTurnOverValue) return;
+      setPercentageTurnOverValue(undefined);
+    } else setPercentageTurnOverValue(percentageTurnOver.value);
+  }, [
+    percentageTurnOver.canQuery,
+    percentageTurnOver.value,
+    percentageTurnOverValue,
+    setPercentageTurnOverValue
+  ]);
 
   return (
     <Layout title={title}>
@@ -50,6 +64,7 @@ const MinimumTax = () => {
                   toast={toast}
                   percentageTurnOver={percentageTurnOver}
                   setPercentageTurnOver={setPercentageTurnOver}
+                  setPercentageTurnOverValue={setPercentageTurnOverValue}
                 />
               </ViewMode>
             )

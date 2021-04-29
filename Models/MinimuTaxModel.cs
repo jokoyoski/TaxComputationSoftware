@@ -13,6 +13,7 @@ namespace TaxComputationSoftware.Model
         public decimal NetAsset { get; set; }
         public decimal ShareCapital { get; set; }
         public decimal TurnOver { get; set; }
+        public decimal Revenue { get; set; }
         public decimal MinimumTaxPayable { get; set; }
         public DateTime DateCreated { get; set; }
 

@@ -117,5 +117,21 @@ namespace TaxComputationAPI.Controllers
 
             }
         }
+   
+
+        [HttpGet("doownload")]
+        public async Task<IActionResult> DownloadOldMinimumTax(int companyId, int yearId)
+        {
+            if(companyId <= 0) return BadRequest($"Invalid companyId: {companyId}");
+
+            if(yearId <= 0) return BadRequest($"Invalid yearId: {yearId}");
+
+            var item = await _trialBalanceService.DownloadExcel(companyId, yearId);
+
+            if(item == null) return NotFound("File not found");
+
+            return File(item, "application/octet-stream", "Sample.csv");
+        }
+   
     }
 }

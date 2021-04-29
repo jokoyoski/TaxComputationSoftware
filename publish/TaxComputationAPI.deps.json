@@ -41,6 +41,8 @@
           "Serilog.Sinks.File": "4.1.0",
           "Serilog.Sinks.RollingFile": "3.3.0",
           "Swashbuckle.AspNetCore": "5.6.3",
+          "iTextSharp": "5.5.10",
+          "itextsharp.xmlworker": "5.5.10",
           "Quartz": "3.2.3",
           "Microsoft.AspNetCore.Antiforgery": "3.1.0.0",
           "Microsoft.AspNetCore.Authentication.Abstractions": "3.1.0.0",
@@ -370,6 +372,31 @@
         },
         "compile": {
           "lib/netstandard2.0/Dapper.dll": {}
+        }
+      },
+      "iTextSharp/5.5.10": {
+        "runtime": {
+          "lib/itextsharp.dll": {
+            "assemblyVersion": "5.5.10.0",
+            "fileVersion": "0.0.0.0"
+          }
+        },
+        "compile": {
+          "lib/itextsharp.dll": {}
+        }
+      },
+      "itextsharp.xmlworker/5.5.10": {
+        "dependencies": {
+          "iTextSharp": "5.5.10"
+        },
+        "runtime": {
+          "lib/itextsharp.xmlworker.dll": {
+            "assemblyVersion": "5.5.10.0",
+            "fileVersion": "0.0.0.0"
+          }
+        },
+        "compile": {
+          "lib/itextsharp.xmlworker.dll": {}
         }
       },
       "Microsoft.AspNetCore.Authentication.JwtBearer/3.1.8": {
@@ -3575,6 +3602,20 @@
       "sha512": "sha512-/xAgd8BO8EDnJ0sURWEV8LptHHvTKxoYiT63YUF2U/yWE2VyUCqR2jcrtEyNngT9Kjzppecz95UKiBla3PnR7g==",
       "path": "dapper/2.0.35",
       "hashPath": "dapper.2.0.35.nupkg.sha512"
+    },
+    "iTextSharp/5.5.10": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-C0JO7VkQIBxd1lQmJz4Flfvvwy0574bG+j/3HXhpNqTmmyD5S/nNOhxVpSydfgr7/Oup7Nf3vFBSByec8u6g0A==",
+      "path": "itextsharp/5.5.10",
+      "hashPath": "itextsharp.5.5.10.nupkg.sha512"
+    },
+    "itextsharp.xmlworker/5.5.10": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-fO52wO/xY9rzGXulNPuhkkHxIVEEtpaXk+G2s3f2vdREA2IhRBepB3GSR2Ip6X49PNOMO0ChAb/kvXbwLqv1hg==",
+      "path": "itextsharp.xmlworker/5.5.10",
+      "hashPath": "itextsharp.xmlworker.5.5.10.nupkg.sha512"
     },
     "Microsoft.AspNetCore.Authentication.JwtBearer/3.1.8": {
       "type": "package",

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TaxComputationAPI.Dtos;
+using TaxComputationAPI.Models;
 using TaxComputationSoftware.Dtos;
 using TaxComputationSoftware.Models;
 
@@ -20,5 +21,7 @@ namespace TaxComputationAPI.Interfaces
         Task SaveProfitsAndLoss(CreateProfitAndLoss profits);
 
         Task<string> GetITLevy(int companyId, int yearId);
+
+        Task<ProfitAndLoss> GetProfitAndLoss(int yearId, int companyId);
     }
 }

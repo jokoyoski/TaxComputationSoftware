@@ -41,7 +41,7 @@ namespace TaxComputationSoftware.Controllers
         }
 
         [HttpGet("{companyId}/{yearId}/{IsItLevyView}")]
-        [Authorize]
+        //[Authorize]
         public async Task<IActionResult> GetIncometax(int companyId, int yearId, bool IsItLevyView, bool isBringLossFoward)
         {
 
