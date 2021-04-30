@@ -31,8 +31,120 @@ namespace TaxComputationSoftware.Repositories
             _logger = logger;
         }
 
+
+
+        public async Task DeleteCapitalAllowanceSummaryById(int assetId, int companyId)
+        {
+            using (IDbConnection conn = await _databaseManager.DatabaseConnection())
+            {
+                if (conn.State == ConnectionState.Closed) conn.Open();
+
+                DynamicParameters parameters = new DynamicParameters();
+                parameters.Add("@AssetId", assetId);
+                parameters.Add("@CompanyId", companyId);
+                try
+                {
+                    conn.Execute("[dbo].[usp_Delete_Capital_Allowance_Summary_By_AssetId_Commpany_Id]", parameters, commandType: CommandType.StoredProcedure);
+                    conn.Close();
+                }
+                catch (Exception e)
+                {
+
+                    _logger.LogError(e.Message);
+                    await _emailService.ExceptionEmail(MethodBase.GetCurrentMethod().DeclaringType.Name, e.Message);
+
+                    throw e;
+                }
+            }
+        }
+
+
+
+
+
+        public async Task<CapitalAllowance> GetCapitalAllowanceById(int id)
+        {
+
+
+            using (IDbConnection conn = await _databaseManager.DatabaseConnection())
+            {
+
+                if (conn.State == ConnectionState.Closed)
+                    conn.Open();
+
+                DynamicParameters parameters = new DynamicParameters();
+
+                parameters.Add("@CapitalAllowanceId", id);
+
+
+                var record = conn.QueryFirstOrDefault<CapitalAllowance>("[dbo].[usp_Get_Capital_Allowance_By_Id]", parameters, commandType: CommandType.StoredProcedure);
+                return record;
+            }
+
+
+            return null;
+        }
+
+        public async Task DeleteCapitalAllowanceByAssetIdCompanyIdYearId(int companyId, int yearId, int assetId)
+        {
+            using (IDbConnection conn = await _databaseManager.DatabaseConnection())
+            {
+                if (conn.State == ConnectionState.Closed) conn.Open();
+
+                DynamicParameters parameters = new DynamicParameters();
+                parameters.Add("@CompanyId", companyId);
+                parameters.Add("@Year", yearId);
+                parameters.Add("@AssetId", assetId);
+                try
+                {
+                    conn.Execute("[dbo].[usp_Delete_Capital_Allowance_By_Company_Id_YearId_Asset_Id]", parameters, commandType: CommandType.StoredProcedure);
+                    conn.Close();
+                }
+                catch (Exception e)
+                {
+
+                    _logger.LogError(e.Message);
+                    await _emailService.ExceptionEmail(MethodBase.GetCurrentMethod().DeclaringType.Name, e.Message);
+
+                    throw e;
+                }
+            }
+        }
+
+
+
+
+
+
+
+
+        public async Task<IEnumerable<CapitalAllowanceSummary>> GetCapitalAllowanceSummaryByCompanyId(int id)
+        {
+
+
+            using (IDbConnection conn = await _databaseManager.DatabaseConnection())
+            {
+
+                if (conn.State == ConnectionState.Closed)
+                    conn.Open();
+
+                DynamicParameters parameters = new DynamicParameters();
+
+                parameters.Add("@CompanyId", id);
+
+
+                var record = await conn.QueryMultipleAsync("[dbo].[usp_Get_Capital_Allowance_Summary_By_CompanyId]", parameters, commandType: CommandType.StoredProcedure);
+                var result = await record.ReadAsync<CapitalAllowanceSummary>();
+                return result;
+            }
+
+
+            return null;
+        }
+
         public async Task<int> UpdateLossBfById(int companyId)
         {
+            
             int rowAffected = 0;
             using (IDbConnection con = await _databaseManager.DatabaseConnection())
             {
@@ -130,21 +242,29 @@ namespace TaxComputationSoftware.Repositories
         public async Task<Company> GetCompanyAsync(int id)
         {
 
-
-            using (IDbConnection conn = await _databaseManager.DatabaseConnection())
+            try
             {
-                if (conn.State == ConnectionState.Closed)
-                    conn.Open();
+                using (IDbConnection conn = await _databaseManager.DatabaseConnection())
+                {
+                    if (conn.State == ConnectionState.Closed)
+                        conn.Open();
 
-                DynamicParameters parameters = new DynamicParameters();
+                    DynamicParameters parameters = new DynamicParameters();
 
-                parameters.Add("@Id", id);
-               
-                var record = await conn.QueryFirstAsync<Company>("[dbo].[usp_Get_Company_By_Id]", parameters, commandType: CommandType.StoredProcedure);
-                return record;
+                    parameters.Add("@Id", id);
+
+                    var record = await conn.QueryFirstAsync<Company>("[dbo].[usp_Get_Company_By_Id]", parameters, commandType: CommandType.StoredProcedure);
+                    return record;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                return null;
             }
 
-           
+
+
         }
 
         public async Task<int> SaveCapitaLAllowanceSummary(CapitalAllowanceSummary capitalAllowance)
@@ -255,7 +375,7 @@ namespace TaxComputationSoftware.Repositories
             return rowAffected;
         }
 
-         public async Task<int> SaveArchivedCapitaLAllowance(CapitalAllowance capitalAllowance, string channel)
+        public async Task<int> SaveArchivedCapitaLAllowance(CapitalAllowance capitalAllowance, string channel)
         {
             try
             {
@@ -378,9 +498,9 @@ namespace TaxComputationSoftware.Repositories
                 DynamicParameters parameters = new DynamicParameters();
 
                 parameters.Add("@Id", preNotification.Id);
-                parameters.Add("@OpeningDate", preNotification.OpeningDate);
-                parameters.Add("@ClosingDate", preNotification.OpeningDate);
-                parameters.Add("@JobDate", preNotification.JobDate);
+                parameters.Add("@OpeningDate",  preNotification.OpeningDate);
+                parameters.Add("@ClosingDate", preNotification.ClosingDate);
+                parameters.Add("@JobDate", DateTime.Today);
 
                 try
                 {
@@ -420,7 +540,7 @@ namespace TaxComputationSoftware.Repositories
 
                     _logger.LogError(e.Message);
                     await _emailService.ExceptionEmail(MethodBase.GetCurrentMethod().DeclaringType.Name, e.Message);
-                    
+
                     throw e;
                 }
             }

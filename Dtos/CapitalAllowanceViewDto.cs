@@ -4,18 +4,19 @@ namespace TaxComputationSoftware.Dtos
     {
         public string TaxYear { get; set; }
         public string OpeningResidue { get; set; }
-        public int Id {get;set;}
-        public int NumberOfYearsAvailable {get;set;}
+        public int Id { get; set; }
+        public int NumberOfYearsAvailable { get; set; }
         public string Addition { get; set; }
         public string Disposal { get; set; }
         public string Initial { get; set; }
         public string Annual { get; set; }
         public string Total { get; set; }
         public string ClosingResidue { get; set; }
-
-        public string Channel {get;set;}
-       public int CompanyId {get;set;}
+        public string CompanyCode {get;set;}
+        public int AssetId {get;set;}
+        public string Channel { get; set; }
+        public int CompanyId { get; set; }
         public int YearsToGo { get; set; }
-       
+
     }
 }

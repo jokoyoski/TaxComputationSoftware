@@ -11,9 +11,16 @@ namespace TaxComputationSoftware.Interfaces
 {
     public interface INotificationRepository
     {
+        Task<IEnumerable<CapitalAllowanceSummary>> GetCapitalAllowanceSummaryByCompanyId(int id);
         Task<int> UpdateArchivedCapitalAllowanceForChannel(string channel, int companyId, string taxYear, int assetId);
         Task<int> UpdateCapitalAllowanceForChannel(string channel, int Id);
         Task<List<PreNotification>> GetPreNotification();
+
+        Task DeleteCapitalAllowanceSummaryById(int assetId, int companyId);
+
+        Task DeleteCapitalAllowanceByAssetIdCompanyIdYearId(int companyId, int yearId, int assetId);
+
+        Task<CapitalAllowance> GetCapitalAllowanceById(int id);
         Task InsertPreNotification(PreNotification preNotification);
 
         Task<int> SaveCapitaLAllowanceSummary(CapitalAllowanceSummary capitalAllowance);

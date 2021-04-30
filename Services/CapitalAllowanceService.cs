@@ -105,7 +105,7 @@ namespace TaxComputationAPI.Services
                 closingResidue = addition - total;      //closingresidue=addition-total
                 remianingYears = totalNoOfYears - 1;    //remainingyears-1
                 code = "0";
-                channel = Constants.Closed;
+                channel = Constants.FixedAsset;
                 numOfYearsAvailable = totalNoOfYears;
             }
 
@@ -169,7 +169,7 @@ namespace TaxComputationAPI.Services
                     decimal total = annualValue;   //total
                     decimal closingResidue = openingResidueValue - total; //openingresidual-total
 
-                    if (previousRecord.YearsToGo - 1 == 0)
+                    if (previousRecord.NumberOfYearsAvailable - 1 == 0)
                     {
                         var capitalAllowanceRecord = new CapitalAllowance
                         {
@@ -185,7 +185,7 @@ namespace TaxComputationAPI.Services
                             CompanyId = companyId,
                             AssetId = previousRecord.AssetId,
                             CompanyCode = null,
-                            Channel = Constants.OpenOld,
+                            Channel = Constants.Zero,
                             NumberOfYearsAvailable = 0
 
 
@@ -207,11 +207,11 @@ namespace TaxComputationAPI.Services
                             Initial = previousRecord.Initial,
                             Disposal = residue,
                             Total = total,
-                            YearsToGo = previousRecord.YearsToGo - 1,
+                            YearsToGo = previousRecord.NumberOfYearsAvailable - 1,
                             CompanyId = companyId,
                             AssetId = assetId,
                             CompanyCode = "companyCode.Code",
-                            Channel =Constants.OpenOld,
+                            Channel =Constants.Closed,
                             NumberOfYearsAvailable = previousRecord.NumberOfYearsAvailable
 
 
@@ -259,7 +259,7 @@ namespace TaxComputationAPI.Services
                             CompanyId = companyId,
                             AssetId = previousRecord.AssetId,
                             CompanyCode = null,
-                            Channel = Constants.OpenNew,
+                            Channel = Constants.Zero,
                             NumberOfYearsAvailable = 0
 
 
@@ -286,7 +286,7 @@ namespace TaxComputationAPI.Services
                             CompanyId = companyId,
                             AssetId = assetId,
                             CompanyCode = "companyCode.Code",
-                            Channel = Constants.OpenNew,
+                            Channel = Constants.Closed,
                             NumberOfYearsAvailable = newtotalNoOfYears,
 
 

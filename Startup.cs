@@ -89,22 +89,23 @@ namespace TaxComputationAPI
 
             services.AddSingleton<IJobFactory, SingletonJobFactory>();
             services.AddSingleton<ISchedulerFactory, StdSchedulerFactory>();
-            services.AddScoped<INotificationRepository, NotificationRepository>();
-            services.AddScoped<IEmailService, EmailService>();
+            services.AddSingleton<INotificationRepository, NotificationRepository>();
+            services.AddSingleton<IEmailService, EmailService>();
 
 
-            
-   
 
-           /* services.AddHostedService<TimedHostedService>();
 
-            services.AddScoped<IScopedProcessingService, ScopedProcessingService>();
 
-            services.AddHostedService<AnnualEmailNotificationBackgroundService>();
-            
+            /* services.AddHostedService<TimedHostedService>();
 
-            services.AddHostedService<BackgroundJobService>();*/
+             services.AddScoped<IScopedProcessingService, ScopedProcessingService>();
 
+             services.AddHostedService<AnnualEmailNotificationBackgroundService>();
+
+
+             services.AddHostedService<BackgroundJobService>();*/
+
+            services.AddHostedService<AnnualCalculations>();
             services.AddScoped<IUsersRepository, UsersRepository>();
             services.AddMemoryCache();
             services.AddScoped<IBalancingAdjustmentRepository, BalancingAdjustmentRepository>();
@@ -135,8 +136,8 @@ namespace TaxComputationAPI
             services.AddScoped<IIncomeTaxRepository, IncomeTaxRepository>();
             services.AddScoped<IIncomeTaxService, IncomeTaxService>();
             services.AddScoped<IDeferredTaxRepository, DeferredTaxRepository>();
-           services.AddScoped<IDeferredTaxService, DeferredTaxService>();
-            services.AddScoped<DatabaseManager>();
+            services.AddScoped<IDeferredTaxService, DeferredTaxService>();
+            services.AddSingleton<DatabaseManager>();
             services.Configure<ConnectionString>(_configuration.GetSection("ConnectionString"));
             services.AddDbContext<DataContext>(options => options.UseSqlServer(_configuration.GetConnectionString("DefaultConnection")));
             services.AddAutoMapper(typeof(Startup));
