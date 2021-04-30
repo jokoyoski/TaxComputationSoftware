@@ -195,6 +195,35 @@ namespace TaxComputationAPI.Repositories
             return null;
         }
 
+        public async Task UpdateCompanyDate(Company company)
+        {
+            
+            try
+            {
+                int rowAffected = 0;
+                using (IDbConnection con = await _databaseManager.DatabaseConnection())
+                {
+                    if (con.State == ConnectionState.Closed)
+                        con.Open();
+
+                    DynamicParameters parameters = new DynamicParameters();
+                    parameters.Add("@Id", company.Id);
+                    parameters.Add("@ClosingDate", company.ClosingYear);
+                    parameters.Add("@OpeningDate", company.OpeningYear);
+                    rowAffected = con.Execute("[dbo].[usp_Update_Company_Closing_OpeningDate]", parameters, commandType: CommandType.StoredProcedure);
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+                _logger.LogError(ex.Message);
+                await _emailService.ExceptionEmail(MethodBase.GetCurrentMethod().DeclaringType.Name, ex.Message);
+            }
+
+
+        }
+
         public async Task UpdateCompany(Company company)
         {
             

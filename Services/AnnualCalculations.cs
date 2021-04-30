@@ -45,7 +45,7 @@ namespace TaxComputationSoftware.Services
             _logger.LogInformation("Timed Hosted Service running.");
 
             _timer = new Timer(Calc, null, TimeSpan.Zero,
-                TimeSpan.FromMinutes(3));
+                TimeSpan.FromMinutes(2));
 
             return Task.CompletedTask;
         }
@@ -157,17 +157,17 @@ namespace TaxComputationSoftware.Services
                                 {
                                     TaxYear = value.TaxYear,
                                     OpeningResidue = 10,
-                                    ClosingResidue = 0,
+                                    ClosingResidue = 20,
                                     Addition = 0,
                                     Disposal = 0,
-                                    Annual = annual,
+                                    Annual = 0,
                                     Initial = 0,
                                     Total = 0,
                                     YearsToGo = 0,
                                     CompanyId = companyId,
                                     AssetId = value.AssetId,
                                     CompanyCode = value.CompanyCode,
-                                    Channel = Constants.Closed,
+                                    Channel = Constants.Zero,
                                     NumberOfYearsAvailable = 0
 
                                 };
@@ -185,7 +185,7 @@ namespace TaxComputationSoftware.Services
                                     ClosingResidue = 0,
                                     Addition = 0,
                                     Disposal = 0,
-                                    Annual = annual,
+                                    Annual = 0,
                                     Initial = 0,
                                     Total = 0,
                                     YearsToGo = 0,
@@ -513,7 +513,7 @@ namespace TaxComputationSoftware.Services
                     scope.ServiceProvider
                         .GetRequiredService<ICompaniesRepository>();
 
-                await scopedProcessingService.UpdateCompany(company);
+                await scopedProcessingService.UpdateCompanyDate(company);
             }
         }
 

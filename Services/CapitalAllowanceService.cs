@@ -32,7 +32,6 @@ namespace TaxComputationAPI.Services
 
             var capitalAllowance = await _capitalAllowanceRepository.GetCapitalAllowance(assetId, companyId);
 
-
             return GetCapitalAllowance(capitalAllowance.ToList());
         }
 
@@ -82,7 +81,7 @@ namespace TaxComputationAPI.Services
                 total = 0;
                 remianingYears = (int)100 / assetDetails.Annual;  //no of years
                 code = null;
-                channel = Constants.OpenNew;
+                channel = Constants.OpenOld;
                 numOfYearsAvailable = remianingYears;
                 disposal = 0;
 
