@@ -149,7 +149,7 @@ namespace TaxComputationSoftware.Services
                             var annual = decimal.Parse(value.OpeningResidue) / value.NumberOfYearsAvailable;
                             annual = Math.Round(annual, 2);
                             var totalValue = annual;
-                            var closingResidueValue = decimal.Parse(value.OpeningResidue) - total;
+                            var closingResidueValue = decimal.Parse(value.OpeningResidue) - totalValue;
                             var yearsAvailable = value.NumberOfYearsAvailable - 1;
                             if (yearsAvailable <= 0)
                             {
