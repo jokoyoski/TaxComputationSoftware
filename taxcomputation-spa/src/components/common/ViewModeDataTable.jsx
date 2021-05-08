@@ -7,7 +7,9 @@ const ViewModeDataTable = ({ value, width, children, scrollable = false }) => {
       className="p-datatable-gridlines"
       value={value}
       style={{ marginTop: 40, width }}
-      scrollable={scrollable}>
+      scrollable={scrollable}
+      resizableColumns
+      columnResizeMode="expand">
       {children}
     </DataTable>
   );
