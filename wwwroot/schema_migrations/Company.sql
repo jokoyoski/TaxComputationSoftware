@@ -179,7 +179,6 @@ DELETE [dbo].[Company] WHERE  Id = @Id
 GO
 
 --------------------------------------- STORED PROCEDURE TO  DELETE COMPANY -----------------------------------------
-
 IF OBJECT_ID('[dbo].[Get_Company_Roll_Over_List]') IS nOT NULL
 BEGIN
 DROP procedure [dbo].[Get_Company_Roll_Over_List]
@@ -190,7 +189,6 @@ AS
 
 select c.Id as CompanyId,  c.CompanyName,TinNumber,ClosingDate  from  [dbo].[Company] c  inner join PreNotification p  on c.Id=p.CompanyId
 GO
-
 
 if object_id('[dbo].[usp_Update_Company]') IS NOT NULL
 BEGIN
