@@ -188,9 +188,8 @@ GO
 CREATE procedure Get_Company_Roll_Over_List
 AS
 
-select CompanyName,TinNumber,ClosingDate  from  [dbo].[Company]  inner join PreNotification p  on [dbo].[Company].Id=p.CompanyId
+select c.Id as CompanyId,  c.CompanyName,TinNumber,ClosingDate  from  [dbo].[Company] c  inner join PreNotification p  on c.Id=p.CompanyId
 GO
-
 
 
 if object_id('[dbo].[usp_Update_Company]') IS NOT NULL
