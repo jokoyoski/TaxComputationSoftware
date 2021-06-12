@@ -306,7 +306,7 @@ AS
 
 delete from [dbo].[CapitalAllowance] where CompanyId=@Id
 delete from [dbo].[CapitalAllowanceSummary] where CompanyId=@Id
-delete from [dbo].[ArchivedCapitalAllowanceSummary] where CompanyId=@Id
+delete from [dbo].[ArchivedCapitalAllowance] where CompanyId=@Id
 GO
 
 
@@ -325,7 +325,7 @@ AS
 
 delete from [dbo].[OldCapitalAllowance] where CompanyId=@Id
 delete from [dbo].[OldCapitalAllowanceSummary] where CompanyId=@Id
-delete from [dbo].[OldArchivedCapitalAllowanceSummary] where CompanyId=@Id
+delete from [dbo].[OldArchivedCapitalAllowance] where CompanyId=@Id
 GO
 
 
