@@ -1,6 +1,21 @@
 
 
 
+----------------------------------- STORED PROCEDURE TO  GET CAPITAL ALLOWANCE SUMMARY BY COMPANYID-----------------------------------------
+
+IF OBJECT_ID('[dbo].[usp_Get_Capital_Allowance_Summary_By_CompanyId]') IS nOT NULL
+BEGIN
+DROP procedure [dbo].[usp_Get_Capital_Allowance_Summary_By_CompanyId]
+END
+GO
+CREATE procedure [dbo].[usp_Get_Capital_Allowance_Summary_By_CompanyId](
+@CompanyId int
+)
+AS
+select [dbo].[AssetMapping].AssetName as AssetName,OpeningResidue,Addition,Disposal,[dbo].[CapitalAllowanceSummary].Initial,[dbo].[CapitalAllowanceSummary].Annual,Total,ClosingResidue,CompanyId,AssetId from [dbo].[CapitalAllowanceSummary]  inner join [dbo].[AssetMapping] on [dbo].[CapitalAllowanceSummary].AssetId=[dbo].[AssetMapping].Id where CompanyId=@CompanyId
+GO
+
+
 
 
 IF NOT EXISTS(SELECT 1 FROM sysobjects WHERE type = 'U' and name = 'OldCapitalAllowanceSummary')
