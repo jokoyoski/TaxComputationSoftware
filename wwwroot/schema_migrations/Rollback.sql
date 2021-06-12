@@ -306,6 +306,26 @@ AS
 
 delete from [dbo].[CapitalAllowance] where CompanyId=@Id
 delete from [dbo].[CapitalAllowanceSummary] where CompanyId=@Id
+delete from [dbo].[ArchivedCapitalAllowanceSummary] where CompanyId=@Id
+GO
+
+
+
+
+
+IF OBJECT_ID('[dbo].[usp_Delete_Old_Capital_Allowance_Summary]') IS nOT NULL
+BEGIN
+DROP procedure [dbo].[usp_Delete_Old_Capital_Allowance_Summary]
+END
+GO
+CREATE procedure [dbo].[usp_Delete_Old_Capital_Allowance_Summary](
+@Id int
+)
+AS
+
+delete from [dbo].[OldCapitalAllowance] where CompanyId=@Id
+delete from [dbo].[OldCapitalAllowanceSummary] where CompanyId=@Id
+delete from [dbo].[OldArchivedCapitalAllowanceSummary] where CompanyId=@Id
 GO
 
 
@@ -316,4 +336,118 @@ GO
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+IF NOT EXISTS(SELECT 1 FROM sysobjects WHERE type = 'U' and name = 'OldArchivedCapitalAllowance')
+BEGIN
+   create table OldArchivedCapitalAllowance(
+
+ Id   int identity(1,1) NOT NULL ,
+ TaxYear   varchar(10),
+ NumberOfYearsAvailable int,
+ OpeningResidue  varchar(20),
+ Addition   varchar(20),
+ Disposal   varchar(30),
+ Initial  varchar (30),
+ Annual    varchar(20),
+ Channel      varchar(10),
+ Total    varchar(20),
+ ClosingResidue varchar(20),
+ YearsToGo varchar(20),
+ CompanyId int,
+ AssetId  int,
+ CompanyCode varchar(20)
+ )
+END
+GO
+
+
+
+
+
+
+iF OBJECT_ID('[dbo].[usp_Insert_Old_Archived_Capital_Allowance]') IS NOT NULL
+BEGIN
+DROP PROCEDURE [dbo].[usp_Insert_Old_Archived_Capital_Allowance]
+PRINT('OK')
+END
+GO
+CREATE PROCEDURE [dbo].[usp_Insert_Old_Archived_Capital_Allowance](
+@AssetId int,
+@CompanyId int,
+@TaxYear   varchar(10),
+@NumberOfYearsAvailable int,
+@OpeningResidue  varchar(20),
+@Channel      varchar(10),
+@Addition   varchar(20),
+@Disposal   varchar(30),
+@Initial  varchar (30),
+@Annual    varchar(20),
+@Total    varchar(20),
+@ClosingResidue varchar(20),
+@YearsToGo varchar(20),
+@CompanyCode varchar(20)
+)
+AS
+
+INSERT [dbo].[OldArchivedCapitalAllowance](
+ TaxYear,
+ OpeningResidue,
+ Addition,
+ Disposal,
+ Initial,
+ Annual,
+ Total,
+ ClosingResidue,
+ YearsToGo,
+ CompanyId,
+ AssetId,
+ CompanyCode,
+ NumberOfYearsAvailable,
+ Channel
+)
+VALUES(
+ @TaxYear,
+ @OpeningResidue,
+ @Addition,
+ @Disposal,
+ @Initial,
+ @Annual,
+ @Total,
+ @ClosingResidue,
+ @YearsToGo,
+ @CompanyId,
+ @AssetId,
+ @CompanyCode,
+ @NumberOfYearsAvailable,
+ @Channel
+)
+GO
+
+
+
+IF OBJECT_ID('[dbo].[usp_Get_Old_Archived_Capital_Allowance_By_CompanyId]') IS nOT NULL
+BEGIN
+DROP procedure [dbo].[usp_Get_Old_Archived_Capital_Allowance_By_CompanyId]
+END
+GO
+CREATE procedure [dbo].[usp_Get_Old_Archived_Capital_Allowance_By_CompanyId](
+@CompanyId int
+)
+AS
+
+select  * from [dbo].[OldArchivedCapitalAllowance] where CompanyId=@CompanyId 
+GO
 
