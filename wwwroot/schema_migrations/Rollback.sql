@@ -288,3 +288,32 @@ delete from [dbo].[DeferredTaxBroughtFoward] where YearId=@Id
 GO
 
 
+
+
+
+
+
+
+IF OBJECT_ID('[dbo].[usp_Delete_Capital_Allowance_Summary]') IS nOT NULL
+BEGIN
+DROP procedure [dbo].[usp_Delete_Capital_Allowance_Summary]
+END
+GO
+CREATE procedure [dbo].[usp_Delete_Capital_Allowance_Summary](
+@Id int
+)
+AS
+
+delete from [dbo].[CapitalAllowance] where CompanyId=@Id
+delete from [dbo].[CapitalAllowanceSummary] where CompanyId=@Id
+GO
+
+
+
+
+
+
+
+
+
+
