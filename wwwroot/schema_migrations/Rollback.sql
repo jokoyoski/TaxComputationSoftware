@@ -244,3 +244,47 @@ AS
 select  * from [dbo].[OldCapitalAllowance] where CompanyId=@CompanyId 
 GO
 
+
+
+
+
+
+
+
+
+
+
+IF OBJECT_ID('[dbo].[usp_Delete_IncomeTax_Brought_Foward]') IS nOT NULL
+BEGIN
+DROP procedure [dbo].[usp_Delete_IncomeTax_Brought_Foward]
+END
+GO
+CREATE procedure [dbo].[usp_Delete_IncomeTax_Brought_Foward](
+@Id int
+)
+AS
+
+delete from [dbo].[IncomeTaxBroughtFoward] where YearId=@Id
+GO
+
+
+
+
+
+
+
+
+IF OBJECT_ID('[dbo].[usp_Delete_Deferred_Tax_Brought_Foward]') IS nOT NULL
+BEGIN
+DROP procedure [dbo].[usp_Delete_Deferred_Tax_Brought_Foward]
+END
+GO
+CREATE procedure [dbo].[usp_Delete_Deferred_Tax_Brought_Foward](
+@Id int
+)
+AS
+
+delete from [dbo].[DeferredTaxBroughtFoward] where YearId=@Id
+GO
+
+
