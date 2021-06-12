@@ -51,7 +51,9 @@ namespace TaxComputationAPI.Controllers
                 var companyDetails = await _utilitiesService.GetPreNotificationsAsync();
                 var companyDate = companyDetails.FirstOrDefault(x => x.CompanyId == investmentAllowanceDto.CompanyId);
                 int taxYear = int.Parse(details.Name);
-                if (companyDate.ClosingDate.Year + 1 != taxYear)
+              var itemModules = await _utilitiesService.GetFinancialCompanyAsync(investmentAllowanceDto.CompanyId);
+                var m = itemModules.LastOrDefault();
+                if (m.Id != details.Id)
                 {
                     return StatusCode(400, new { errors = new[] { "This operation is not valid for previous tax years" } });
 

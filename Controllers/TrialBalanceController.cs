@@ -94,11 +94,12 @@ namespace TaxComputationAPI.Controllers
                 var details = await _utilityService.GetFinancialYearAsync(excel.YearId);
                 var companyDetails = await _utilityService.GetPreNotificationsAsync();
                 var companyDate = companyDetails.FirstOrDefault(x => x.CompanyId == excel.CompanyId);
-                int taxYear = int.Parse(details.Name);
-                if (companyDate.ClosingDate.Year + 1 != taxYear)
+                var itemModules = await _utilityService.GetFinancialCompanyAsync(excel.CompanyId);
+                var m = itemModules.LastOrDefault();
+                if (m.Id != details.Id)
                 {
-                    return StatusCode(400, new { errors = new[] { "This operation is not valid for previous tax years"} });
-  
+                    return StatusCode(400, new { errors = new[] { "This operation is not valid for previous tax years" } });
+
                 }
                 await _trialBalanceService.UploadTrialBalance(excel);
                 return Ok($"{excel.File.FileName} successfully upload");
@@ -117,21 +118,21 @@ namespace TaxComputationAPI.Controllers
 
             }
         }
-   
+
 
         [HttpGet("doownload")]
         public async Task<IActionResult> DownloadOldMinimumTax(int companyId, int yearId)
         {
-            if(companyId <= 0) return BadRequest($"Invalid companyId: {companyId}");
+            if (companyId <= 0) return BadRequest($"Invalid companyId: {companyId}");
 
-            if(yearId <= 0) return BadRequest($"Invalid yearId: {yearId}");
+            if (yearId <= 0) return BadRequest($"Invalid yearId: {yearId}");
 
             var item = await _trialBalanceService.DownloadExcel(companyId, yearId);
 
-            if(item == null) return NotFound("File not found");
+            if (item == null) return NotFound("File not found");
 
             return File(item, "application/octet-stream", "Sample.csv");
         }
-   
+
     }
 }

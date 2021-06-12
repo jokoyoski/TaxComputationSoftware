@@ -44,7 +44,7 @@ namespace TaxComputationAPI.Controllers
         {
             try
             {
-                
+
                 foreach (var j in profitAndLoss.TrialBalanceList)
                 {
                     var trialBalanceRecord = await _trialBalanceService.GetTrialBalanceById(j.TrialBalanceId);
@@ -66,13 +66,13 @@ namespace TaxComputationAPI.Controllers
                 var details = await _utilitiesServices.GetFinancialYearAsync(profitAndLoss.YearId);
                 var companyDetails = await _utilitiesServices.GetPreNotificationsAsync();
                 var companyDate = companyDetails.FirstOrDefault(x => x.CompanyId == profitAndLoss.CompanyId);
-                int taxYear = int.Parse(details.Name);
-                if (companyDate.ClosingDate.Year + 1 != taxYear)
+                var itemModules = await _utilitiesServices.GetFinancialCompanyAsync(profitAndLoss.CompanyId);
+                var m = itemModules.LastOrDefault();
+                if (m.Id != details.Id)
                 {
-                    return StatusCode(400, new { errors = new[] { "This operation is not valid for previous tax years"} });
-  
-                }
+                    return StatusCode(400, new { errors = new[] { "This operation is not valid for previous tax years" } });
 
+                }
                 await _profitAndLossService.SaveProfitsAndLoss(profitAndLoss);
                 return Ok("saved successfully");
 

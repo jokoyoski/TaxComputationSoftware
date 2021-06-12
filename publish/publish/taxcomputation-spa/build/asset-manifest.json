@@ -1,0 +1,28 @@
+{
+  "files": {
+    "main.css": "/static/css/main.ce5097cb.chunk.css",
+    "main.js": "/static/js/main.c6917315.chunk.js",
+    "main.js.map": "/static/js/main.c6917315.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.fdea7932.js",
+    "runtime-main.js.map": "/static/js/runtime-main.fdea7932.js.map",
+    "static/css/2.4494fa82.chunk.css": "/static/css/2.4494fa82.chunk.css",
+    "static/js/2.25046211.chunk.js": "/static/js/2.25046211.chunk.js",
+    "static/js/2.25046211.chunk.js.map": "/static/js/2.25046211.chunk.js.map",
+    "index.html": "/index.html",
+    "precache-manifest.60145088975a70d2f311bcd08c178dee.js": "/precache-manifest.60145088975a70d2f311bcd08c178dee.js",
+    "service-worker.js": "/service-worker.js",
+    "static/css/2.4494fa82.chunk.css.map": "/static/css/2.4494fa82.chunk.css.map",
+    "static/css/main.ce5097cb.chunk.css.map": "/static/css/main.ce5097cb.chunk.css.map",
+    "static/js/2.25046211.chunk.js.LICENSE.txt": "/static/js/2.25046211.chunk.js.LICENSE.txt",
+    "static/media/primereact.min.css": "/static/media/color.c7a33805.png",
+    "static/media/index.css": "/static/media/tax.4025654a.png",
+    "static/media/primeicons.css": "/static/media/primeicons.79432094.woff"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.fdea7932.js",
+    "static/css/2.4494fa82.chunk.css",
+    "static/js/2.25046211.chunk.js",
+    "static/css/main.ce5097cb.chunk.css",
+    "static/js/main.c6917315.chunk.js"
+  ]
+}

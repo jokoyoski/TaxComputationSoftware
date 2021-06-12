@@ -67,10 +67,15 @@ namespace TaxComputationAPI.Controllers
             var companyDetails = await _utilitiesService.GetPreNotificationsAsync();
             var companyDate = companyDetails.FirstOrDefault(x => x.CompanyId == addBalanceAdjustmentDto.CompanyId);
             int taxYear = int.Parse(details.Name);
-            if (companyDate.ClosingDate.Year + 1 != taxYear)
+
+            var itemModules = await _utilitiesService.GetFinancialCompanyAsync(addBalanceAdjustmentDto.CompanyId);
+            var m = itemModules.LastOrDefault();
+            if (m.Id != details.Id)
             {
                 return StatusCode(400, new { errors = new[] { "This operation is not valid for previous tax years" } });
+
             }
+
             if (previousRecord.Channel == Constants.Closed)
             {
                 return BadRequest(new { errors = new[] { "The annual for this item has already been calculated from fixed asset" } });
@@ -106,7 +111,9 @@ namespace TaxComputationAPI.Controllers
             var companyDetails = await _utilitiesService.GetPreNotificationsAsync();
             var companyDate = companyDetails.FirstOrDefault(x => x.CompanyId == details.CompanyId);
             int taxYear = int.Parse(details.Name);
-            if (companyDate.ClosingDate.Year + 1 != taxYear)
+            var itemModules = await _utilitiesService.GetFinancialCompanyAsync(details.CompanyId);
+            var m = itemModules.LastOrDefault();
+            if (m.Id != details.Id)
             {
                 return StatusCode(400, new { errors = new[] { "This operation is not valid for previous tax years" } });
 

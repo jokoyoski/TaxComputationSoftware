@@ -207,3 +207,27 @@ GO
 
 
 
+
+
+
+if object_id('[dbo].[usp_Update_Company_Closing_OpeningDate]') IS NOT NULL
+BEGIN
+drop procedure [dbo].[usp_Update_Company_Closing_OpeningDate]
+end
+go
+create procedure usp_Update_Company_Closing_OpeningDate(
+@Id int,
+@OpeningDate datetime,
+@ClosingDate datetime,
+
+)
+AS
+Update [dbo].[Company]
+set OpeningDate = @OpeningDate,
+ClosingDate = @ClosingDate,
+where Id = @Id
+GO
+
+
+
+

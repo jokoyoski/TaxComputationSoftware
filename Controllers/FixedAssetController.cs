@@ -62,10 +62,12 @@ namespace TaxComputationAPI.Controllers
                 int taxYear = int.Parse(details.Name);
                 var companyDetails = await _utilitiesService.GetPreNotificationsAsync();
                 var companyDate = companyDetails.FirstOrDefault(x => x.CompanyId == createFixed.CompanyId);
-                if (companyDate.ClosingDate.Year+1!=taxYear)
+                var itemModules = await _utilitiesService.GetFinancialCompanyAsync(createFixed.CompanyId);
+                var m=itemModules.LastOrDefault();
+                if (m.Id!=createFixed.YearId)
                 {
-                    return StatusCode(400, new { errors = new[] { "This operation is not valid for previous tax years"} });
-  
+                    return StatusCode(400, new { errors = new[] { "This operation is not valid for previous tax years" } });
+
                 }
 
                 bool status = createFixed.IsCost ? true : false;
@@ -200,7 +202,7 @@ namespace TaxComputationAPI.Controllers
                 {
                     return StatusCode(404, new { errors = new[] { "Record not found at this time please try again later" } });
                 }
-                if (companyDate.ClosingDate.Year +1 == taxYear)
+                if (companyDate.ClosingDate.Year + 1 == taxYear)
                 {
                     fixedAsset.CanDelete = true;
                 }

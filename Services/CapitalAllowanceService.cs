@@ -81,7 +81,7 @@ namespace TaxComputationAPI.Services
                 total = 0;
                 remianingYears = (int)100 / assetDetails.Annual;  //no of years
                 code = null;
-                channel = Constants.OpenOld;
+                channel = Constants.Balancing;
                 numOfYearsAvailable = remianingYears;
                 disposal = 0;
 

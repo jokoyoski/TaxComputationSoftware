@@ -130,11 +130,12 @@ namespace TaxComputationSoftware.Controllers
                 var details = await _utilitiesService.GetFinancialYearAsync(createIncomeTaxDto.YearId);
                 var companyDetails = await _utilitiesService.GetPreNotificationsAsync();
                 var companyDate = companyDetails.FirstOrDefault(x => x.CompanyId == createIncomeTaxDto.CompanyId);
-                int taxYear = int.Parse(details.Name);
-                if (companyDate.ClosingDate.Year + 1 != taxYear)
+                var itemModules = await _utilitiesService.GetFinancialCompanyAsync(createIncomeTaxDto.CompanyId);
+                var m = itemModules.LastOrDefault();
+                if (m.Id != details.Id)
                 {
-                    return StatusCode(400, new { errors = new[] { "This operation is not valid for previous tax years"} });
-  
+                    return StatusCode(400, new { errors = new[] { "This operation is not valid for previous tax years" } });
+
                 }
 
 
