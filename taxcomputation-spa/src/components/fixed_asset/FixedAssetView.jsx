@@ -66,10 +66,7 @@ const FixedAssetView = ({ year, toast }) => {
       category: null
     },
     {
-      category: <strong>Net Book Value</strong>
-    },
-    {
-      category: <strong>Closing Balance</strong>,
+      category: <strong>Net Book Value</strong>,
       key: "netValue"
     }
   ]);
@@ -163,13 +160,14 @@ const FixedAssetView = ({ year, toast }) => {
   return (
     <>
       {fixedAssetApiData && (
-        <ViewModeDataTable value={fixedAssetData}>
-          <Column field="category" header=""></Column>
+        <ViewModeDataTable value={fixedAssetData} width={1200}>
+          <Column field="category" header="" headerStyle={{ width: "10em" }}></Column>
           {fixedAssetApiData &&
             fixedAssetApiData.fixedAssetData.map(d => (
               <Column
                 key={d.fixedAssetName}
                 field={d.fixedAssetName}
+                headerStyle={{ width: "10em" }}
                 header={
                   <div className="p-d-flex p-jc-between p-ai-center">
                     <p>{`${d.fixedAssetName}`}</p>
@@ -201,7 +199,7 @@ const FixedAssetView = ({ year, toast }) => {
                 }
               />
             ))}
-          <Column field="total" header="Total"></Column>
+          <Column field="total" header="Total" headerStyle={{ width: "10em" }}></Column>
         </ViewModeDataTable>
       )}
       {loading && <ViewLoader />}

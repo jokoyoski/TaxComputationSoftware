@@ -138,14 +138,23 @@ const BalancingAdjustmentView = ({ year, toast }) => {
   return (
     <>
       {balancingAdjustmentData && (
-        <ViewModeDataTable value={balancingAdjustmentData}>
-          <Column field="category" header=""></Column>
-          <Column field="credit" header=""></Column>
-          <Column field="balancingAllowance" header="Balancing Allowance"></Column>
-          <Column field="balancingCharge" header="Balancing Charge"></Column>
-          <Column field="cost" header="Cost"></Column>
-          <Column field="salesProceed" header="Sales Proceed"></Column>
-          <Column field="twdv" header="TWDV"></Column>
+        <ViewModeDataTable value={balancingAdjustmentData} width={1200}>
+          <Column field="category" header="" headerStyle={{ width: "10em" }}></Column>
+          <Column field="credit" header="" headerStyle={{ width: "10em" }}></Column>
+          <Column
+            field="balancingAllowance"
+            header="Balancing Allowance"
+            headerStyle={{ width: "10em" }}></Column>
+          <Column
+            field="balancingCharge"
+            header="Balancing Charge"
+            headerStyle={{ width: "10em" }}></Column>
+          <Column field="cost" header="Cost" headerStyle={{ width: "10em" }}></Column>
+          <Column
+            field="salesProceed"
+            header="Sales Proceed"
+            headerStyle={{ width: "10em" }}></Column>
+          <Column field="twdv" header="TWDV" headerStyle={{ width: "10em" }}></Column>
         </ViewModeDataTable>
       )}
       {loading && <ViewLoader />}
