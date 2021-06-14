@@ -18,7 +18,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace TaxComputationSoftware.Services
 {
-    public class AnnualCalculations : IHostedService, IDisposable
+    public class AnnualCalculations 
     {
         private readonly IServiceProvider _services;
         private readonly INotificationRepository _notificationRepository;
@@ -40,15 +40,6 @@ namespace TaxComputationSoftware.Services
             // throw new NotImplementedException();
         }
 
-        public Task StartAsync(CancellationToken cancellationToken)
-        {
-            _logger.LogInformation("Timed Hosted Service running.");
-
-            _timer = new Timer(Calc, null, TimeSpan.Zero,
-                TimeSpan.FromMinutes(2));
-
-            return Task.CompletedTask;
-        }
 
 
         private async void Calc(object state)

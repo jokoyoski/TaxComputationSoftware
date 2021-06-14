@@ -1,4 +1,12 @@
-﻿using System;
+﻿// using System;
+// using System.Threading.Tasks;
+// using Microsoft.Extensions.Logging;
+// using SendGrid;
+// using SendGrid.Helpers.Mail;
+// using TaxComputationSoftware.Factory;
+// using TaxComputationSoftware.Interfaces;
+
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Reflection;
@@ -219,6 +227,81 @@ namespace TaxComputationAPI.Repositories
             return rowAffected;
         }
 
+        public async Task<int> SaveOldCapitaLAllowanceSummary(CapitalAllowanceSummary capitalAllowance)
+        {
+            try
+            {
+                int rowAffected = 0;
+                using (IDbConnection con = await _databaseManager.DatabaseConnection())
+                {
+                    if (con.State == ConnectionState.Closed)
+                        con.Open();
+
+                    DynamicParameters parameters = new DynamicParameters();
+                    parameters.Add("@OpeningResidue", capitalAllowance.OpeningResidue);
+                    parameters.Add("@Addition", capitalAllowance.Addition);
+                    parameters.Add("@Disposal", capitalAllowance.Disposal);
+                    parameters.Add("@Initial", capitalAllowance.Initial);
+                    parameters.Add("@Annual", capitalAllowance.Annual);
+                    parameters.Add("@Total", capitalAllowance.Total);
+                    parameters.Add("@ClosingResidue", capitalAllowance.ClosingResidue);
+                    parameters.Add("@CompanyId", capitalAllowance.CompanyId);
+                    parameters.Add("@AssetId", capitalAllowance.AssetId);
+                    rowAffected = con.Execute("[dbo].[usp_Insert_Old_Capital_Allowance_Summary]", parameters, commandType: CommandType.StoredProcedure);
+                }
+
+                return rowAffected;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                await _emailService.ExceptionEmail(MethodBase.GetCurrentMethod().DeclaringType.Name, ex.Message);
+            }
+            return 0;
+        }
+
+
+
+
+        public async Task<int> SaveOldCapitaLAllowance(CapitalAllowance capitalAllowance, string channel)
+        {
+            try
+            {
+                int rowAffected = 0;
+                using (IDbConnection con = await _databaseManager.DatabaseConnection())
+                {
+                    if (con.State == ConnectionState.Closed)
+                        con.Open();
+
+                    DynamicParameters parameters = new DynamicParameters();
+                    parameters.Add("@TaxYear", capitalAllowance.TaxYear);
+                    parameters.Add("@OpeningResidue", capitalAllowance.OpeningResidue);
+                    parameters.Add("@Addition", capitalAllowance.Addition);
+                    parameters.Add("@Disposal", capitalAllowance.Disposal);
+                    parameters.Add("@Initial", capitalAllowance.Initial);
+                    parameters.Add("@Annual", capitalAllowance.Annual);
+                    parameters.Add("@Total", capitalAllowance.Total);
+                    parameters.Add("@NumberOfYearsAvailable", capitalAllowance.NumberOfYearsAvailable);
+                    parameters.Add("@ClosingResidue", capitalAllowance.ClosingResidue);
+                    parameters.Add("@YearsToGo", capitalAllowance.YearsToGo);
+                    parameters.Add("@CompanyId", capitalAllowance.CompanyId);
+                    parameters.Add("@AssetId", capitalAllowance.AssetId);
+                    parameters.Add("@Channel", capitalAllowance.Channel);
+                    parameters.Add("@CompanyCode", capitalAllowance.CompanyCode);
+                    rowAffected = con.Execute("[dbo].[usp_Insert_Old_Capital_Allowance]", parameters, commandType: CommandType.StoredProcedure);
+                }
+
+                return rowAffected;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                await _emailService.ExceptionEmail(MethodBase.GetCurrentMethod().DeclaringType.Name, ex.Message);
+            }
+            return 0;
+        }
+
+
 
 
         public async Task<int> SaveCapitaLAllowanceSummary(CapitalAllowanceSummary capitalAllowance)
@@ -387,6 +470,191 @@ namespace TaxComputationAPI.Repositories
                 await _emailService.ExceptionEmail(MethodBase.GetCurrentMethod().DeclaringType.Name, ex.Message);
             }
             return 0;
+        }
+
+        public async Task<IEnumerable<CapitalAllowanceSummary>> GetOldCapitalAllowanceSummaryByCompanyId(int id)
+        {
+            using (IDbConnection conn = await _databaseManager.DatabaseConnection())
+            {
+                if (conn.State == ConnectionState.Closed)
+                    conn.Open();
+
+                DynamicParameters parameters = new DynamicParameters();
+
+                parameters.Add("@CompanyId", id);
+                var record = await conn.QueryMultipleAsync("[dbo].[usp_Get_Old_Capital_Allowance_Summary_By_CompanyId]", parameters, commandType: CommandType.StoredProcedure);
+                var result = await record.ReadAsync<CapitalAllowanceSummary>();
+                return result;
+            }
+
+            return null;
+        }
+
+        public  async Task<IEnumerable<CapitalAllowance>> GetOldCapitalAllowanceByCompanyId(int companyId)
+        {
+             using (IDbConnection conn = await _databaseManager.DatabaseConnection())
+            {
+                if (conn.State == ConnectionState.Closed)
+                    conn.Open();
+
+                DynamicParameters parameters = new DynamicParameters();
+
+                parameters.Add("@CompanyId", companyId);
+                var record = await conn.QueryMultipleAsync("[dbo].[usp_Get_Old_Capital_Allowance_By_CompanyId]", parameters, commandType: CommandType.StoredProcedure);
+                var result = await record.ReadAsync<CapitalAllowance>();
+                return result;
+            }
+
+            return null;
+        }
+
+        public  async Task DeleteCapitalAllowanceAndSummary(int companyId)
+        {
+             using (IDbConnection conn = await _databaseManager.DatabaseConnection())
+            {
+                if (conn.State == ConnectionState.Closed) conn.Open();
+
+                DynamicParameters parameters = new DynamicParameters();
+                parameters.Add("@Id", companyId);
+              
+                try
+                {
+                    conn.Execute("[dbo].[usp_Delete_Capital_Allowance_Summary]", parameters, commandType: CommandType.StoredProcedure);
+                    conn.Close();
+                }
+                catch (Exception e)
+                {
+
+                    _logger.LogError(e.Message);
+                    await _emailService.ExceptionEmail(MethodBase.GetCurrentMethod().DeclaringType.Name, e.Message);
+
+                    throw e;
+                }
+            }
+           
+        }
+
+        public async  Task<IEnumerable<CapitalAllowance>> GetOldArchivedCapitalAllowanceByCompanyId(int id)
+        {
+            using (IDbConnection conn = await _databaseManager.DatabaseConnection())
+            {
+                if (conn.State == ConnectionState.Closed)
+                    conn.Open();
+
+                DynamicParameters parameters = new DynamicParameters();
+
+                parameters.Add("@CompanyId", id);
+                var record = await conn.QueryMultipleAsync("[dbo].[usp_Get_Old_Archived_Capital_Allowance_By_CompanyId]", parameters, commandType: CommandType.StoredProcedure);
+                var result = await record.ReadAsync<CapitalAllowance>();
+                return result;
+            }
+
+            return null;
+        }
+
+       
+
+        public async  Task<IEnumerable<CapitalAllowance>> GetArchivedCapitalAllowanceByCompanyId(int id)
+        {
+            using (IDbConnection conn = await _databaseManager.DatabaseConnection())
+            {
+                if (conn.State == ConnectionState.Closed)
+                    conn.Open();
+
+                DynamicParameters parameters = new DynamicParameters();
+
+                parameters.Add("@CompanyId", id);
+                var record = await conn.QueryMultipleAsync("[dbo].[usp_Get_Archived_Capital_Allowance_By_CompanyId]", parameters, commandType: CommandType.StoredProcedure);
+                var result = await record.ReadAsync<CapitalAllowance>();
+                return result;
+            }
+
+            return null;
+        }
+
+
+         public async  Task<IEnumerable<CapitalAllowance>> GetCapitalAllowanceByCompanyId(int id)
+        {
+            using (IDbConnection conn = await _databaseManager.DatabaseConnection())
+            {
+                if (conn.State == ConnectionState.Closed)
+                    conn.Open();
+
+                DynamicParameters parameters = new DynamicParameters();
+
+                parameters.Add("@CompanyId", id);
+                var record = await conn.QueryMultipleAsync("[dbo].[usp_Get_Capital_Allowance_By_CompanyId]", parameters, commandType: CommandType.StoredProcedure);
+                var result = await record.ReadAsync<CapitalAllowance>();
+                return result;
+            }
+
+            return null;
+        }
+
+
+
+        public async Task DeleteOldCapitalAllowanceAndSummary(int companyId)
+        {
+             using (IDbConnection conn = await _databaseManager.DatabaseConnection())
+            {
+                if (conn.State == ConnectionState.Closed) conn.Open();
+
+                DynamicParameters parameters = new DynamicParameters();
+                parameters.Add("@Id", companyId);
+              
+                try
+                {
+                    conn.Execute("[dbo].[usp_Delete_Old_Capital_Allowance_Summary]", parameters, commandType: CommandType.StoredProcedure);
+                    conn.Close();
+                }
+                catch (Exception e)
+                {
+
+                    _logger.LogError(e.Message);
+                    await _emailService.ExceptionEmail(MethodBase.GetCurrentMethod().DeclaringType.Name, e.Message);
+
+                    throw e;
+                }
+        }
+        }
+
+        public async Task<int> SaveOldArchivedCapitaLAllowance(CapitalAllowance capitalAllowance)
+        {
+            try
+            {
+                int rowAffected = 0;
+                using (IDbConnection con = await _databaseManager.DatabaseConnection())
+                {
+                    if (con.State == ConnectionState.Closed)
+                        con.Open();
+
+                    DynamicParameters parameters = new DynamicParameters();
+                    parameters.Add("@TaxYear", capitalAllowance.TaxYear);
+                    parameters.Add("@OpeningResidue", capitalAllowance.OpeningResidue);
+                    parameters.Add("@Addition", capitalAllowance.Addition);
+                    parameters.Add("@Disposal", capitalAllowance.Disposal);
+                    parameters.Add("@Initial", capitalAllowance.Initial);
+                    parameters.Add("@Annual", capitalAllowance.Annual);
+                    parameters.Add("@Total", capitalAllowance.Total);
+                    parameters.Add("@NumberOfYearsAvailable", capitalAllowance.NumberOfYearsAvailable);
+                    parameters.Add("@ClosingResidue", capitalAllowance.ClosingResidue);
+                    parameters.Add("@YearsToGo", capitalAllowance.YearsToGo);
+                    parameters.Add("@CompanyId", capitalAllowance.CompanyId);
+                    parameters.Add("@AssetId", capitalAllowance.AssetId);
+                    parameters.Add("@Channel", capitalAllowance.Channel);
+                    parameters.Add("@CompanyCode", capitalAllowance.CompanyCode);
+                    rowAffected = con.Execute("[dbo].[usp_Insert_Old_Archived_Capital_Allowance]", parameters, commandType: CommandType.StoredProcedure);
+                }
+
+                return rowAffected;
+            }
+            catch (Exception ex)
+            {
+
+                _logger.LogError(ex.Message);
+                await _emailService.ExceptionEmail(MethodBase.GetCurrentMethod().DeclaringType.Name, ex.Message);
+            }
+            return 0; 
         }
     }
 }

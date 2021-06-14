@@ -8,6 +8,18 @@ namespace TaxComputationAPI.Interfaces
 {
     public interface ICapitalAllowanceRepository
     {
+
+        Task<IEnumerable<CapitalAllowance>> GetCapitalAllowanceByCompanyId(int id);
+        Task<IEnumerable<CapitalAllowance>> GetArchivedCapitalAllowanceByCompanyId(int id);
+        Task<IEnumerable<CapitalAllowance>> GetOldArchivedCapitalAllowanceByCompanyId(int id);
+        Task<IEnumerable<CapitalAllowanceSummary>> GetOldCapitalAllowanceSummaryByCompanyId(int id);
+        Task<IEnumerable<CapitalAllowance>> GetOldCapitalAllowanceByCompanyId(int companyId);
+        Task DeleteCapitalAllowanceAndSummary(int companyId);
+        Task DeleteOldCapitalAllowanceAndSummary(int companyId);
+        Task<int> SaveOldArchivedCapitaLAllowance(CapitalAllowance capitalAllowance);
+        Task<int> SaveOldCapitaLAllowanceSummary(CapitalAllowanceSummary capitalAllowance);
+        Task<int> SaveOldCapitaLAllowance(CapitalAllowance capitalAllowance, string channel);
+
         Task<int> SaveCapitaLAllowance(CapitalAllowance capitalAllowance, string channel);
         Task DeleteCapitalAllowanceByAssetIdCompanyIdYearId(int companyId, int yearId, int assetId);
         Task<CapitalAllowance> GetCapitalAllowanceByAssetIdYear(int assetId, int companyId, string year);

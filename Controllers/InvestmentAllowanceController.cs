@@ -51,8 +51,8 @@ namespace TaxComputationAPI.Controllers
                 var companyDetails = await _utilitiesService.GetPreNotificationsAsync();
                 var companyDate = companyDetails.FirstOrDefault(x => x.CompanyId == investmentAllowanceDto.CompanyId);
                 int taxYear = int.Parse(details.Name);
-              var itemModules = await _utilitiesService.GetFinancialCompanyAsync(investmentAllowanceDto.CompanyId);
-                var m = itemModules.LastOrDefault();
+                var itemModules = await _utilitiesService.GetFinancialCompanyAsync(investmentAllowanceDto.CompanyId);
+                var m = itemModules.OrderByDescending(x => x.Id).FirstOrDefault();
                 if (m.Id != details.Id)
                 {
                     return StatusCode(400, new { errors = new[] { "This operation is not valid for previous tax years" } });
@@ -64,7 +64,6 @@ namespace TaxComputationAPI.Controllers
                 investmentAllowanceToAdd.CompanyId = investmentAllowanceDto.CompanyId;
                 investmentAllowanceToAdd.YearId = investmentAllowanceDto.YearId;
                 await _investmentAllowanceService.AddInvestmentAllowanceAsync(investmentAllowanceToAdd);
-
                 return Ok("Investment Allowance added successfully !!");
 
             }

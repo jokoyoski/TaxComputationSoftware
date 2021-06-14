@@ -220,6 +220,83 @@ namespace TaxComputationAPI.Repositories
             }
         }
 
+
+        public async Task DeleteLastFinancialYearAsync(int yearId)
+        {
+
+
+            try
+            {
+
+                using (IDbConnection conn = await _databaseManager.DatabaseConnection())
+                {
+                    if (conn.State == ConnectionState.Closed) conn.Open();
+
+                    DynamicParameters parameters = new DynamicParameters();
+
+                    parameters.Add("@Id", yearId);
+
+
+                    try
+                    {
+                        var respone = conn.Execute("[dbo].[usp_Delete_Last_Financial_Year]", parameters, commandType: CommandType.StoredProcedure);
+                        conn.Close();
+                    }
+                    catch (Exception e)
+                    {
+
+                        _logger.LogError($"{e.Message}");
+
+                        throw e;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+
+                _logger.LogError(e.Message);
+                await _emailService.ExceptionEmail(MethodBase.GetCurrentMethod().DeclaringType.Name, e.Message);
+                throw new SystemException(e.Message);
+            }
+        }
+
+
+        public async Task<FinancialYear> GetLastFinancialYearAsync(int companyId)
+        {
+            if (companyId <= 0) throw new ArgumentNullException(nameof(companyId));
+
+            var result = default(FinancialYear);
+
+            using (IDbConnection conn = await _databaseManager.DatabaseConnection())
+            {
+                if (conn.State == ConnectionState.Closed) conn.Open();
+
+                DynamicParameters parameters = new DynamicParameters();
+
+                parameters.Add("@CompanyId", companyId);
+
+                try
+                {
+                    result = conn.QueryFirstOrDefault<FinancialYear>("[dbo].[usp_Get_Last_Financial_Year]", parameters, commandType: CommandType.StoredProcedure);
+                    conn.Close();
+                }
+                catch (Exception e)
+                {
+
+                    _logger.LogError(e.Message);
+                    await _emailService.ExceptionEmail(MethodBase.GetCurrentMethod().DeclaringType.Name, e.Message);
+
+                    throw e;
+                }
+
+                return result;
+            }
+        }
+
+
+
+
+
         public async Task<List<FinancialYear>> GetFinancialCompanyAsync(int companyId)
         {
             if (companyId <= 0) throw new ArgumentNullException(nameof(companyId));
@@ -237,6 +314,7 @@ namespace TaxComputationAPI.Repositories
                 try
                 {
                     result = await conn.QueryAsync<FinancialYear>("[dbo].[usp_Get_Financial_Year_By_CompanyId]", parameters, commandType: CommandType.StoredProcedure);
+                   
                     conn.Close();
                 }
                 catch (Exception e)
@@ -281,7 +359,7 @@ namespace TaxComputationAPI.Repositories
         }
 
 
-         public async Task<List<PreNotification>> GetPreNotification()
+        public async Task<List<PreNotification>> GetPreNotification()
         {
             using (IDbConnection conn = await _databaseManager.DatabaseConnection())
             {
@@ -305,6 +383,39 @@ namespace TaxComputationAPI.Repositories
 
         }
 
+        public async Task<RollBackYear> GetRollBackYear(int companyId)
+        {
+
+            var result = default(RollBackYear);
+
+            using (IDbConnection conn = await _databaseManager.DatabaseConnection())
+            {
+                if (conn.State == ConnectionState.Closed) conn.Open();
+
+                DynamicParameters parameters = new DynamicParameters();
+
+                parameters.Add("@CompanyId", companyId);
+
+                try
+                {
+                    result = conn.QueryFirstOrDefault<RollBackYear>("[dbo].[usp_Get_RollBack_Year_By_CompanyId]", parameters, commandType: CommandType.StoredProcedure);
+                    conn.Close();
+                }
+                catch (Exception e)
+                {
+
+                    _logger.LogError(e.Message);
+                    await _emailService.ExceptionEmail(MethodBase.GetCurrentMethod().DeclaringType.Name, e.Message);
+
+                    throw e;
+                }
+
+                return result;
+            }
+        }
+
+
+
 
         public async Task<AssetMapping> GetAssetMappingAsync(string Name)
         {
@@ -327,7 +438,7 @@ namespace TaxComputationAPI.Repositories
                 }
                 catch (Exception e)
                 {
-                    
+
                     _logger.LogError(e.Message);
                     await _emailService.ExceptionEmail(MethodBase.GetCurrentMethod().DeclaringType.Name, e.Message);
 
@@ -338,7 +449,7 @@ namespace TaxComputationAPI.Repositories
             }
         }
 
-          public async Task<AllowableDisAllowable> GetAllowableDisAllowableByTrialBalanceId(int Id)
+        public async Task<AllowableDisAllowable> GetAllowableDisAllowableByTrialBalanceId(int Id)
         {
 
 
@@ -360,7 +471,7 @@ namespace TaxComputationAPI.Repositories
             return null;
         }
 
-         public async Task DeleteFairGainByTrialBalanceId(int Id)
+        public async Task DeleteFairGainByTrialBalanceId(int Id)
         {
             using (IDbConnection conn = await _databaseManager.DatabaseConnection())
             {
@@ -861,6 +972,33 @@ namespace TaxComputationAPI.Repositories
                 _logger.LogError(e.Message);
                 await _emailService.ExceptionEmail(MethodBase.GetCurrentMethod().DeclaringType.Name, e.Message);
                 throw new SystemException(e.Message);
+            }
+        }
+
+        public async Task AddRollBackAsync(RollBackYear rollBackYear)
+        {
+            using (IDbConnection conn = await _databaseManager.DatabaseConnection())
+            {
+                if (conn.State == ConnectionState.Closed) conn.Open();
+
+                DynamicParameters parameters = new DynamicParameters();
+
+                parameters.Add("@CompanyId", rollBackYear.CompanyId);
+
+                parameters.Add("@YearId", rollBackYear.YearId);
+
+                try
+                {
+                    var respone = conn.Execute("[dbo].[usp_Insert_RollBack_Year_By_CompanyId]", parameters, commandType: CommandType.StoredProcedure);
+                    conn.Close();
+                }
+                catch (Exception e)
+                {
+
+                    _logger.LogError($"{e.Message}");
+
+                    throw e;
+                }
             }
         }
     }

@@ -47,10 +47,6 @@ namespace TaxComputationAPI.Controllers
             {
                 var financialYear = await _utilitiesService.GetFinancialCompanyAsync(companyId);
                 var financialYearRecord = financialYear.OrderByDescending(x => x.Id).FirstOrDefault();
-                if (financialYear.FirstOrDefault().Id == int.Parse(year))
-                {
-                    return StatusCode(400, new { errors = new[] { "Invalid Year selected" } });
-                }
                 if (IsBringDeferredTaxFoward && financialYearRecord.Id != int.Parse(year))
                 {
                     return StatusCode(400, new { errors = new[] { "Please move the current Deferred tax and not previous deferred tax" } });

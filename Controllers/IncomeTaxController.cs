@@ -47,10 +47,6 @@ namespace TaxComputationSoftware.Controllers
 
             var financialYear = await _utilitiesService.GetFinancialCompanyAsync(companyId);
             var financialYearRecord = financialYear.OrderByDescending(x => x.Id).FirstOrDefault();
-            if (financialYear.FirstOrDefault().Id == yearId)
-            {
-                return StatusCode(400, new { errors = new[] { "Invalid Year selected" } });
-            }
             if (isBringLossFoward && financialYearRecord.Id != yearId)
             {
                 return StatusCode(400, new { errors = new[] { "Please move the current Loss/unRelived and not previous UnRelieved/losses" } });

@@ -105,8 +105,10 @@ namespace TaxComputationAPI
 
              services.AddHostedService<BackgroundJobService>();*/
 
-            services.AddHostedService<AnnualCalculations>();
+            //services.AddHostedService<AnnualCalculations>();
+
             services.AddScoped<IUsersRepository, UsersRepository>();
+            services.AddScoped<RollOverService>();
             services.AddMemoryCache();
             services.AddScoped<IBalancingAdjustmentRepository, BalancingAdjustmentRepository>();
             services.AddScoped<IUsersService, UsersService>();

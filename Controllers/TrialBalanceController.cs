@@ -95,7 +95,7 @@ namespace TaxComputationAPI.Controllers
                 var companyDetails = await _utilityService.GetPreNotificationsAsync();
                 var companyDate = companyDetails.FirstOrDefault(x => x.CompanyId == excel.CompanyId);
                 var itemModules = await _utilityService.GetFinancialCompanyAsync(excel.CompanyId);
-                var m = itemModules.LastOrDefault();
+                var m = itemModules.OrderByDescending(x=>x.Id).FirstOrDefault();
                 if (m.Id != details.Id)
                 {
                     return StatusCode(400, new { errors = new[] { "This operation is not valid for previous tax years" } });

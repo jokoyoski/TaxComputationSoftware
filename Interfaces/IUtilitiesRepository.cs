@@ -10,6 +10,10 @@ namespace TaxComputationAPI.Interfaces
 {
     public interface IUtilitiesRepository
     {
+        //Task AddRollBackAsync(RollBackYear rollBackYear);
+         Task<RollBackYear> GetRollBackYear(int companyId);
+        Task<FinancialYear> GetLastFinancialYearAsync(int companyId);
+        Task DeleteLastFinancialYearAsync(int yearId);
         Task DeleteAllowableDisAllowableById(int Id);
         Task<AllowableDisAllowable> GetAllowableDisAllowableById(int Id);
         Task<FinancialYear> GetFinancialYearAsync(int yearId);
@@ -34,6 +38,8 @@ namespace TaxComputationAPI.Interfaces
         Task<AssetMapping> GetAssetMappingById(int Id);
 
         Task AddAssetMappingAsync(AssetMapping asset);
+
+        Task AddRollBackAsync(RollBackYear rollBackYear);
 
         Task UpdateAssetMappingAsync(AssetMapping asset);
 

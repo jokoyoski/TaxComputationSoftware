@@ -11,6 +11,7 @@ using Microsoft.Extensions.Logging;
 using TaxComputationAPI.Dtos;
 using TaxComputationAPI.Helpers;
 using TaxComputationAPI.Interfaces;
+using System.Linq;
 using TaxComputationAPI.Models;
 using TaxComputationSoftware.Interfaces;
 using TaxComputationSoftware.Services;
@@ -244,8 +245,9 @@ namespace TaxComputationAPI.Controllers
 
                 }
                 var itemModules = await _utilitiesService.GetFinancialCompanyAsync(companyId);
-
-                return Ok(itemModules);
+             
+               
+                return Ok(itemModules.OrderBy(x=>x.Id));
 
             }
             catch (Exception ex)

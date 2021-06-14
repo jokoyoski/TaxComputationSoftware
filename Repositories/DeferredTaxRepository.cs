@@ -25,7 +25,7 @@ namespace TaxComputationSoftware.Repositories
             _logger = logger;
         }
 
-         public async Task<int> CreateDeferredTaxBroughtFoward(int companyId, decimal deferredTaxBroughtFoward, int yearId)
+        public async Task<int> CreateDeferredTaxBroughtFoward(int companyId, decimal deferredTaxBroughtFoward, int yearId)
         {
 
             int rowAffected = 0;
@@ -95,7 +95,7 @@ namespace TaxComputationSoftware.Repositories
                     var record = await conn.QueryMultipleAsync("[dbo].[usp_Get_Deferred_Tax_Brought_Foward_By_CompanyId]", parameters, commandType: CommandType.StoredProcedure);
                     var result = await record.ReadAsync<DeferredTaxFoward>();
                     return result;
-                   
+
                 }
 
 
@@ -108,6 +108,10 @@ namespace TaxComputationSoftware.Repositories
             }
             return null;
         }
+
+
+
+
 
 
 
@@ -171,13 +175,59 @@ namespace TaxComputationSoftware.Repositories
 
                     _logger.LogError(e.Message);
                     await _emailService.ExceptionEmail(MethodBase.GetCurrentMethod().DeclaringType.Name, e.Message);
-                    
+
                     throw e;
                 }
             }
         }
 
 
+        public async Task DeleteDeferredTaxBroughtFoward(int yearId)
+        {
+            using (IDbConnection conn = await _databaseManager.DatabaseConnection())
+            {
+                if (conn.State == ConnectionState.Closed) conn.Open();
 
+                DynamicParameters parameters = new DynamicParameters();
+                parameters.Add("@Id", yearId);
+                try
+                {
+                    conn.Execute("[dbo].[usp_Delete_Deferred_Tax_Brought_Foward]", parameters, commandType: CommandType.StoredProcedure);
+                    conn.Close();
+                }
+                catch (Exception e)
+                {
+
+                    _logger.LogError(e.Message);
+                    await _emailService.ExceptionEmail(MethodBase.GetCurrentMethod().DeclaringType.Name, e.Message);
+
+                    throw e;
+                }
+            }
+        }
+
+        public async Task DeleteIncomeTaxBroughtFoward(int yearId)
+        {
+            using (IDbConnection conn = await _databaseManager.DatabaseConnection())
+            {
+                if (conn.State == ConnectionState.Closed) conn.Open();
+
+                DynamicParameters parameters = new DynamicParameters();
+                parameters.Add("@Id", yearId);
+                try
+                {
+                    conn.Execute("[dbo].[usp_Delete_IncomeTax_Brought_Foward]", parameters, commandType: CommandType.StoredProcedure);
+                    conn.Close();
+                }
+                catch (Exception e)
+                {
+
+                    _logger.LogError(e.Message);
+                    await _emailService.ExceptionEmail(MethodBase.GetCurrentMethod().DeclaringType.Name, e.Message);
+
+                    throw e;
+                }
+            }
+        }
     }
 }
