@@ -617,8 +617,7 @@ namespace TaxComputationSoftware.Services
                 UnRelievedCf = unrelievedCf,
                 AssessableLoss = losscf,
             });
-            if (IsBringLossFoward)
-            {
+           
                 _incomeTaxRepository.CreateBalanceBroughtFoward(new BroughtFoward
                 {
                     LossCf = losscf,
@@ -627,7 +626,7 @@ namespace TaxComputationSoftware.Services
                     CompanyId = companyId
                 });
 
-            }
+            
 
 
             return incomeListDto;

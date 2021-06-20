@@ -1,6 +1,21 @@
 
 
 
+----------------------------------- STORED PROCEDURE TO  GET CAPITAL ALLOWANCE SUMMARY BY COMPANYID-----------------------------------------
+
+IF OBJECT_ID('[dbo].[usp_Get_Capital_Allowance_Summary_By_CompanyId]') IS nOT NULL
+BEGIN
+DROP procedure [dbo].[usp_Get_Capital_Allowance_Summary_By_CompanyId]
+END
+GO
+CREATE procedure [dbo].[usp_Get_Capital_Allowance_Summary_By_CompanyId](
+@CompanyId int
+)
+AS
+select [dbo].[AssetMapping].AssetName as AssetName,OpeningResidue,Addition,Disposal,[dbo].[CapitalAllowanceSummary].Initial,[dbo].[CapitalAllowanceSummary].Annual,Total,ClosingResidue,CompanyId,AssetId from [dbo].[CapitalAllowanceSummary]  inner join [dbo].[AssetMapping] on [dbo].[CapitalAllowanceSummary].AssetId=[dbo].[AssetMapping].Id where CompanyId=@CompanyId
+GO
+
+
 
 
 IF NOT EXISTS(SELECT 1 FROM sysobjects WHERE type = 'U' and name = 'OldCapitalAllowanceSummary')
@@ -306,7 +321,7 @@ AS
 
 delete from [dbo].[CapitalAllowance] where CompanyId=@Id
 delete from [dbo].[CapitalAllowanceSummary] where CompanyId=@Id
-delete from [dbo].[ArchivedCapitalAllowanceSummary] where CompanyId=@Id
+delete from [dbo].[ArchivedCapitalAllowance] where CompanyId=@Id
 GO
 
 
@@ -325,7 +340,7 @@ AS
 
 delete from [dbo].[OldCapitalAllowance] where CompanyId=@Id
 delete from [dbo].[OldCapitalAllowanceSummary] where CompanyId=@Id
-delete from [dbo].[OldArchivedCapitalAllowanceSummary] where CompanyId=@Id
+delete from [dbo].[OldArchivedCapitalAllowance] where CompanyId=@Id
 GO
 
 
@@ -451,3 +466,85 @@ AS
 select  * from [dbo].[OldArchivedCapitalAllowance] where CompanyId=@CompanyId 
 GO
 
+
+
+
+
+
+
+IF OBJECT_ID('[dbo].[usp_Get_Archived_Capital_Allowance_By_CompanyId]') IS nOT NULL
+BEGIN
+DROP procedure [dbo].[usp_Get_Archived_Capital_Allowance_By_CompanyId]
+END
+GO
+CREATE procedure [dbo].[usp_Get_Archived_Capital_Allowance_By_CompanyId](
+@CompanyId int
+)
+AS
+
+select  * from [dbo].[ArchivedCapitalAllowance] where CompanyId=@CompanyId 
+GO
+
+
+
+
+
+IF OBJECT_ID('[dbo].[usp_Get_Capital_Allowance_By_CompanyId]') IS nOT NULL
+BEGIN
+DROP procedure [dbo].[usp_Get_Capital_Allowance_By_CompanyId]
+END
+GO
+CREATE procedure [dbo].[usp_Get_Capital_Allowance_By_CompanyId](
+@CompanyId int
+)
+AS
+
+select  * from [dbo].[CapitalAllowance] where CompanyId=@CompanyId 
+GO
+
+
+
+
+
+IF NOT EXISTS(SELECT 1 FROM sysobjects WHERE type = 'U' and name = 'RollBackYear')
+BEGIN
+   create table RollBackYear(
+ Id   int identity(1,1) NOT NULL ,
+ YearId int,
+ CompanyId int
+ )
+END
+GO
+
+
+
+IF OBJECT_ID('[dbo].[usp_Get_RollBack_Year_By_CompanyId]') IS nOT NULL
+BEGIN
+DROP procedure [dbo].[usp_Get_RollBack_Year_By_CompanyId]
+END
+GO
+CREATE procedure [dbo].[usp_Get_RollBack_Year_By_CompanyId](
+@CompanyId int
+)
+AS
+select  * from [dbo].[RollBackYear] where CompanyId=@CompanyId 
+GO
+
+
+IF OBJECT_ID('[dbo].[usp_Insert_RollBack_Year_By_CompanyId]') IS nOT NULL
+BEGIN
+DROP procedure [dbo].[usp_Insert_RollBack_Year_By_CompanyId]
+END
+GO
+CREATE procedure [dbo].[usp_Insert_RollBack_Year_By_CompanyId](
+@CompanyId int,
+@YearId int
+)
+AS
+if exists (select  * from [dbo].[RollBackYear] where CompanyId=@CompanyId)
+begin
+update RollBackYear set YearId=@YearId ,CompanyId=@CompanyId
+end
+else
+insert into RollBackYear (CompanyId,YearId) values(@CompanyId,@YearId)
+GO
