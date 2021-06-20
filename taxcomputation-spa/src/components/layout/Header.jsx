@@ -13,8 +13,10 @@ import CompanyList from "../common/CompanyList";
 import CompanyDetails from "../common/CompanyDetails";
 import AddEditCompanyForm from "../common/AddEditCompanyForm";
 import { Toast } from "primereact/toast";
+import utils from "../../utils";
+import { rollback, rollover } from "../../apis/Rollover";
 
-const Header = ({ title, loading }) => {
+const Header = ({ title, loading, setPageLoader }) => {
   const { replace } = useRouterActions();
   const [toast, setToast] = React.useState(null);
   const [showSettings, setShowSettings] = React.useState();
@@ -26,7 +28,7 @@ const Header = ({ title, loading }) => {
   const [showCompanyDetails, setShowCompanyDetails] = React.useState();
   const [showAddEditCompany, setShowAddEditCompany] = React.useState();
   const [showFinancialYear, setShowFinancialYear] = React.useState(false);
-  const [{ companyName }, { resetCompany }] = useCompany();
+  const [{ companyName, companyId }, { resetCompany }] = useCompany();
   const [
     { financialYears, selectedFinancialYear, selectedCompany },
     { resetResources }
@@ -44,6 +46,36 @@ const Header = ({ title, loading }) => {
     () => financialYears?.find(year => year.value === selectedFinancialYear)?.label,
     [financialYears, selectedFinancialYear]
   );
+
+  const reloadPage = () => {
+    setPageLoader(false);
+    resetCompany();
+    resetResources();
+    sessionStorage.removeItem("year");
+    window.location.reload();
+  };
+
+  const rolloverHandler = async () => {
+    setShowSettings(false);
+    setPageLoader(true);
+    try {
+      const res = await rollover(companyId);
+      if (res.status === 200) reloadPage();
+    } catch (error) {
+      utils.apiErrorHandling(error, toast);
+    }
+  };
+
+  const rollbackHandler = async () => {
+    setShowSettings(false);
+    setPageLoader(true);
+    try {
+      const res = await rollback(companyId);
+      if (res.status === 200) reloadPage();
+    } catch (error) {
+      utils.apiErrorHandling(error, toast);
+    }
+  };
 
   return (
     <>
@@ -83,6 +115,12 @@ const Header = ({ title, loading }) => {
                     padding: 5,
                     background: "#fff"
                   }}>
+                  <p className="settings-item" onClick={rolloverHandler}>
+                    Rollover
+                  </p>
+                  <p className="settings-item" onClick={rollbackHandler}>
+                    Rollback
+                  </p>
                   <p
                     className="settings-item"
                     onClick={() => {
