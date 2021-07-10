@@ -26,12 +26,12 @@ namespace TaxComputationSoftware.Controllers
 
             try
             {
-               
+
                 var value = _rollOverService.DeleteOldCapitalAllowanceAndSummary(companyId);
-                _rollOverService.SaveRollFowardCapitalAllowance(companyId);
-                _rollOverService.SaveRollFowardArchivedCapitalAllowance(companyId);
-                _rollOverService.SaveRollFowardCapitalAllowanceSummary(companyId);
-                _rollOverService.CalculateAnnualCalculation(companyId);
+                await _rollOverService.SaveRollFowardCapitalAllowance(companyId);
+                await _rollOverService.SaveRollFowardArchivedCapitalAllowance(companyId);
+                await _rollOverService.SaveRollFowardCapitalAllowanceSummary(companyId);
+                await _rollOverService.CalculateAnnualCalculation(companyId);
                 return Ok("Successfully Rolled Foward!!!!!!");
             }
             catch (Exception ex)
@@ -54,32 +54,29 @@ namespace TaxComputationSoftware.Controllers
 
             try
             {
-                
-                var value = _rollOverService.DeleteCapitalAllowanceAndSummary(companyId);
-                _rollOverService.SaveRollBackCapitalAllowance(companyId);
-                _rollOverService.SaveRollBackArchivedCapitalAllowance(companyId);
-                _rollOverService.SaveRollBackCapitalAllowanceSummary(companyId);
-                var result = await _rollOverService.GetRollBackYearAsync(companyId);
-                var valueYear = await _rollOverService.GetRollBackYearAsync(companyId);
-                if (valueYear != null)
+                var valueYear1 = await _rollOverService.GetRollBackYearAsync(companyId);
+                if (valueYear1 != null)
                 {
-                    var record = await _rollOverService.GetFinancialYear(valueYear.YearId);
-                    if (record != null)
+                    var value = _rollOverService.DeleteCapitalAllowanceAndSummary(companyId);
+                    _rollOverService.SaveRollBackCapitalAllowance(companyId);
+                    _rollOverService.SaveRollBackArchivedCapitalAllowance(companyId);
+                    _rollOverService.SaveRollBackCapitalAllowanceSummary(companyId);
+                    var result = await _rollOverService.GetRollBackYearAsync(companyId);
+                    var valueYear = await _rollOverService.GetRollBackYearAsync(companyId);
+                    if (valueYear != null)
                     {
-                        _rollOverService.RollBackYear(companyId);
+                        var record = await _rollOverService.GetFinancialYear(valueYear.YearId);
+                        if (record != null)
+                        {
+                            _rollOverService.RollBackYear(companyId);
+                        }
                     }
+                    _rollOverService.DeleteFinancialYear(result.YearId);
+                    _rollOverService.DeleteIncomeTaxBroughtFoward(result.YearId);
+                    _rollOverService.DeleteDeferredTaxBroughtFoward(result.YearId);
+                    return Ok("Rolled back Successfully");
                 }
 
-
-
-                if (result == null)
-                {
-                    return StatusCode(400, new { errors = new[] { "Nothing to RollBack !!!" } });
-                }
-                _rollOverService.DeleteFinancialYear(result.YearId);
-                _rollOverService.DeleteIncomeTaxBroughtFoward(result.YearId);
-                _rollOverService.DeleteDeferredTaxBroughtFoward(result.YearId);
-                return Ok("Rolled back Successfully");
             }
             catch (Exception ex)
             {

@@ -59,6 +59,10 @@ namespace TaxComputationSoftware.Controllers
             try
             {
                 var value = await _incomeTaxService.GetIncomeTax(companyId, yearId, IsItLevyView, isBringLossFoward);
+                if (value == null)
+                {
+                    return StatusCode(400, new { errors = new[] { "Ensure You have an active capital allowance for this year!" } });
+                }
                 return Ok(value);
 
             }

@@ -34,6 +34,7 @@ namespace TaxComputationSoftware.Services
         }
         public async Task<List<DeferredTaxDto>> GetDeferredTax(int companyId, int yearId, bool IsBringDeferredTaxFoward)
         {
+           
 
             var financialYear = await _utilitiesRepository.GetFinancialCompanyAsync(companyId);
             var financialYearRecord = financialYear.OrderByDescending(x=>x.Id).Where(x => x.Id < yearId).FirstOrDefault();
@@ -41,8 +42,7 @@ namespace TaxComputationSoftware.Services
             var broughtFoward = record.ToList().Where(x => x.YearId == financialYearRecord.Id).OrderByDescending(x => x.Id).FirstOrDefault();
             var netbookValue = await _fixedAssetService.GetFixedAssetsByCompanyForDeferredTax(companyId, yearId);
             var capitalAllowanceSummary = await _capitalAllowanceService.GetCapitalAllowanceSummaryForDeferredTax(companyId);
-           // var unrelievedCapitalAllowanceCf = await _incomeTaxService.GetIncomeTaxForDeferred(companyId, yearId);
-           var unrelievedCf=await _incomeTaxService.GetAsessableLossUnRelievedByCompanyIdYearId(companyId,yearId);
+            var unrelievedCf=await _incomeTaxService.GetAsessableLossUnRelievedByCompanyIdYearId(companyId,yearId);
             var fairValueGains = await _deferredTaxRepository.GetFairValueGainByCompanyIdAndYear(companyId, yearId);
             decimal deferredTaxCf = 0;
             decimal lessTotal = 0;
@@ -98,6 +98,9 @@ namespace TaxComputationSoftware.Services
                 CanBolden = true
 
             });
+            if(unrelievedCf==null){
+                return null;
+            }
 
             deferredTaxDto.Add(new DeferredTaxDto
             {
@@ -258,10 +261,9 @@ namespace TaxComputationSoftware.Services
                 CanBolden = true
 
             });
-            if (IsBringDeferredTaxFoward)
-            {
+           
                 _deferredTaxRepository.CreateDeferredTaxBroughtFoward(companyId, deferredTaxCf, yearId);
-            }
+            
             //await _deferredTaxRepository.UpdateDeferredTaxBroughtFowardByDeferredTax(companyId, deferredTaxCf);
 
             return deferredTaxDto;

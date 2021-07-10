@@ -9,6 +9,7 @@ namespace TaxComputationAPI.Interfaces
 {
     public interface ICapitalAllowanceService
     {
+        Task<IEnumerable<CapitalAllowance>> GetCapitalAllowanceByCompanyId(int id);
         Task SaveCapitalAllowance(CapitalAllowance capitalAllowance);
         Task SaveCapitalAllowanceSummary(int assetId, int companyId);
 

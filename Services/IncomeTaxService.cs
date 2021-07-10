@@ -44,6 +44,12 @@ namespace TaxComputationSoftware.Services
 
         public async Task<List<IncomeTaxDto>> GetIncomeTax(int companyId, int yearId, bool IsItLevyView, bool IsBringLossFoward)
         {
+            var valuess = await _capitalAllowanceService.GetCapitalAllowanceByCompanyId(companyId);
+            var results = valuess.FirstOrDefault(x => x.TaxYear == yearId.ToString());
+            if (results == null)
+            {
+               return null;
+            }
             decimal totalAllowable = 0;
             decimal totalDisallowable = 0;
             decimal capitalAllowanceClaimed = 0;
@@ -358,7 +364,7 @@ namespace TaxComputationSoftware.Services
             else
             {
 
-                twoThirdaccessibleType = (2 * accessibleType)/3;
+                twoThirdaccessibleType = (2 * accessibleType) / 3;
                 if (twoThirdaccessibleType > capitalAllowanceOfTheYear)
                 {
                     capitalAllowanceClaimed = capitalAllowanceOfTheYear;
@@ -521,11 +527,11 @@ namespace TaxComputationSoftware.Services
                 });
 
             }
-             //bool boma=true;
-            if (companyDetails.MinimumTaxTypeId==0)
+            //bool boma=true;
+            if (companyDetails.MinimumTaxTypeId == 0)
             {    //// if old 
                 var minimumTaxValue = await _minimumTaxService.GetOldMinimumTax(companyId, yearId);
-               if (minimumTaxValue.ResponseDescription!="Minimum tax not found")
+                if (minimumTaxValue.ResponseDescription != "Minimum tax not found")
                 {
                     incomeListDto.Add(new IncomeTaxDto
                     {
@@ -610,23 +616,23 @@ namespace TaxComputationSoftware.Services
             {
                 values = 0;
             }
-            _incomeTaxRepository.SaveAsessableUnRelieved(new AsessableLossUnRelieved
+            await _incomeTaxRepository.SaveAsessableUnRelieved(new AsessableLossUnRelieved
             {
                 CompanyId = companyId,
                 YearId = yearId,
                 UnRelievedCf = unrelievedCf,
                 AssessableLoss = losscf,
             });
-           
-                _incomeTaxRepository.CreateBalanceBroughtFoward(new BroughtFoward
-                {
-                    LossCf = losscf,
-                    UnRelievedCf = unrelievedCf,
-                    YearId = yearId,
-                    CompanyId = companyId
-                });
 
-            
+            await _incomeTaxRepository.CreateBalanceBroughtFoward(new BroughtFoward
+            {
+                LossCf = losscf,
+                UnRelievedCf = unrelievedCf,
+                YearId = yearId,
+                CompanyId = companyId
+            });
+
+
 
 
             return incomeListDto;

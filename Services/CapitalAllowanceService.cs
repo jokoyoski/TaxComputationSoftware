@@ -600,6 +600,9 @@ namespace TaxComputationAPI.Services
             return _capitalAllowanceRepository.UpdateArchivedCapitalAllowanceForChannel(channel, companyId, taxYear, assetId);
         }
 
-       
+        public Task<IEnumerable<CapitalAllowance>> GetCapitalAllowanceByCompanyId(int id)
+        {
+           return _capitalAllowanceRepository.GetCapitalAllowanceByCompanyId(id);
+        }
     }
 }

@@ -43,11 +43,11 @@ namespace TaxComputationSoftware.Services
             // var single = prenotification.Where(p => p.CompanyId == companyId).FirstOrDefault();
 
             await _companyRepository.UpdateCompanyDate(company);
-          
+
         }
 
 
-         public async Task<FinancialYear> GetFinancialYear(int yearId)
+        public async Task<FinancialYear> GetFinancialYear(int yearId)
         {
             return await _utilityRepository.GetFinancialYearAsync(yearId);
         }
@@ -236,13 +236,13 @@ namespace TaxComputationSoftware.Services
 
         public async Task DeleteOldCapitalAllowanceAndSummary(int companyId)
         {
-            _capitalAllowanceRepository.DeleteOldCapitalAllowanceAndSummary(companyId);
+            await _capitalAllowanceRepository.DeleteOldCapitalAllowanceAndSummary(companyId);
         }
 
 
         public async Task DeleteCapitalAllowanceAndSummary(int companyId)
         {
-            _capitalAllowanceRepository.DeleteCapitalAllowanceAndSummary(companyId);
+            await _capitalAllowanceRepository.DeleteCapitalAllowanceAndSummary(companyId);
         }
         /*  public async Task SaveOldCapitalAllowanceSummary(int companyId)
           {
@@ -276,16 +276,7 @@ namespace TaxComputationSoftware.Services
             foreach (var item in values)
             {
 
-
-                if (values.Count() > 0)
-                {
-                    foreach (var value in values)
-                    {
-                        _capitalAllowanceRepository.SaveOldArchivedCapitaLAllowance(value);
-                    }
-
-
-                }
+                await _capitalAllowanceRepository.SaveOldArchivedCapitaLAllowance(item);
 
             }
 
@@ -322,7 +313,7 @@ namespace TaxComputationSoftware.Services
             {
                 foreach (var item in value)
                 {
-                    _capitalAllowanceRepository.SaveOldCapitaLAllowanceSummary(item);
+                    await _capitalAllowanceRepository.SaveOldCapitaLAllowanceSummary(item);
                 }
             }
         }
@@ -335,7 +326,7 @@ namespace TaxComputationSoftware.Services
             {
                 foreach (var item in value)
                 {
-                    _capitalAllowanceRepository.SaveCapitaLAllowanceSummary(item);
+                    await _capitalAllowanceRepository.SaveCapitaLAllowanceSummary(item);
                 }
             }
         }
@@ -347,16 +338,8 @@ namespace TaxComputationSoftware.Services
             var values = await _capitalAllowanceRepository.GetCapitalAllowanceByCompanyId(companyId);
             foreach (var item in values)
             {
-                if (values.Count() > 0)
-                {
-                    foreach (var value in values)
-                    {
-                        _capitalAllowanceRepository.SaveOldCapitaLAllowance(value, "");
-                    }
-                }
-
+                await _capitalAllowanceRepository.SaveOldCapitaLAllowance(item, "");
             }
-
 
         }
 
@@ -366,17 +349,9 @@ namespace TaxComputationSoftware.Services
             var values = await _capitalAllowanceRepository.GetOldCapitalAllowanceByCompanyId(companyId);
             foreach (var item in values)
             {
-                if (values.Count() > 0)
-                {
-                    foreach (var value in values)
-                    {
-                        _capitalAllowanceRepository.SaveCapitaLAllowance(value, "");
-                    }
-                }
+                await _capitalAllowanceRepository.SaveCapitaLAllowance(item, item.Channel);
 
             }
-
-
         }
 
 
@@ -421,7 +396,7 @@ namespace TaxComputationSoftware.Services
                             };
                             await _capitalAllowanceRepository.SaveArchivedCapitaLAllowance(capitalAllowance, capitalAllowance.Channel);
                             await _capitalAllowanceRepository.UpdateCapitalAllowanceByFixedAssetOrBalancingAdjustemnt(capitalAllowance);
-                            SaveCapitalAllowanceSummary(value.AssetId, companyId);
+                            await SaveCapitalAllowanceSummary(value.AssetId, companyId);
 
 
                         }
@@ -540,7 +515,7 @@ namespace TaxComputationSoftware.Services
             var currentYearId = await _utilityRepository.GetLastFinancialYearAsync(companyId);
             if (currentYearId != null)
             {
-                _utilityRepository.AddRollBackAsync(new RollBackYear
+                await _utilityRepository.AddRollBackAsync(new RollBackYear
                 {
                     CompanyId = companyId,
                     YearId = currentYearId.Id

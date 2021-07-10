@@ -52,7 +52,9 @@ namespace TaxComputationAPI.Controllers
                     return StatusCode(400, new { errors = new[] { "Please move the current Deferred tax and not previous deferred tax" } });
                 }
                 var value = await _deferredTaxService.GetDeferredTax(companyId, int.Parse(year), IsBringDeferredTaxFoward);
-
+                if(value==null){
+                      return StatusCode(400, new { errors = new[] { "No Active Unabsorbed from Income Tax to use" } });
+                }
                 return Ok(value);
 
             }
