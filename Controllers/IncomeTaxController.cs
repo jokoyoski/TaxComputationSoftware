@@ -46,6 +46,7 @@ namespace TaxComputationSoftware.Controllers
         {
 
             var financialYear = await _utilitiesService.GetFinancialCompanyAsync(companyId);
+            var financialYearRecords = financialYear.OrderByDescending(x => x.Id);
             var financialYearRecord = financialYear.OrderByDescending(x => x.Id).FirstOrDefault();
             if (isBringLossFoward && financialYearRecord.Id != yearId)
             {

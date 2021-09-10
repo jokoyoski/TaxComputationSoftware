@@ -99,7 +99,13 @@ namespace TaxComputationSoftware.Services
 
             });
             if(unrelievedCf==null){
-                return null;
+                unrelievedCf = new AsessableLossUnRelieved
+                {
+                    AssessableLoss = 0,
+                    CompanyId = companyId,
+                    UnRelievedCf = 0,
+                    YearId = yearId
+                };
             }
 
             deferredTaxDto.Add(new DeferredTaxDto

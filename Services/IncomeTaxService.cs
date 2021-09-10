@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using TaxComputationAPI.Helpers;
 using TaxComputationAPI.Interfaces;
+using TaxComputationAPI.Models;
 using TaxComputationSoftware.Dtos;
 using TaxComputationSoftware.Interfaces;
 using TaxComputationSoftware.Models;
@@ -48,7 +49,7 @@ namespace TaxComputationSoftware.Services
             var results = valuess.FirstOrDefault(x => x.TaxYear == yearId.ToString());
             if (results == null)
             {
-               return null;
+                results = new CapitalAllowance();
             }
             decimal totalAllowable = 0;
             decimal totalDisallowable = 0;
@@ -397,7 +398,9 @@ namespace TaxComputationSoftware.Services
 
 
                 }
+
                 unrelievedCf = capitalAllowanceOfTheYear - capitalAllowanceClaimed;
+
                 incomeListDto.Add(new IncomeTaxDto
                 {
                     Description = "Unrelieved Capital Allowance Carried Foward c/f",
@@ -631,10 +634,6 @@ namespace TaxComputationSoftware.Services
                 YearId = yearId,
                 CompanyId = companyId
             });
-
-
-
-
             return incomeListDto;
         }
 
