@@ -374,6 +374,12 @@ namespace TaxComputationSoftware.Services
                 {
                     capitalAllowanceClaimed = twoThirdaccessibleType;
                 }
+
+                if (losscf < 0)
+                {
+                    capitalAllowanceClaimed = 0;
+                }
+              
                 if (capitalAllowanceClaimed < 0)
                 {
 
@@ -398,6 +404,7 @@ namespace TaxComputationSoftware.Services
 
 
                 }
+                 
 
                 unrelievedCf = capitalAllowanceOfTheYear - capitalAllowanceClaimed;
 
@@ -426,6 +433,10 @@ namespace TaxComputationSoftware.Services
             }
 
             taxableProfit = accessibleBalancingCharge - capitalAllowanceClaimed;
+            if (losscf < 0)
+            {
+                taxableProfit = 0;
+            }
             if (isAssessibleProfit)
             {
                 incomeListDto.Add(new IncomeTaxDto
