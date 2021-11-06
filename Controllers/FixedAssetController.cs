@@ -63,8 +63,8 @@ namespace TaxComputationAPI.Controllers
                 var companyDetails = await _utilitiesService.GetPreNotificationsAsync();
                 var companyDate = companyDetails.FirstOrDefault(x => x.CompanyId == createFixed.CompanyId);
                 var itemModules = await _utilitiesService.GetFinancialCompanyAsync(createFixed.CompanyId);
-                var m = itemModules.OrderByDescending(x=>x.Id).FirstOrDefault();
-                if (m.Id!=createFixed.YearId)
+                var m = itemModules.OrderByDescending(x => x.Id).FirstOrDefault();
+                if (m.Id != createFixed.YearId)
                 {
                     return StatusCode(400, new { errors = new[] { "This operation is not valid for previous tax years" } });
 
@@ -178,6 +178,51 @@ namespace TaxComputationAPI.Controllers
         {
             await _fixedAssetService.DeleteFixedAssetById(id);
             return Ok("Item Unmapped");
+        }
+
+
+        [HttpGet("roll")]
+        //[Authorize]
+        public async Task<IActionResult> GetFixedAssetRoll(int companyId, int yearId, int assetId)
+        {
+            try
+            {
+                var details = await _utilitiesService.GetFinancialYearAsync(yearId);
+                int taxYear = int.Parse(details.Name);
+                var companyDetails = await _utilitiesService.GetPreNotificationsAsync();
+                var companyDate = companyDetails.FirstOrDefault(x => x.CompanyId == companyId);
+
+                if (yearId == 0)
+                {
+                    return StatusCode(400, new { errors = new[] { "Please select a Valid year" } });
+                }
+                var fixedAsset = await _fixedAssetService.GetFixedAssetsByCompanyForRollOver(companyId, yearId);
+                if (fixedAsset != null)
+                {
+                    var fixedAssets = fixedAsset.fixedAssetResponse.FixedAssetData.FirstOrDefault(x => x.AssetId == assetId);
+                    if (fixedAssets == null)
+                    {
+                        if (yearId == 0)
+                        {
+                            return StatusCode(400, new { errors = new[] { "No records" } });
+                        }
+                    }
+                     return Ok(fixedAssets);
+                }
+                return Ok();
+               
+            }
+            catch (Exception ex)
+            {
+                var email = User.FindFirst(ClaimTypes.Email).Value;
+                _logger.LogInformation("Exception for {email}, {ex}", email, ex.Message);
+
+                _logger.LogError(ex.Message);
+                await _emailService.ExceptionEmail(MethodBase.GetCurrentMethod().DeclaringType.Name, ex.Message);
+
+                return StatusCode(500, new { errors = new[] { "Error occured while trying to process your request please try again later !" } });
+
+            }
         }
 
 

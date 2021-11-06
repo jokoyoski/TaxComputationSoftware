@@ -3,6 +3,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using TaxComputationAPI.Interfaces;
 using TaxComputationAPI.Models;
 using TaxComputationSoftware.Services;
 
@@ -13,9 +14,11 @@ namespace TaxComputationSoftware.Controllers
     {
 
         private readonly RollOverService _rollOverService;
-        public RollOverController(RollOverService rollOverService)
+        private readonly IFixedAssetService _fixedAssetService;
+        public RollOverController(RollOverService rollOverService, IFixedAssetService fixedAssetService)
         {
             _rollOverService = rollOverService;
+            _fixedAssetService = fixedAssetService;
         }
 
 
@@ -27,11 +30,44 @@ namespace TaxComputationSoftware.Controllers
             try
             {
 
+                var currentYear1 = await _rollOverService.GetLastFinancialYear(companyId);
                 var value = _rollOverService.DeleteOldCapitalAllowanceAndSummary(companyId);
                 await _rollOverService.SaveRollFowardCapitalAllowance(companyId);
                 await _rollOverService.SaveRollFowardArchivedCapitalAllowance(companyId);
                 await _rollOverService.SaveRollFowardCapitalAllowanceSummary(companyId);
                 await _rollOverService.CalculateAnnualCalculation(companyId);
+                int i = 0;
+                var currentYear2 = await _rollOverService.GetLastFinancialYear(companyId);
+                var fixedAsset = await _fixedAssetService.GetFixedAssetsByCompanyForRollOver(companyId, currentYear1.Id);
+                foreach (var item in fixedAsset.fixedAssetResponse.FixedAssetData)
+                {
+
+                    await _fixedAssetService.SaveFixedAssetRollOver(new TaxComputationAPI.Dtos.CreateFixedAssetDto()
+                    {
+                        CompanyId=companyId,
+                        YearId = currentYear2.Id,
+                        OpeningCost = fixedAsset.costs[i],
+                        OpeningDepreciation = fixedAsset.depreciations[i],
+                        AssetId = item.AssetId,
+                        IsCost=true,
+                    });
+                    i++;
+                }
+                i=0;
+                foreach (var item in fixedAsset.fixedAssetResponse.FixedAssetData)
+                {
+
+                    await _fixedAssetService.SaveFixedAssetRollOver(new TaxComputationAPI.Dtos.CreateFixedAssetDto()
+                    {
+                        CompanyId=companyId,
+                        YearId = currentYear2.Id,
+                        OpeningCost = fixedAsset.costs[i],
+                        OpeningDepreciation = fixedAsset.depreciations[i],
+                        AssetId = item.AssetId,
+                        IsCost=false,
+                    });
+                    i++;
+                }
                 return Ok("Successfully Rolled Foward!!!!!!");
             }
             catch (Exception ex)
@@ -63,14 +99,23 @@ namespace TaxComputationSoftware.Controllers
                     _rollOverService.SaveRollBackCapitalAllowanceSummary(companyId);
                     var result = await _rollOverService.GetRollBackYearAsync(companyId);
                     var valueYear = await _rollOverService.GetRollBackYearAsync(companyId);
+                    var record = await _rollOverService.GetFinancialYear(valueYear.YearId);
                     if (valueYear != null)
                     {
-                        var record = await _rollOverService.GetFinancialYear(valueYear.YearId);
                         if (record != null)
                         {
                             _rollOverService.RollBackYear(companyId);
                         }
                     }
+                    var fixedAsset = await _fixedAssetService.GetFixedAssetsByCompanyForRollOver(companyId, record.Id);
+                    if (fixedAsset != null)
+                    {
+                        foreach (var item in fixedAsset.fixedAssetResponse.FixedAssetData)
+                        {
+                            await _fixedAssetService.DeleteFixedAssetById(item.Id);
+                        }
+                    }
+
                     _rollOverService.DeleteFinancialYear(result.YearId);
                     _rollOverService.DeleteIncomeTaxBroughtFoward(result.YearId);
                     _rollOverService.DeleteDeferredTaxBroughtFoward(result.YearId);

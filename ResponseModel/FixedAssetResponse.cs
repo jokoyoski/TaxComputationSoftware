@@ -15,6 +15,7 @@ namespace TaxComputationAPI.ResponseModel
     public class  FixedAssetData{
         public int Id {get;set;}   
          public  string CompanyName  {get;set;}
+         public int AssetId {get;set;}
          public string Year {get;set;}
          public string YearName {get;set;}
         public string FixedAssetName {get;set;}    

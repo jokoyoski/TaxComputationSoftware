@@ -9,6 +9,7 @@ using Total = TaxComputationAPI.ResponseModel.Total;
 using NetBookValue = TaxComputationAPI.ResponseModel.NetBookValue;
 using TaxComputationAPI.Models;
 using FixedAssetData = TaxComputationAPI.Dtos.FixedAssetData;
+using TaxComputationSoftware.Models;
 
 namespace TaxComputationAPI.Services
 {
@@ -54,6 +55,86 @@ namespace TaxComputationAPI.Services
 
             return netBookValue;
         }
+
+
+
+        public async Task<RollOverFixedAsset> GetFixedAssetsByCompanyForRollOver(int companyId, int yearId)
+        {
+            decimal openingCostTotal = 0;
+            decimal adddtionCostTotal = 0;
+            decimal disposalCostTotal = 0;
+            decimal closingCostTotal = 0;
+            decimal openingDepreciationTotal = 0;
+            decimal adddtionDepreciationTotal = 0;
+            decimal disposalDepreciationTotal = 0;
+            decimal closingDepreciationTotal = 0;
+            decimal transferCostTotal = 0;
+            decimal transferDepreciationTotal = 0;
+            decimal cost = 0;
+            decimal depreciation = 0;
+            int i = 0;
+
+            List<Total> totals = new List<Total>();
+            List<NetBookValue> netBookValues = new List<NetBookValue>();
+
+
+            var result = await _fixedAssetRepository.GetFixedAssetsByCompany(companyId, yearId);
+            if (result.FixedAssetData.Count <= 0)
+            {
+                return null;
+            }
+
+            List<decimal> costList = new List<decimal>();
+            List<decimal> depreciationList = new List<decimal>();
+            foreach (var x in result.FixedAssetData)
+            {
+                decimal costValue = await _utilitiesRepository.GetAmount(x.Id, "cost");
+                decimal depreciationValue = await _utilitiesRepository.GetAmount(x.Id, "depreciation"); ;
+                openingCostTotal += x.OpeningCost;
+                adddtionCostTotal += x.CostAddition;
+                disposalCostTotal += -x.CostDisposal;
+                closingCostTotal += costValue;
+                openingDepreciationTotal += x.OpeningDepreciation;
+                adddtionDepreciationTotal += x.DepreciationAddition;
+                disposalDepreciationTotal += -x.DepreciationDisposal;
+                closingDepreciationTotal += depreciationValue;
+                transferCostTotal += x.TransferCost;
+                transferDepreciationTotal = x.TransferDepreciation;
+                costList.Add(costValue);
+                depreciationList.Add(depreciationValue);
+                netBookValues.Add(new NetBookValue
+                {
+                    value = costValue - depreciationValue
+                });
+            }
+            result.total = new Total
+            {
+                OpeningCostTotal = openingCostTotal,
+                AdditionCostTotal = adddtionCostTotal,
+                ClosingCostTotal = closingCostTotal,
+                DisposalCostTotal = disposalCostTotal,
+                OpeningDepreciationTotal = openingDepreciationTotal,
+                AdditionDepreciationTotal = adddtionDepreciationTotal,
+                DisposalDepreciationTotal = disposalDepreciationTotal,
+                ClosingDepreciationTotal = closingDepreciationTotal,
+
+
+            };
+            netBookValues.Add(new NetBookValue
+            {
+                value = closingCostTotal - closingDepreciationTotal
+            });
+            result.netBookValue = netBookValues;
+            return new RollOverFixedAsset
+            {
+                costs = costList,
+                depreciations = depreciationList,
+                fixedAssetResponse = result
+            };
+
+        }
+
+
 
 
         public async Task<TaxComputationAPI.Dtos.FixedAssetResponseDto> GetFixedAssetsByCompany(int companyId, int yearId)
@@ -317,17 +398,20 @@ namespace TaxComputationAPI.Services
 
         public async Task DeleteFixedAssetById(int Id)
         {
-        var fixedAsset = await _fixedAssetRepository.GetFixedAssetsById(Id);
-        _fixedAssetRepository.DeleteFixedAssetById(Id);
-        if (fixedAsset != null)
-        {
+            var fixedAsset = await _fixedAssetRepository.GetFixedAssetsById(Id);
+            _fixedAssetRepository.DeleteFixedAssetById(Id);
+            if (fixedAsset != null)
+            {
                 var result = _capitalAllowanceRepository.DeleteCapitalAllowanceSummaryById(fixedAsset.AssetId, fixedAsset.CompanyId);
                 _capitalAllowanceService.GetCapitalAllowanceSummaryByCompanyId(fixedAsset.CompanyId);
-        }
+            }
 
         }
 
-
+        public async Task SaveFixedAssetRollOver(CreateFixedAssetDto fixedAssetDto)
+        {
+            await _fixedAssetRepository.SaveFixedAsset(fixedAssetDto);
+        }
     }
 }
 

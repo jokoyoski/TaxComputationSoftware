@@ -19,6 +19,8 @@ namespace TaxComputationAPI.Dtos
         public int Id { get; set; }
         public string CompanyName { get; set; }
 
+        public int AssetId {get;set;}
+
         public string Year { get; set; }
         public string FixedAssetName { get; set; }
         public string OpeningCost { get; set; }

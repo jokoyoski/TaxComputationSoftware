@@ -51,6 +51,17 @@ export const fixedAssetViewData = async ({ companyId, year }) => {
   }
 };
 
+export const fixedAssetRollBackData = async (companyId, year, assetId) => {
+  try {
+    const { data } = await axios.get(
+      `/api/FixedAsset/roll?companyId=${companyId}&yearId=${year}&assetId=${assetId}`
+    );
+    return data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const fixedAssetUnmapping = async ({ id }) => {
   try {
     return await axios.put(`/api/FixedAsset/fixed-asset/${id}`);

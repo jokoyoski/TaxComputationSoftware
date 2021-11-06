@@ -1,14 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button } from "primereact/button";
 import { Checkbox } from "primereact/checkbox";
 import utils from "../../utils";
 import { Controller, useForm } from "react-hook-form";
 import { useCompany } from "../../store/CompanyStore";
-import { fixedAssetMapping } from "../../apis/FixedAsset";
+import { fixedAssetMapping, fixedAssetRollBackData } from "../../apis/FixedAsset";
 import TrialBalanceMappingTable from "../common/TrialBalanceMappingTable";
 import DropdownController from "../controllers/DropdownController";
 import InputController from "../controllers/InputController";
 import { useResources } from "../../store/ResourcesStore";
+import { InputNumber } from "primereact/inputnumber";
 
 const FixedAssetMapping = ({
   assetClassSelectItems,
@@ -29,10 +30,28 @@ const FixedAssetMapping = ({
   const [selectedAccounts, setSelectedAccounts] = React.useState([]);
   const [selectedAssetType, setSelectedAssetType] = React.useState();
   const [transferChecked, setTransferChecked] = React.useState();
+  const [opening, setOpening] = useState(0);
+  const [year, setYear] = React.useState();
+  const [asset, setAsset] = React.useState();
   const typeSelectItems = [
     { label: "Cost", value: cost },
     { label: "Depreciation", value: depreciation }
   ];
+
+  var setValue = e => {
+    setAsset(e);
+  };
+
+  var value = 0;
+  var setYearValue = async e => {
+    var result = await fixedAssetRollBackData(companyId, e, asset);
+    console.log(result);
+    if (selectedAssetType == "cost") {
+      setOpening(result.openingCost);
+    } else {
+      setOpening(result.openingDepreciation);
+    }
+  };
 
   React.useEffect(() => {
     trialBalanceRefresh();
@@ -70,15 +89,7 @@ const FixedAssetMapping = ({
       return;
     }
 
-    if (isNaN(openingBalance)) {
-      toast.show(
-        utils.toastCallback({
-          severity: "error",
-          detail: "Opening balance is not a number"
-        })
-      );
-      return;
-    } else if (isNaN(addition)) {
+    if (isNaN(addition)) {
       toast.show(
         utils.toastCallback({
           severity: "error",
@@ -114,7 +125,7 @@ const FixedAssetMapping = ({
         assetId: assetClass,
         triBalanceId: selectedAccounts.map(account => account.id),
         isCost: assetType === cost ? true : false,
-        openingCost: assetType === cost ? Number(openingBalance) : 0,
+        openingCost: assetType === cost ? Number(opening) : 0,
         transferCost: assetType === cost ? Number(transfer) : 0,
         transferDepreciation: assetType !== cost ? Number(transfer) : 0,
         isTransferCostRemoved: assetType === cost ? transferChecked : false,
@@ -122,7 +133,7 @@ const FixedAssetMapping = ({
         costAddition: assetType === cost ? Number(addition) : 0,
         costDisposal: assetType === cost ? Number(disposal) : 0,
         costClosing: assetType === cost ? Number(closingBalance) : 0,
-        openingDepreciation: assetType !== cost ? Number(openingBalance) : 0,
+        openingDepreciation: assetType !== cost ? Number(opening) : 0,
         depreciationAddition: assetType !== cost ? Number(addition) : 0,
         depreciationDisposal: assetType !== cost ? Number(disposal) : 0,
         depreciationClosing: assetType !== cost ? Number(closingBalance) : 0
@@ -151,6 +162,7 @@ const FixedAssetMapping = ({
             Controller={Controller}
             control={control}
             errors={errors}
+            onChangeCallback={setValue}
             controllerName="assetClass"
             label="Fixed Asset Class"
             required
@@ -168,6 +180,7 @@ const FixedAssetMapping = ({
             onChangeCallback={setSelectedAssetType}
             errorMessage="Fixed Asset Type is required"
           />
+
           <DropdownController
             Controller={Controller}
             control={control}
@@ -175,6 +188,7 @@ const FixedAssetMapping = ({
             controllerName="year"
             label="Tax Year"
             required
+            onChangeCallback={setYearValue}
             dropdownOptions={financialYears}
             errorMessage="Tax Year is required"
           />
@@ -191,15 +205,16 @@ const FixedAssetMapping = ({
           />
         </div>
         <div className="p-d-flex p-ai-start p-jc-between">
-          <InputController
-            Controller={Controller}
-            control={control}
-            errors={errors}
-            controllerName="openingBalance"
-            label="Opening Balance"
-            required
-            errorMessage="Opening Balance is required"
-          />
+          <div>
+            <label style={{ display: "block" }}> Opening Balance: </label>
+            <InputNumber
+              required
+              value={opening}
+              onValueChange={e => setOpening(e.value)}
+              mode="decimal"
+            />
+          </div>
+
           <InputController
             Controller={Controller}
             control={control}
