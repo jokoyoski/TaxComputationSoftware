@@ -30,7 +30,7 @@ const FixedAssetMapping = ({
   const [selectedAccounts, setSelectedAccounts] = React.useState([]);
   const [selectedAssetType, setSelectedAssetType] = React.useState();
   const [transferChecked, setTransferChecked] = React.useState();
-  const [opening, setOpening] = useState(0);
+  const [opening, setOpening] = useState("");
   const [year, setYear] = React.useState();
   const [asset, setAsset] = React.useState();
   const typeSelectItems = [
@@ -45,12 +45,15 @@ const FixedAssetMapping = ({
   var value = 0;
   var setYearValue = async e => {
     var result = await fixedAssetRollBackData(companyId, e, asset);
-    console.log(result);
     if (selectedAssetType == "cost") {
       setOpening(result.openingCost);
     } else {
       setOpening(result.openingDepreciation);
     }
+  };
+
+  var onchangeOpening = value => {
+    setOpening(value);
   };
 
   React.useEffect(() => {
@@ -118,6 +121,8 @@ const FixedAssetMapping = ({
     setLoading(true);
 
     try {
+      console.log(opening);
+      console.log(Number(opening));
       const response = await fixedAssetMapping({
         companyId,
         yearId: year,
@@ -207,10 +212,11 @@ const FixedAssetMapping = ({
         <div className="p-d-flex p-ai-start p-jc-between">
           <div>
             <label style={{ display: "block" }}> Opening Balance: </label>
-            <InputNumber
+            <input
+              style={{ height: "40px", borderRadius: "7px", border: "1px solid #ced4da" }}
               required
               value={opening}
-              onValueChange={e => setOpening(e.value)}
+              onChange={e => onchangeOpening(e.target.value)}
               mode="decimal"
             />
           </div>
