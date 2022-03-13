@@ -25,6 +25,7 @@ const BalancingAdjustmentView = ({ year, toast }) => {
         setError(null);
         setLoading(true);
         const data = await balancingAdjustmentViewData({ companyId, year });
+        console.log(data);
         if (isMounted.current && data) {
           setBalancingAdjustmentData(() => {
             const tableData = [];
@@ -101,7 +102,12 @@ const BalancingAdjustmentView = ({ year, toast }) => {
                     assetYear.balancingAllowance
                   );
                 }
-
+                console.log(initialAllowanceRow);
+                console.log(costRow);
+                console.log(annualAllowanceRow);
+                console.log(residueRow);
+                console.log(salesProceedRow);
+                console.log(balanceRow);
                 tableData.push(costRow);
                 tableData.push(initialAllowanceRow);
                 tableData.push(annualAllowanceRow);

@@ -12,12 +12,14 @@ using TaxComputationAPI.Models;
 using Microsoft.Extensions.Logging;
 using System.Reflection;
 using TaxComputationSoftware.Interfaces;
+using TaxComputationSoftware.Services;
 
 namespace TaxComputationAPI.Services
 {
     public class BalancingAdjustmentService : IBalancingAdjustmentService
     {
         private readonly IUtilitiesService _utilitiesService;
+        private readonly RollOverService _rollOverService;
         private readonly IUtilitiesRepository _utilitiesRepository;
         private readonly IBalancingAdjustmentRepository _balancingAdjustmentRepository;
         private readonly ICompaniesRepository _companies;
@@ -26,13 +28,14 @@ namespace TaxComputationAPI.Services
         private readonly IEmailService _emailService;
         private readonly ILogger<BalancingAdjustmentService> _logger;
 
-        public BalancingAdjustmentService(IUtilitiesService utilitiesService, IUtilitiesRepository utilitiesRepository, ICapitalAllowanceService capitalAllowanceService, 
+        public BalancingAdjustmentService(IUtilitiesService utilitiesService, RollOverService rollOverService, IUtilitiesRepository utilitiesRepository, ICapitalAllowanceService capitalAllowanceService, 
                                             IBalancingAdjustmentRepository balancingAdjustmentRepository, ICompaniesRepository companies, IMapper mapper,
                                             IEmailService emailService, ILogger<BalancingAdjustmentService> logger)
         {
             _utilitiesService = utilitiesService;
             _utilitiesRepository = utilitiesRepository;
             _balancingAdjustmentRepository = balancingAdjustmentRepository;
+            _rollOverService = rollOverService;
             _companies = companies;
             _capitalAllowanceService = capitalAllowanceService;
             _mapper = mapper;
@@ -140,13 +143,21 @@ namespace TaxComputationAPI.Services
                 };
             }
             var company = await _companies.GetCompanyAsync(companyId);
+           
 
             var result = new AddBalancingAdjustmentResponse();
             result.Values = new BalancingAdjustmentDisplay();
             result.Values.Company = company.CompanyName;
             result.Values.BalancingAdjustmentYear = year;
             result.Values.BalancingAdjustments = new List<Response.BalancingAdjustment>();
-
+           // var currentYear = await _rollOverService.GetLastFinancialYear(companyId);
+            var financialYear = await _utilitiesRepository.GetFinancialCompanyAsync(companyId);
+            var result9 = financialYear.OrderByDescending(x => x.Id);
+            if(result9.FirstOrDefault().Id==int.Parse(year))
+            {
+                result.Values.CanDelete = true;
+            }
+            //  if(currentYear.)
 
             try
             {
@@ -504,7 +515,7 @@ namespace TaxComputationAPI.Services
 
                 await _balancingAdjustmentRepository.DeleteBalancingAdjustmentYearBoughtAsync(yearBought);
                 var balancingAdjustemtDetails = await _balancingAdjustmentRepository.GetBalancingAdjustmentById(yearBought.BalancingAdjustmentId);
-                _capitalAllowanceService.UpdateCapitalAllowanceFromDeleteBalancingAdjustment(yearBought.Residue, yearBought.YearBought, balancingAdjustemtDetails.CompanyId, balancingAdjustemtDetails.AssetId);
+               _capitalAllowanceService.UpdateCapitalAllowanceFromDeleteBalancingAdjustment(yearBought.Residue, yearBought.YearBought, balancingAdjustemtDetails.CompanyId, balancingAdjustemtDetails.AssetId);
             }
             catch (Exception e)
             {
